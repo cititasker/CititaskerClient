@@ -1,0 +1,24 @@
+"use client";
+import dynamic from "next/dynamic";
+import React from "react";
+import { motion } from "framer-motion";
+
+const Map = dynamic(() => import("@/components/browseTask/Map"), {
+  ssr: false,
+});
+
+const page = () => {
+  return (
+    <motion.div
+      initial={{ x: "100%" }}
+      animate={{ x: 0 }}
+      exit={{ x: "100%" }}
+      transition={{ type: "spring", stiffness: 100, damping: 20 }}
+      className="w-full h-full"
+    >
+      <Map />
+    </motion.div>
+  );
+};
+
+export default page;

@@ -1,0 +1,20 @@
+import { JWT } from "next-auth/jwt";
+
+declare module "next-auth" {
+  interface User {
+    token: string;
+    role: "poster" | "tasker";
+  }
+  interface Session {
+    user: {
+      authToken: string;
+    } & DefaultSession["user"];
+  }
+}
+
+declare module "next-auth/jwt" {
+  interface JWT {
+    idToken?: string;
+    userData: { token: string; role: string };
+  }
+}

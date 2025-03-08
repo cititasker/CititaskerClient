@@ -1,0 +1,12 @@
+GET https://cititasker.africa/api/v1/tasks/single
+Content-Type: application/json
+Accept: application/json
+
+{
+    "task_id":"21"
+}
+
+###
+GET https://cititasker.africa/api/v1/auth/google
+Content-Type: application/json
+Accept: application/json
