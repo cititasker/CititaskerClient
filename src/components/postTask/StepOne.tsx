@@ -143,7 +143,7 @@ const StepOne = () => {
               type="text"
               placeholder="Eg: AC Installation"
               wrapperStyle="mb-6"
-              inputStyle="px-[1.5rem]"
+              inputstyle="px-[1.5rem]"
             />
             <FormTextArea
               name="description"

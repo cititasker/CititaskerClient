@@ -19,7 +19,7 @@ interface IProps {
   type?: string;
   name: string;
   placeholder?: string;
-  inputStyle?: string;
+  inputstyle?: string;
   wrapperStyle?: string;
   labelStyle?: string;
   disabled?: boolean;
