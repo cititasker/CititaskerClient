@@ -8,7 +8,7 @@ import { GridColDef } from "@mui/x-data-grid";
 import React from "react";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 
-const Page = () => {
+export default function Page() {
   const { user } = useAppSelector((state) => state.user);
   const columns: GridColDef[] = [
     { field: "s/n", headerName: "S/N", flex: 1 },
@@ -20,7 +20,7 @@ const Page = () => {
       field: "actions",
       headerName: "Actions",
       width: 150,
-      renderCell: (params) => <MdOutlineRemoveRedEye />,
+      renderCell: () => <MdOutlineRemoveRedEye />,
     },
   ];
   const rows: any = [];
@@ -57,6 +57,4 @@ const Page = () => {
       </div>
     </div>
   );
-};
-
-export default Page;
+}

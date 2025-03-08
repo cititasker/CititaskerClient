@@ -3,28 +3,13 @@ import React, { useState } from "react";
 import CustomModal from "../reusables/CustomModal";
 import CustomTabs from "../reusables/CustomTabs";
 import Image from "next/image";
-import { SxProps, Theme, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import Icons from "../Icons";
 import theme from "@/providers/theme";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { toggleWaitlistModal } from "@/store/slices/general";
 import PosterWaitListForm from "./PosterWaitListForm";
 import TaskerWaitListForm from "./TaskerWaitListForm";
-
-const style: Record<string, SxProps<Theme>> = {
-  container: {
-    ".MuiPaper-root": {
-      maxWidth: "800px",
-      width: "90%",
-      padding: "40px",
-      position: "absolute",
-      top: "50%",
-      left: "50%",
-      transform: "translate(-50%, -50%)",
-      borderRadius: "12px",
-    },
-  },
-};
 
 const WaitlistModalForm = () => {
   const [user, setUser] = useState("poster");

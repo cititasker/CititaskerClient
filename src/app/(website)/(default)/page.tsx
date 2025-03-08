@@ -9,7 +9,7 @@ import Testimonies from "@/components/Testimonies/Testimonies";
 import WhyChooseCitiTasker from "@/components/WhyChooseCitiTasker/WhyChooseCitiTasker";
 import React from "react";
 
-const page = () => {
+export default function Page() {
   return (
     <div>
       <LandingPageHero />
@@ -23,6 +23,4 @@ const page = () => {
       <BecomeTaskerBanner />
     </div>
   );
-};
-
-export default page;
+}

@@ -7,7 +7,7 @@ import Summary from "@/components/postTask/Summary";
 import { useSearchParams } from "next/navigation";
 import React from "react";
 
-function page() {
+export default function Page() {
   const searchParams = useSearchParams() as any;
   const current = searchParams.get("step");
   const step = current ? +current : 1;
@@ -22,5 +22,3 @@ function page() {
     </>
   );
 }
-
-export default page;

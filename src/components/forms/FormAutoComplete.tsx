@@ -2,7 +2,6 @@
 import { globalStyles } from "@/globalStyles";
 import {
   Autocomplete,
-  Box,
   FormControl,
   FormLabel,
   SxProps,
@@ -54,8 +53,6 @@ const FormAutoComplete = <T,>({
   renderOption,
   isOptionEqualToValue,
   onChange,
-  value,
-  ...rest
 }: IProps<T>) => {
   const {
     control,

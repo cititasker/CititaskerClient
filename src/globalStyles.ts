@@ -1,5 +1,3 @@
-import theme from "./providers/theme";
-
 export const globalStyles: any = {
   input: {
     ".MuiFormLabel-root": {

@@ -31,8 +31,7 @@ const AuthLayout = ({ children, extraClass }: IProps) => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
-    let intervalId: any;
-    intervalId = setInterval(() => {
+    const intervalId = setInterval(() => {
       setActiveIndex((prev) => {
         if (prev == data.length - 1) {
           return 0;

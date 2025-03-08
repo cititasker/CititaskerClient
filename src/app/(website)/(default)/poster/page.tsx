@@ -8,7 +8,7 @@ import Recommended from "@/components/poster/landingPage/Recommended";
 import Search from "@/components/Search";
 import React from "react";
 
-const Page = () => {
+export default function Page() {
   return (
     <main className="">
       <div className="bg-light-primary-1">
@@ -29,6 +29,4 @@ const Page = () => {
       <PosterTestimonies />
     </main>
   );
-};
-
-export default Page;
+}

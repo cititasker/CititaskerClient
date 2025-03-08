@@ -8,7 +8,6 @@ import Portfolio from "@/components/profile/Portfolio";
 import ProfileSidebar from "@/components/profile/ProfileSidebar";
 import Reviews from "@/components/profile/Reviews";
 import CustomTab from "@/components/reusables/CustomTab";
-import { useAppSelector } from "@/store/hook";
 import { Box, SxProps, Theme } from "@mui/material";
 import React from "react";
 
@@ -35,8 +34,7 @@ const style: Record<string, SxProps<Theme>> = {
   },
 };
 
-const Page = () => {
-  const { user } = useAppSelector((state) => state.user);
+export default function Page() {
   return (
     <Box className=" p-top bg-light-grey h-dvh relative">
       <div className="container h-full relative overflow-y-auto">
@@ -59,6 +57,4 @@ const Page = () => {
       </div>
     </Box>
   );
-};
-
-export default Page;
+}

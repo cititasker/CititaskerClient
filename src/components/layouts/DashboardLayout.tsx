@@ -1,6 +1,5 @@
 import React from "react";
 import DashboardSidebar from "../dashboard/DashboardSidebar";
-import VerificationBanner from "../VerificationBanner";
 
 const DashboardLayout = ({ children }: IChildren) => {
   return (

@@ -15,7 +15,6 @@ const ForgotPassword = () => {
       console.log(value, values, index);
     }
   };
-  const id = null;
 
   useEffect(() => {
     let intervalId: any;

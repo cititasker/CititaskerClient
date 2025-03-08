@@ -82,6 +82,7 @@ const Account = () => {
   const onSubmit: SubmitHandler<accountSchemaType> = (value) => {
     const { profile_image, ...rest } = value;
     updateProfileMutation.mutate(rest);
+    console.log(profile_image);
   };
   return (
     <FormProvider {...methods}>

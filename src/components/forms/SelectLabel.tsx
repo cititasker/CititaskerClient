@@ -45,7 +45,7 @@ const SelectLabel = ({
   multiple,
   showRadio = true,
 }: IProps) => {
-  const { control, getValues, setValue, watch } = useFormContext();
+  const { control, getValues, setValue } = useFormContext();
 
   const handleChange = () => {
     if (multiple) {

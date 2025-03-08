@@ -13,7 +13,7 @@ const imagesData = [
 
 const SlidingImageCarousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [images, setImages] = useState(imagesData);
+  const [images] = useState(imagesData);
 
   useEffect(() => {
     const interval = setInterval(() => {

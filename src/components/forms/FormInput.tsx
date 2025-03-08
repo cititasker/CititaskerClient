@@ -48,7 +48,6 @@ const FormInput = ({
   type = "text",
   name,
   placeholder,
-  inputStyle,
   labelStyle,
   wrapperStyle,
   disabled = false,

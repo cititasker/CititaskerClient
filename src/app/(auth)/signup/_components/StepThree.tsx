@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { verifyPhoneSchema, verifyPhoneSchemaType } from "@/schema/auth";
 import { useMutation } from "@tanstack/react-query";
 import { sendPhoneVerificationToken } from "@/services/auth";
-import { useSearchParams } from "next/navigation";
 import FormInput from "@/components/forms/FormInput";
 import FormButton from "@/components/forms/FormButton";
 import { useSnackbar } from "@/providers/SnackbarProvider";

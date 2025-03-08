@@ -3,7 +3,7 @@ import Sidebar from "../_components/Sidebar";
 import TopCard from "../_components/TopCard";
 import BottomCard from "../_components/BottomCard";
 
-const page = () => {
+export default function Page() {
   return (
     <div className="bg-light-grey min-h-dvh">
       <div className="container p-top w-full min-h-[calc(100%-14px)] flex gap-5 flex-col lg:flex-row">
@@ -15,6 +15,4 @@ const page = () => {
       </div>
     </div>
   );
-};
-
-export default page;
+}

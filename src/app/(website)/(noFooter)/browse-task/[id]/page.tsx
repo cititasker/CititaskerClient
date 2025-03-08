@@ -26,11 +26,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-const page = async ({ params }: Props) => {
+export default async function Page({ params }: Props) {
   const id = (await params).id;
 
   await queryClient.prefetchQuery(getSingleTaskQuery(id));
   return <TaskDetails />;
-};
-
-export default page;
+}

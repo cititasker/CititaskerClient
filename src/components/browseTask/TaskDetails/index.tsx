@@ -12,9 +12,6 @@ import {
 import React, { useEffect, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { styles } from "./styles";
 import FormButton from "@/components/forms/FormButton";
 import MakeOfferModal from "../Modals";
@@ -37,12 +34,7 @@ import Offer from "../Offer";
 import Question from "../Question";
 import { defaultProfile } from "@/constant/images";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
-import { motion } from "framer-motion";
 import { setTaskDetails, setUserTaskOffer } from "@/store/slices/task";
-
-const schema = z.object({
-  step1: z.object({ amount: z.string() }),
-});
 
 const TaskDetails = () => {
   const { isAuth, user } = useAppSelector((state) => state.user);
@@ -105,15 +97,6 @@ const TaskDetails = () => {
     prevOpen.current = open;
   }, [open]);
 
-  const method = useForm({
-    resolver: zodResolver(schema),
-  });
-
-  const { handleSubmit } = method;
-
-  const onSubmit = (data: any) => {
-    console.log(data);
-  };
   const handleShareTaskAction = () => {
     openShareModal();
   };

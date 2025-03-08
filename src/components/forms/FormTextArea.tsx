@@ -72,12 +72,8 @@ const FormTextArea = ({
   disabled,
   ...rest
 }: IProps) => {
-  const {
-    control,
-    formState: { errors: err },
-  } = useFormContext();
+  const { control } = useFormContext();
 
-  const errors = err as any;
   return (
     <FormControl fullWidth sx={{ ...styles.container, ...sx }} {...rest}>
       {label && (

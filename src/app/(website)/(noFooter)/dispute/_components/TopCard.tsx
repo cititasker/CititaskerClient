@@ -1,11 +1,4 @@
-import {
-  Box,
-  LinearProgress,
-  Slider,
-  SxProps,
-  Theme,
-  Typography,
-} from "@mui/material";
+import { Box, Slider, SxProps, Theme, Typography } from "@mui/material";
 import React from "react";
 
 const marks = [

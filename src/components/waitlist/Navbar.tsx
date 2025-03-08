@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, usePathname } from "next/navigation";
 import { MdClose } from "react-icons/md";
 import WaitlistModalForm from "./WaitlistModalForm";

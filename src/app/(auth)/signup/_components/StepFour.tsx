@@ -1,12 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
 import CustomPinInput from "@/components/reusables/CustomPinInput";
-import {
-  otpApi,
-  resendEmailVerificationApi,
-  verifyPhoneNumber,
-} from "@/services/auth";
+import { resendEmailVerificationApi, verifyPhoneNumber } from "@/services/auth";
 import { useMutation } from "@tanstack/react-query";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 

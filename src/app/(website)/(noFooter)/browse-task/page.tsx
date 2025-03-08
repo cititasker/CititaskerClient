@@ -7,7 +7,7 @@ const Map = dynamic(() => import("@/components/browseTask/Map"), {
   ssr: false,
 });
 
-const page = () => {
+export default function Page() {
   return (
     <motion.div
       initial={{ x: "100%" }}
@@ -19,6 +19,4 @@ const page = () => {
       <Map />
     </motion.div>
   );
-};
-
-export default page;
+}

@@ -7,15 +7,14 @@ import { loginSchema, loginSchemaType } from "@/schema/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
 import Logo from "@/../public/images/cititasker_logo.svg";
 import { useSearchParams } from "next/navigation";
-import { googleAuth } from "@/services/auth";
 import { signIn, useSession } from "next-auth/react";
 
-export default function page() {
+export default function Page() {
   const [loading, setLoading] = useState(false);
   const { showSnackbar } = useSnackbar();
   const searchParams = useSearchParams();

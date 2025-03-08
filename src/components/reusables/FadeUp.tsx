@@ -6,8 +6,8 @@ import { cn } from "@/utils";
 interface IProps {
   extraClass?: string;
   children: React.ReactNode;
-  hidden?: {};
-  visible?: {};
+  hidden?: any;
+  visible?: any;
   transition?: {
     delay?: number;
     duration: number;

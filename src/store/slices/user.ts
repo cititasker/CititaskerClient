@@ -1,14 +1,11 @@
 "use client";
 import { createSlice } from "@reduxjs/toolkit";
-import Cookies from "universal-cookie";
 
 export interface UserState {
   isAuth: boolean;
   role: string | null;
   user: Partial<IUser>;
 }
-
-const cookie = new Cookies();
 
 const initialState: UserState = {
   isAuth: false,

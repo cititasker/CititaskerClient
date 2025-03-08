@@ -43,7 +43,7 @@ const AnimationWrapper = ({ children }: any) => {
   );
 };
 
-const Page = () => {
+export default function Page() {
   const searchParams = useSearchParams();
   const current = searchParams.get("step");
   const step = current ? +current : 1;
@@ -77,6 +77,4 @@ const Page = () => {
       )}
     </AnimatePresence>
   );
-};
-
-export default Page;
+}

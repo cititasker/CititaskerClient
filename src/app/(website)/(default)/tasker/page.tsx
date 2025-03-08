@@ -8,7 +8,7 @@ import Testimonies from "@/components/tasker/Testimonies/Testimonies";
 import WhyCitiTasker from "@/components/tasker/WhyCitiTasker/WhyCitiTasker";
 import React from "react";
 
-const Page = () => {
+export default function Page() {
   return (
     <div>
       <Hero />
@@ -20,6 +20,4 @@ const Page = () => {
       <TaskerBanner />
     </div>
   );
-};
-
-export default Page;
+}

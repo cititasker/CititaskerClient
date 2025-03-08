@@ -5,7 +5,7 @@ import Notification from "@/components/dashboard/Notification";
 import Security from "@/components/dashboard/Security";
 import React from "react";
 
-const page = () => {
+export default function Page() {
   const tabs = ["Account", "Notification", "Security"];
   return (
     <CustomTab tabs={tabs}>
@@ -14,6 +14,4 @@ const page = () => {
       <Security />
     </CustomTab>
   );
-};
-
-export default page;
+}

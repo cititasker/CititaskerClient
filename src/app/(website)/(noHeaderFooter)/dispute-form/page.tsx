@@ -11,7 +11,7 @@ import Grid from "@mui/material/Grid2";
 import FormTextArea from "@/components/forms/FormTextArea";
 import FormButton from "@/components/forms/FormButton";
 
-const page = () => {
+export default function Page() {
   const methods = useForm<disputeSchemaType>({
     defaultValues: {
       task_status: "",
@@ -27,6 +27,7 @@ const page = () => {
 
   const handleUpload = (e: any) => {
     const files = e.target.files;
+    console.log(files);
   };
 
   const onSubmit = (values: disputeSchemaType) => {
@@ -103,6 +104,4 @@ const page = () => {
       </div>
     </div>
   );
-};
-
-export default page;
+}

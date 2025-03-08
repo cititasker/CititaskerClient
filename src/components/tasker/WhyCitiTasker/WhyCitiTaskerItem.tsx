@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import React from "react";
 import FormButton from "@/components/forms/FormButton";
 import { cn } from "@/utils";

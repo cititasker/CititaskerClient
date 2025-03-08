@@ -15,8 +15,6 @@ interface IProps {
   metadata?: any;
 }
 
-const key = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY;
-
 const PaystackButton = ({
   text,
   className,

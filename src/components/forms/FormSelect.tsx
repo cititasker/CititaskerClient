@@ -51,10 +51,8 @@ const FormSelect = ({
   required,
   placeholder,
   inputLabel,
-  sx,
   multiple,
   labelStyle,
-  ...rest
 }: IProps) => {
   const {
     control,

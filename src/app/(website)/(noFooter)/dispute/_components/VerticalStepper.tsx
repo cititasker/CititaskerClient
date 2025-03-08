@@ -62,7 +62,7 @@ function DotStepIcon(props: StepIconProps) {
 }
 
 export default function VerticalStepper() {
-  const [activeStep, setActiveStep] = useState(0);
+  const [activeStep] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState({
     days: 0,
     hours: 0,

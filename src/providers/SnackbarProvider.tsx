@@ -12,7 +12,6 @@ const SnackbarContext = createContext<SnackbarContextType | undefined>(
   undefined
 );
 
-// eslint-disable-next-line
 export const useSnackbar = (): SnackbarContextType => {
   const context = useContext(SnackbarContext);
   if (!context) {

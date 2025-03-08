@@ -1,5 +1,5 @@
 import React from "react";
-// @ts-ignore: error
+// @ts-expect-error:ignore
 import useIdentityPayKYC from "react-identity-kyc";
 import FormButton from "./forms/FormButton";
 

@@ -24,14 +24,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             if (res.success) {
               user = res.data;
             }
-          } catch (error) {}
+          } catch (error) {
+            console.log(error);
+          }
         }
         return user;
       },
     }),
   ],
   callbacks: {
-    async signIn({ user, account }) {
+    async signIn({ account }) {
       if (account?.provider === "google") {
         // console.log(99, account);
         return false;
