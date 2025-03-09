@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "cititasker.africa",
+        hostname: "staging-api.cititasker.africa",
         // pathname: "cititasker.africa",
         // search: "",
       },
