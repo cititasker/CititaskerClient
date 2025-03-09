@@ -3,7 +3,7 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { useParams, usePathname } from "next/navigation";
 import { MdClose } from "react-icons/md";
-import WaitlistModalForm from "./WaitlistModalForm";
+// import WaitlistModalForm from "./WaitlistModalForm";
 import Icons from "../Icons";
 import FormButton from "../forms/FormButton";
 import { useAppDispatch } from "@/store/hook";
@@ -130,7 +130,7 @@ const Navbar = () => {
           />
         </div>
       </div>
-      <WaitlistModalForm />
+      {/* <WaitlistModalForm /> */}
     </div>
   );
 };
