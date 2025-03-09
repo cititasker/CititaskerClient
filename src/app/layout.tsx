@@ -26,9 +26,7 @@ export default function RootLayout({
       <body
         className={`relative ${montserrat.className} ${lato.variable} ${dm_sans.variable}`}
       >
-        <AppProvider>
-          <Providers>{children}</Providers>
-        </AppProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
