@@ -6,11 +6,12 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "staging-api.cititasker.africa",
-        // pathname: "cititasker.africa",
-        // search: "",
       },
     ],
   },
+  // eslint: {
+  //   ignoreDuringBuilds: true,
+  // },
 };
 
 export default nextConfig;

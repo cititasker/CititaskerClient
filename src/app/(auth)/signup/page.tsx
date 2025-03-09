@@ -20,9 +20,11 @@ const SignUpPage = () => {
   );
 
   useEffect(() => {
-    const currentUrl = new URL(window.location.href);
-    currentUrl.searchParams.set("step", `${step}`);
-    router.replace(`${currentUrl}`);
+    if (typeof window !== "undefined") {
+      const currentUrl = new URL(window.location.href);
+      currentUrl.searchParams.set("step", `${step}`);
+      router.replace(`${currentUrl}`);
+    }
   }, []);
 
   // Function to go to the next step

@@ -98,35 +98,37 @@ export default function GoogleMaps({ name, label }: any) {
   React.useEffect(() => {
     let active = true;
 
-    if (!autocompleteService.current && (window as any).google) {
-      autocompleteService.current = new (
-        window as any
-      ).google.maps.places.AutocompleteService();
-    }
-    if (!autocompleteService.current) {
-      return undefined;
-    }
-
-    if (inputValue === "") {
-      setOptions(value ? [value] : []);
-      return undefined;
-    }
-
-    fetch({ input: inputValue }, (results?: readonly PlaceType[]) => {
-      if (active) {
-        let newOptions: readonly PlaceType[] = [];
-
-        if (value) {
-          newOptions = [value];
-        }
-
-        if (results) {
-          newOptions = [...newOptions, ...results];
-        }
-
-        setOptions(newOptions);
+    if (typeof window !== "undefined") {
+      if (!autocompleteService.current && (window as any).google) {
+        autocompleteService.current = new (
+          window as any
+        ).google.maps.places.AutocompleteService();
       }
-    });
+      if (!autocompleteService.current) {
+        return undefined;
+      }
+
+      if (inputValue === "") {
+        setOptions(value ? [value] : []);
+        return undefined;
+      }
+
+      fetch({ input: inputValue }, (results?: readonly PlaceType[]) => {
+        if (active) {
+          let newOptions: readonly PlaceType[] = [];
+
+          if (value) {
+            newOptions = [value];
+          }
+
+          if (results) {
+            newOptions = [...newOptions, ...results];
+          }
+
+          setOptions(newOptions);
+        }
+      });
+    }
 
     return () => {
       active = false;
