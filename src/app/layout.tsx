@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { SessionProvider } from "next-auth/react";
 import "./globals.css";
 import Providers from "@/providers";
 import AppProvider from "@/providers/AppProvider";
@@ -27,11 +26,9 @@ export default function RootLayout({
       <body
         className={`relative ${montserrat.className} ${lato.variable} ${dm_sans.variable}`}
       >
-        <SessionProvider>
-          <AppProvider>
-            <Providers>{children}</Providers>
-          </AppProvider>
-        </SessionProvider>
+        <AppProvider>
+          <Providers>{children}</Providers>
+        </AppProvider>
       </body>
     </html>
   );
