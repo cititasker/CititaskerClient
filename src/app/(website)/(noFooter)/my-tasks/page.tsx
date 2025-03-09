@@ -1,5 +1,5 @@
 import { getUserTasks } from "@/actions";
-import Map from "@/components/browseTask/Map";
+import MapWrapper from "@/components/browseTask/MapWrapper";
 import MyTasksLayout from "@/components/layouts/MyTaskLayout";
 import { queryClient } from "@/providers/ServerProvider";
 import React from "react";
@@ -12,7 +12,7 @@ export default async function page() {
 
   return (
     <MyTasksLayout>
-      <Map />
+      <MapWrapper />
     </MyTasksLayout>
   );
 }

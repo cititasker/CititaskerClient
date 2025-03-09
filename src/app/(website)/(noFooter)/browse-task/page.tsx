@@ -1,7 +1,11 @@
 "use client";
-import Map from "@/components/browseTask/Map";
 import React from "react";
 import { motion } from "framer-motion";
+import dynamic from "next/dynamic";
+
+const Map = dynamic(() => import("@/components/browseTask/Map"), {
+  ssr: false,
+});
 
 export default function Page() {
   return (
