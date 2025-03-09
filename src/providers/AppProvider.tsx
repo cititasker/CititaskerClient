@@ -4,7 +4,11 @@ import { Provider } from "react-redux";
 import { persistor, store } from "@/store";
 import { PersistGate } from "redux-persist/integration/react";
 import ServerProvider from "./ServerProvider";
-import Loader from "@/components/reusables/Loading";
+import dynamic from "next/dynamic";
+
+const Loader = dynamic(() => import("@/components/reusables/Loading"), {
+  ssr: false,
+});
 
 const AppProvider = ({ children }: any) => {
   return (
