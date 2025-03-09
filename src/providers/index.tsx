@@ -3,10 +3,10 @@ import React, { Suspense } from "react";
 import { SnackbarProvider } from "./SnackbarProvider";
 import { StyledEngineProvider, ThemeProvider } from "@mui/material";
 import theme from "./theme";
-import { persistor, store } from "@/store";
+// import { persistor, store } from "@/store";
 import Loader from "@/components/reusables/Loading";
-import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
+// import { Provider } from "react-redux";
+// import { PersistGate } from "redux-persist/integration/react";
 
 const Providers = ({ children }: any) => {
   return (
@@ -14,11 +14,11 @@ const Providers = ({ children }: any) => {
       <ThemeProvider theme={theme}>
         <SnackbarProvider>
           <StyledEngineProvider injectFirst>
-            <Provider store={store}>
-              <PersistGate loading={null} persistor={persistor}>
-                {children}
-              </PersistGate>
-            </Provider>
+            {/* <Provider store={store}>
+              <PersistGate loading={null} persistor={persistor}> */}
+            {children}
+            {/* </PersistGate>
+            </Provider> */}
           </StyledEngineProvider>
         </SnackbarProvider>
       </ThemeProvider>
