@@ -1,4 +1,3 @@
-"use client";
 import Loader from "@/components/reusables/Loading";
 import React from "react";
 
