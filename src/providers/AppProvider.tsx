@@ -8,15 +8,15 @@ import Loader from "@/components/reusables/Loading";
 
 const AppProvider = ({ children }: any) => {
   return (
-    <Suspense fallback={<Loader />}>
-      <ServerProvider>
+    <ServerProvider>
+      <Suspense fallback={<Loader />}>
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
             {children}
           </PersistGate>
         </Provider>
-      </ServerProvider>
-    </Suspense>
+      </Suspense>
+    </ServerProvider>
   );
 };
 
