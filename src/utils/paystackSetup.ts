@@ -1,3 +1,4 @@
+"use client";
 import PaystackPop from "@paystack/inline-js";
 
 interface IData {

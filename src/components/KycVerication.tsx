@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 // @ts-expect-error:ignore
 import useIdentityPayKYC from "react-identity-kyc";
