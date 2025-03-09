@@ -3,7 +3,11 @@
 import theme from "@/providers/theme";
 import { IconButton, Modal, Paper, SxProps, Theme } from "@mui/material";
 import Icons from "../Icons";
-import SuccessConfetti from "./SuccessConfetti";
+import dynamic from "next/dynamic";
+
+const SuccessConfetti = dynamic(() => import("./SuccessConfetti"), {
+  ssr: false,
+});
 
 interface IProps {
   isOpen: boolean;
@@ -39,6 +43,7 @@ const cancel: SxProps<Theme> = {
     right: "24px",
   },
 };
+
 const CustomModal = ({
   isOpen,
   onClose,
