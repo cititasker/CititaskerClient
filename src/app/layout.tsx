@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Providers from "@/providers";
-import AppProvider from "@/providers/AppProvider";
 import { dm_sans, lato, montserrat } from "@/fonts";
 
 export const metadata: Metadata = {
@@ -26,9 +24,7 @@ export default function RootLayout({
       <body
         className={`relative ${montserrat.className} ${lato.variable} ${dm_sans.variable}`}
       >
-        <AppProvider>
-          <Providers>{children}</Providers>
-        </AppProvider>
+        {children}
       </body>
     </html>
   );
