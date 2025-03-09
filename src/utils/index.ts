@@ -154,14 +154,16 @@ export const purgeData = ({
   storagePath?: string;
   path: string;
 }) => {
-  const localPath = storagePath ?? "persist:task";
-  const persistedTaskData = localStorage.getItem(localPath);
-  if (persistedTaskData) {
-    const taskSliceState = JSON.parse(persistedTaskData);
-    delete taskSliceState[path];
-    localStorage.setItem(localPath, JSON.stringify(taskSliceState));
-  } else {
-    console.error("No persist data found in localStorage");
+  if (typeof window !== "undefined") {
+    const localPath = storagePath ?? "persist:task";
+    const persistedTaskData = localStorage.getItem(localPath);
+    if (persistedTaskData) {
+      const taskSliceState = JSON.parse(persistedTaskData);
+      delete taskSliceState[path];
+      localStorage.setItem(localPath, JSON.stringify(taskSliceState));
+    } else {
+      console.error("No persist data found in localStorage");
+    }
   }
 };
 
