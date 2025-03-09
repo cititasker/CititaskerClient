@@ -8,6 +8,6 @@ import Loader from "@/components/reusables/Loading";
 // import { Provider } from "react-redux";
 // import { PersistGate } from "redux-persist/integration/react";
 
-export default function Providers({ children }: any) {
+export default function AppProvider({ children }: any) {
   return <Suspense fallback={<Loader />}>{children}</Suspense>;
 }

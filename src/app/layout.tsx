@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { dm_sans, lato, montserrat } from "@/fonts";
-import Providers from "@/providers";
+import AppProvider from "@/providers/AppProvider";
 
 export const metadata: Metadata = {
   title: "CitiTasker",
@@ -25,7 +25,7 @@ export default function RootLayout({
       <body
         className={`relative ${montserrat.className} ${lato.variable} ${dm_sans.variable}`}
       >
-        <Providers>{children}</Providers>
+        <AppProvider>{children}</AppProvider>
       </body>
     </html>
   );
