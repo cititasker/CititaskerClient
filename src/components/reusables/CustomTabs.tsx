@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import FormButton from "../forms/FormButton";
 

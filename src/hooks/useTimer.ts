@@ -5,13 +5,6 @@ const formatNumber = (num: number) => {
   return num < 10 ? `0${num}` : `${num}`;
 };
 
-type TUseTimer = {
-  days: string;
-  hours: string;
-  minutes: string;
-  seconds: string;
-};
-
 const DAYS_IN_MS = 1000 * 60 * 60 * 24;
 const HOURS_IN_MS = 1000 * 60 * 60;
 const MIN_IN_MS = 1000 * 60;
@@ -39,7 +32,6 @@ export const useTimer = (targetTime: number): TUseTimer => {
 
   useEffect(() => {
     const id = setTimeout(() => {
-      // We can set conditions here like timeLeft > 0
       setTimeLeft((prev) => prev - 1000);
     }, 1000);
 

@@ -1,7 +1,12 @@
 interface IChildren {
   children: React.ReactNode;
 }
-
+type TUseTimer = {
+  days: string;
+  hours: string;
+  minutes: string;
+  seconds: string;
+};
 interface IUser {
   date_of_birth: string | null;
   email: string;
