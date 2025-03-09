@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import { persistor, store } from "@/store";
 import { PersistGate } from "redux-persist/integration/react";
 import ServerProvider from "./ServerProvider";
-import Loader from "@/components/reusables/Loading";
+import Loader from "@/app/components/reusables/Loading";
 
 const AppProvider = ({ children }: any) => {
   return (

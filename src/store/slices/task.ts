@@ -1,12 +1,10 @@
-import { offerSchemaType } from "@/schema/offer";
-import { postTaskSchemaType } from "@/schema/task";
 import { purgeData } from "@/utils";
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface TaskState {
   taskId: number | null;
-  task: Partial<postTaskSchemaType>;
-  offer: Partial<offerSchemaType>;
+  task: any;
+  offer: any;
   taskDetails: Partial<ITask>;
   taskersOffer: IOffer | null;
 }
