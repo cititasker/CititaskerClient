@@ -1,6 +1,6 @@
 import { cn } from "@/utils";
 import React from "react";
-import Icons from "../Icons";
+import Icons from "@/components/Icons";
 import { Box } from "@mui/material";
 
 const style = {
