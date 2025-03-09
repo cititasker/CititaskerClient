@@ -1,3 +1,4 @@
+"use client";
 import { createContext, useContext, useState, ReactNode, FC } from "react";
 import { Snackbar, SnackbarOrigin, Alert } from "@mui/material";
 
