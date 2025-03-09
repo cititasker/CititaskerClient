@@ -60,17 +60,19 @@ export default function GoogleMaps({ name, label }: any) {
   const [options, setOptions] = React.useState<readonly PlaceType[]>([]);
   const loaded = React.useRef(false);
 
-  if (typeof window !== "undefined" && !loaded.current) {
-    if (!document.querySelector("#google-maps")) {
-      loadScript(
-        `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`,
-        document.querySelector("head"),
-        "google-maps"
-      );
-    }
+  React.useEffect(() => {
+    if (typeof window !== "undefined" && !loaded.current) {
+      if (!document.querySelector("#google-maps")) {
+        loadScript(
+          `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`,
+          document.querySelector("head"),
+          "google-maps"
+        );
+      }
 
-    loaded.current = true;
-  }
+      loaded.current = true;
+    }
+  }, []);
 
   const fetch = React.useMemo(
     () =>
@@ -128,11 +130,11 @@ export default function GoogleMaps({ name, label }: any) {
           setOptions(newOptions);
         }
       });
-    }
 
-    return () => {
-      active = false;
-    };
+      return () => {
+        active = false;
+      };
+    }
   }, [value, inputValue, fetch]);
 
   const {
@@ -187,8 +189,7 @@ export default function GoogleMaps({ name, label }: any) {
             filterSelectedOptions
             value={value}
             noOptionsText="No locations"
-            onChange={(event: any, newValue: any) => {
-              console.log(newValue);
+            onChange={(_: any, newValue: any) => {
               setOptions(newValue ? [newValue, ...options] : options);
               setValue(newValue);
               field.onChange(newValue?.description || "");

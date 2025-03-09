@@ -11,10 +11,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         let user = null;
         const { email, password } = credentials;
         try {
-          const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/login`,
-            { method: "POST", body: JSON.stringify({ email, password }) }
-          ).then((data) => data.json());
+          const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}`, {
+            method: "POST",
+            body: JSON.stringify({ email, password }),
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          }).then((data) => data.json());
           const cookieStore = await cookies();
           cookieStore.set("citi-user", res.data.token, {
             secure: false,
