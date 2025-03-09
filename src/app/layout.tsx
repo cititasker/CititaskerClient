@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Providers from "@/providers";
-import AppProvider from "@/providers/AppProvider";
 import { dm_sans, lato, montserrat } from "@/fonts";
+import Providers from "@/providers";
 
 export const metadata: Metadata = {
   title: "CitiTasker",
