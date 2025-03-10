@@ -5,9 +5,21 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "staging-api.cititasker.africa",
+        hostname: process.env.API_BASE_URL as string,
       },
     ],
+  },
+  async redirects() {
+    if (process.env.NODE_ENV === "production") {
+      return [
+        {
+          source: "/",
+          destination: "/waitlist",
+          permanent: false,
+        },
+      ];
+    }
+    return [];
   },
   // eslint: {
   //   ignoreDuringBuilds: true,

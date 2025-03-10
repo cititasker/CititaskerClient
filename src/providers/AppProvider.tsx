@@ -5,6 +5,7 @@ import { persistor, store } from "@/store";
 import { PersistGate } from "redux-persist/integration/react";
 import ServerProvider from "./ServerProvider";
 import dynamic from "next/dynamic";
+import { PostHogProvider } from "./PostHogProvider";
 
 const Loader = dynamic(() => import("@/components/reusables/Loading"), {
   ssr: false,
@@ -16,7 +17,7 @@ const AppProvider = ({ children }: any) => {
       <ServerProvider>
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
-            {children}
+            <PostHogProvider>{children}</PostHogProvider>
           </PersistGate>
         </Provider>
       </ServerProvider>

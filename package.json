@@ -31,6 +31,7 @@
     "lottie-react": "^2.4.1",
     "next": "15.1.6",
     "next-auth": "^5.0.0-beta.25",
+    "posthog-js": "^1.229.5",
     "react": "^19.0.0",
     "react-confetti": "^6.2.2",
     "react-dom": "^19.0.0",
