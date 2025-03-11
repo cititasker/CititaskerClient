@@ -15,14 +15,10 @@ const TaskerBanner = () => {
           <div className="transition-all duration-300 p-5 sm:py-[62px] sm:px-[73px] bg-dark-secondary xl:bg-secondary rounded-[1.25rem] sm:rounded-[1.875rem] flex-1">
             <div className="mb-5 sm:mb-[3.25rem]">
               <h2 className="text-base sm:text-xl md:text-3xl lg:text-[2.5rem] font-bold text-white mb-2 sm:mb-5">
-                Become a Tasker for free
+              Get Started for Free
               </h2>
               <p className="text-white text-xs sm:text-base">
-                Our Help Centre and dedicated CitiTasker Support specialist are
-                on hand 24/7 to help you navigate our tools and get the most out
-                of our website. You can count on them to work with you in a
-                timely manner to resolve any issues that might arise - swiftly
-                and promptly.
+              Becoming a Tasker is completely free! No hidden charges or subscription fees—just sign up and start earning.
               </p>
             </div>
             <FormButton

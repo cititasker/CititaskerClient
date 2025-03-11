@@ -1,43 +1,43 @@
 export const accordionData = [
   {
-    question: " What type of tasks are available on CitiTasker?",
+    question: "What type of tasks are available on CitiTasker?",
     answer:
-      "Accordion components are user interface elements used for organizing and presenting content in a collapsible manner. They typically consist of a header, content, and an expand/collapse action.",
+      "CitiTasker offers a wide range of tasks to suit various needs. Whether you’re looking for errands, home repairs, cleaning, delivery services, or even professional assistance like tech support or graphic design, our platform connects you with skilled Taskers who can handle it all. Whatever your to-do list looks like, you’ll find reliable Taskers ready to help.",
   },
   {
     question: "What’s required to become a Tasker?",
     answer:
-      "They are commonly employed in various contexts, including FAQs, product descriptions, navigation menus, settings panels, and data tables, to save screen space and provide a structured and user-friendly interface for presenting information or options.",
+      "To become a Tasker on CitiTasker, you simply need to sign up on the platform and create an account. You’ll need to provide details about your skills, qualifications, and experience so Posters can find the right match. After your profile is set up, you can start applying for available tasks that align with your expertise.",
   },
   {
     question: "How do I become a Tasker?",
     answer:
-      "The accordion is a musical instrument with a keyboard and bellows. It produces sound by air passing over reeds when the player expands or compresses the bellows, used in various music genres.",
+      "To become a Tasker on CitiTasker, sign up on our platform, create an account, and complete your profile with relevant skills and experience. Once your profile is ready, you can start browsing and applying for tasks that resonate with your field.",
   },
   {
     question: "How do I get paid?",
     answer:
-      "Yes of course, it is very possible to create an accordion component with another framework.",
+      "Payment for your tasks is securely held in an escrow account by CitiTasker. Once you complete the task to the Poster’s satisfaction, the payment is released from escrow and sent to you. This ensures that both you and the Poster are protected during the transaction.",
   },
   {
-    question: " Who will I be working with?",
+    question: "Who will I be working with?",
     answer:
-      "Yes of course, it is very possible to create an accordion component with another framework.",
+      "As a Tasker,, you’ll be working with Posters who need your services. Each Poster will provide details about the task and their expectations. You’ll be able to view their profile, communicate directly with them, and decide if you’re a good fit for the job.",
   },
   {
-    question: " Is there insurance?",
+    question: "Is there insurance?",
     answer:
-      "Yes of course, it is very possible to create an accordion component with another framework.",
+      "Currently, CitiTasker does not provide insurance coverage for tasks. However, we encourage Taskers and Posters to communicate clearly and agree on the terms of service before beginning any job.",
   },
   {
     question: "How do I get assigned to a task by a Poster?",
     answer:
-      "Yes of course, it is very possible to create an accordion component with another framework.",
+      "To get assigned a task, you’ll need to browse the available tasks posted by Posters and apply for the ones that match your skills. Once you apply, the Poster will review your profile, qualifications, and experience, and select you for the task if they feel you're the right fit.",
   },
   {
-    question: " Can I get task alerts?",
+    question: "Can I get task alerts?",
     answer:
-      "Yes of course, it is very possible to create an accordion component with another framework.",
+      "Yes, you can! CitiTasker sends alerts to notify you when new tasks are posted that match your skills. This way, you can stay updated and quickly apply to tasks that interest you, ensuring you never miss out on opportunities.",
   },
 ];
 export const taskerAccordionData = [
@@ -78,7 +78,7 @@ export const posterData = [
   {
     question: "Secured payment",
     answer:
-      "Yes of course, it is very possible to create an accordion component with another framework.",
+      "At CitiTasker, we prioritize your trust and security. When you post a task, your payment is held securely in our escrow account. This means your money is protected until the task is completed to your satisfaction.",
   },
   {
     question: "Get insurance covered",
@@ -88,12 +88,12 @@ export const posterData = [
   {
     question: "24/7 Support",
     answer:
-      "Yes of course, it is very possible to create an accordion component with another framework.",
+      "At CitiTasker, your satisfaction is our priority. That’s why we offer round-the-clock support to ensure your experience is seamless and stress-free.",
   },
   {
     question: "Verified Taskers",
     answer:
-      "Yes of course, it is very possible to create an accordion component with another framework.",
+      "At CitiTasker, we connect you with verified Taskers. Every Tasker on our platform goes through a thorough verification process which includes background checks, and skill validation amongst others, to ensure they are skilled, reliable, and trustworthy",
   },
 ];
 
@@ -101,22 +101,27 @@ export const taskerData = [
   {
     question: "Secured payment",
     answer:
-      "Yes of course, it is very possible to create an accordion component with another framework.",
+      "With secure payments held in escrow, you’ll always get paid on time after completing a task. Your earnings are protected.",
   },
   {
-    question: "Secured payment",
+    question: "Work Your Way",
     answer:
-      "Yes of course, it is very possible to create an accordion component with another framework.",
+      "Choose tasks that match your skills, set your rates, and work on your terms. Flexibility is in your hands.",
   },
   {
-    question: "Secured payment",
+    question: "Be in Charge",
     answer:
-      "Yes of course, it is very possible to create an accordion component with another framework.",
+      "Be your own boss! Decide when, where, and how you want to work while enjoying a steady stream of opportunities.",
   },
   {
-    question: "Secured payment",
+    question: "24/7 Support ",
     answer:
-      "Yes of course, it is very possible to create an accordion component with another framework.",
+      "At CitiTasker, our dedicated support team is available 24/7 to answer your questions, resolve issues, and ensure your experience as a Tasker is smooth and hassle-free. Whether you need help with tasks, payments, or anything else, we’ve got your back.",
+  },
+  {
+    question: "Fast Payout",
+    answer:
+      "Taskers can get paid within 24 hours after completing a job. No delays—your hard work is rewarded promptly.",
   },
 ];
 
