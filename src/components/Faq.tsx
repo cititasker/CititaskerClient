@@ -33,8 +33,11 @@ const Faq = () => {
                   Still have any question?
                 </h3>
                 <div className="max-w-80 w-full text-justify text-slate-900 text-sm font-normal ">
-                  Borem ipsum dolor sit amet, consectetur adipiscing elit. Borem
-                  ipsum dolor sit amet, consectetur adipiscing elit.
+                  We're here to help! If you have any more questions or need
+                  further assistance, don’t hesitate to reach out. Our support
+                  team is ready to provide the information you need and ensure
+                  your experience with CitiTasker is smooth and hassle-free.
+                  Feel free to contact us anytime!
                 </div>
               </div>
               <FormButton

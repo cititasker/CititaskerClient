@@ -20,9 +20,10 @@ const WhyCitiTasker = () => {
             <UnderlinedHeader text="CitiTasker?" lineStyle="sm:top-full" />
           </div>
           <p className="text-sm sm:text-[1.25rem] text-dark-secondary text-center leading-normal">
-            Borem ipsum dolor sit amet, consectetur adipiscing elit. Borem ipsum
-            dolor sit amet, consectetur adipiscing elit. Borem ipsum dolor sit
-            amet.
+            CitiTasker is the ultimate platform for connecting you with skilled
+            Taskers who can help tackle your to-do list. Whether you need help
+            with errands, household repairs, or specialized projects, CitiTasker
+            makes it simple and hassle-free.
           </p>
         </div>
         <div className="w-full rounded-[2.5rem] bg-white pt-[1.625rem] pb-[3.75rem] sm:py-[3.25rem] px-5 md:px-[5.875rem]">
@@ -33,18 +34,19 @@ const WhyCitiTasker = () => {
           />
           {user === "poster" ? (
             <div className="text-xs sm:text-xl text-center max-w-[56.875rem] mx-auto font-semibold mb-[1.75rem] sm:mb-[3.75rem]">
-              <span className="text-primary">Who is a Poster?</span> Qorem ipsum
-              dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero
-              et velit interdum, ac aliquet odio mattis. Class aptent taciti
-              sociosqu ad litora torquent per conubia nostra, per inceptos
-              himenaeos. adipiscing.
+              <span className="text-primary">Who is a Poster?</span> A Poster is
+              someone who needs assistance with a task and uses CitiTasker to
+              connect with skilled Taskers. From running errands, and household
+              repairs, to professional tasks, Posters can easily find help
+              through our platform.
             </div>
           ) : (
             <div className="text-xs sm:text-xl text-center max-w-[56.875rem] mx-auto font-semibold mb-[1.75rem] sm:mb-[3.75rem]">
-              <span className="text-primary">Who is a Tasker?</span> Qorem ipsum
-              dolor sit amet, adipiscing elit. Nunc vulputate libero et velit
-              interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad
-              litora torquent per conubia.
+              <span className="text-primary">Who is a Tasker?</span> A Tasker is
+              a skilled service provider who completes tasks posted on
+              CitiTasker. From artisans like plumbers and electricians to
+              cleaners and other professionals, Taskers help Posters get their
+              jobs done efficiently.
             </div>
           )}
           {user === "poster" ? (
