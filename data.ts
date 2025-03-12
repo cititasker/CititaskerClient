@@ -22,7 +22,7 @@ export const accordionData = [
   {
     question: "Who will I be working with?",
     answer:
-      "As a Tasker,, you’ll be working with Posters who need your services. Each Poster will provide details about the task and their expectations. You’ll be able to view their profile, communicate directly with them, and decide if you’re a good fit for the job.",
+      "As a Tasker, you’ll be working with Posters who need your services. Each Poster will provide details about the task and their expectations. You’ll be able to view their profile, communicate directly with them, and decide if you’re a good fit for the job.",
   },
   {
     question: "Is there insurance?",

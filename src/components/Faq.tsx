@@ -7,7 +7,8 @@ import FormButton from "./forms/FormButton";
 
 const Faq = () => {
   return (
-    <div className="bg-sky-50" id="faq">
+    <div className="bg-sky-50 relative">
+      <div id="faq" className="absolute w-full -top-[95px]" />
       <div className="container py-[3.25rem] sm:pt-[5.625rem] sm:pb-[8.875rem] ">
         <div className="justify-between items-start gap-5 flex flex-col-reverse lg:flex-row">
           <div className="w-full lg:max-w-[419px]">

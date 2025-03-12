@@ -10,18 +10,18 @@ import TaskerStats from "@/components/TaskerStats";
 
 const Hero = () => {
   return (
-    <div className="bg-dark-secondary relative overflow-hidden">
+    <div id="home" className="bg-dark-secondary relative overflow-hidden">
       <div className="container pt-[8.875rem] pb-[5.25rem]">
         <div className="flex flex-col xl:flex-row items-center gap-6 justify-between">
           <div className="flex-1 w-full h-fit mb-[60px] xl:mb-0 relative">
-          <div className="w-full xl:max-w-[40.875rem]">
+            <div className="w-full xl:max-w-[40.875rem]">
               <h2 className="hidden sm:block text-xl sm:text-[4rem] font-bold leading-normal mb-3 sm:mb-5 text-white text-center xl:text-left">
                 Get to-dos{" "}
                 <UnderlinedHeader
-                  text="Done,"
+                  text="Done, "
                   lineStyle="rotate-[3deg] sm:top-[75%]"
                 />
-               Anytime, Anywhere.
+                Anytime, Anywhere.
               </h2>
               <h2 className="sm:hidden text-4xl sm:text-[4rem] font-bold leading-normal mb-3 sm:mb-5 text-white text-center xl:text-left">
                 Get to-dos{" "}
@@ -32,7 +32,7 @@ const Hero = () => {
                 Anytime, Anywhere
               </h2>
               <p className="text-sm sm:text-xl font-normal text-dark-grey-1 text-center xl:text-left">
-              Post it. Match it. Done
+                Post it. Match it. Done
               </p>
             </div>
             <HeroButton />
