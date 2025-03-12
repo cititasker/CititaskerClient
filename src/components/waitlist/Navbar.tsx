@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { useParams, usePathname } from "next/navigation";
 import { MdClose } from "react-icons/md";
 import WaitlistModalForm from "./WaitlistModalForm";
 import Icons from "../Icons";
@@ -12,7 +11,7 @@ import Image from "next/image";
 
 const navbar = [
   {
-    href: "/waitlist",
+    href: "#home",
     name: "Home",
   },
   {
@@ -28,28 +27,23 @@ const navbar = [
 const Navbar = () => {
   const [showMobileNav, setShowMobileNav] = useState(false);
   const [active, setActive] = useState("");
-  const path = usePathname();
   const dispatch = useAppDispatch();
-  const params = useParams();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
+      const currentHash = window.location.hash || "#home";
+      setActive(currentHash);
+
       const handleHashChange = () => {
-        if (window.location.hash) {
-          setActive(window.location.hash);
-        } else {
-          setActive(path);
-        }
+        console.log(77, window.location.hash);
+        setActive(window.location.hash);
       };
-      window.addEventListener("hashchange", () => {
-        handleHashChange();
-      });
-      handleHashChange();
+      window.addEventListener("hashchange", handleHashChange);
       return () => {
         window.removeEventListener("hashchange", handleHashChange);
       };
     }
-  }, [params]);
+  }, []);
 
   const toggleMobileNav = () => {
     setShowMobileNav((prev) => !prev);
@@ -59,7 +53,7 @@ const Navbar = () => {
     <div className="px-5 fixed top-5  w-full  z-[99]">
       <div className="shadow-md flex items-center rounded-[3.125rem] px-5 h-[4.688rem] w-full max-w-[87.5rem] mx-auto bg-white">
         <div className="max-w-[79.375rem] w-full mx-auto flex justify-between items-center relative">
-          <Link href="/waitlist">
+          <a href="/waitlist#home">
             <Image
               src="/icons/logo_icon.svg"
               alt="brand_logo"
@@ -67,7 +61,7 @@ const Navbar = () => {
               height={70}
               className="h-5 w-auto sm:h-auto"
             />
-          </Link>
+          </a>
           <ul className="hidden items-center mx-2 md:flex">
             {navbar.map((nav, i) => (
               <li
@@ -76,7 +70,7 @@ const Navbar = () => {
                   active === nav.href && "border-b-[3px] border-primary"
                 }`}
               >
-                <Link href={nav.href}>{nav.name}</Link>
+                <a href={nav.href}>{nav.name}</a>
               </li>
             ))}
           </ul>

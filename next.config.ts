@@ -14,7 +14,7 @@ const nextConfig: NextConfig = {
       return [
         {
           source: "/",
-          destination: "/waitlist",
+          destination: "https://www.cititasker.africa/waitlist",
           permanent: false,
         },
       ];

@@ -10,29 +10,29 @@ import TaskerStats from "@/components/TaskerStats";
 
 const Hero = () => {
   return (
-    <div className="bg-dark-secondary relative overflow-hidden">
+    <div id="home" className="bg-dark-secondary relative overflow-hidden">
       <div className="container pt-[8.875rem] pb-[5.25rem]">
         <div className="flex flex-col xl:flex-row items-center gap-6 justify-between">
           <div className="flex-1 w-full h-fit mb-[60px] xl:mb-0 relative">
             <div className="w-full xl:max-w-[40.875rem]">
-              <h2 className="hidden sm:block text-2xl sm:text-[4rem] font-bold leading-normal mb-3 sm:mb-5 text-white text-center xl:text-left">
-                Get your todo’s done on{" "}
+              <h2 className="hidden sm:block text-xl sm:text-[4rem] font-bold leading-normal mb-3 sm:mb-5 text-white text-center xl:text-left">
+                Get to-dos{" "}
                 <UnderlinedHeader
-                  text="CitiTasker"
+                  text="Done, "
                   lineStyle="rotate-[3deg] sm:top-[75%]"
-                />{" "}
-                in minutes.
+                />
+                Anytime, Anywhere.
               </h2>
-              <h2 className="sm:hidden text-2xl sm:text-[4rem] font-bold leading-normal mb-3 sm:mb-5 text-white text-center xl:text-left">
-                Get your to-dos{" "}
+              <h2 className="sm:hidden text-4xl sm:text-[4rem] font-bold leading-normal mb-3 sm:mb-5 text-white text-center xl:text-left">
+                Get to-dos{" "}
                 <UnderlinedHeader
                   text="done"
                   lineStyle="rotate-[1deg] top-[80%]"
                 />{" "}
-                just in minutes.
+                Anytime, Anywhere
               </h2>
               <p className="text-sm sm:text-xl font-normal text-dark-grey-1 text-center xl:text-left">
-                Find the right people for anything you need.
+                Post it. Match it. Done
               </p>
             </div>
             <HeroButton />
