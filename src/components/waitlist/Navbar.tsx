@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { useParams, usePathname } from "next/navigation";
 import { MdClose } from "react-icons/md";
 import WaitlistModalForm from "./WaitlistModalForm";
 import Icons from "../Icons";
@@ -28,9 +27,7 @@ const navbar = [
 const Navbar = () => {
   const [showMobileNav, setShowMobileNav] = useState(false);
   const [active, setActive] = useState("");
-  const path = usePathname();
   const dispatch = useAppDispatch();
-  const params = useParams();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
