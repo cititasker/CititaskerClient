@@ -8,6 +8,7 @@ type TUseTimer = {
   seconds: string;
 };
 interface IUser {
+  isVerified: any;
   date_of_birth: string | null;
   email: string;
   first_name: string | null;

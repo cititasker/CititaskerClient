@@ -35,6 +35,8 @@ import Question from "../Question";
 import { defaultProfile } from "@/constant/images";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { setTaskDetails, setUserTaskOffer } from "@/store/slices/task";
+import VerificationModal from "../Modals/VerifyModal/Verify";
+import ImageGallery from "../Modals/ImageGalleryModal/ImageGallery";
 
 const TaskDetails = () => {
   const { isAuth, user } = useAppSelector((state) => state.user);
@@ -101,16 +103,27 @@ const TaskDetails = () => {
     openShareModal();
   };
 
+  const [verifyModalOpen, setVerifyModalOpen] = React.useState(false);
+
   const hasMadeOffer = useMemo(
     () => task.offers.some((el) => el.tasker.id === user?.id),
     [task, user]
   );
 
   const buttonText = useMemo(() => {
-    if (task.status == "open" && !hasMadeOffer) return "Make an offer";
-    else if (task.status == "open" && hasMadeOffer) return "Update Offer";
-    else if (task.status == "assigned") return "Assigned";
-  }, [task, hasMadeOffer]);
+    if (!("isVerified" in user) || !user.isVerified) return "Verify Account";
+    if (task.status === "open" && !hasMadeOffer) return "Make an Offer";
+    if (task.status === "open" && hasMadeOffer) return "Update Offer";
+    if (task.status === "assigned") return "Assigned";
+  }, [task, hasMadeOffer, user]);
+
+  const handleButtonClick = () => {
+    if (!user || !user.isVerified) {
+      setVerifyModalOpen(true);
+    } else {
+      openNextModal();
+    }
+  };
 
   useEffect(() => {
     const taskersOffer =
@@ -257,8 +270,8 @@ const TaskDetails = () => {
                     {formatCurrency({ value: task.budget, noFraction: true })}
                   </h2>
                   <FormButton
-                    handleClick={openNextModal}
-                    btnStyle="min-h-[39px] text-base font-normal"
+                    handleClick={handleButtonClick}
+                    btnStyle="min-h-[39px] min-w-40 text-base font-normal"
                     disabled={task.status !== "open"}
                   >
                     {buttonText}
@@ -334,18 +347,13 @@ const TaskDetails = () => {
           </div>
           <div className="mb-7">
             <p className="mb-4 text-xl font-semibold text-black-2">Pictures</p>
-            <div className="grid grid-cols-[repeat(auto-fill,minmax(100px,1fr))] gap-3 items-center">
-              {task.images.map((img, i) => (
-                <Image
-                  key={i}
-                  src={img}
-                  alt=""
-                  width={100}
-                  height={90}
-                  className="h-[90px] object-cover rounded-[10px] border border-dark-grey-1 overflow-hidden"
-                />
-              ))}
-            </div>
+
+
+            {task.images && task.images.length > 0 ? (
+              <ImageGallery images={task.images} />
+            ) : (
+              <p>No images available for this task.</p>
+            )}
           </div>
           <CustomTab tabs={["Offers", "Questions"]}>
             <Offer offers={task.offers} />
@@ -354,6 +362,12 @@ const TaskDetails = () => {
         </div>
       </div>
 
+      <VerificationModal
+        open={verifyModalOpen}
+        handleClose={() => setVerifyModalOpen(false)}
+        onContinue={openNextModal}
+      />
+
       {nextModalOpen && (
         <MakeOfferModal
           open={nextModalOpen}
@@ -361,6 +375,7 @@ const TaskDetails = () => {
           handleOpen={openNextModal}
         />
       )}
+
       <ShareTaskModal
         open={isOpen}
         handleClose={closeShareModal}
