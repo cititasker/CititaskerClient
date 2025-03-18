@@ -15,6 +15,7 @@ interface IProps {
 
 const TaskCard = ({ item, path }: IProps) => {
   const { id } = useParams();
+  const isActive = item.id === Number(id);
 
   return (
     <Link
@@ -36,7 +37,7 @@ const TaskCard = ({ item, path }: IProps) => {
               className="w-[50px] h-[50px] object-cover rounded-full"
             />
           </div>
-          <StatusChip status={item.status} />
+          <StatusChip status={item.status} isActive={isActive} />
         </div>
         {item.budget && (
           <div className="flex gap-4 items-center">
