@@ -9,10 +9,10 @@ const styles: Record<string, SxProps<Theme>> = {
     height: "22px",
     border: "0.8px solid var(--primary)",
 
-    bgcolor: "var(--light-primary-1)",
+    bgcolor: "var(--primary)",
 
     ".MuiChip-label": {
-      color: "var(--primary)",
+      color: "white",
       fontSize: "10px",
       px: "12px",
       textTransform: "capitalize",

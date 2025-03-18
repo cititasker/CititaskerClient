@@ -65,6 +65,7 @@ interface IOffer {
 }
 
 interface ITask {
+  price: React.JSX.Element;
   id: number;
   category: { id: number; name: string };
   sub_category: { id: number; name: string };
