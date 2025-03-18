@@ -10,10 +10,10 @@ const styles = (isActive:boolean): Record<string, SxProps<Theme>> => ({
     height: "22px",
     border: "0.8px solid var(--primary)",
 
-    bgcolor: isActive ? "var(--light-primary)" : "var(--primary)",
+    bgcolor: isActive ? "var(--primary)" : "var(--light-primary)",
 
     ".MuiChip-label": {
-       color: isActive ? "var(--primary)" : "white",
+       color: isActive ? "white" : "var(--primary)",
       fontSize: "10px",
       px: "12px",
       textTransform: "capitalize",
