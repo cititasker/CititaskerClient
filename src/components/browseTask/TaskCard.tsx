@@ -11,6 +11,7 @@ import StatusChip from "../reusables/StatusChip";
 interface IProps {
   item: ITask;
   path: string;
+  isActive?: boolean; 
 }
 
 const TaskCard = ({ item, path }: IProps) => {
