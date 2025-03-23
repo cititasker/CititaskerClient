@@ -24,10 +24,10 @@ const style: Record<string, SxProps<Theme>> = {
       color: "var(--black)",
     },
     ".Mui-selected": {
-      color: "var(--secondary) !important",
+      color: "var(--primary)",
     },
     ".MuiTabs-indicator": {
-      bgcolor: "var(--secondary)",
+      bgcolor: "var(--primary)",
     },
   },
 };
