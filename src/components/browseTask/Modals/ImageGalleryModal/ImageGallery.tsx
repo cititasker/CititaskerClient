@@ -2,23 +2,27 @@ import { useState } from "react";
 import Image from "next/image";
 import { Modal, IconButton } from "@mui/material";
 import Icons from "@/components/Icons";
+import useModal from "@/hooks/useModal";
 
 const ImageGallery = ({ images }: { images: string[] }) => {
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState<number>(0);
+  const previewModal = useModal();
 
-  const openModal = (index: number) => setSelectedIndex(index);
-  const closeModal = () => setSelectedIndex(null);
+  const openModal = (index: number) => {
+    setSelectedIndex(index);
+    previewModal.openModal();
+  };
+  const closeModal = () => {
+    setSelectedIndex(0);
+    previewModal.closeModal();
+  };
 
   const prevImage = () => {
-    if (selectedIndex !== null) {
-      setSelectedIndex((prev) => (prev === 0 ? images.length - 1 : prev! - 1));
-    }
+    setSelectedIndex((prev) => (prev - 1 + images?.length) % images?.length);
   };
 
   const nextImage = () => {
-    if (selectedIndex !== null) {
-      setSelectedIndex((prev) => (prev === images.length - 1 ? 0 : prev! + 1));
-    }
+    setSelectedIndex((prev) => (prev + 1) % images?.length);
   };
 
   return (
@@ -35,49 +39,51 @@ const ImageGallery = ({ images }: { images: string[] }) => {
         />
       ))}
 
-      <Modal open={selectedIndex !== null} onClose={closeModal}>
-        <div className="fixed inset-0 bg-black bg-opacity-10 flex items-center justify-center pt-20">
-          {/* Transparent Border Box */}
-          <div className="relative  rounded-lg p-4">
-            {selectedIndex !== null && (
-              <>
-                {/* Image Display */}
+      <Modal open={previewModal.isOpen} onClose={closeModal} className="jus">
+        <div className="relative max-w-[360px] w-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+          <div className="overflow-auto w-full rounded-lg">
+            <div
+              className="flex flex-row transition-all duration-300"
+              style={{ transform: `translateX(-${selectedIndex * 100}%)` }}
+            >
+              {images.map((img, i) => (
                 <Image
-                  src={images[selectedIndex]}
+                  key={i}
+                  src={img}
                   alt="Preview"
                   width={360}
                   height={300}
-                  className="rounded-lg"
+                  className="rounded-lg min-w-full"
                 />
-
-                {/* Navigation Buttons*/}
-                {images.length > 1 && (
-                  <>
-                    <IconButton
-                      className="absolute left-[-20px] top-[140px] text-white rounded-full p-2"
-                      onClick={prevImage}
-                    >
-                      <Icons.iconLeft />
-                    </IconButton>
-                    <IconButton
-                      className="absolute right-[-20px] top-[140px] text-white rounded-full p-2"
-                      onClick={nextImage}
-                    >
-                      <Icons.iconRight />
-                    </IconButton>
-                  </>
-                )}
-
-                {/* Close Button*/}
-                <IconButton
-                  className="absolute top-[-20px] right-[10px] text-white rounded-full p-2"
-                  onClick={closeModal}
-                >
-                  <Icons.cancel />
-                </IconButton>
-              </>
-            )}
+              ))}
+            </div>
           </div>
+
+          {/* Navigation Buttons*/}
+          {images.length > 1 && (
+            <>
+              <IconButton
+                className="absolute -left-10 top-1/2 -translate-y-1/2 text-white rounded-full p-2"
+                onClick={prevImage}
+              >
+                <Icons.iconLeft />
+              </IconButton>
+              <IconButton
+                className="absolute -right-10 top-1/2 -translate-y-1/2 text-white rounded-full p-2"
+                onClick={nextImage}
+              >
+                <Icons.iconRight />
+              </IconButton>
+            </>
+          )}
+
+          {/* Close Button*/}
+          <IconButton
+            className="absolute -top-[30px] -right-[20px] text-white rounded-full p-2"
+            onClick={closeModal}
+          >
+            <Icons.cancel />
+          </IconButton>
         </div>
       </Modal>
     </div>
@@ -85,8 +91,3 @@ const ImageGallery = ({ images }: { images: string[] }) => {
 };
 
 export default ImageGallery;
-
-
-
-
-

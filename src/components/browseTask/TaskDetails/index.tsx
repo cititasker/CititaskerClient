@@ -9,7 +9,7 @@ import {
   Paper,
   Popper,
 } from "@mui/material";
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { styles } from "./styles";
@@ -39,6 +39,12 @@ import VerificationModal from "../Modals/VerifyModal/Verify";
 import ImageGallery from "../Modals/ImageGalleryModal/ImageGallery";
 
 const TaskDetails = () => {
+  const [verifications] = useState({
+    face: false,
+    id: false,
+    bank: false,
+    home: false,
+  });
   const { isAuth, user } = useAppSelector((state) => state.user);
   const [open, setOpen] = React.useState(false);
   const prevOpen = React.useRef(open);
@@ -111,14 +117,15 @@ const TaskDetails = () => {
   );
 
   const buttonText = useMemo(() => {
-    if (!("isVerified" in user) || !user.isVerified) return "Verify Account";
     if (task.status === "open" && !hasMadeOffer) return "Make an Offer";
     if (task.status === "open" && hasMadeOffer) return "Update Offer";
     if (task.status === "assigned") return "Assigned";
   }, [task, hasMadeOffer, user]);
 
   const handleButtonClick = () => {
-    if (!user || !user.isVerified) {
+    const allVerified = Object.values(verifications).every((value) => value);
+
+    if (allVerified) {
       setVerifyModalOpen(true);
     } else {
       openNextModal();
@@ -348,7 +355,6 @@ const TaskDetails = () => {
           <div className="mb-7">
             <p className="mb-4 text-xl font-semibold text-black-2">Pictures</p>
 
-
             {task.images && task.images.length > 0 ? (
               <ImageGallery images={task.images} />
             ) : (
@@ -365,7 +371,7 @@ const TaskDetails = () => {
       <VerificationModal
         open={verifyModalOpen}
         handleClose={() => setVerifyModalOpen(false)}
-        onContinue={openNextModal}
+        verifications={verifications}
       />
 
       {nextModalOpen && (
