@@ -411,7 +411,8 @@ const Offer = () => {
                             (82)
                           </Typography>
                           {task.tasker?.id === offer.tasker.id && (
-                            <StatusChip status={capitalize(task.status)} />
+                            <StatusChip status={capitalize(task.status)} isActive={false} />
+
                           )}
                         </Box>
                         <Box

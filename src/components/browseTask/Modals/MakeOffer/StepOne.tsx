@@ -2,7 +2,7 @@ import FormButton from "@/components/forms/FormButton";
 import { connectionFee } from "@/constant";
 import { offerSchema } from "@/schema/offer";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
-import { setOfferData } from "@/store/slices/task";
+import { setOfferData, setTaskDetails } from "@/store/slices/task";
 import { formatCurrency } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormHelperText } from "@mui/material";
@@ -22,10 +22,12 @@ const schema = offerSchema.pick({ task_id: true, offer_amount: true });
 type schemaType = z.infer<typeof schema>;
 
 const StepOne = ({ nextStep }: ModalType) => {
-  const { offer, taskersOffer } = useAppSelector((state) => state.task);
-  const [inputWidth, setInputWidth] = useState(180);
-  const { id }: { id: string } = useParams();
   const dispatch = useAppDispatch();
+  const { id }: { id: string } = useParams();
+  
+  const { offer, taskersOffer, taskDetails } = useAppSelector((state) => state.task);
+  
+  const [inputWidth, setInputWidth] = useState(180);
   const maxWidth = 400;
 
   const {
@@ -38,20 +40,34 @@ const StepOne = ({ nextStep }: ModalType) => {
     mode: "onChange",
     defaultValues: {
       task_id: +id,
-      offer_amount: offer.offer_amount || "0",
+      offer_amount: taskersOffer?.offer_amount
+        ? String(taskersOffer.offer_amount)
+        : "0",
     },
   });
 
   const offerAmount = watch("offer_amount");
 
+  // ✅ Ensure Redux has task details
   useEffect(() => {
-    if (taskersOffer) {
-      setValue("task_id", taskersOffer.id);
-      setValue("offer_amount", `${taskersOffer.offer_amount}`);
+    if (!taskDetails || Object.keys(taskDetails).length === 0) {
+      console.log("Fetching and setting task details in Redux...");
+      dispatch(setTaskDetails({ id: +id, budget: 1000 })); 
     }
-  }, [taskersOffer]);
+  }, [taskDetails, dispatch, id]);
 
-  React.useEffect(() => {
+
+  useEffect(() => {
+    if (taskersOffer?.offer_amount) {
+      setValue("task_id", taskersOffer.id);
+      setValue("offer_amount", String(taskersOffer.offer_amount));
+    } else if (taskDetails?.budget) { 
+      setValue("offer_amount", String(taskDetails.budget));
+    }
+  }, [taskersOffer, taskDetails, setValue]);
+
+
+  useEffect(() => {
     const baseWidth = 180;
     const additionalWidth = offerAmount?.length * 10;
     const newWidth = baseWidth + additionalWidth;
@@ -75,14 +91,13 @@ const StepOne = ({ nextStep }: ModalType) => {
       </p>
 
       <div
-        className="mt-2 mx-auto bg-light-blue  rounded-20 px-[12px] py-[20px] "
-        style={{ width: `${inputWidth}px`, maxWidth: `${maxWidth}px` }} // Dynamically set width with max constraint
+        className="mt-2 mx-auto bg-light-blue rounded-20 px-[12px] py-[20px]"
+        style={{ width: `${inputWidth}px`, maxWidth: `${maxWidth}px` }}
       >
         <NumericFormat
           value={offerAmount}
           onValueChange={(values) => {
-            const { value } = values;
-            setValue("offer_amount", value);
+            setValue("offer_amount", values.value);
           }}
           thousandSeparator={true}
           prefix="₦"
@@ -144,10 +159,7 @@ const StepOne = ({ nextStep }: ModalType) => {
         </div>
       </div>
 
-      <FormButton
-        type="submit"
-        btnStyle="text-white mt-[58px] w-full font-normal"
-      >
+      <FormButton type="submit" btnStyle="text-white mt-[58px] w-full font-normal">
         Next
       </FormButton>
     </form>
