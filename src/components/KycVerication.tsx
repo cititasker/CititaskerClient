@@ -25,6 +25,7 @@ const KycVerication = ({
   text = "Verify me",
   className,
 }: IProps) => {
+  console.log(665, data);
   const config = {
     ...data,
     merchant_key: passKey,

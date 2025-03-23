@@ -23,6 +23,8 @@ import PaystackButton from "../PaystackButton";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { maxDate } from "@/utils";
+import { useMutation } from "@tanstack/react-query";
+import { updateProfile } from "@/services/user";
 
 const options = [
   { id: "male", name: "Male" },
@@ -84,6 +86,16 @@ type schemaType = z.infer<typeof schema>;
 const KYC = () => {
   const { user } = useAppSelector((state) => state.user);
 
+  const updateProfileMutation = useMutation({
+    mutationFn: updateProfile,
+    onSuccess: (data) => {
+      console.log(data);
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
   const methods = useForm<schemaType>({
     defaultValues: {
       first_name: user.first_name ?? "",
@@ -114,6 +126,7 @@ const KYC = () => {
 
   const onSubmit = (values: schemaType) => {
     console.log(values);
+    updateProfileMutation.mutate(values);
   };
   return (
     <Box sx={style.container} className="px-10">
@@ -167,7 +180,12 @@ const KYC = () => {
                     />
                   </Grid>
                 </Grid>
-                <FormButton text="Save" type="submit" btnStyle="w-full mt-5" />
+                <FormButton
+                  loading={updateProfileMutation.isPending}
+                  text="Save"
+                  type="submit"
+                  btnStyle="w-full mt-5"
+                />
               </form>
             </FormProvider>
           </div>
