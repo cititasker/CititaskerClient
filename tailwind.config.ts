@@ -30,6 +30,7 @@ export default {
         "green-state-color": "#29C483",
         "yellow-state-color": "#F2AF42",
         "light-blue": "#EEFAFE",
+        "text-black": "#1B2149",
       },
       borderRadius: {
         "20": "20px",

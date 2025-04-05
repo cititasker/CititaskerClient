@@ -2,7 +2,7 @@ import { defaultProfile } from "@/constant/images";
 import { queryClient } from "@/providers/ServerProvider";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import { USERS } from "@/queries/queryKeys";
-import { accountSchema, accountSchemaType } from "@/schema";
+import { accountSchemaType, profileSchema, profileSchemaType } from "@/schema";
 import { updateProfile, uploadProfile } from "@/services/user";
 import { useAppSelector } from "@/store/hook";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,7 +15,14 @@ import { BiLoader } from "react-icons/bi";
 import { MdOutlineCameraAlt } from "react-icons/md";
 import FormInput from "../forms/FormInput";
 import FormButton from "../forms/FormButton";
-import { errorHandler } from "@/utils";
+import { errorHandler, maxDate } from "@/utils";
+import FormDatePicker from "../forms/FormDatePicker";
+import FormSelect from "../forms/FormSelect";
+
+const options = [
+  { id: "male", name: "Male" },
+  { id: "female", name: "Female" },
+];
 
 const Account = () => {
   const { user } = useAppSelector((state) => state.user);
@@ -42,32 +49,28 @@ const Account = () => {
     },
   });
 
-  const methods = useForm<accountSchemaType>({
+  const methods = useForm<profileSchemaType>({
     defaultValues: {
       profile_image: "",
-      full_name: "",
-      email: "",
-      phone_number: "",
-      location: "",
-      occupation: "",
+      first_name: user.first_name ?? "",
+      last_name: user.last_name ?? "",
+      email: user.email ?? "",
+      phone_number: user.phone_number ?? "",
+      gender: user.gender ?? "",
+      date_of_birth: user.date_of_birth ?? "",
     },
-    resolver: zodResolver(accountSchema),
+    resolver: zodResolver(profileSchema),
   });
   const { handleSubmit, setValue } = methods;
 
   useEffect(() => {
     if (user?.profile_image) setValue("profile_image", user.profile_image);
+    if (user.first_name) setValue("first_name", user.first_name);
+    if (user.last_name) setValue("last_name", user.last_name);
     if (user.email) setValue("email", user.email);
     if (user?.phone_number) setValue("phone_number", user.phone_number);
-    if (user?.location) setValue("location", user.location);
-    if (user?.occupation) setValue("occupation", user.occupation);
-    if (user.first_name && user.last_name) {
-      setValue("full_name", `${user.first_name} ${user.last_name}`);
-    } else if (user.first_name) {
-      setValue("full_name", user.first_name);
-    } else if (user?.last_name) {
-      setValue("full_name", user.last_name);
-    }
+    if (user?.gender) setValue("gender", user.gender);
+    if (user?.date_of_birth) setValue("date_of_birth", user.date_of_birth);
   }, [user]);
 
   const handleUpload = (e: any) => {
@@ -116,21 +119,32 @@ const Account = () => {
         <div className="mt-6">
           <Grid container columnSpacing="32px">
             <Grid size={{ xs: 12, md: 6 }}>
-              <FormInput name="full_name" label="Full Name" />
+              <FormInput name="first_name" label="First Name" />
             </Grid>
             <Grid size={{ xs: 12, md: 6 }}>
-              <FormInput name="email" label="Email Address" disabled />
+              <FormInput name="last_name" label="Last Name" />
             </Grid>
           </Grid>
           <Grid container columnSpacing="32px">
             <Grid size={{ xs: 12, md: 6 }}>
-              <FormInput name="phone_number" label="Phone Number" />
+              <FormInput name="email" label="Email" />
             </Grid>
             <Grid size={{ xs: 12, md: 6 }}>
-              <FormInput name="location" label="Location" />
+              <FormInput name="phone_number" label="Phone Number" />
             </Grid>
           </Grid>
-          <FormInput name="occupation" label="occupation" />
+          <Grid container columnSpacing="32px">
+            <Grid size={{ xs: 12, md: 6 }}>
+              <FormSelect name="gender" label="Gender" options={options} />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+              <FormDatePicker
+                name="date_of_birth"
+                label="Date of Birth"
+                maxDate={maxDate}
+              />
+            </Grid>
+          </Grid>
         </div>
         <FormButton
           type="submit"

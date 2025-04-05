@@ -1,5 +1,17 @@
 import { z } from "zod";
 
+export const profileSchema = z.object({
+  profile_image: z.any(),
+  first_name: z.string().min(1, { message: "First name is reqired" }),
+  last_name: z.string().min(1, { message: "Last name is reqired" }),
+  email: z.string().email({ message: "Must be a valid email" }),
+  phone_number: z.string().min(1, { message: "Phone number is reqired" }),
+  gender: z.string().min(1, { message: "Gender is reqired" }),
+  date_of_birth: z.string().min(1, { message: "Date of birth is reqired" }),
+});
+
+export type profileSchemaType = z.infer<typeof profileSchema>;
+
 export const accountSchema = z.object({
   profile_image: z.any(),
   full_name: z.string().optional(),

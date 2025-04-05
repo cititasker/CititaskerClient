@@ -3,7 +3,7 @@ import Account from "@/components/dashboard/Account";
 import CustomTab from "@/components/dashboard/CustomTab";
 import Notification from "@/components/dashboard/Notification";
 import Security from "@/components/dashboard/Security";
-import Verification from "@/components/dashboard/Verification";
+import Verifications from "@/components/dashboard/Verifications";
 import React from "react";
 
 export default function Page() {
@@ -13,7 +13,7 @@ export default function Page() {
       <Account />
       <Notification />
       <Security />
-      <Verification />
+      <Verifications />
     </CustomTab>
   );
 }

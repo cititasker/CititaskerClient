@@ -57,7 +57,7 @@ const data = [
       {
         name: "Profile",
         href: "/profile",
-        icon: Icons.user,
+        icon: Icons.profileCircle,
       },
     ],
   },

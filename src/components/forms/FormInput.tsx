@@ -40,6 +40,14 @@ const style: Record<string, SxProps<Theme>> | any = {
       textAlign: "left",
     },
     ...globalStyles.input,
+    ".MuiFormHelperText-root": {
+      ml: 0,
+    },
+    // ".Mui-disabled": {
+    //   ".MuiOutlinedInput-notchedOutline": {
+    //     borderColor: "#d32f2f",
+    //   },
+    // },
   },
 };
 
@@ -90,6 +98,7 @@ const FormInput = ({
             helperText={errors[name]?.message as any}
             disabled={disabled}
             {...field}
+            autoComplete="on"
             type={
               type === "password"
                 ? showPassword

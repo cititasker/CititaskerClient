@@ -14,8 +14,10 @@ interface TabPanelProps {
 
 const style: Record<string, SxProps<Theme>> = {
   container: {
-    borderBottom: 1,
-    borderColor: "divider",
+    ".MuiTabs-root": {
+      borderBottom: 1,
+      borderColor: "divider",
+    },
     ".MuiTab-root": {
       py: "25px",
       px: "40px",
@@ -62,8 +64,8 @@ const CustomTab = ({ tabs, defaultIndex = 0, children }: IProps) => {
     setValue(newValue);
   };
   return (
-    <div>
-      <Box sx={style.container}>
+    <Box sx={style.container} className="relative">
+      <div className="sticky top-0 z-10 bg-white">
         <Tabs
           value={value}
           onChange={handleChange}
@@ -73,7 +75,7 @@ const CustomTab = ({ tabs, defaultIndex = 0, children }: IProps) => {
             <Tab key={i} label={el} {...a11yProps(i)} />
           ))}
         </Tabs>
-      </Box>
+      </div>
       {React.Children.map(children, (child, i) => {
         return (
           <CustomTabPanel value={value} index={i} key={i}>
@@ -81,7 +83,7 @@ const CustomTab = ({ tabs, defaultIndex = 0, children }: IProps) => {
           </CustomTabPanel>
         );
       })}
-    </div>
+    </Box>
   );
 };
 

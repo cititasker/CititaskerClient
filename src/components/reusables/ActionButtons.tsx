@@ -34,7 +34,7 @@ const ActionsButtons = ({
       <FormButton
         text={cancelText}
         btnStyle={cn(
-          "flex-1 border-[1.5px] border-primary bg-white text-primary font-medium",
+          "flex-1 bg-light-grey text-primary font-normal",
           cancelStyle
         )}
         handleClick={handleCancel}
