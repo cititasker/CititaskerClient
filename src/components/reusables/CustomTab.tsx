@@ -11,6 +11,7 @@ interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
   value: number;
+  [key: string]: any;
 }
 
 const style: Record<string, SxProps<Theme>> = {
@@ -47,7 +48,7 @@ function CustomTabPanel(props: TabPanelProps) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && <Box>{children}</Box>}
+      {value === index && children}
     </div>
   );
 }
@@ -66,7 +67,7 @@ const CustomTab = ({ tabs, defaultIndex = 0, children, sx = {} }: IProps) => {
     setValue(newValue);
   };
   return (
-    <div>
+    <div className="h-full">
       <Box sx={{ ...style.container, ...sx }}>
         <Tabs
           value={value}
@@ -74,13 +75,18 @@ const CustomTab = ({ tabs, defaultIndex = 0, children, sx = {} }: IProps) => {
           aria-label="basic tabs example"
         >
           {tabs.map((el, i) => (
-            <Tab key={i} label={el} {...a11yProps(i)} />
+            <Tab key={i} label={el} {...a11yProps(i)} className="tab" />
           ))}
         </Tabs>
       </Box>
       {React.Children.map(children, (child, i) => {
         return (
-          <CustomTabPanel value={value} index={i} key={i}>
+          <CustomTabPanel
+            value={value}
+            index={i}
+            key={i}
+            className="h-[calc(100%-48px)] bg-white"
+          >
             {child}
           </CustomTabPanel>
         );

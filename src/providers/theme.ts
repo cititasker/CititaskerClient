@@ -35,7 +35,7 @@ const theme: Theme = createTheme({
     },
   },
   typography: {
-    fontFamily: "Montserrat, sans-serif",
+    fontFamily: "Articulat, sans-serif",
   },
 });
 

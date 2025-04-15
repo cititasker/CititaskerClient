@@ -31,6 +31,10 @@ export default {
         "yellow-state-color": "#F2AF42",
         "light-blue": "#EEFAFE",
         "text-black": "#1B2149",
+        lapis: "#70A1B6",
+        "cs-dark-4": "var(--Cultured-Secondary-Dark-4)",
+        "cs-dark-5": "var(--Cultured-Secondary-Dark-5)",
+        F9F9F9: "var(--F9F9F9)",
       },
       borderRadius: {
         "20": "20px",
@@ -45,8 +49,28 @@ export default {
         montserrat: "var(--font-montserrat)",
         dm_sans: "var(--font-dm_sans)",
         poppins: "var(--font-poppins)",
+        articulat: ["Articulat", "sans-serif"],
       },
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addBase, theme, addUtilities }: any) {
+      const newUtilities = {
+        ".no-scrollbar": {
+          "scrollbar-width": "none", // Firefox
+          "&::-webkit-scrollbar": {
+            display: "none", // Chrome, Safari
+          },
+        },
+      };
+      addUtilities(newUtilities);
+      addBase({
+        body: { "font-family": theme("fontFamily.articulat") },
+        "h1,h2,h3,h4,h5,h6": {
+          color: theme("colors.black"),
+          "font-family": theme("fontFamily.articulat"),
+        },
+      });
+    },
+  ],
 } satisfies Config;

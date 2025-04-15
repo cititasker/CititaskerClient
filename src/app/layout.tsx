@@ -3,7 +3,7 @@ import { SessionProvider } from "next-auth/react";
 import "./globals.css";
 import Providers from "@/providers";
 import AppProvider from "@/providers/AppProvider";
-import { dm_sans, lato, montserrat } from "@/fonts";
+// import { dm_sans, lato, montserrat } from "@/fonts";
 
 export const metadata: Metadata = {
   title: "CitiTasker",
@@ -24,9 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`relative ${montserrat.className} ${lato.variable} ${dm_sans.variable}`}
-      >
+      <body className="relative">
         <SessionProvider>
           <AppProvider>
             <Providers>{children}</Providers>

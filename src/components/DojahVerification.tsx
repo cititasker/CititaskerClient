@@ -47,7 +47,6 @@ function DojahVerification({ text, className, handleSuccess }: IProps) {
   };
 
   const response = (type: any, data: any) => {
-    console.log(type, data);
     if (type === "success") {
       setIsLoading(false);
       handleSuccess(data);
@@ -57,6 +56,7 @@ function DojahVerification({ text, className, handleSuccess }: IProps) {
     } else if (type === "close") {
       setIsLoading(false);
     } else if (type === "begin") {
+      //
     } else if (type === "loading") {
       setIsLoading(true);
     }
@@ -81,6 +81,9 @@ function DojahVerification({ text, className, handleSuccess }: IProps) {
           config={config}
           userData={userData}
           metadata={metadata}
+          onClose={() => {
+            setIsVisible(false);
+          }}
         />
       )}
     </>

@@ -60,7 +60,7 @@ function a11yProps(index: number) {
 const CustomTab = ({ tabs, defaultIndex = 0, children }: IProps) => {
   const [value, setValue] = React.useState(defaultIndex);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
   return (

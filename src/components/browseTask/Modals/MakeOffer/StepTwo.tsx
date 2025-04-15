@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { setOfferData } from "@/store/slices/task";
 import { FormHelperText } from "@mui/material";
 import { maxLengthChar } from "@/constant";
+import ActionsButtons from "@/components/reusables/ActionButtons";
 
 interface ModalType {
   nextStep: () => void;
@@ -75,17 +76,13 @@ export default function StepTwo({ nextStep, prevStep }: ModalType) {
           </FormHelperText>
         )}
 
-        <div className="flex gap-5 mt-[154px]">
-          <FormButton
-            handleClick={prevStep}
-            btnStyle="text-primary border border-primary bg-transparent w-full"
-          >
-            Back
-          </FormButton>
-          <FormButton type="submit" btnStyle="text-white bg-[#236F8E] w-full">
-            Next
-          </FormButton>
-        </div>
+        <ActionsButtons
+          type="submit"
+          cancelText="Back"
+          okText="Next"
+          className="mt-[154px] sm:gap-x-5"
+          handleCancel={prevStep}
+        />
       </form>
     </FormProvider>
   );
