@@ -1,12 +1,9 @@
 "use client";
-import React, { Fragment, useState } from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import Tab from "@mui/material/Tab";
-import Tabs from "@mui/material/Tabs";
-import Divider from "@mui/material/Divider";
 import Popper from "@mui/material/Popper";
 import Grow from "@mui/material/Grow";
 import Paper from "@mui/material/Paper";
@@ -41,7 +38,6 @@ import ExtraInfo from "@/components/forms/ExtraInfo";
 import ActionsButtons from "@/components/reusables/ActionButtons";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import { paymentReference } from "@/services/user";
-import UserOffer from "@/components/myTasks/UserOffer";
 import { queryClient } from "@/providers/ServerProvider";
 import { USER_TASK_ID } from "@/queries/queryKeys";
 import AllOffers from "@/components/myTasks/AllOffers";
@@ -69,13 +65,12 @@ const schema = z.object({
 type schemaType = z.infer<typeof schema>;
 
 const Offer = () => {
-  const [tabValue, setTabValue] = React.useState(0);
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef<HTMLButtonElement>(null);
   const [showAcceptModal, setShowAcceptModal] = useState(false);
   const [selectedOffer, setSelectedOffer] = useState<IOffer | null>(null);
   const { id } = useParams() as any;
-  const { data, refetch } = useSuspenseQuery(getUserTaskByIdQuery(id));
+  const { data } = useSuspenseQuery(getUserTaskByIdQuery(id));
   const task: ITask = data.data;
   const status = task.status;
   const navigate = useRouter();
@@ -131,10 +126,6 @@ const Offer = () => {
       setOpen(false);
     }
   }
-
-  const handleTabChange = (_: any, newValue: React.SetStateAction<number>) => {
-    setTabValue(newValue);
-  };
 
   const toggleModal = (value?: any) => {
     setShowAcceptModal((prev) => {
