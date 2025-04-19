@@ -1,16 +1,12 @@
 "use client";
 import { Box, SxProps, Theme } from "@mui/material";
 import React from "react";
-// import Icons from "../../Icons";
-import BankVerification from "../Verifications/BankVerification";
-import BVNVerification from "./BVNVerification";
 import Icons from "@/components/Icons";
 import PaymentStatus from "../PaymentStatus";
 import ExtraInfo from "@/components/forms/ExtraInfo";
 import CustomModal from "@/components/reusables/CustomModal";
 import useModal from "@/hooks/useModal";
 import theme from "@/providers/theme";
-import FormButton from "@/components/forms/FormButton";
 import PadLock from "@/../public/images/padlock.png";
 import Image from "next/image";
 import { useAppSelector } from "@/store/hook";
@@ -171,8 +167,6 @@ const Verifications = () => {
           className="absolute top-0 bottom-0 right-0 left-0 m-auto"
         />
       </CustomModal>
-      {/* <BVNVerification />
-      <BankVerification /> */}
     </Box>
   );
 };

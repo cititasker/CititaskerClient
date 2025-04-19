@@ -95,6 +95,7 @@ const PersonalDetails = () => {
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div className="max-w-[653px] px-8 space-y-6">
               {/* Bio */}
+              <label className="font-semibold">About me</label>
               <Controller
                 control={control}
                 name="bio"

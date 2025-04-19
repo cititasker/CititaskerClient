@@ -1,5 +1,5 @@
 import { Avatar, Box, Button, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 import { FaStar } from "react-icons/fa";
 import StatusChip from "../reusables/StatusChip";
 import { capitalize, formatCurrency, loggedInUser } from "@/utils";
