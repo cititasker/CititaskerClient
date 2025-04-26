@@ -7,7 +7,25 @@ type TUseTimer = {
   minutes: string;
   seconds: string;
 };
+
+interface IBank {
+  name: string;
+  slug: string;
+  code: string;
+  longcode: string;
+  gateway: null;
+  pay_with_bank: boolean;
+  active: boolean;
+  is_deleted: boolean;
+  country: string;
+  currency: string;
+  type: string;
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+}
 interface IUser {
+  isVerified: any;
   date_of_birth: string | null;
   email: string;
   first_name: string | null;
@@ -64,6 +82,7 @@ interface IOffer {
 }
 
 interface ITask {
+  price: React.JSX.Element;
   id: number;
   category: { id: number; name: string };
   sub_category: { id: number; name: string };

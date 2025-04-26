@@ -1,7 +1,6 @@
 "use client";
 import Notification from "@/components/dashboard/Notification";
 import FAQ from "@/components/profile/FAQ";
-import KYC from "@/components/profile/KYC";
 import Licenses from "@/components/profile/Licenses";
 import PersonalDetails from "@/components/profile/PersonalDetails";
 import Portfolio from "@/components/profile/Portfolio";
@@ -13,10 +12,9 @@ import React from "react";
 
 const tabs = [
   "Personal Details",
-  "Porfolio",
+  "Portfolio",
   "Reviews",
   "Licenses",
-  "KYC",
   "Notifications",
   "FAQ",
 ];
@@ -47,7 +45,6 @@ export default function Page() {
                 <Portfolio />
                 <Reviews />
                 <Licenses />
-                <KYC />
                 <Notification />
                 <FAQ />
               </CustomTab>

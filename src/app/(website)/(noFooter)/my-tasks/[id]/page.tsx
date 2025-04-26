@@ -3,11 +3,7 @@ import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import Typography from "@mui/material/Typography";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import Tab from "@mui/material/Tab";
-import Tabs from "@mui/material/Tabs";
-import Divider from "@mui/material/Divider";
 import Popper from "@mui/material/Popper";
 import Grow from "@mui/material/Grow";
 import Paper from "@mui/material/Paper";
@@ -15,25 +11,20 @@ import ClickAwayListener from "@mui/material/ClickAwayListener";
 import MenuList from "@mui/material/MenuList";
 import MenuItem from "@mui/material/MenuItem";
 import Grid from "@mui/material/Grid2";
-import { FaStar } from "react-icons/fa6";
 import Link from "next/link";
 import { styles } from "./styles";
 import Icons from "@/components/Icons";
 import Image from "next/image";
 import FormButton from "@/components/forms/FormButton";
-import StatusChip from "@/components/reusables/StatusChip";
 import { useParams, useRouter } from "next/navigation";
 import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import { getUserTaskByIdQuery } from "@/queries/task";
 import {
-  capitalize,
   errorHandler,
   formatCurrency,
   formatDate,
   initializeName,
-  loggedInUser,
 } from "@/utils";
-import ReplyOffer from "@/components/browseTask/Offer/ReplyOffer";
 import ConfirmationModal from "@/components/reusables/Modals/ConfirmationModal";
 import { defaultProfile } from "@/constant/images";
 import FormCheckbox from "@/components/forms/FormCheckbox";
@@ -47,6 +38,12 @@ import ExtraInfo from "@/components/forms/ExtraInfo";
 import ActionsButtons from "@/components/reusables/ActionButtons";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import { paymentReference } from "@/services/user";
+import { queryClient } from "@/providers/ServerProvider";
+import { USER_TASK_ID } from "@/queries/queryKeys";
+import AllOffers from "@/components/myTasks/AllOffers";
+import CustomTab from "@/components/reusables/CustomTab";
+import Questions from "@/components/myTasks/Questions";
+import Reviews from "@/components/myTasks/Reviews";
 
 const moreOptions = [
   { text: "Cancel Task", name: "cancel" },
@@ -68,12 +65,11 @@ const schema = z.object({
 type schemaType = z.infer<typeof schema>;
 
 const Offer = () => {
-  const [tabValue, setTabValue] = React.useState(0);
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef<HTMLButtonElement>(null);
+  const [showAcceptModal, setShowAcceptModal] = useState(false);
   const [selectedOffer, setSelectedOffer] = useState<IOffer | null>(null);
   const { id } = useParams() as any;
-  const [showAcceptModal, setShowAcceptModal] = useState(false);
   const { data } = useSuspenseQuery(getUserTaskByIdQuery(id));
   const task: ITask = data.data;
   const status = task.status;
@@ -131,10 +127,6 @@ const Offer = () => {
     }
   }
 
-  const handleTabChange = (_: any, newValue: React.SetStateAction<number>) => {
-    setTabValue(newValue);
-  };
-
   const toggleModal = (value?: any) => {
     setShowAcceptModal((prev) => {
       if (prev) {
@@ -177,6 +169,7 @@ const Offer = () => {
 
   const handleSuccess = (data: any) => {
     console.log(data);
+    queryClient.invalidateQueries({ queryKey: USER_TASK_ID(id) });
     toggleSuccessModal();
   };
 
@@ -192,6 +185,8 @@ const Offer = () => {
       navigate.push(`/post-task/${id}`);
     }
   };
+
+  console.log(899, task);
 
   const buttonText =
     status == "open"
@@ -364,105 +359,15 @@ const Offer = () => {
           </Card>
         </Grid>
 
-        <Grid size={{ xs: 12, md: 7 }}>
-          <Tabs
-            value={tabValue}
-            onChange={handleTabChange}
-            aria-label="Offers and Questions Tabs"
+        <Grid size={{ xs: 12, md: 7 }} sx={{ minHeight: "100%" }}>
+          <CustomTab
+            tabs={[`Offers (${task.offer_count})`, "Questions (3)", "Reviews"]}
+            sx={styles.tabs}
           >
-            <Tab
-              label={`Offers (${task.offer_count})`}
-              sx={{ textTransform: "none", color: "#000", fontWeight: "600" }}
-            />
-            <Tab
-              label="Questions (3)"
-              sx={{ textTransform: "none", color: "#000", fontWeight: "600" }}
-            />
-          </Tabs>
-          <Divider />
-
-          <div className="paper rounded-none p-8">
-            {task.offers.map((offer) => (
-              <div
-                key={offer.id}
-                className="mb-5 last:mb-0 border border-light-grey rounded-30 p-5"
-              >
-                <div className="max-w-[691px] m-auto">
-                  <div className="mb-6 flex items-center justify-between gap-3">
-                    <Box display="flex" gap={2}>
-                      <Avatar
-                        src={offer.tasker.profile_image ?? defaultProfile}
-                        alt="User Avatar"
-                        className="w-[50px] h-[50px]"
-                      />
-                      <div className="">
-                        <Box display="flex" alignItems="center" gap={0.5}>
-                          <Typography variant="body1" fontWeight="bold">
-                            {loggedInUser(
-                              offer.tasker.first_name,
-                              offer.tasker.last_name
-                            )}
-                          </Typography>
-                          <Typography variant="body2" sx={{ color: "#F2AF42" }}>
-                            5.0
-                          </Typography>
-                          <FaStar className="text-[#F2AF42]" />
-                          <Typography variant="body2" color="textSecondary">
-                            (82)
-                          </Typography>
-                          {task.tasker?.id === offer.tasker.id && (
-                            <StatusChip status={capitalize(task.status)} />
-                          )}
-                        </Box>
-                        <Box
-                          display="flex"
-                          alignItems="center"
-                          gap={2.5}
-                          mt={1}
-                        >
-                          <Button
-                            startIcon={<Icons.person />}
-                            className="text-dark-grey-2"
-                          >
-                            View Profile
-                          </Button>
-                          <Button
-                            startIcon={<Icons.flag />}
-                            className="text-dark-grey-2"
-                          >
-                            Report Offer
-                          </Button>
-                        </Box>
-                      </div>
-                    </Box>
-                    <Typography variant="h6" fontWeight="bold">
-                      {formatCurrency({
-                        value: offer.offer_amount,
-                        noFraction: true,
-                      })}
-                    </Typography>
-                  </div>
-
-                  {offer.status === "pending" && (
-                    <FormButton
-                      text="Accept Offer"
-                      btnStyle="min-h-[45px] ml-auto max-w-[184px] w-full mb-5"
-                      handleClick={() => toggleModal(offer)}
-                    />
-                  )}
-                  {task.status === "assigned" &&
-                    task.tasker?.email === offer.tasker.email && (
-                      <FormButton
-                        text="Message"
-                        btnStyle="bg-green-state-color text-white min-h-[45px] ml-auto max-w-[184px] w-full mb-5"
-                        handleClick={() => {}}
-                      />
-                    )}
-                  <ReplyOffer offer={offer} />
-                </div>
-              </div>
-            ))}
-          </div>
+            <AllOffers task={task} toggleModal={toggleModal} />
+            <Questions />
+            <Reviews />
+          </CustomTab>
         </Grid>
       </Grid>
       <ConfirmationModal
@@ -598,7 +503,6 @@ const Offer = () => {
             the task location. Message your tasker the details to get your task
             done.
           </ExtraInfo>
-
           <ActionsButtons
             cancelText="Go to task"
             okText={`Message ${selectedOffer?.tasker.first_name ?? ""}`}

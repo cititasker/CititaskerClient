@@ -6,7 +6,6 @@ import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { offerSchema, offerSchemaType } from "@/schema/offer";
 import { z } from "zod";
-import FormButton from "../../../forms/FormButton";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
 import FormCheckbox from "../../../forms/FormCheckbox";
 import { useMutation } from "@tanstack/react-query";
@@ -18,6 +17,7 @@ import { TASK_ID } from "@/queries/queryKeys";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import { connectionFee } from "@/constant";
 import { purgeStateData } from "@/store/slices/task";
+import ActionsButtons from "@/components/reusables/ActionButtons";
 
 interface ModalType {
   nextStep: () => void;
@@ -135,21 +135,14 @@ export default function StepThree({ nextStep, prevStep }: ModalType) {
           />
         </div>
 
-        <div className="flex gap-5 mt-5">
-          <FormButton
-            handleClick={prevStep}
-            btnStyle="text-primary border border-primary bg-transparent w-full"
-          >
-            Back
-          </FormButton>
-          <FormButton
-            type="submit"
-            btnStyle="w-full"
-            loading={mutation.isPending || updateMutation.isPending}
-          >
-            {!!taskersOffer ? "Update Offer" : "Submit Offer"}
-          </FormButton>
-        </div>
+        <ActionsButtons
+          type="submit"
+          cancelText="Back"
+          okText={!!taskersOffer ? "Update Offer" : "Send Offer"}
+          className="mt-5 sm:gap-x-5"
+          handleCancel={prevStep}
+          loading={mutation.isPending || updateMutation.isPending}
+        />
       </form>
     </FormProvider>
   );

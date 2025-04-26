@@ -18,7 +18,7 @@ export const globalStyles: any = {
       height: "48px",
 
       ".Mui-disabled": {
-        // bgcolor: "rgba(217, 217, 217, 0.46) !important",
+        bgcolor: "rgba(217, 217, 217, 0.46) !important",
       },
 
       "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
@@ -39,9 +39,9 @@ export const globalStyles: any = {
         height: "100%",
         bgcolor: "#fff",
       },
-      "&:hover fieldset": {
-        borderColor: "var(--black)",
-      },
+      // "&:not(:disabled):hover fieldset": {
+      //   borderColor: "var(--black)",
+      // },
     },
   },
   actionBtns: {

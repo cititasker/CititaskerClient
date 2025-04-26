@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import api from "./apiService";
+import api, { publicApi } from "./apiService";
 
 export function joinPosterApi(data: any) {
   return api
@@ -56,3 +56,39 @@ export const reverseGeocode = async (
     console.error("Error in reverse geocoding:", error);
   }
 };
+
+export function getBanks(): Promise<any> {
+  return publicApi
+    .get(`https://api.paystack.co/bank`, {
+      headers: {
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_PAYSTACK_SECERET_KEY}`,
+      },
+    })
+    .then((data) => {
+      return data.data.data;
+    })
+    .catch((error: AxiosError) => {
+      throw error.response?.data;
+    });
+}
+
+export function resolveAccountNumber({
+  account,
+  bank_code,
+}: any): Promise<any> {
+  return publicApi
+    .get(
+      `https://api.paystack.co/bank/resolve?account_number=${account}&bank_code=${bank_code}`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_PAYSTACK_SECERET_KEY}`,
+        },
+      }
+    )
+    .then((data) => {
+      return data.data.data;
+    })
+    .catch((error: AxiosError) => {
+      throw error.response?.data;
+    });
+}

@@ -51,4 +51,10 @@ export const styles: Record<string, SxProps<Theme>> = {
       },
     },
   },
+  tabs: {
+    mb: 0,
+    ".tab": {
+      fontWeight: 400,
+    },
+  },
 };
