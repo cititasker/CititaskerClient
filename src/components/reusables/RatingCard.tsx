@@ -18,7 +18,7 @@ const RatingCard: React.FC<RatingCardProps> = ({
   review,
 }) => {
   return (
-    <div className="w-full max-w-[290px] min-h-[214px] px-4 py-4 rounded-2xl shadow-md space-y-4 bg-light-grey">
+    <div className="w-full min-h-[214px] px-4 py-4 rounded-2xl shadow-md space-y-4 bg-light-grey">
       {/* Stars */}
       <div className="flex justify-center items-center space-x-1">
         {Array.from({ length: 5 }).map((_, i) => (

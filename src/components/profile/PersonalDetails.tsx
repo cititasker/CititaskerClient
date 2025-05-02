@@ -258,7 +258,7 @@ const PersonalDetails = () => {
               </div>
             </div>
           )}
-          
+
           {!edit && bio && (
             <div className="py-10">
               <RatingSection />

@@ -36,6 +36,7 @@ const cancel: SxProps<Theme> = {
   position: "absolute",
   top: "5px",
   right: "5px",
+  zIndex: 20,
 
   [theme.breakpoints.up("sm")]: {
     top: "24px",
