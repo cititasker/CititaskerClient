@@ -8,6 +8,7 @@ import { z } from "zod";
 import Image from "next/image";
 import FormError from "../reusables/FormError";
 import Icons from "../Icons";
+import RatingSection from "./RatingSection";
 
 const schema = z.object({
   bio: z.string().min(1, { message: "Please enter some text" }),
@@ -237,11 +238,13 @@ const PersonalDetails = () => {
           </form>
         </FormProvider>
       ) : (
-        <div className="max-w-[740px] px-8 space-y-6">
-          <div dangerouslySetInnerHTML={{ __html: bio }} />
+        <div className=" px-8 space-y-6 ">
+          <div className="max-w-[740px]">
+            <div dangerouslySetInnerHTML={{ __html: bio }} />
+          </div>
 
           {addedSkills.length > 0 && (
-            <div>
+            <div className="max-w-[740px]">
               <p className="text-sm font-bold mb-1">Skills:</p>
               <div className="flex flex-wrap gap-2">
                 {addedSkills.map((skill) => (
@@ -256,8 +259,14 @@ const PersonalDetails = () => {
             </div>
           )}
 
+          {!edit && bio && (
+            <div className="py-10">
+              <RatingSection />
+            </div>
+          )}
+
           {certificates.length > 0 && (
-            <div>
+            <div className="max-w-[740px]">
               <p className="text-sm font-bold mb-1">Certifications:</p>
               <div className="space-y-4 grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
                 {certificates.map((cert, i) => (
