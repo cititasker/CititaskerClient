@@ -44,15 +44,3 @@ export function paymentReference(data: any) {
       throw error.response?.data;
     });
 }
-
-export function verifyBank(data: any) {
-  const queryParams = new URLSearchParams(data).toString();
-  return api
-    .post(`utility/verify-account-details?${queryParams}`, data)
-    .then((data) => {
-      return data.data;
-    })
-    .catch((error: AxiosError) => {
-      throw error.response?.data;
-    });
-}

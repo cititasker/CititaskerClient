@@ -1,5 +1,6 @@
 "use client";
 import { globalStyles } from "@/globalStyles";
+import { cn } from "@/utils";
 import {
   Autocomplete,
   FormControl,
@@ -25,6 +26,7 @@ interface IProps<T> {
     option: T
   ) => React.ReactNode;
   isOptionEqualToValue?: (option: T, value: T) => boolean;
+  className?: string;
   [key: string]: any;
 }
 
@@ -53,6 +55,7 @@ const FormAutoComplete = <T,>({
   renderOption,
   isOptionEqualToValue,
   onChange,
+  className,
 }: IProps<T>) => {
   const {
     control,
@@ -60,7 +63,11 @@ const FormAutoComplete = <T,>({
   } = useFormContext();
 
   return (
-    <FormControl fullWidth sx={styles.container} className="w-full flex-1 mb-5">
+    <FormControl
+      fullWidth
+      sx={styles.container}
+      className={cn("w-full flex-1 mb-5", className)}
+    >
       <FormLabel htmlFor={label} className="label">
         {label}
       </FormLabel>

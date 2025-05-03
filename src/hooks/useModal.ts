@@ -1,8 +1,8 @@
 import { UseModalReturn } from "@/constant/interface";
 import { useState, useCallback } from "react";
 
-export default function useModal(): UseModalReturn {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+export default function useModal(v?: boolean): UseModalReturn {
+  const [isOpen, setIsOpen] = useState<boolean>(v || false);
 
   const openModal = useCallback(() => setIsOpen(true), []);
   const closeModal = useCallback(() => setIsOpen(false), []);

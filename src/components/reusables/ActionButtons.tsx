@@ -12,6 +12,7 @@ interface IProps {
   handleCancel?: any;
   handleSubmit?: any;
   type?: "submit" | "button";
+  disabled?: boolean;
 }
 const ActionsButtons = ({
   loading,
@@ -23,6 +24,7 @@ const ActionsButtons = ({
   type = "submit",
   okText = "Submit",
   cancelText = "Cancel",
+  disabled = false,
 }: IProps) => {
   return (
     <div
@@ -31,20 +33,23 @@ const ActionsButtons = ({
         className
       )}
     >
-      <FormButton
-        text={cancelText}
-        btnStyle={cn(
-          "flex-1 bg-light-grey text-primary font-normal",
-          cancelStyle
-        )}
-        handleClick={handleCancel}
-      />
+      {handleCancel && (
+        <FormButton
+          text={cancelText}
+          btnStyle={cn(
+            "flex-1 bg-light-grey text-primary font-normal",
+            cancelStyle
+          )}
+          handleClick={handleCancel}
+        />
+      )}
       <FormButton
         text={okText}
         type={type}
         btnStyle={cn("flex-1 font-medium", okStyle)}
         loading={loading}
         handleClick={handleSubmit}
+        disabled={disabled || loading}
       />
     </div>
   );

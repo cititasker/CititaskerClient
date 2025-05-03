@@ -1,5 +1,6 @@
 import { AxiosError } from "axios";
 import api, { publicApi } from "./apiService";
+import { QUERY_PATHS } from "@/constant";
 
 export function joinPosterApi(data: any) {
   return api
@@ -58,12 +59,8 @@ export const reverseGeocode = async (
 };
 
 export function getBanks(): Promise<any> {
-  return publicApi
-    .get(`https://api.paystack.co/bank`, {
-      headers: {
-        Authorization: `Bearer ${process.env.NEXT_PUBLIC_PAYSTACK_SECERET_KEY}`,
-      },
-    })
+  return api
+    .get(QUERY_PATHS.UTILITY.BANKS)
     .then((data) => {
       return data.data.data;
     })
@@ -72,21 +69,12 @@ export function getBanks(): Promise<any> {
     });
 }
 
-export function resolveAccountNumber({
-  account,
-  bank_code,
-}: any): Promise<any> {
-  return publicApi
-    .get(
-      `https://api.paystack.co/bank/resolve?account_number=${account}&bank_code=${bank_code}`,
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_PAYSTACK_SECERET_KEY}`,
-        },
-      }
-    )
+export function verifyAccountNumber(data: any) {
+  const queryParams = new URLSearchParams(data).toString();
+  return api
+    .get(`${QUERY_PATHS.UTILITY.VERIFY_ACCOUNT_NUMBER}?${queryParams}`)
     .then((data) => {
-      return data.data.data;
+      return data.data;
     })
     .catch((error: AxiosError) => {
       throw error.response?.data;
