@@ -95,16 +95,13 @@ const RatingSection = () => {
         <FormButton
           text="See all reviews"
           handleClick={handleOpen}
-          btnStyle="mt-5 max-w-[144px] w-full !bg-[#D0F0FB] !text-primary"
+          btnStyle="w-fit !bg-[#D0F0FB] text-primary"
         />
       </div>
 
-      {/* Scrollable Cards */}
-      <div className="flex overflow-x-auto gap-4 scrollbar-hide py-2">
-        {mockReviews.map((review, idx) => (
-          <div key={idx} className="flex-shrink-0 w-[290px]">
-            <RatingCard {...review} />
-          </div>
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(290px,1fr))] overflow-x-auto gap-4 scrollbar-hide py-2">
+        {mockReviews.slice(0, 3).map((review, idx) => (
+          <RatingCard key={idx} {...review} />
         ))}
       </div>
 
@@ -116,6 +113,8 @@ const RatingSection = () => {
         aria-describedby="modal-modal-description"
         paperStyle={{
           maxWidth: "750px",
+          height: "95dvh",
+          maxHeight: "1058px",
           p: "20px",
           [theme.breakpoints.up("sm")]: {
             px: "34px",
@@ -124,12 +123,12 @@ const RatingSection = () => {
           },
         }}
       >
-        <div>
-          <h3 className="text-xl font-semibold text-center pb-6">All Reviews</h3>
-
-          <div className="flex flex-col md:flex-row gap-6 items-start">
-            {/* Left Profile Summary Box */}
-            <div className="w-full md:max-w-[350px] flex-shrink-0 bg-primary p-6 rounded-2xl space-y-4">
+        <div className="relative h-full overflow-y-auto">
+          <h3 className="bg-white text-xl font-semibold text-center pb-6">
+            All Reviews
+          </h3>
+          <div className="h-[calc(100%-52px)] overflow-y-auto flex flex-col md:flex-row gap-4 relative hide-scrollbar">
+            <div className="h-fit md:sticky md:top-0 w-full md:max-w-[350px] flex-shrink-0 bg-primary p-6 rounded-2xl space-y-4">
               <div className="flex items-center gap-4">
                 <Image
                   src={profileSummary.image}
@@ -168,9 +167,7 @@ const RatingSection = () => {
                 </p>
               </div>
             </div>
-
-            {/* Right Review List */}
-            <div className="flex-1 max-h-[400px] overflow-y-auto space-y-6 bg-white rounded-2xl">
+            <div className="flex-1 space-y-6">
               <div className="grid grid-cols-1 gap-4">
                 {mockReviews.map((review, idx) => (
                   <RatingCard key={idx} {...review} />
@@ -178,8 +175,6 @@ const RatingSection = () => {
               </div>
             </div>
           </div>
-
-          
         </div>
       </CustomModal>
     </div>
@@ -187,4 +182,3 @@ const RatingSection = () => {
 };
 
 export default RatingSection;
-

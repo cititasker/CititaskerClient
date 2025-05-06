@@ -8,6 +8,7 @@ import {
 } from "@/schema/auth";
 import api, { publicApi } from "./apiService";
 import { AxiosError } from "axios";
+import { QUERY_PATHS } from "@/constant";
 
 export function registerApi(data: loginSchemaType) {
   return publicApi
@@ -128,6 +129,17 @@ export function googleAuth() {
     .get(`auth/google`)
     .then((data) => {
       return data.data;
+    })
+    .catch((error: AxiosError) => {
+      throw error.response?.data;
+    });
+}
+
+export function updateBankDetails(data: any): Promise<any> {
+  return api
+    .post(QUERY_PATHS.AUTH.UPDATE_BANK_DETAILS, data)
+    .then((data) => {
+      return data.data.data;
     })
     .catch((error: AxiosError) => {
       throw error.response?.data;
