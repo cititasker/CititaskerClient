@@ -19,8 +19,8 @@ const PopularTasks = () => {
           ))}
         </div>
         <FormButton
-          text="Explore more on citiTasker"
-          btnStyle="w-fit mx-auto !bg-secondary !px-5"
+          text="Explore more"
+          btnStyle="w-fit mx-auto !px-5"
         />
       </div>
     </div>

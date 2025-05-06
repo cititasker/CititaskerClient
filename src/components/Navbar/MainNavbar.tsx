@@ -354,7 +354,7 @@ const MainNavbar = ({ isAuth }: IProp) => {
   };
 
   return (
-    <div className="px-2.5 fixed w-full top-5 z-[100]">
+    <div className="px-[57px] fixed w-full top-5 z-[100]">
       <div className="shadow-md max-w-[87.5rem] mx-auto h-[4.688rem] flex items-center rounded-[3.125rem] px-5 w-full bg-white">
         <div className="max-w-[79.375rem] w-full mx-auto flex justify-between items-center relative">
           <Link href="/">

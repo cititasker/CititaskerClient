@@ -11,15 +11,17 @@ const MainFooter = () => {
         <div className="flex flex-col xl:flex-row gap-x-5 gap-y-[4.5rem] justify-between pb-[5.75rem] border-b border-primary mb-[3.625rem]">
           <div>
             <Image
-              src="/icons/logo_icon.svg"
+              src="/images/footer-logo.svg"
               alt="logo"
               height={32}
               width={192}
               className="mb-7"
             />
             <p className="text-base font-normal max-w-[24rem] w-full text-white">
-              Borem ipsum dolor sit amet, consectetur adipiscing elit. Borem
-              ipsum dolor sit amet, consectetur adipiscing elit.
+              CitiTasker is a trusted platform designed to connect people in
+              need of help with people who are ready to work. With secure
+              payments, verified Taskers, and 24/7 support, CitiTasker is your
+              go-to platform for getting things done quickly and efficiently.
             </p>
           </div>
           <div className="flex flex-1 xl:max-w-[900px] w-full">

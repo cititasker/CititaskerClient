@@ -9,6 +9,7 @@ const imagesData = [
   "/images/hiw-2.svg",
   "/images/hiw-3.svg",
   "/images/hiw-4.svg",
+  "/images/hiw-5.svg",
 ];
 
 const SlidingImageCarousel = () => {

@@ -25,7 +25,7 @@ const data = [
   {
     id: "4",
     title: "Verified Taskers",
-    text: "Verified Tasker gets a badge to give posters more info when deciding who to assign a task. Each badge has certain requirements that must be met and vetted before they’re ",
+    text: "Every Tasker on our platform goes through a thorough verification process which includes background checks, and skill validation amongst others, to ensure they are skilled, reliable, and trustworthy.",
     image: "/images/wcu-4.svg",
   },
 ];
@@ -41,68 +41,77 @@ const WhyChooseCitiTasker = () => {
     }
   }, []);
   return (
-    <div className="bg-dark-secondary">
-      <div className="container pb-[5.75rem] pt-[4.375rem]">
-        <div className="w-fit font-bold mx-auto text-center text-base sm:text-[2.5rem] text-white mb-3.5 md:mb-[5.625rem]">
-          Why Choose{" "}
-          <UnderlinedHeader
-            text="CitiTasker?"
-            extraStyle="before:!translate-x-0 mb-[0.875rem] sm:mb-[1.875rem]  inline-block"
-          />
-        </div>
+    <div className="bg-[#F5F5F5] relative overflow-hidden">
+  <Image
+    src="/images/bg-pics.svg"
+    alt="background shape"
+    width={484}
+    height={484}
+    className="hidden md:block absolute bottom-0 right-0 w-[200px] h-auto pointer-events-none z-0"
+  />
 
-        <div className="w-full flex flex-col lg:flex-row gap-x-5 justify-between items-center">
-          <div className="overflow-hidden max-w-full lg:max-w-[32.875rem] w-full mb-[4.375rem] lg:mb-0  relative pl-12 sm:pl-20 before:content-[''] before:absolute before:left-0 before:top-0 before:w-[5px] before:h-full before:bg-dark-grey-2 before:rounded-20">
-            <div
-              className="w-[5px] bg-primary absolute top-0 left-0 rounded-20 transition-transform duration-300"
-              style={{
-                transform: `translateY(${height * activeIndex}px)`,
-                height: `${height}px`,
-              }}
-            ></div>
-            {data.map((el, i) => (
-              <div
-                ref={listItem}
-                key={el.id}
-                className="flex items-center cursor-pointer"
-                onClick={() => setActiveIndex(i)}
-              >
-                <div className="py-[1.5rem]">
-                  <h2
-                    className={`mb-2.5 sm:mb-4 text-base sm:text-[1.5rem] font-semibold ${
-                      activeIndex === i ? "text-primary" : "text-dark-grey-2"
-                    }`}
-                  >
-                    {el.title}
-                  </h2>
-                  <p
-                    className={`text-xs sm:text-base font-normal ${
-                      activeIndex === i ? "text-white" : "text-dark-grey-2"
-                    }`}
-                  >
-                    {el.text}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="relative max-w-[34rem] w-full h-[22.625rem] sm:h-[37.5rem] rounded-[1.125rem] sm:rounded-30 overflow-hidden">
-            {data.map((item, i) => (
-              <Image
-                key={item.id}
-                src={item.image}
-                alt=""
-                width={745}
-                height={800}
-                className={`absolute top-0 left-0 w-full h-[37.5rem] object-cover transition-opacity duration-500 ${
-                  activeIndex === i ? "opacity-100" : "opacity-0"
+  <div className="container relative z-10 pb-[5.75rem] pt-[4.375rem]">
+    <div className="w-fit font-bold mx-auto text-center text-base sm:text-[2.5rem] mb-3.5 md:mb-[5.625rem]">
+      Why Choose{" "}
+      <UnderlinedHeader
+        text="CitiTasker?"
+        extraStyle="before:!translate-x-0 mb-[0.875rem] sm:mb-[1.875rem]  inline-block"
+      />
+    </div>
+
+    <div className="w-full flex flex-col lg:flex-row gap-x-5 justify-between items-center">
+      <div className="overflow-hidden max-w-full lg:max-w-[32.875rem] w-full mb-[4.375rem] lg:mb-0  relative pl-12 sm:pl-20 before:content-[''] before:absolute before:left-0 before:top-0 before:w-[5px] before:h-full before:bg-dark-grey-2 before:rounded-20">
+        <div
+          className="w-[5px] bg-primary absolute top-0 left-0 rounded-20 transition-transform duration-300"
+          style={{
+            transform: `translateY(${height * activeIndex}px)`,
+            height: `${height}px`,
+          }}
+        ></div>
+        {data.map((el, i) => (
+          <div
+            ref={listItem}
+            key={el.id}
+            className="flex items-center cursor-pointer"
+            onClick={() => setActiveIndex(i)}
+          >
+            <div className="py-[1.5rem]">
+              <h2
+                className={`mb-2.5 sm:mb-4 text-base sm:text-[1.5rem] font-semibold ${
+                  activeIndex === i ? "text-primary" : "text-dark-grey-2"
                 }`}
-              />
-            ))}
+              >
+                {el.title}
+              </h2>
+              <p
+                className={`text-xs sm:text-base font-normal ${
+                  activeIndex === i ? "text-black" : "text-dark-grey-2"
+                }`}
+              >
+                {el.text}
+              </p>
+            </div>
           </div>
-        </div>
+        ))}
+      </div>
+      <div className="relative max-w-[34rem] w-full h-[22.625rem] sm:h-[37.5rem] rounded-[1.125rem] sm:rounded-30 overflow-hidden">
+        {data.map((item, i) => (
+          <Image
+            key={item.id}
+            src={item.image}
+            alt=""
+            width={745}
+            height={800}
+            className={`absolute top-0 left-0 w-full h-[37.5rem] object-cover transition-opacity duration-500 ${
+              activeIndex === i ? "opacity-100" : "opacity-0"
+            }`}
+          />
+        ))}
       </div>
     </div>
+  </div>
+</div>
+
   );
 };
 
