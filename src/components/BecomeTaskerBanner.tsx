@@ -20,17 +20,17 @@ const BecomeTaskerBanner = () => {
               Become a Tasker for free
             </h2>
             <p className="text-white text-xs sm:text-base font-normal">
-              Our Help Centre and dedicated CitiTasker Support specialist are on
-              hand 24/7 to help you navigate our tools and get the most out of
-              our website. You can count on them to work with you in a timely
-              manner to resolve any issues that might arise - swiftly and
-              promptly.
+              Turn your skills into income with CitiTasker! Join a trusted
+              community where you can choose tasks that match your expertise,
+              work on your terms, and earn up to ₦500,000 a month. Signing up is
+              easy, secure, and completely free. Start earning today—your next
+              opportunity is just a click away!
             </p>
           </div>
           <FormButton
             href="/tasker"
             text="Earn on CitiTasker"
-            btnStyle="mt-auto text-xs"
+            btnStyle="mt-auto text-xs !bg-white !text-primary"
           />
         </div>
         <Image
@@ -40,23 +40,6 @@ const BecomeTaskerBanner = () => {
           height={478}
           className="object-cover absolute bottom-0 h-[120%] left-[70%] translate-x-[-50%] hidden lg:block"
         />
-      </div>
-      <div className="max-w-[41.875rem] mx-auto mt-[3.75rem]">
-        <h2 className="text-center text-[1.25rem] sm:text-[2.5rem] font-bold leading-normal">
-          Post your first task and get it done instantly.
-        </h2>
-        <div className="w-fit mx-auto flex items-center gap-6 mt-[1.875rem] sm:mt-[3.75rem]">
-          <FormButton
-            text="Post a task for free"
-            btnStyle="text-xs sm:text-base"
-            href="/post-task"
-          />
-          <FormButton
-            href="/tasker"
-            text="Become a Tasker"
-            btnStyle="bg-secondary text-xs sm:text-base"
-          />
-        </div>
       </div>
     </div>
   );

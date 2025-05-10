@@ -3,6 +3,7 @@ import Faq from "@/components/Faq";
 import HowItWorks from "@/components/HowItWorks/HowItWorks";
 import LandingPageHero from "@/components/LandingPageHero";
 import PopularTasks from "@/components/PopularTasks/PopularTasks";
+import PosterTestimonies from "@/components/poster/landingPage/PosterTestimonies";
 import Stats from "@/components/Stats";
 import TaskCategories from "@/components/TaskCategories/TaskCategories";
 import Testimonies from "@/components/Testimonies/Testimonies";
@@ -19,6 +20,7 @@ export default function Page() {
       <PopularTasks />
       <Stats />
       <Testimonies />
+      <PosterTestimonies  showHeading={false}/>
       <Faq />
       <BecomeTaskerBanner />
     </div>

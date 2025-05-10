@@ -2,12 +2,18 @@
 import Image from "next/image";
 import React from "react";
 
-const PosterTestimonies = () => {
+interface PosterTestimoniesProps {
+  showHeading?: boolean;
+}
+
+  const PosterTestimonies: React.FC<PosterTestimoniesProps> = ({ showHeading = true }) => {
   return (
     <div className="container pt-[4.875rem] pb-[7.5rem]">
-      <h2 className="header max-w-[35.875rem] mx-auto text-center mb-[3.375rem]">
+      {showHeading && (
+        <h2 className="header max-w-[35.875rem] mx-auto text-center mb-[3.375rem]">
         Meet our top posters & their testimonies{" "}
       </h2>
+      )}
       <div className="flex justify-between gap-3 min-h-[25rem]">
         <div className="relative max-w-[50.375rem] w-full h-[25rem] rounded-40 overflow-hidden">
           <Image
@@ -42,5 +48,6 @@ const PosterTestimonies = () => {
     </div>
   );
 };
+
 
 export default PosterTestimonies;

@@ -5,7 +5,7 @@ import { statsData } from "../../data";
 
 const Stats = () => {
   return (
-    <div className="bg-secondary">
+    <div className="bg-primary">
       <div className="container py-[3.75rem]">
         <div className="max-w-[58.5rem] mx-auto w-full flex justify-between items-center flex-col md:flex-row gap-y-[4.25rem] gap-x-4">
           {statsData.map((item, i) => (
