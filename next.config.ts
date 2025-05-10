@@ -9,18 +9,19 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  async redirects() {
-    if (process.env.NODE_ENV === "production") {
-      return [
-        {
-          source: "/",
-          destination: `${process.env.NEXT_PUBLIC_DOMAIN_URL}/waitlist`,
-          permanent: false,
-        },
-      ];
-    }
-    return [];
-  },
+  // async redirects() {
+  //   if (process.env.NODE_ENV === "production") {
+  //     return [
+  //       {
+  //         source: "/",
+  //         destination: `${process.env.NEXT_PUBLIC_DOMAIN_URL}/waitlist`,
+  //         permanent: false,
+
+  //       },
+  //     ];
+  //   }
+  //   return [];
+  // },
   // eslint: {
   //   ignoreDuringBuilds: true,
   // },
