@@ -1,8 +1,6 @@
 import React from "react";
 import { Typography } from "@mui/material";
 import Icons from "@/components/Icons";
-import FormButton from "../forms/FormButton";
-import { MdOutlineAdd } from "react-icons/md";
 
 interface WalletBalanceCardProps {
   balance: string;

@@ -63,13 +63,13 @@ const EditImageModal = ({
           <FormButton
             type="submit"
             text="Post"
-            btnStyle="mt-3 max-w-[318px] w-full"
+            className="mt-3 max-w-[318px] w-full"
             handleClick={handleSaveImage}
           />
           <FormButton
             type="submit"
             text="Cancel"
-            btnStyle="mt-3 max-w-[318px] w-full !bg-[#f3f5f6] !text-primary"
+            className="mt-3 max-w-[318px] w-full !bg-[#f3f5f6] !text-primary"
             handleClick={onClose}
           />
         </div>

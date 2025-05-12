@@ -3,10 +3,10 @@ import { Box } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import React from "react";
 import PaymentStatus from "../../PaymentStatus";
-import WalletBalanceCard from "@/components/reusables/WalletCard";
 import FormButton from "@/components/forms/FormButton";
 import { MdOutlineAdd } from "react-icons/md";
 import { useAppSelector } from "@/store/hook";
+import WalletBalanceCard from "@/components/reusables/WalletCard";
 
 const style = {
   container: {
@@ -81,12 +81,12 @@ const WalletTab = () => {
           </p>
         </div>
         <div className="flex  gap-4">
-          <FormButton btnStyle="text-base">
+          <FormButton className="text-base">
             <div className="text-white gap-2 text-xs flex item-center">
               <MdOutlineAdd size={16} /> Top Up
             </div>
           </FormButton>
-          <FormButton btnStyle="bg-red-light-1 text-base">
+          <FormButton className="bg-red-light-1 text-base">
             <div className="text-white gap-2 text-xs flex item-center">
               <MdOutlineAdd size={16} /> Transfer
             </div>
