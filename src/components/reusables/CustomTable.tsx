@@ -1,6 +1,7 @@
 import React from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { SxProps, Theme, Typography } from "@mui/material";
+import SearchAndFilterBar from "./SearchAndFilterBar";
 
 interface IProps {
   rows: any;
@@ -31,7 +32,7 @@ const CustomTable = ({
         <Typography className="text-2xl font-semibold text-[#101828]">
           {title}
         </Typography>
-        <div>Search filter</div>
+        <SearchAndFilterBar />
       </div>
       <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
         <DataGrid
