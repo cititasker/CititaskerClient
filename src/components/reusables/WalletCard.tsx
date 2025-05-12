@@ -9,7 +9,7 @@ interface WalletBalanceCardProps {
 
 const WalletBalanceCard: React.FC<WalletBalanceCardProps> = ({ balance }) => {
   return (
-    <div className="p-5 bg-primary w-[268px] h-[157px] rounded-[14px] relative overflow-hidden mb-12">
+    <div className="p-5 bg-primary max-w-[268px] h-[157px] rounded-[14px] relative overflow-hidden mb-12">
       <Icons.wallet />
       <div className="flex items-center gap-1 my-[14px]">
         <Typography className="text-xs font-normal text-white">
