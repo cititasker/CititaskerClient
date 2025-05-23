@@ -2,18 +2,23 @@
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { icon } from "leaflet";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { getAllTasksQuery } from "@/queries/task";
 import { defaultProfile } from "@/constant/images";
 import Image from "next/image";
-import Typography from "@mui/material/Typography";
-import { truncate } from "@/utils";
-import Link from "next/link";
-import Icons from "../Icons";
+import { formatCurrency, formatDateAgo, initializeName } from "@/utils";
+import FormButton from "../forms/FormButton";
+import { useSearchParams } from "next/navigation";
 
-export default function Map() {
-  const { data } = useSuspenseQuery(getAllTasksQuery());
-  const tasks: ITask[] = data.data.data || [];
+interface IProps {
+  tasks: ITask[];
+}
+export default function Map({ tasks }: IProps) {
+  const redirectUrl = (id: any) => {
+    const url = new URL(window.location.href);
+    if (url.search) {
+      return `${url.pathname}/${id}/${url.search}`;
+    }
+    return `${url.pathname}/${id}`;
+  };
 
   return (
     <MapContainer
@@ -40,75 +45,44 @@ export default function Map() {
               '&copy; <a href="https://www.flaticon.com/free-icons/address" title="address icons">Address icons created by hqrloveq - Flaticon</a>',
           })}
         >
-          <Popup className="popup">
-            <Link
-              href={`/browse-task/${task.id}`}
-              className="w-full flex gap-3 min-w-[406px] rounded-[48px]"
-            >
-              <div>
-                <div className="flex flex-col items-center mb-[14px]">
-                  <Image
-                    src={task.poster.profile?.profile_image || defaultProfile}
-                    alt="poster profile"
-                    width={80}
-                    height={80}
-                    className="object-cover h-[80px] w-[80px] rounded-full"
-                  />
-                  <Typography className="text-center text-black-2 text-sm font-semibold">
-                    Posted by
-                  </Typography>
-                  <Typography className="text-center text-black-2 text-sm font-semibold">
-                    Taiwo J.
-                  </Typography>
-                </div>
-                <div className="flex flex-col gap-4">
-                  <div className="flex gap-4">
-                    <Icons.distance height={22} width={14} className="mt-1.5" />
-                    <div>
-                      <Typography className="text-xs text-black-2 font-semibold">
-                        Location
-                      </Typography>
-                      <Typography className="text-xs text-dark-grey-2 font-normal">
-                        Badore Ajah, Lagos
-                      </Typography>
-                    </div>
-                  </div>
-                  <div className="flex gap-4">
-                    <Icons.distance height={22} width={14} className="mt-1.5" />
-                    <div>
-                      <Typography className="text-xs text-black-2 font-semibold">
-                        Location
-                      </Typography>
-                      <Typography className="text-xs text-dark-grey-2 font-normal">
-                        Badore Ajah, Lagos
-                      </Typography>
-                    </div>
-                  </div>
-                  <div className="flex gap-4">
-                    <Icons.distance height={22} width={14} className="mt-1.5" />
-                    <div>
-                      <Typography className="text-xs text-black-2 font-semibold">
-                        Location
-                      </Typography>
-                      <Typography className="text-xs text-dark-grey-2 font-normal">
-                        Badore Ajah, Lagos
-                      </Typography>
-                    </div>
-                  </div>
+          <Popup className="popup" closeButton={false}>
+            <div>
+              <div className="mb-2 flex gap-3 justify-between w-full">
+                <Image
+                  src={task.poster.profile?.profile_image || defaultProfile}
+                  alt="poster profile"
+                  width={80}
+                  height={80}
+                  className="object-cover h-[80px] w-[80px] rounded-full"
+                />
+                <div className="w-fit rounded-lg px-4 py-3 bg-[#EEFAFE] text-center">
+                  <span className="text-sm text-dark-grey-2 inline-block mb-1">
+                    Task Budget
+                  </span>
+                  <p className="text-2xl font-semibold text-black">
+                    {formatCurrency({ value: task.budget, noFraction: true })}
+                  </p>
                 </div>
               </div>
               <div>
-                <Typography className="text-base font-medium !m-0">
-                  {task.name}
-                </Typography>
-                <Typography
-                  className="text-sm text-black !m-0"
-                  title={task.description}
-                >
-                  {truncate(task.description, 40)}
-                </Typography>
+                <h2 className="text-base font-medium mb-1">{task.name}</h2>
+                <p className="text-xs font-normal">
+                  Posted by{" "}
+                  <span className="text-secondary">
+                    {initializeName({
+                      first_name: task.poster_profile?.first_name,
+                      last_name: task.poster_profile?.last_name,
+                    })}
+                  </span>{" "}
+                  {formatDateAgo(task.created_at)}
+                </p>
               </div>
-            </Link>
+              <FormButton
+                href={redirectUrl(task.id)}
+                text="View task"
+                btnStyle="!text-white w-full mt-3 h-10"
+              />
+            </div>
           </Popup>
         </Marker>
       ))}

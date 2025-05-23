@@ -387,7 +387,7 @@ const MainNavbar = ({ isAuth }: IProp) => {
                         "border-b-[3px] border-primary"
                       }`}
                     >
-                      <Link href="/my-tasks">My Tasks</Link>
+                      <Link href={`/${user.role}/my-tasks`}>My Tasks</Link>
                     </li>
                   </ul>
                 )

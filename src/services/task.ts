@@ -45,9 +45,11 @@ export function getSingleTask(id: string) {
     });
 }
 
-export function getUserTasks() {
+export function getUserTasks({ status }: any) {
+  const urlParams = new URLSearchParams();
+  if (status) urlParams.set("status", status);
   return api
-    .get(`tasks/user`)
+    .get(`tasks/user?${urlParams}`)
     .then((data) => {
       return data.data;
     })

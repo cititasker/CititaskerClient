@@ -1,45 +1,29 @@
+// components/myTasks/TaskSection.tsx
 "use client";
+
+import { updateQueryParams } from "@/utils";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
 const list = [
-  {
-    href: "all",
-    name: "All Tasks",
-  },
-  {
-    href: "posted",
-    name: "Posted Tasks",
-  },
-  {
-    href: "assigned",
-    name: "Assigned Tasks",
-  },
-  {
-    href: "pending",
-    name: "Pending Offer",
-  },
-  {
-    href: "cancelled",
-    name: "Cancelled Offers",
-  },
-  {
-    href: "completed",
-    name: "Completed Tasks",
-  },
+  { href: "all", name: "All Tasks" },
+  { href: "open", name: "Open Tasks" },
+  { href: "assigned", name: "Assigned Tasks" },
+  { href: "cancelled", name: "Cancelled Offers" },
+  { href: "completed", name: "Completed Tasks" },
+  { href: "expired", name: "Expired Tasks" },
 ];
 
 const TaskSection = () => {
   const searchParams = useSearchParams();
-  const status = searchParams.get("status");
+  const status = searchParams.get("status") || "all";
   const router = useRouter();
 
   useEffect(() => {
-    if (!status) {
-      router.replace("?status=all");
-    }
-  }, []);
+    const params = updateQueryParams(searchParams, "status", status);
+    router.replace(`?${params}`);
+  }, [status, searchParams, router]);
 
   return (
     <div className="w-full rounded-[20px] bg-white py-[24.5px]">
@@ -55,7 +39,7 @@ const TaskSection = () => {
             key={i}
             href={`?status=${el.href}`}
             className={`py-5 px-6 w-full text-base ${
-              status == el.href
+              status === el.href
                 ? "bg-light-primary-1 border-r-2 border-primary text-primary"
                 : "text-black-2"
             }`}

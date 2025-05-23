@@ -15,6 +15,14 @@ const api = axios.create({
   },
 });
 
+// api.interceptors.request.use((config) => {
+//   const token = new Cookies().get("citi-user");
+//   if (token) {
+//     config.headers.Authorization = `Bearer ${token}`;
+//   }
+//   return config;
+// });
+
 api.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -38,6 +46,14 @@ export const formDataApi = axios.create({
     Authorization: `Bearer ${token}`,
   },
 });
+
+// formDataApi.interceptors.request.use((config) => {
+//   const token = new Cookies().get("citi-user");
+//   if (token) {
+//     config.headers.Authorization = `Bearer ${token}`;
+//   }
+//   return config;
+// });
 
 formDataApi.interceptors.response.use(
   (response) => response,

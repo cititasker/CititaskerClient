@@ -10,7 +10,7 @@ export default function Tasklist() {
   return (
     <div className="grid overflow-y-auto gap-3 pb-5">
       {tasks.map((task) => (
-        <TaskCard key={task.id} path="browse-task" item={task} />
+        <TaskCard key={task.id} item={task} path="browse-task" />
       ))}
     </div>
   );

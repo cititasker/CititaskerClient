@@ -1,8 +1,10 @@
 "use client";
-import React from "react";
+
+import React, { useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
+
 import Icons from "../Icons";
 import { formatDate, truncate, formatCurrency } from "@/utils";
 import { defaultProfile } from "@/constant/images";
@@ -11,70 +13,76 @@ import StatusChip from "../reusables/StatusChip";
 interface IProps {
   item: ITask;
   path: string;
-  isActive?: boolean; 
+  isActive?: boolean;
 }
 
 const TaskCard = ({ item, path }: IProps) => {
-  const { id } = useParams();
-  const isActive = item.id === Number(id);
+  const params = useParams();
+  const currentTaskId = params?.id;
+  const searchParams = useSearchParams();
+
+  const isActive = item.id === Number(currentTaskId);
+  const status = searchParams.get("status");
+
+  const href = useMemo(() => {
+    const sp = new URLSearchParams();
+    if (status) sp.set("status", status);
+    return `${path}/${item.id}?${sp.toString()}`;
+  }, [path, item.id, status]);
 
   return (
     <Link
-      href={`/${path}/${item.id}`}
-      className={`paper cursor-pointer p-4 rounded-[10px] lg:rounded-[25px] ${
-        item.id === Number(id)
-          ? "bg-light-primary-1 border border-light-primary-2"
-          : "bg-white"
+      href={href}
+      scroll={false}
+      className={`block cursor-pointer p-4 rounded-[10px] lg:rounded-[25px] transition-shadow duration-200 ${
+        isActive
+          ? "bg-light-primary-1 border border-light-primary-2 shadow-sm"
+          : "bg-white border border-transparent hover:shadow-md"
       }`}
+      aria-current={isActive ? "page" : undefined}
     >
-      <div className="flex justify-between w-full items-center">
-        <div>
-          <div className="w-12 h-12 grow-0 rounded-full mb-2">
-            <Image
-              src={item.poster_profile_image ?? defaultProfile}
-              alt="avatar"
-              width={50}
-              height={50}
-              className="w-[50px] h-[50px] object-cover rounded-full"
-            />
-          </div>
+      {/* Header with avatar and status */}
+      <div className="flex justify-between items-start mb-4">
+        <div className="flex flex-col items-center">
+          <Image
+            src={item.poster_profile_image ?? defaultProfile}
+            alt="Task poster"
+            width={50}
+            height={50}
+            className="w-[50px] h-[50px] object-cover rounded-full mb-1"
+          />
           <StatusChip status={item.status} isActive={isActive} />
         </div>
         {item.budget && (
-          <div className="flex gap-4 items-center">
-            <p className="text-primary text-[20px] font-semibold">
-              {formatCurrency({ value: item.budget, noFraction: true })}
-            </p>
-          </div>
+          <p className="text-primary text-[20px] font-semibold">
+            {formatCurrency({ value: item.budget, noFraction: true })}
+          </p>
         )}
       </div>
 
-      <p className="font-[600] text-base mt-4">{item.name}</p>
-      <p className="font-[400] text-[12px] mt-1">
-        {truncate(item.description, 50)}
-      </p>
+      {/* Title & Description */}
+      <h3 className="font-semibold text-base mb-1">{item.name}</h3>
+      <p className="text-sm text-gray-600">{truncate(item.description, 60)}</p>
 
-      <div className="flex gap-4 items-center mt-[22px]">
-        <Icons.calendar className="shrink-0" />
-        <p className="text-dark-grey-2 text-[14px] font-[400]">
-          On {formatDate(item.date, "D, MMMM YYYY")}
-        </p>
-      </div>
-
-      <div className="flex gap-4 items-center mt-[12px]">
-        <Icons.distance className="shrink-0" />
-        <p className="text-dark-grey-2 text-[14px] font-[400]">
-          {`${
-            item.location_type == "in_person" ? "Offline" : "Online"
-          } ${truncate(item.address, 20)}`}
-        </p>
-      </div>
-
-      <div className="flex gap-4 items-center mt-[12px]">
-        <Icons.group className="shrink-0" />
-        <p className="text-dark-grey-2 text-[14px] font-[400]">
-          {item.offer_count} Offers
-        </p>
+      {/* Details */}
+      <div className="mt-4 space-y-3 text-sm text-dark-grey-2">
+        <div className="flex gap-2 items-center">
+          <Icons.calendar className="shrink-0" />
+          <span>On {formatDate(item.date, "D, MMMM YYYY")}</span>
+        </div>
+        <div className="flex gap-2 items-center">
+          <Icons.distance className="shrink-0" />
+          <span>
+            {item.location_type === "in_person" ? "Offline" : "Online"} –{" "}
+            {truncate(item.address, 20)}
+          </span>
+        </div>
+        <div className="flex gap-2 items-center">
+          <Icons.group className="shrink-0" />
+          <span>
+            {item.offer_count} Offer{item.offer_count !== 1 ? "s" : ""}
+          </span>
+        </div>
       </div>
     </Link>
   );

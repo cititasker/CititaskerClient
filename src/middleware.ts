@@ -24,7 +24,8 @@ export default auth(async (req) => {
 export const config = {
   matcher: [
     "/dashboard/:path*",
-    "/my-tasks/:path*",
+    "/poster/my-tasks/:path*",
+    "/tasker/my-tasks/:path*",
     "/profile",
     "/((?!api|_next/static|_next/image|favicon.ico).*)",
   ],
