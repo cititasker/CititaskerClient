@@ -2,16 +2,10 @@ import TaskDetails from "@/components/browseTask/TaskDetails";
 import { getSingleTaskQuery } from "@/queries/task";
 import { getSingleTask } from "@/services/task";
 import { queryClient } from "@/providers/ServerProvider";
-import type { Metadata } from "next";
 
-interface PageProps {
-  params: Promise<{ id: string }>;
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}
+type Params = Promise<{ id: string }>;
 
-export async function generateMetadata({
-  params,
-}: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Params }) {
   const { id } = await params;
   const { data: task } = await getSingleTask(id);
 
@@ -26,7 +20,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({ params }: PageProps) {
+export default async function Page({ params }: { params: Params }) {
   const { id } = await params;
   await queryClient.prefetchQuery(getSingleTaskQuery(id));
   return <TaskDetails />;
