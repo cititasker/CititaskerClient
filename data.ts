@@ -81,7 +81,7 @@ export const posterData = [
       "At CitiTasker, we prioritize your trust and security. When you post a task, your payment is held securely in our escrow account. This means your money is protected until the task is completed to your satisfaction.",
   },
   {
-    question: "Get insurance covered",
+    question: "Flexibility and convenience",
     answer:
       "Yes of course, it is very possible to create an accordion component with another framework.",
   },
