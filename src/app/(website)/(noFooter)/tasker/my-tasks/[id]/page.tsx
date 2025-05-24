@@ -27,7 +27,7 @@ export async function generateMetadata({
 }
 
 export default async function Page({ params }: PageProps) {
-  const id = (await params).id;
+  const { id } = await params;
   await queryClient.prefetchQuery(getSingleTaskQuery(id));
   return <TaskDetails />;
 }
