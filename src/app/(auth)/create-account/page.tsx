@@ -12,6 +12,7 @@ import Radio from "@mui/material/Radio";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { ROLE } from "@/constant";
 
 const style: Record<string, SxProps<Theme>> = {
   container: {
@@ -99,18 +100,18 @@ const CreateAccountPage = () => {
               render={({ field }) => (
                 <FormLabel
                   component="label"
-                  htmlFor="tasker"
+                  htmlFor={ROLE.tasker}
                   className={`label ${
-                    field.value.includes("tasker") && "border border-primary"
+                    field.value.includes(ROLE.tasker) && "border border-primary"
                   }`}
                 >
                   <Radio
-                    id="tasker"
-                    checked={field.value.includes("tasker")}
+                    id={ROLE.tasker}
+                    checked={field.value.includes(ROLE.tasker)}
                     onClick={() => {
-                      handleChange("tasker");
+                      handleChange(ROLE.tasker);
                     }}
-                    value="tasker"
+                    value={ROLE.tasker}
                     inputProps={{ "aria-label": "Tasker" }}
                   />
                   <Typography className="label_text">
@@ -125,18 +126,18 @@ const CreateAccountPage = () => {
               render={({ field }) => (
                 <FormLabel
                   component="label"
-                  htmlFor="poster"
+                  htmlFor={ROLE.poster}
                   className={`label ${
-                    field.value.includes("poster") && "border border-primary"
+                    field.value.includes(ROLE.poster) && "border border-primary"
                   }`}
                 >
                   <Radio
-                    id="poster"
-                    checked={field.value.includes("poster")}
+                    id={ROLE.poster}
+                    checked={field.value.includes(ROLE.poster)}
                     onClick={() => {
-                      handleChange("poster");
+                      handleChange(ROLE.poster);
                     }}
-                    value="poster"
+                    value={ROLE.poster}
                     inputProps={{ "aria-label": "Poster" }}
                   />
                   <Typography className="label_text">

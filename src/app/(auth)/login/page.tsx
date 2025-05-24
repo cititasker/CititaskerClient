@@ -13,6 +13,7 @@ import { FcGoogle } from "react-icons/fc";
 import Logo from "@/../public/images/cititasker_logo.svg";
 import { useSearchParams } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
+import { ROLE } from "@/constant";
 
 export default function Page() {
   const [loading, setLoading] = useState(false);
@@ -47,7 +48,7 @@ export default function Page() {
         if (redirect) {
           location.href = decodeURIComponent(redirect);
         } else {
-          if (session?.user.role == "poster") {
+          if (session?.user.role == ROLE.poster) {
             location.href = "/poster";
           } else {
             location.href = "/dashboard";

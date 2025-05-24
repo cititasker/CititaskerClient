@@ -7,6 +7,7 @@ import { getUserTasksQuery } from "@/queries/task";
 import { useAppSelector } from "@/store/hook";
 import TaskCard from "../browseTask/TaskCard";
 import FormButton from "../forms/FormButton";
+import { ROUTES } from "@/constant";
 
 const TaskList = () => {
   const status = useSearchParams().get("status") || "all";
@@ -35,7 +36,11 @@ const TaskList = () => {
   return (
     <div className="grid gap-3 overflow-y-auto">
       {tasks.map((task) => (
-        <TaskCard key={task.id} item={task} path={`/${user.role}/my-tasks`} />
+        <TaskCard
+          key={task.id}
+          item={task}
+          path={`/${user.role}/${ROUTES.MY_TASKS}`}
+        />
       ))}
     </div>
   );

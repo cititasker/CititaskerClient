@@ -4,6 +4,7 @@ import PosterPayment from "@/components/dashboard/poster/Payment";
 import { useAppSelector } from "@/store/hook";
 import React from "react";
 import dynamic from "next/dynamic";
+import { ROLE } from "@/constant";
 
 const Loader = dynamic(() => import("@/components/reusables/Loading"), {
   ssr: false,
@@ -14,6 +15,6 @@ export default function Page() {
 
   if (!user.role) return <Loader />;
 
-  if (user.role === "tasker") return <TaskerPayment />;
+  if (user.role === ROLE.tasker) return <TaskerPayment />;
   else return <PosterPayment />;
 }

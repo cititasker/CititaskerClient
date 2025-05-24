@@ -6,7 +6,6 @@ import { defaultProfile } from "@/constant/images";
 import Image from "next/image";
 import { formatCurrency, formatDateAgo, initializeName } from "@/utils";
 import FormButton from "../forms/FormButton";
-import { useSearchParams } from "next/navigation";
 
 interface IProps {
   tasks: ITask[];

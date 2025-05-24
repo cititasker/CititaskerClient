@@ -2,6 +2,7 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 import { cookies } from "next/headers";
+import { ROLE } from "./constant";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -50,7 +51,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
     jwt({ token, user, account }) {
       if (account?.provider === "credentials") {
-        token.userData = { ...user, role: "poster" };
+        token.userData = { ...user, role: ROLE.poster };
       }
       return token;
     },

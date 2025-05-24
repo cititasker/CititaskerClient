@@ -39,6 +39,7 @@ import {
   initializeName,
   truncate,
 } from "@/utils";
+import { ROLE } from "@/constant";
 
 const TaskDetails = () => {
   const { id } = useParams() as { id: string };
@@ -94,7 +95,12 @@ const TaskDetails = () => {
 
   const handleButtonClick = () => {
     const isAllVerified = Object.values(verifications).every(Boolean);
-    isAllVerified ? setVerifyModalOpen(true) : openOfferModal();
+
+    if (isAllVerified) {
+      setVerifyModalOpen(true);
+    } else {
+      openOfferModal();
+    }
   };
 
   const handleToggleMoreOptions = () => setOpenMoreOptions((prev) => !prev);
@@ -150,7 +156,7 @@ const TaskDetails = () => {
           <div className="shrink-0">
             <Image
               src={task.poster_profile_image ?? defaultProfile}
-              alt="poster"
+              alt={ROLE.poster}
               width={60}
               height={60}
               className="rounded-full object-cover"

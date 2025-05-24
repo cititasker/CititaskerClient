@@ -3,7 +3,7 @@ import { JWT } from "next-auth/jwt";
 declare module "next-auth" {
   interface User {
     token: string;
-    role: "poster" | "tasker";
+    role: TRole;
   }
   interface Session {
     user: {

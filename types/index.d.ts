@@ -34,7 +34,7 @@ interface IUser {
   last_name: string | null;
   phone_number: string | null;
   profile_image: string | null;
-  role: "poster" | "tasker";
+  role: TRole;
   created_at: string;
   has_verified_bvn: null;
   phone_number_verified_at: string;

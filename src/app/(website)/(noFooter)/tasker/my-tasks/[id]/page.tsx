@@ -4,13 +4,15 @@ import { getSingleTask } from "@/services/task";
 import { queryClient } from "@/providers/ServerProvider";
 import type { Metadata } from "next";
 
-// This function generates SEO metadata based on the task's details
+interface PageProps {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
 export async function generateMetadata({
   params,
-}: {
-  params: { id: string };
-}): Promise<Metadata> {
-  const { id } = params;
+}: PageProps): Promise<Metadata> {
+  const { id } = await params;
   const { data: task } = await getSingleTask(id);
 
   return {
@@ -24,7 +26,8 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({ params }: { params: { id: string } }) {
-  await queryClient.prefetchQuery(getSingleTaskQuery(params.id));
+export default async function Page({ params }: PageProps) {
+  const id = (await params).id;
+  await queryClient.prefetchQuery(getSingleTaskQuery(id));
   return <TaskDetails />;
 }

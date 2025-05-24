@@ -64,7 +64,7 @@ const schema = z.object({
 
 type schemaType = z.infer<typeof schema>;
 
-const Offer = () => {
+export default function Offer() {
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef<HTMLButtonElement>(null);
   const [showAcceptModal, setShowAcceptModal] = useState(false);
@@ -76,6 +76,7 @@ const Offer = () => {
   const navigate = useRouter();
   const [isSuccess, setIsSuccess] = useState(false);
   const { showSnackbar } = useSnackbar();
+  const router = useRouter();
 
   const methods = useForm<schemaType>({
     defaultValues: {
@@ -142,22 +143,18 @@ const Offer = () => {
     setIsSuccess((prev) => !prev);
   };
 
-  const taskStatusText = () => {
+  const renderTaskStatus = () => {
     switch (status) {
-      case "assigned": {
+      case "assigned":
         return {
           title: "Task Assigned",
-          content: `Wait for your task to be completed. Your task will be completed on ${formatDate(
+          content: `Wait for your task to be completed. Completion date: ${formatDate(
             task.date,
             "DD MMM, YYYY"
-          )}.`,
+          )}`,
         };
-      }
-      case "completed": {
-        return {
-          title: "Release Payment",
-        };
-      }
+      case "completed":
+        return { title: "Release Payment" };
       default:
         return {
           title: `You have ${task.offer_count} offers`,
@@ -199,22 +196,22 @@ const Offer = () => {
     <Box sx={styles.container}>
       <Grid container spacing="32px" className="max-w-[1300px] mx-auto px-5">
         <Grid size={{ xs: 12, md: 5 }}>
-          <Link
-            href="/my-tasks"
-            className="text-primary  my-6 text-[16px] underline font-bold flex gap-2 items-center"
+          <div
+            onClick={router.back}
+            className="text-primary cursor-pointer my-6 text-[16px] underline font-bold flex gap-2 items-center"
           >
             <Icons.arrowLeft />
             Back to citiTasker
-          </Link>
+          </div>
           <Card className="bg-black rounded-[30px] text-white px-[26px] py-[34px] mb-6">
             <span className="bg-[#FB9596] px-4 py-2 rounded-[40px] inline-block mb-6 text-base">
               New Offer!
             </span>
             <Typography className="text-[2rem] font-semibold mb-1">
-              {taskStatusText().title}
+              {renderTaskStatus().title}
             </Typography>
             <Typography className="text-sm font-normal text-dark-grey-1">
-              {taskStatusText().content}
+              {renderTaskStatus().content}
             </Typography>
           </Card>
 
@@ -496,7 +493,7 @@ const Offer = () => {
             {`Your payment is secured and ${initializeName({
               first_name: selectedOffer?.tasker.first_name,
               last_name: selectedOffer?.tasker.last_name,
-            })} is assigned to the task.`}
+            })} has been notified to begin your task. You’ll only release the payment when the task is completed to your satisfaction.`}
           </p>
           <ExtraInfo className="px-4">
             You can now send private messages with important information like
@@ -513,6 +510,4 @@ const Offer = () => {
       </CustomModal>
     </Box>
   );
-};
-
-export default Offer;
+}
