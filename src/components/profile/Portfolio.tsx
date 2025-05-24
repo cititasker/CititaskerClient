@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Icons from "../Icons";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,6 +7,7 @@ import Image from "next/image";
 import { convertToBase64 } from "@/utils";
 import { BsTrash } from "react-icons/bs";
 import { IconButton } from "@mui/material";
+import EditImageModal from "../reusables/Modals/EditImageModal";
 
 const schema = z.object({
   portfolio: z.array(z.object({ src: z.any(), file: z.any() })).optional(),
@@ -22,22 +23,26 @@ const Portfolio = () => {
   });
   const { handleSubmit, getValues, setValue, watch } = methods;
 
-  const images = watch("portfolio");
+  const images = watch("portfolio") ?? [];
+  const [openCropModal, setOpenCropModal] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<any>(null);
 
   const handleUpload = async (e: any) => {
     const files = e.target.files;
-    const prev = getValues("portfolio") as any;
-    if (files) {
-      const fileArray: File[] = Array.from(files);
-      const images = await Promise.all(
-        fileArray.map(async (file) => {
-          const src = await convertToBase64(file);
-          return { src, file };
-        })
-      );
-      const uploaded = [...prev, ...images].slice(0, 4);
-      setValue("portfolio", uploaded);
+    if (files && files.length) {
+      const file = files[0];
+      const src = await convertToBase64(file);
+      setSelectedImage({ src, file });
+      setOpenCropModal(true);
     }
+  };
+
+  const handleSaveImage = () => {
+    const prev = getValues("portfolio") as any;
+    const updated = [...prev, selectedImage].slice(0, 4);
+    setValue("portfolio", updated);
+    setOpenCropModal(false);
+    setSelectedImage(null);
   };
 
   const onsubmit = () => {};
@@ -68,23 +73,32 @@ const Portfolio = () => {
                 </div>
               </div>
             ))}
-          <div className="h-[300px] flex items-center justify-center">
-            <label
-              htmlFor="portfolio"
-              className="cursor-pointer inline-flex w-[120px] h-[120px] items-center justify-center border border-dashed border-dark-grey-1 rounded-[10px]"
-            >
-              <Icons.plus />
-            </label>
-            <input
-              type="file"
-              id="portfolio"
-              multiple
-              hidden
-              onChange={handleUpload}
-            />
-          </div>
+          {images?.length < 4 && (
+            <div className="h-[300px] flex items-center justify-center">
+              <label
+                htmlFor="portfolio"
+                className="cursor-pointer inline-flex w-[280px] h-[280px] items-center justify-center border border-dashed border-dark-grey-1 rounded-[10px]"
+              >
+                <Icons.plus />
+              </label>
+              <input
+                type="file"
+                id="portfolio"
+                multiple={false}
+                hidden
+                onChange={handleUpload}
+              />
+            </div>
+          )}
         </div>
       </form>
+
+      <EditImageModal
+        open={openCropModal}
+        onClose={() => setOpenCropModal(false)}
+        selectedImage={selectedImage}
+        handleSaveImage={handleSaveImage}
+      />
     </FormProvider>
   );
 };

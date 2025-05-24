@@ -1,9 +1,12 @@
-
+// import FormButton from "@/components/forms/FormButton";
+// import Icons from "@/components/Icons";
 import CustomTable from "@/components/reusables/CustomTable";
 import { Box } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import React from "react";
+// import { MdOutlineAdd } from "react-icons/md";
 import PaymentStatus from "../../PaymentStatus";
+import WalletBalanceCard from "@/components/reusables/WalletCard";
 
 const style = {
   container: {
@@ -16,7 +19,7 @@ const style = {
     },
   },
 };
-const PaymentTab = () => {
+const WalletTab = () => {
   const columns: GridColDef[] = [
     { field: "reference", headerName: "Reference", flex: 1 },
     { field: "name", headerName: "Name", flex: 1 },
@@ -67,9 +70,10 @@ const PaymentTab = () => {
   ];
   return (
     <Box sx={style.container} className="px-4">
-      <CustomTable title="Transactions History" rows={rows} columns={columns} />
+      <WalletBalanceCard balance="₦59,040.00"  />
+      <CustomTable title="Wallet Transaction" rows={rows} columns={columns} />
     </Box>
   );
 };
 
-export default PaymentTab;
+export default WalletTab;
