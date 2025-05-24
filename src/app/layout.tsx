@@ -3,7 +3,6 @@ import { SessionProvider } from "next-auth/react";
 import "./globals.css";
 import Providers from "@/providers";
 import AppProvider from "@/providers/AppProvider";
-// import { dm_sans, lato, montserrat } from "@/fonts";
 
 export const metadata: Metadata = {
   title: "CitiTasker",

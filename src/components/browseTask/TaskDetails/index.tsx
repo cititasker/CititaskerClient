@@ -27,8 +27,8 @@ import Question from "../Question";
 import useModal from "@/hooks/useModal";
 import { styles } from "./styles";
 import { defaultProfile } from "@/constant/images";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { getSingleTaskQuery } from "@/queries/task";
+import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import { getSingleTaskQuery, useRequestPayment } from "@/queries/task";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { setTaskDetails, setUserTaskOffer } from "@/store/slices/task";
 import {
@@ -40,6 +40,8 @@ import {
   truncate,
 } from "@/utils";
 import { ROLE } from "@/constant";
+import { useSnackbar } from "@/providers/SnackbarProvider";
+import { TASK_ID } from "@/queries/queryKeys";
 
 const TaskDetails = () => {
   const { id } = useParams() as { id: string };
@@ -48,12 +50,15 @@ const TaskDetails = () => {
   const { isAuth, user } = useAppSelector((state) => state.user);
 
   const { data } = useSuspenseQuery(getSingleTaskQuery(id));
+  const requestPaymentMutation = useRequestPayment();
   const task: ITask = data.data;
 
   const [verifyModalOpen, setVerifyModalOpen] = useState(false);
   const [openMoreOptions, setOpenMoreOptions] = useState(false);
   const moreOptionsRef = useRef<HTMLButtonElement>(null);
   const prevOpen = useRef(openMoreOptions);
+  const { showSnackbar } = useSnackbar();
+  const queryClient = useQueryClient();
 
   const {
     isOpen: shareModalOpen,
@@ -89,6 +94,7 @@ const TaskDetails = () => {
   const buttonText = useMemo(() => {
     if (task.status === "open" && !hasMadeOffer) return "Make an Offer";
     if (task.status === "open" && hasMadeOffer) return "Update Offer";
+    if (task.status === "assigned" && hasMadeOffer) return "Request Payment";
     if (task.status === "assigned") return "Assigned";
     return "Unavailable";
   }, [task.status, hasMadeOffer]);
@@ -98,6 +104,19 @@ const TaskDetails = () => {
 
     if (isAllVerified) {
       setVerifyModalOpen(true);
+    } else if (hasMadeOffer) {
+      requestPaymentMutation.mutate(
+        { task_id: task.id },
+        {
+          onSuccess(data) {
+            showSnackbar(data.message, "success");
+            queryClient.invalidateQueries({ queryKey: [TASK_ID(id)] });
+          },
+          onError(error) {
+            showSnackbar(error.message, "error");
+          },
+        }
+      );
     } else {
       openOfferModal();
     }
@@ -234,8 +253,9 @@ const TaskDetails = () => {
                   </h2>
                   <FormButton
                     handleClick={handleButtonClick}
-                    btnStyle="min-h-[39px] min-w-40 text-base font-normal"
-                    disabled={task.status !== "open"}
+                    btnStyle="text-base font-normal"
+                    disabled={task.status !== "open" && !hasMadeOffer}
+                    loading={requestPaymentMutation.isPending}
                   >
                     {buttonText}
                   </FormButton>

@@ -6,7 +6,6 @@ import Link from "next/link";
 import { useMutation } from "@tanstack/react-query";
 import { registerApi } from "@/services/auth";
 import { useSearchParams } from "next/navigation";
-import Cookies from "universal-cookie";
 import FormInput from "@/components/forms/FormInput";
 import FormButton from "@/components/forms/FormButton";
 import { useSnackbar } from "@/providers/SnackbarProvider";
@@ -19,7 +18,6 @@ interface IAuthService {
 }
 
 const StepOne = ({ onNext }: IAuthService) => {
-  const cookies = new Cookies();
   const { showSnackbar } = useSnackbar();
 
   const searchParams = useSearchParams();
@@ -28,11 +26,6 @@ const StepOne = ({ onNext }: IAuthService) => {
   const mutation = useMutation({
     mutationFn: registerApi,
     onSuccess: (data) => {
-      cookies.set("citi-user", data?.data.token, {
-        path: "/",
-        maxAge: 21600, // Expiry time in seconds (6 hours)
-        sameSite: "strict", // Prevent CSRF
-      });
       showSnackbar(data?.message, "success");
       onNext();
     },

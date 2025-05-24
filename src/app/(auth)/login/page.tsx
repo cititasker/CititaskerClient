@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
 import Logo from "@/../public/images/cititasker_logo.svg";
 import { useSearchParams } from "next/navigation";
@@ -29,39 +29,27 @@ export default function Page() {
     resolver: zodResolver(loginSchema),
   });
 
-  const handleGoogleAuth = async () => {
+  const handleGoogleAuth = () => {
     signIn("google");
-    // try {
-    //   const res = await googleAuth();
-    //   console.log(234, res);
-    // } catch (error) {
-    //   console.log("Error", error);
-    // }
   };
 
-  const onSubmit: SubmitHandler<loginSchemaType> = async (values) => {
+  const onSubmit = async (values: loginSchemaType) => {
     setLoading(true);
-    try {
-      const res = (await loginWithCredentials(values)) as any;
-      if (res.success) {
-        const redirect = searchParams.get("redirect") as string;
-        if (redirect) {
-          location.href = decodeURIComponent(redirect);
-        } else {
-          if (session?.user.role == ROLE.poster) {
-            location.href = "/poster";
-          } else {
-            location.href = "/dashboard";
-          }
-        }
-      } else {
-        showSnackbar(res.message, "error");
-      }
-    } catch (error: any) {
-      console.log(error);
-    } finally {
-      setLoading(false);
+    const res = await loginWithCredentials(values);
+
+    if (res?.success) {
+      showSnackbar(res.message, "success");
+      const redirect = searchParams.get("redirect");
+      window.location.href = redirect
+        ? decodeURIComponent(redirect)
+        : session?.user?.role === ROLE.poster
+        ? "/poster"
+        : "/dashboard";
+    } else {
+      showSnackbar(res.message, "error");
     }
+
+    setLoading(false);
   };
 
   return (

@@ -1,7 +1,6 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
-import { cookies } from "next/headers";
 import { ROLE } from "./constant";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
@@ -9,68 +8,53 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     Google,
     Credentials({
       async authorize(credentials) {
-        let user = null;
-        const { email, password } = credentials;
-        try {
-          const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_BASE_URL}auth/login`,
-            {
-              method: "POST",
-              body: JSON.stringify({ email, password }),
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-              },
-            }
-          ).then((data) => data.json());
-
-          const cookieStore = await cookies();
-          cookieStore.set("citi-user", res.data?.token, {
-            secure: false,
-            path: "/",
-          });
-          if (res.success) {
-            user = res.data;
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}auth/login`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(credentials),
           }
-        } catch (error) {
-          console.log(error);
+        );
+        const result = await res.json();
+
+        if (result.success) {
+          return {
+            ...result.data,
+            role: result.data.role || ROLE.poster,
+          };
         }
-        return user;
+        return null;
       },
     }),
   ],
+  session: {
+    strategy: "jwt",
+    maxAge: 60 * 60 * 24 * 7, // 7 days session lifetime
+  },
+  jwt: {
+    maxAge: 60 * 60 * 24 * 7, // 7 days token lifetime
+  },
   callbacks: {
-    async signIn({ account }) {
-      if (account?.provider === "google") {
-        return false;
-      }
-      return true;
-    },
-    authorized({ auth }) {
-      return !!auth;
-    },
-    jwt({ token, user, account }) {
-      if (account?.provider === "credentials") {
+    signIn: async ({ account }) => account?.provider !== "google",
+    authorized: ({ auth }) => !!auth,
+    jwt: ({ token, user, account }) => {
+      if (account?.provider === "credentials" && user) {
         token.userData = { ...user, role: ROLE.poster };
       }
       return token;
     },
-    session({ session, token }) {
+    session: ({ session, token }) => {
       if (token.userData) {
-        session.user.authToken = token.userData?.token;
-        session.user.role = token.userData.role;
+        session.user = {
+          ...session.user,
+          authToken: token.userData.token,
+          role: token.userData.role,
+        };
       }
       return session;
     },
   },
-  // session: {
-  //   strategy: "jwt",
-  //   maxAge: 60,
-  //   updateAge: 0,
-  // },
-  // jwt: {
-  //   maxAge: 60,
-  // },
   pages: {
     signIn: "/login",
   },
