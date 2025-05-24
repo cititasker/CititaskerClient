@@ -14,7 +14,7 @@ const nextConfig: NextConfig = {
       return [
         {
           source: "/",
-          destination: `${process.env.NEXT_PUBLIC_DOMAIN_URL}/waitlist`,
+          destination: "/waitlist",
           permanent: false,
         },
       ];
