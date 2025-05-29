@@ -141,7 +141,25 @@ body {
 .ql-editor {
   min-height: 200px;
 }
+.leaflet-pane {
+  width: 100% !important;
+}
+
+.popup {
+  font-family: Articulat !important;
+}
 
 .leaflet-popup-content p {
   margin: 0 !important;
+}
+.leaflet-popup-content-wrapper {
+  border-radius: 20px !important;
+  background-color: white;
+  width: 100% !important;
+}
+.leaflet-popup-content {
+  margin: 0 !important;
+  padding: 15px;
+  max-width: 300px !important;
+  width: 100% !important;
 }

@@ -10,14 +10,15 @@ import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { toggleWaitlistModal } from "@/store/slices/general";
 import PosterWaitListForm from "./PosterWaitListForm";
 import TaskerWaitListForm from "./TaskerWaitListForm";
+import { ROLE } from "@/constant";
 
 const WaitlistModalForm = () => {
-  const [user, setUser] = useState("poster");
+  const [user, setUser] = useState<TRole>(ROLE.poster);
   const { showWaitlistForm } = useAppSelector((state) => state.general);
   const dispatch = useAppDispatch();
   const [success, setSuccess] = useState(false);
 
-  const handleTabToggle = (value: string) => {
+  const handleTabToggle = (value: TRole) => {
     setUser(value);
   };
 
@@ -58,7 +59,7 @@ const WaitlistModalForm = () => {
         </div>
         <div>
           <CustomTabs userType={user} handleTabToggle={handleTabToggle} />
-          {user === "poster" ? (
+          {user === ROLE.poster ? (
             <PosterWaitListForm toggleSuccessModal={toggleSuccessModal} />
           ) : (
             <TaskerWaitListForm toggleSuccessModal={toggleSuccessModal} />

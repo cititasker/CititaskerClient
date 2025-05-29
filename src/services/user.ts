@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import api, { formDataApi } from "./apiService";
+import api from "./apiService";
 
 export function getUserApi() {
   return api
@@ -13,7 +13,7 @@ export function getUserApi() {
 }
 
 export function uploadProfile(data: any) {
-  return formDataApi
+  return api
     .post(`auth/upload-profile-image`, data)
     .then((data) => {
       return data.data;

@@ -1,26 +1,36 @@
 "use client";
-import {
-  Button,
-  Chip,
-  ClickAwayListener,
-  Grow,
-  MenuItem,
-  MenuList,
-  Paper,
-  Popper,
-} from "@mui/material";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { styles } from "./styles";
+import { useParams, useRouter } from "next/navigation";
+import {
+  Paper,
+  Chip,
+  Button,
+  Popper,
+  Grow,
+  MenuList,
+  MenuItem,
+  ClickAwayListener,
+} from "@mui/material";
+
+import Icons from "@/components/Icons";
 import FormButton from "@/components/forms/FormButton";
 import MakeOfferModal from "../Modals";
 import ShareTaskModal from "../Modals/ShareTaskModal";
+import VerificationModal from "../Modals/VerifyModal/Verify";
+import ImageGallery from "../Modals/ImageGalleryModal/ImageGallery";
+import CustomTab from "@/components/reusables/CustomTab";
+import Offer from "../Offer";
+import Question from "../Question";
+
 import useModal from "@/hooks/useModal";
-import Icons from "@/components/Icons";
-import { getSingleTaskQuery } from "@/queries/task";
-import { useParams } from "next/navigation";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { styles } from "./styles";
+import { defaultProfile } from "@/constant/images";
+import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import { getSingleTaskQuery, useRequestPayment } from "@/queries/task";
+import { useAppDispatch, useAppSelector } from "@/store/hook";
+import { setTaskDetails, setUserTaskOffer } from "@/store/slices/task";
 import {
   cn,
   convertDate,
@@ -29,117 +39,102 @@ import {
   initializeName,
   truncate,
 } from "@/utils";
-import CustomTab from "@/components/reusables/CustomTab";
-import Offer from "../Offer";
-import Question from "../Question";
-import { defaultProfile } from "@/constant/images";
-import { useAppDispatch, useAppSelector } from "@/store/hook";
-import { setTaskDetails, setUserTaskOffer } from "@/store/slices/task";
-import VerificationModal from "../Modals/VerifyModal/Verify";
-import ImageGallery from "../Modals/ImageGalleryModal/ImageGallery";
+import { ROLE } from "@/constant";
+import { useSnackbar } from "@/providers/SnackbarProvider";
+import { TASK_ID } from "@/queries/queryKeys";
 
 const TaskDetails = () => {
-  const [verifications] = useState({
-    face: false,
-    id: false,
-    bank: false,
-    home: false,
-  });
-  const { isAuth, user } = useAppSelector((state) => state.user);
-  const [open, setOpen] = React.useState(false);
-  const prevOpen = React.useRef(open);
+  const { id } = useParams() as { id: string };
   const dispatch = useAppDispatch();
-  const anchorRef = React.useRef<HTMLButtonElement>(null);
+  const router = useRouter();
+  const { isAuth, user } = useAppSelector((state) => state.user);
+
+  const { data } = useSuspenseQuery(getSingleTaskQuery(id));
+  const requestPaymentMutation = useRequestPayment();
+  const task: ITask = data.data;
+
+  const [verifyModalOpen, setVerifyModalOpen] = useState(false);
+  const [openMoreOptions, setOpenMoreOptions] = useState(false);
+  const moreOptionsRef = useRef<HTMLButtonElement>(null);
+  const prevOpen = useRef(openMoreOptions);
+  const { showSnackbar } = useSnackbar();
+  const queryClient = useQueryClient();
+
   const {
-    isOpen,
+    isOpen: shareModalOpen,
     openModal: openShareModal,
     closeModal: closeShareModal,
   } = useModal();
   const {
-    isOpen: nextModalOpen,
-    openModal: openNextModal,
-    closeModal: closeNextModal,
+    isOpen: offerModalOpen,
+    openModal: openOfferModal,
+    closeModal: closeOfferModal,
   } = useModal();
 
-  const { id } = useParams() as any;
-
-  const { data } = useSuspenseQuery(getSingleTaskQuery(id));
-
-  const task: ITask = data.data;
+  const verifications = useMemo(
+    () => ({ face: false, id: false, bank: false, home: false }),
+    []
+  );
 
   useEffect(() => {
-    if (task) {
-      dispatch(setTaskDetails(task));
-    }
+    if (task) dispatch(setTaskDetails(task));
   }, [task]);
-
-  const handleToggle = () => {
-    setOpen((prevOpen) => !prevOpen);
-  };
-
-  const handleClose = (event: Event | React.SyntheticEvent) => {
-    if (
-      anchorRef.current &&
-      anchorRef.current.contains(event.target as HTMLElement)
-    ) {
-      return;
-    }
-
-    setOpen(false);
-  };
-
-  function handleListKeyDown(event: React.KeyboardEvent) {
-    if (event.key === "Tab") {
-      event.preventDefault();
-      setOpen(false);
-    } else if (event.key === "Escape") {
-      setOpen(false);
-    }
-  }
-
-  React.useEffect(() => {
-    if (prevOpen.current === true && open === false) {
-      anchorRef.current!.focus();
-    }
-
-    prevOpen.current = open;
-  }, [open]);
-
-  const handleShareTaskAction = () => {
-    openShareModal();
-  };
-
-  const [verifyModalOpen, setVerifyModalOpen] = React.useState(false);
 
   const hasMadeOffer = useMemo(
     () => task.offers.some((el) => el.tasker.id === user?.id),
     [task, user]
   );
 
+  useEffect(() => {
+    const taskerOffer =
+      task.offers.find((el) => el.tasker.id === user?.id) ?? null;
+    dispatch(setUserTaskOffer(taskerOffer));
+  }, [hasMadeOffer]);
+
   const buttonText = useMemo(() => {
     if (task.status === "open" && !hasMadeOffer) return "Make an Offer";
     if (task.status === "open" && hasMadeOffer) return "Update Offer";
+    if (task.status === "assigned" && hasMadeOffer) return "Request Payment";
     if (task.status === "assigned") return "Assigned";
-  }, [task, hasMadeOffer, user]);
+    return "Unavailable";
+  }, [task.status, hasMadeOffer]);
 
   const handleButtonClick = () => {
-    const allVerified = Object.values(verifications).every((value) => value);
+    const isAllVerified = Object.values(verifications).every(Boolean);
 
-    if (allVerified) {
+    if (isAllVerified) {
       setVerifyModalOpen(true);
+    } else if (hasMadeOffer) {
+      requestPaymentMutation.mutate(
+        { task_id: task.id },
+        {
+          onSuccess(data) {
+            showSnackbar(data.message, "success");
+            queryClient.invalidateQueries({ queryKey: [TASK_ID(id)] });
+          },
+          onError(error) {
+            showSnackbar(error.message, "error");
+          },
+        }
+      );
     } else {
-      openNextModal();
+      openOfferModal();
     }
   };
 
+  const handleToggleMoreOptions = () => setOpenMoreOptions((prev) => !prev);
+  const handleCloseMoreOptions = (event: Event | React.SyntheticEvent) => {
+    if (moreOptionsRef.current?.contains(event.target as HTMLElement)) return;
+    setOpenMoreOptions(false);
+  };
+
   useEffect(() => {
-    const taskersOffer =
-      task.offers.find((el) => el.tasker.id == user.id) ?? null;
-    dispatch(setUserTaskOffer(taskersOffer));
-  }, [hasMadeOffer]);
+    if (prevOpen.current && !openMoreOptions) moreOptionsRef.current?.focus();
+    prevOpen.current = openMoreOptions;
+  }, [openMoreOptions]);
 
   const headerMenu = [
-    { icon: Icons.share, name: "Share task", action: handleShareTaskAction },
+    { icon: Icons.share, name: "Share task", action: openShareModal },
     { icon: Icons.flag, name: "Report task" },
     { icon: Icons.bookmark, name: "Save task" },
   ];
@@ -150,180 +145,150 @@ const TaskDetails = () => {
       elevation={0}
       className="hide-scrollbar relative"
     >
-      <div className="px-[48px] h-[65px] flex justify-between items-center border-b sticky top-0 z-[20] bg-white">
+      <div className="px-12 h-[65px] flex justify-between items-center border-b sticky top-0 z-[20] bg-white">
         <Link
-          href="/browse-task"
+          href="#"
+          onClick={router.back}
           className="flex items-center gap-2 text-base text-primary font-normal"
         >
-          <Icons.arrowLeft />
-          Back to Map
+          <Icons.arrowLeft /> Back to Map
         </Link>
         <div className="flex items-center gap-5">
-          {headerMenu.map((el) => (
+          {headerMenu.map((item) => (
             <button
-              key={el.name}
-              onClick={el.action}
-              className="flex items-center gap-2 cursor-pointer"
+              key={item.name}
+              onClick={item.action}
+              className="flex items-center gap-2"
             >
-              <el.icon fill="red" />
-
-              <p className="text-dark-grey-2 text-[0.875rem] font-normal">
-                {el.name}
+              <item.icon fill="red" />
+              <p className="text-dark-grey-2 text-sm font-normal">
+                {item.name}
               </p>
             </button>
           ))}
         </div>
       </div>
+
       <div className="px-[30px] pt-[28px] mb-10">
-        <div className="flex gap-7 mb-[48px] w-full">
-          <div className="shrink-0 h-fit">
+        {/* Poster Info & Task Header */}
+        <div className="flex gap-7 mb-[48px]">
+          <div className="shrink-0">
             <Image
               src={task.poster_profile_image ?? defaultProfile}
-              alt="poster image"
+              alt={ROLE.poster}
               width={60}
               height={60}
-              className="w-[60px] h-[60px] object-cover rounded-full"
+              className="rounded-full object-cover"
             />
-            <div className="w-fit mx-auto mt-2">
+            <div className="text-center mt-2">
               <p className="text-black-2 text-xs font-semibold mb-1">
                 Posted by
               </p>
-              <p className="text-dark-grey-2 font-normal text-xs text-center">
-                {initializeName({
-                  first_name: task.poster?.profile?.first_name,
-                  last_name: task.poster?.profile?.last_name,
-                })}
+              <p className="text-dark-grey-2 text-xs">
+                {initializeName(task.poster?.profile)}
               </p>
             </div>
           </div>
-          <div className="w-full">
-            <div className="flex items-center gap-5 mb-5">
-              <Chip
-                label="Open"
-                className={cn(
-                  " text-[0.625rem] font-normal h-[26px]",
-                  task.status == "open" ? "bg-light-primary-2" : "bg-light-grey"
-                )}
-              />
-              <Chip
-                label="Assigned"
-                className={cn(
-                  " text-[0.625rem] font-normal h-[26px]",
-                  task.status == "assigned"
-                    ? "bg-light-primary-2"
-                    : "bg-light-grey"
-                )}
-              />
-              <Chip
-                label="Completed"
-                className={cn(
-                  " text-[0.625rem] font-normal h-[26px]",
-                  task.status == "completed"
-                    ? "bg-light-primary-2"
-                    : "bg-light-grey"
-                )}
-              />
+
+          <div className="flex-1">
+            <div className="flex gap-3 mb-5">
+              {["open", "assigned", "completed"].map((status) => (
+                <Chip
+                  key={status}
+                  label={status.charAt(0).toUpperCase() + status.slice(1)}
+                  className={cn(
+                    "text-xs h-[26px] font-normal",
+                    task.status === status
+                      ? "bg-light-primary-2"
+                      : "bg-light-grey"
+                  )}
+                />
+              ))}
             </div>
-            <div className="flex justify-between gap-5 w-full">
-              <div className="max-w-[250px] w-full">
+
+            <div className="flex justify-between gap-5">
+              <div className="max-w-[250px]">
                 <h1 className="text-2xl font-semibold text-black-2">
                   {task.name}
                 </h1>
                 <div className="mt-5 flex flex-col gap-4">
-                  <div className="flex items-center gap-x-4">
-                    <Icons.distance width={20} height={20} />
-                    <div>
-                      <p className="text-black-2 text-xs font-semibold mb-0.5">
-                        Location
-                      </p>
-                      <p
-                        className="text-dark-grey-2 text-xs font-normal"
-                        title={task.address}
-                      >
-                        {truncate(task.address, 20)}
-                      </p>
+                  {[
+                    {
+                      icon: <Icons.distance width={20} height={20} />,
+                      label: "Location",
+                      value: truncate(task.address, 20),
+                    },
+                    {
+                      icon: <Icons.calendar width={18} height={18} />,
+                      label: "Due Date",
+                      value: convertDate(task.date, "MMM DD, YYYY"),
+                    },
+                    {
+                      icon: <Icons.avTimer />,
+                      label: "Posted",
+                      value: formatDateAgo(task.created_at),
+                    },
+                  ].map((item, index) => (
+                    <div key={index} className="flex items-start gap-4">
+                      {item.icon}
+                      <div>
+                        <p className="text-black-2 text-xs font-semibold mb-0.5">
+                          {item.label}
+                        </p>
+                        <p className="text-dark-grey-2 text-xs">{item.value}</p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex items-center gap-x-4">
-                    <Icons.calendar width={18} height={18} />
-                    <div>
-                      <p className="text-black-2 text-xs font-semibold mb-0.5">
-                        Due Date
-                      </p>
-                      <p className="text-dark-grey-2 text-xs font-normal">
-                        {convertDate(task.date, "MMM DD, YYYY")}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-x-4">
-                    <Icons.avTimer />
-                    <div>
-                      <p className="text-black-2 text-xs font-semibold mb-0.5">
-                        Posted
-                      </p>
-                      <p className="text-dark-grey-2 text-xs font-normal">
-                        {formatDateAgo(task.created_at)}
-                      </p>
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
+
+              {/* Budget Box */}
               <div>
-                <div className="rounded-[10px] p-[17px] bg-light-primary-1 text-center flex flex-col items-center">
-                  <p className="text-dark-grey-2 text-sm font-normal mb-5">
+                <div className="rounded-[10px] p-[17px] bg-light-primary-1 text-center">
+                  <p className="text-dark-grey-2 text-sm mb-5">
                     Estimated Task Budget
                   </p>
-                  <h2 className="font-semibold text-[2rem] text-black-2 mb-[20px]">
+                  <h2 className="text-[2rem] font-semibold text-black-2 mb-5">
                     {formatCurrency({ value: task.budget, noFraction: true })}
                   </h2>
                   <FormButton
                     handleClick={handleButtonClick}
-                    btnStyle="min-h-[39px] min-w-40 text-base font-normal"
-                    disabled={task.status !== "open"}
+                    btnStyle="text-base font-normal"
+                    disabled={task.status !== "open" && !hasMadeOffer}
+                    loading={requestPaymentMutation.isPending}
                   >
                     {buttonText}
                   </FormButton>
                 </div>
                 {isAuth && (
-                  <div className="menu">
+                  <div className="mt-2">
                     <Button
-                      ref={anchorRef}
-                      id="composition-button"
-                      aria-controls={open ? "composition-menu" : undefined}
-                      aria-expanded={open ? "true" : undefined}
-                      aria-haspopup="true"
-                      onClick={handleToggle}
-                      // endIcon={<KeyboardArrowDownIcon />}
-                      className="!bg-light-grey mt-2 w-full text-black-2"
+                      ref={moreOptionsRef}
+                      onClick={handleToggleMoreOptions}
+                      className="!bg-light-grey w-full text-black-2"
                     >
                       More Options
                     </Button>
                     <Popper
-                      open={open}
-                      anchorEl={anchorRef.current}
-                      role={undefined}
+                      open={openMoreOptions}
+                      anchorEl={moreOptionsRef.current}
                       placement="bottom-start"
                       transition
                       disablePortal
+                      className="max-w-[194px] w-full bg-white border border-light-grey"
                     >
-                      {({ TransitionProps, placement }) => (
+                      {({ TransitionProps }) => (
                         <Grow
                           {...TransitionProps}
-                          style={{
-                            transformOrigin:
-                              placement === "bottom-start"
-                                ? "left top"
-                                : "left bottom",
-                          }}
+                          style={{ transformOrigin: "left top" }}
                         >
-                          <Paper elevation={0} className="paper">
-                            <ClickAwayListener onClickAway={handleClose}>
+                          <Paper elevation={0} className="w-full">
+                            <ClickAwayListener
+                              onClickAway={handleCloseMoreOptions}
+                            >
                               <MenuList
+                                autoFocusItem={openMoreOptions}
                                 disablePadding
-                                autoFocusItem={open}
-                                id="composition-menu"
-                                aria-labelledby="composition-button"
-                                onKeyDown={handleListKeyDown}
                               >
                                 <MenuItem component={Link} href="/profile">
                                   Profile
@@ -343,29 +308,26 @@ const TaskDetails = () => {
             </div>
           </div>
         </div>
-        <div>
-          <div className="mb-7">
-            <p className="mb-4 text-xl font-semibold text-black-2">
-              Description
-            </p>
-            <p className="text-sm font-normal text-black-2">
-              {task.description}
-            </p>
-          </div>
-          <div className="mb-7">
-            <p className="mb-4 text-xl font-semibold text-black-2">Pictures</p>
 
-            {task.images && task.images.length > 0 ? (
-              <ImageGallery images={task.images} />
-            ) : (
-              <p>No images available for this task.</p>
-            )}
-          </div>
-          <CustomTab tabs={["Offers", "Questions"]}>
-            <Offer offers={task.offers} />
-            <Question />
-          </CustomTab>
+        {/* Description & Images */}
+        <div className="mb-7">
+          <p className="text-xl font-semibold mb-4">Description</p>
+          <p className="text-sm text-black-2">{task.description}</p>
         </div>
+
+        <div className="mb-7">
+          <p className="text-xl font-semibold mb-4">Pictures</p>
+          {task.images?.length ? (
+            <ImageGallery images={task.images} />
+          ) : (
+            <p>No images available for this task.</p>
+          )}
+        </div>
+
+        <CustomTab tabs={["Offers", "Questions"]}>
+          <Offer offers={task.offers} />
+          <Question />
+        </CustomTab>
       </div>
 
       <VerificationModal
@@ -373,17 +335,13 @@ const TaskDetails = () => {
         handleClose={() => setVerifyModalOpen(false)}
         verifications={verifications}
       />
-
-      {nextModalOpen && (
-        <MakeOfferModal
-          open={nextModalOpen}
-          handleClose={closeNextModal}
-          handleOpen={openNextModal}
-        />
-      )}
-
+      <MakeOfferModal
+        open={offerModalOpen}
+        handleClose={closeOfferModal}
+        handleOpen={openOfferModal}
+      />
       <ShareTaskModal
-        open={isOpen}
+        open={shareModalOpen}
         handleClose={closeShareModal}
         handleOpen={openShareModal}
       />

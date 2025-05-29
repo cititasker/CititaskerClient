@@ -201,3 +201,17 @@ export function formatTime(dateString: string, format = "hh:mm a"): string {
   return dayjs(dateString).format(format);
 }
 export const maxDate = dayjs().subtract(18, "year");
+
+export const updateQueryParams = (
+  searchParams: URLSearchParams,
+  key: string,
+  value: string
+) => {
+  const params = new URLSearchParams(searchParams.toString());
+  if (value) {
+    params.set(key, value);
+  } else {
+    params.delete(key);
+  }
+  return params.toString();
+};

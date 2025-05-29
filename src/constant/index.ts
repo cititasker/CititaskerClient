@@ -1,6 +1,11 @@
 export const maxLengthChar = 200;
 export const connectionFee = 10;
 
+export enum ROLE {
+  poster = "poster",
+  tasker = "tasker",
+}
+
 export const QUERY_PATHS = {
   AUTH: {
     SIGN_IN: "/auth/sign-in",
@@ -17,3 +22,5 @@ export const QUERY_PATHS = {
   LOGIN: "/auth/login",
   USER: "/auth/get-user",
 };
+
+export const ROUTES = { MY_TASKS: "/my-tasks" } as const;

@@ -1,8 +1,8 @@
 import { AxiosError } from "axios";
-import api, { formDataApi, publicApi } from "./apiService";
+import api from "./apiService";
 
 export function createTask(data: any) {
-  return formDataApi
+  return api
     .post(`tasks/create`, data)
     .then((data) => {
       return data.data;
@@ -13,7 +13,7 @@ export function createTask(data: any) {
 }
 
 export function updateTask(data: any) {
-  return formDataApi
+  return api
     .post(`tasks/update-task`, data)
     .then((data) => {
       return data.data;
@@ -24,7 +24,7 @@ export function updateTask(data: any) {
 }
 
 export function getAllTasks(data: any) {
-  return publicApi
+  return api
     .get(`tasks`, data)
     .then((data) => {
       return data.data;
@@ -35,7 +35,7 @@ export function getAllTasks(data: any) {
 }
 
 export function getSingleTask(id: string) {
-  return publicApi
+  return api
     .get(`tasks/single/${id}`)
     .then((data) => {
       return data.data;
@@ -45,9 +45,11 @@ export function getSingleTask(id: string) {
     });
 }
 
-export function getUserTasks() {
+export function getUserTasks({ status }: any) {
+  const urlParams = new URLSearchParams();
+  if (status) urlParams.set("status", status);
   return api
-    .get(`tasks/user`)
+    .get(`tasks/user?${urlParams}`)
     .then((data) => {
       return data.data;
     })
@@ -59,6 +61,17 @@ export function getUserTasks() {
 export function getUserTaskById(id: string) {
   return api
     .get(`tasks/user/single/${id}`)
+    .then((data) => {
+      return data.data;
+    })
+    .catch((error: AxiosError) => {
+      throw error.response?.data;
+    });
+}
+
+export function requestPayment(data: any) {
+  return api
+    .post(`tasks/request-payment`, data)
     .then((data) => {
       return data.data;
     })

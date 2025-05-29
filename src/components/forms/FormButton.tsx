@@ -33,7 +33,7 @@ const FormButton = ({
         href={href}
         target={target}
         className={cn(
-          "h-12 rounded-full transition-all duration-300 whitespace-nowrap px-5 text-base font-normal inline-flex justify-center cursor-pointer gap-3 w-fit bg-primary text-white items-center leading-normal",
+          "min-w-max h-12 rounded-full transition-all duration-300 whitespace-nowrap px-5 text-base font-normal inline-flex justify-center cursor-pointer gap-3 w-fit bg-primary text-white items-center leading-normal",
           btnStyle
         )}
       >
@@ -46,7 +46,7 @@ const FormButton = ({
         type={type}
         disabled={disabled || loading}
         className={cn(
-          "h-12 rounded-full transition-all duration-300 disabled:cursor-not-allowed disabled:bg-primary/70 px-5 text-base font-normal flex justify-center cursor-pointer gap-3 w-fit bg-primary text-white items-center leading-normal",
+          "min-w-max h-12 rounded-full transition-all duration-300 disabled:cursor-not-allowed disabled:bg-primary/70 px-5 text-base font-normal flex justify-center cursor-pointer gap-3 w-fit bg-primary text-white items-center leading-normal",
           btnStyle
         )}
         onClick={handleClick}

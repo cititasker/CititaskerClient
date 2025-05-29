@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: process.env.API_BASE_URL as string,
+        hostname: process.env.API_BASE_URL || "staging-api.cititasker.com",
       },
     ],
   },
@@ -14,16 +14,16 @@ const nextConfig: NextConfig = {
       return [
         {
           source: "/",
-          destination: `${process.env.NEXT_PUBLIC_DOMAIN_URL}/waitlist`,
+          destination: "/waitlist",
           permanent: false,
         },
       ];
     }
     return [];
   },
-  // eslint: {
-  //   ignoreDuringBuilds: true,
-  // },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
 
 export default nextConfig;

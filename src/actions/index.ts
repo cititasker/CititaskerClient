@@ -19,14 +19,15 @@ export async function getUserSingleTask(id: string) {
   return response.json();
 }
 
-export async function getUserTasks() {
+export async function getUserTasks({ status }: any) {
   const session = await auth();
   const token = session?.user.authToken;
+  const urlParams = new URLSearchParams();
+  if (status) urlParams.set("status", status);
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/tasks/user`,
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/tasks/user?${urlParams}`,
     { method: "GET", ...config(token) }
   );
-  console.log(33, await response.json());
 
   if (!response.ok) throw new Error("Failed to fetch post");
   return await response.json();

@@ -4,11 +4,12 @@ import UnderlinedHeader from "../../reusables/UnderlinedHeader";
 import CustomTabs from "../../reusables/CustomTabs";
 import WhyJoinCititasker from "./WhyJoinCititasker";
 import { posterData, taskerData } from "../../../../data";
+import { ROLE } from "@/constant";
 
 const WhyCitiTasker = () => {
-  const [user, setUser] = useState("poster");
+  const [user, setUser] = useState<TRole>(ROLE.poster);
 
-  const handleTabToggle = (value: string) => {
+  const handleTabToggle = (value: TRole) => {
     setUser(value);
   };
   return (
@@ -33,7 +34,7 @@ const WhyCitiTasker = () => {
             handleTabToggle={handleTabToggle}
             extraStyle="!mb-[1.75rem]"
           />
-          {user === "poster" ? (
+          {user === ROLE.poster ? (
             <div className="text-xs sm:text-xl text-center max-w-[56.875rem] mx-auto font-normal mb-[1.75rem] sm:mb-[3.75rem]">
               <span className="text-primary font-semibold">
                 Who is a Poster?
@@ -54,7 +55,7 @@ const WhyCitiTasker = () => {
               jobs done efficiently.
             </div>
           )}
-          {user === "poster" ? (
+          {user === ROLE.poster ? (
             <WhyJoinCititasker img="/images/poster.svg" data={posterData} />
           ) : (
             <WhyJoinCititasker img="/images/tasker.svg" data={taskerData} />

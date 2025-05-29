@@ -3,9 +3,10 @@ import {
   getSingleTask,
   getUserTaskById,
   getUserTasks,
+  requestPayment,
 } from "@/services/task";
-import { queryOptions } from "@tanstack/react-query";
-import { TASK_ID, USER_TASK_ID } from "./queryKeys";
+import { queryOptions, useMutation } from "@tanstack/react-query";
+import { TASK_ID, USER_TASK_ID, USER_TASKS } from "./queryKeys";
 
 export const getAllTasksQuery = () => {
   return queryOptions({
@@ -30,9 +31,15 @@ export const getUserTaskByIdQuery = (id: string) => {
   });
 };
 
-export const getUserTasksQuery = () => {
+export const getUserTasksQuery = ({ status }: { status: string | null }) => {
   return queryOptions({
-    queryKey: ["tasks/user"],
-    queryFn: getUserTasks,
+    queryKey: USER_TASKS(status),
+    queryFn: () => getUserTasks({ status }),
+  });
+};
+
+export const useRequestPayment = () => {
+  return useMutation({
+    mutationFn: requestPayment,
   });
 };

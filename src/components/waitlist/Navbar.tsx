@@ -35,7 +35,6 @@ const Navbar = () => {
       setActive(currentHash);
 
       const handleHashChange = () => {
-        console.log(77, window.location.hash);
         setActive(window.location.hash);
       };
       window.addEventListener("hashchange", handleHashChange);

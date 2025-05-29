@@ -8,10 +8,10 @@ const WhyCitiTasker = () => {
         <div className="mb-[3.75rem] max-w-[45.625rem] mx-auto">
           <h1 className="header mb-5">Why Choose CitiTasker?</h1>
           <p className="font-normal text-base text-center">
-            Borem ipsum dolor sit amet, consectetur adipiscing elit. Borem ipsum
-            dolor sit amet, consectetur adipiscing elit. Borem ipsum dolor sit
-            amet, consectetur adipiscing elit. Borem ipsum dolor sit amet,
-            consectetur adipiscing elit.
+            CitiTasker is a trusted platform designed to connect people in need
+            of help with people who are ready to work. With secure payments,
+            verified Taskers, and 24/7 support, CitiTasker is your go-to
+            platform for getting things done quickly and efficiently.
           </p>
         </div>
         <WhyCitiTaskerList />

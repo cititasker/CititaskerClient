@@ -14,6 +14,7 @@ import { defaultProfile } from "@/constant/images";
 import Icons from "../Icons";
 import { loggedInUser } from "@/utils";
 import { logout } from "@/store/slices/user";
+import { ROLE, ROUTES } from "@/constant";
 
 const navbar = [
   {
@@ -387,7 +388,9 @@ const MainNavbar = ({ isAuth }: IProp) => {
                         "border-b-[3px] border-primary"
                       }`}
                     >
-                      <Link href="/my-tasks">My Tasks</Link>
+                      <Link href={`/${user.role}/${ROUTES.MY_TASKS}`}>
+                        My Tasks
+                      </Link>
                     </li>
                   </ul>
                 )
@@ -454,7 +457,7 @@ const MainNavbar = ({ isAuth }: IProp) => {
                       <li className="mb-6">
                         <FormButton
                           text={`Switch to ${
-                            user.role == "tasker" ? "Poster" : "Tasker"
+                            user.role == ROLE.tasker ? "Poster" : "Tasker"
                           }`}
                           href="/"
                           btnStyle="w-full bg-transparent font-medium border-[1.5px] border-primary text-primary"

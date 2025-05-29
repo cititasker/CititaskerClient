@@ -18,10 +18,7 @@ const PopularTasks = () => {
             <TaskCategoryCard key={i} />
           ))}
         </div>
-        <FormButton
-          text="Explore more"
-          btnStyle="w-fit mx-auto !px-5"
-        />
+        <FormButton text="Explore more" btnStyle="w-fit mx-auto !px-5" />
       </div>
     </div>
   );

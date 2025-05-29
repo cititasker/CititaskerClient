@@ -6,12 +6,12 @@ import {
   verifyEmailSchemaType,
   verifyPhoneSchemaType,
 } from "@/schema/auth";
-import api, { publicApi } from "./apiService";
+import api from "./apiService";
 import { AxiosError } from "axios";
 import { QUERY_PATHS } from "@/constant";
 
 export function registerApi(data: loginSchemaType) {
-  return publicApi
+  return api
     .post(`auth/registration`, data)
     .then((data) => {
       return data.data;
@@ -22,7 +22,7 @@ export function registerApi(data: loginSchemaType) {
 }
 
 export function loginApi(data: loginSchemaType) {
-  return publicApi
+  return api
     .post(`auth/login`, data)
     .then((data) => {
       return data.data;
@@ -125,7 +125,7 @@ export function changePassword(data: any) {
 }
 
 export function googleAuth() {
-  return publicApi
+  return api
     .get(`auth/google`)
     .then((data) => {
       return data.data;

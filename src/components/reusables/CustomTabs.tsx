@@ -1,10 +1,11 @@
 "use client";
 import React from "react";
 import FormButton from "../forms/FormButton";
+import { ROLE } from "@/constant";
 
 interface IProps {
   userType: string;
-  handleTabToggle: (value: string) => void;
+  handleTabToggle: (value: TRole) => void;
   extraStyle?: string;
 }
 
@@ -15,22 +16,22 @@ const CustomTabs = ({ userType, handleTabToggle, extraStyle }: IProps) => {
     >
       <div
         className={`h-[calc(100%-8px)] rounded-[40px] bg-primary absolute top-1 left-1 w-1/2 transition-transform duration-150 ${
-          userType === "tasker" ? "translate-x-[calc(100%-0.5rem)]" : ""
+          userType === ROLE.tasker ? "translate-x-[calc(100%-0.5rem)]" : ""
         }`}
       ></div>
       <FormButton
         btnStyle={`!bg-transparent w-1/2 min-h-[2.5rem] sm:!min-h-[3.125rem] z-[2] flex-1 !text-xs sm:!text-base ${
-          userType === "poster" ? "!text-white" : "!text-primary"
+          userType === ROLE.poster ? "!text-white" : "!text-primary"
         }`}
-        handleClick={() => handleTabToggle("poster")}
+        handleClick={() => handleTabToggle(ROLE.poster)}
       >
         Join as a Poster
       </FormButton>
       <FormButton
         btnStyle={`bg-transparent w-1/2 min-h-[2.5rem] sm:!min-h-[3.125rem] z-[2] flex-1 !text-xs sm:!text-base ${
-          userType === "tasker" ? "!text-white" : "!text-primary"
+          userType === ROLE.tasker ? "!text-white" : "!text-primary"
         }`}
-        handleClick={() => handleTabToggle("tasker")}
+        handleClick={() => handleTabToggle(ROLE.tasker)}
       >
         Join as a Tasker
       </FormButton>

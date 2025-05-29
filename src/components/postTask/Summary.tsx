@@ -18,6 +18,7 @@ import { createTask, updateTask } from "@/services/task";
 import { persistor } from "@/store";
 import { queryClient } from "@/providers/ServerProvider";
 import { USER_TASK_ID } from "@/queries/queryKeys";
+import { ROUTES } from "@/constant";
 
 const Summary = () => {
   const { data: session } = useSession();
@@ -31,7 +32,7 @@ const Summary = () => {
     onSuccess: async (data) => {
       showSnackbar(data.message, "success");
       await persistor.purge();
-      push("/my-tasks");
+      push(`/${session?.user.role}/${ROUTES.MY_TASKS}`);
     },
     onError: (error) => {
       showSnackbar(errorHandler(error), "error");
@@ -44,7 +45,7 @@ const Summary = () => {
       showSnackbar(data.message, "success");
       queryClient.invalidateQueries({ queryKey: USER_TASK_ID(id) });
       await persistor.purge();
-      push(`/my-tasks/${id}`);
+      push(`/${session?.user.role}/${ROUTES.MY_TASKS}/${id}`);
     },
     onError: (error) => {
       showSnackbar(errorHandler(error), "error");

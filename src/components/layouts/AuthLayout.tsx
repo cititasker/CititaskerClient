@@ -44,17 +44,17 @@ const AuthLayout = ({ children, extraClass }: IProps) => {
 
   return (
     <div className="bg-white lg:bg-light-primary-1">
-      <div className="max-w-[1800px] mx-auto  min-h-dvh relative">
+      <div className="min-h-dvh relative">
         <div className="flex">
-          <div className="relative flex-1 w-full h-screen hidden md:block">
+          <div className="relative flex-1 w-full h-screen hidden md:block overflow-hidden [clip-path:inset(0)]">
             {data.map((el, i) => (
               <Image
                 key={i}
                 src={el.img}
                 alt=""
-                width={40}
-                height={40}
-                className={`h-full w-full object-cover absolute top-0 left-0 transition-all duration-500 ${
+                // width={40}
+                // height={40}
+                className={`h-full w-full scale-[1.02] object-cover absolute top-0 left-0 transition-transform duration-500 ${
                   activeIndex == i ? "opacity-100" : "opacity-0"
                 }`}
               />
