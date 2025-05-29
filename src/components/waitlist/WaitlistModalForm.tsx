@@ -52,7 +52,7 @@ const WaitlistModalForm = () => {
             height={17}
             className=""
           />
-          <span className="inline-block bg-red-500 text-white text-[0.625rem] px-4 py-2 rounded-[1.25rem]">
+          <span className="inline-block bg-light-primary-2 !text-primary text-white text-[0.625rem] px-4 py-2 rounded-[1.25rem]">
             Coming soon
           </span>
         </div>

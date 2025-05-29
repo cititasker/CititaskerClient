@@ -11,7 +11,6 @@ import { joinPosterApi } from "@/services";
 import FormInput from "../forms/FormInput";
 import FormButton from "../forms/FormButton";
 import { useSnackbar } from "@/providers/SnackbarProvider";
-import SelectState from "../forms/SelectState";
 
 interface IProps {
   toggleSuccessModal: () => void;
@@ -24,7 +23,6 @@ const PosterWaitListForm = ({ toggleSuccessModal }: IProps) => {
     defaultValues: {
       name: "",
       email: "",
-      location: null,
     },
     resolver: zodResolver(posterWaitListFormSchema),
   });
@@ -43,12 +41,9 @@ const PosterWaitListForm = ({ toggleSuccessModal }: IProps) => {
       showSnackbar(error.message, "error");
     },
   });
+
   const onSubmit: SubmitHandler<posterWaitListFormSchemaType> = (values) => {
-    const payload = {
-      ...values,
-      location: values.location?.id,
-    };
-    mutation.mutate(payload);
+    mutation.mutate(values);
   };
 
   return (
@@ -61,6 +56,13 @@ const PosterWaitListForm = ({ toggleSuccessModal }: IProps) => {
             type="text"
             placeholder="Enter your full name"
             wrapperStyle="!mb-0"
+            InputProps={{
+              sx: {
+                "&.MuiOutlinedInput-root": {
+                  borderRadius: "9999px",
+                },
+              },
+            }}
           />
           <FormInput
             label="Email"
@@ -68,12 +70,16 @@ const PosterWaitListForm = ({ toggleSuccessModal }: IProps) => {
             type="email"
             placeholder="Enter your email address"
             wrapperStyle="!mb-0"
+            InputProps={{
+              sx: {
+                "&.MuiOutlinedInput-root": {
+                  borderRadius: "9999px",
+                },
+              },
+            }}
           />
         </div>
-        <div className="flex items-center justify-between gap-x-8 gap-y-5 flex-col sm:flex-row mb-5">
-          <SelectState label="Location" name="location" />
-          <div className="flex-1"></div>
-        </div>
+
         <FormButton
           type="submit"
           text="Join Waitlist"

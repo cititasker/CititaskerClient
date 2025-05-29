@@ -1,10 +1,7 @@
-// import FormButton from "@/components/forms/FormButton";
-// import Icons from "@/components/Icons";
 import CustomTable from "@/components/reusables/CustomTable";
 import { Box } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import React from "react";
-// import { MdOutlineAdd } from "react-icons/md";
 import PaymentStatus from "../../PaymentStatus";
 import WalletBalanceCard from "@/components/reusables/WalletCard";
 
