@@ -14,9 +14,14 @@ interface ModalType {
   open: boolean;
   handleOpen: () => void;
   handleClose: () => void;
+  isIncreaseBudget?: boolean;
 }
 
-export default function MakeOfferModal({ open, handleClose }: ModalType) {
+export default function MakeOfferModal({
+  open,
+  handleClose,
+  isIncreaseBudget,
+}: ModalType) {
   const [currentStep, setCurrentStep] = useState(1);
   const [edit, setEdit] = useState(false);
   const { isAuth } = useAppSelector((state) => state.user);
@@ -26,8 +31,6 @@ export default function MakeOfferModal({ open, handleClose }: ModalType) {
   React.useEffect(() => {
     setEdit(!!taskersOffer);
   }, []);
-
-  console.log(2233, edit);
 
   const nextStep = () => {
     if (currentStep < 4) {

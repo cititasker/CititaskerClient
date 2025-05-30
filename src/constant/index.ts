@@ -23,4 +23,18 @@ export const QUERY_PATHS = {
   USER: "/auth/get-user",
 };
 
-export const ROUTES = { MY_TASKS: "/my-tasks" } as const;
+const isProd = process.env.NODE_ENV === "production";
+
+export const ROUTES = {
+  MY_TASKS: "/my-tasks",
+  LOGIN: isProd ? "/waitlist" : "/login",
+  SIGNUP: isProd ? "/waitlist" : "/signup",
+  CREATE_ACCOUNT: "/create-account",
+  FORGOT_PASSWORD: "/forgot-password",
+  DASHBOARD: "/dashboard",
+  POSTER: isProd ? "/waitlist" : "/poster",
+  TASKER: isProd ? "/waitlist" : "/tasker",
+  WAITLIST: "/waitlist",
+  POST_TASK: isProd ? "/waitlist" : "/post-task",
+  BROWSE_TASK: "/browse-task",
+} as const;

@@ -7,6 +7,8 @@ import AuthBg1 from "../../../public/images/hiw-1.svg";
 import AuthBg2 from "../../../public/images/hiw-2.svg";
 import AuthBg3 from "../../../public/images/hiw-3.svg";
 import { cn } from "@/utils";
+import { usePathname } from "next/navigation";
+import { ROUTES } from "@/constant";
 
 interface IProps {
   children: React.ReactNode;
@@ -29,6 +31,7 @@ const data = [
 ];
 const AuthLayout = ({ children, extraClass }: IProps) => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const pathname = usePathname();
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -43,7 +46,12 @@ const AuthLayout = ({ children, extraClass }: IProps) => {
   }, []);
 
   return (
-    <div className="bg-white lg:bg-light-primary-1">
+    <div
+      className={cn(
+        "bg-white lg:bg-light-primary-1",
+        pathname == ROUTES.CREATE_ACCOUNT && "bg-light-primary-1"
+      )}
+    >
       <div className="min-h-dvh relative">
         <div className="flex">
           <div className="relative flex-1 w-full h-screen hidden md:block overflow-hidden [clip-path:inset(0)]">
@@ -52,8 +60,6 @@ const AuthLayout = ({ children, extraClass }: IProps) => {
                 key={i}
                 src={el.img}
                 alt=""
-                // width={40}
-                // height={40}
                 className={`h-full w-full scale-[1.02] object-cover absolute top-0 left-0 transition-transform duration-500 ${
                   activeIndex == i ? "opacity-100" : "opacity-0"
                 }`}
@@ -94,7 +100,7 @@ const AuthLayout = ({ children, extraClass }: IProps) => {
                 Back to Website
               </span>
             </Link>
-            <div className="flex justify-center md:items-center min-h-[calc(100dvh-96px)]">
+            <div className="flex justify-center items-center min-h-[calc(100dvh-96px)]">
               {children}
             </div>
           </div>

@@ -3,6 +3,7 @@ import React from "react";
 import FormButton from "@/components/forms/FormButton";
 import { cn } from "@/utils";
 import Icons from "@/components/Icons";
+import { ROUTES } from "@/constant";
 
 interface IProps {
   extraClass?: string;
@@ -47,7 +48,7 @@ const WhyCitiTaskerItem = ({
               </li>
             ))}
           </ul>
-          <FormButton text="Earn more as a Tasker" href="/tasker" />
+          <FormButton text="Earn more as a Tasker" href={ROUTES.TASKER} />
         </div>
       </div>
     </div>

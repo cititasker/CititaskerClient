@@ -75,7 +75,7 @@ const Navbar = () => {
           </ul>
           <FormButton
             text="Join Waitlist"
-            btnStyle="hidden md:flex"
+            className="hidden md:flex"
             handleClick={() => dispatch(toggleWaitlistModal())}
           />
           <Icons.hambuger
@@ -118,7 +118,7 @@ const Navbar = () => {
           </ul>
           <FormButton
             text="Join Waitlist"
-            btnStyle="mx-auto"
+            className="mx-auto"
             handleClick={toggleWaitlistModal}
           />
         </div>

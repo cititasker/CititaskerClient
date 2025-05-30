@@ -239,6 +239,8 @@ export const statsData = [
 ];
 
 import Tasker from "./public/images/tasker.png";
+import Icons from "@/components/Icons";
+import { ROUTES } from "@/constant";
 export const tasks = [
   {
     id: "1",
@@ -446,5 +448,303 @@ export const QuestionTabItems = [
     message:
       "Hi Judith\nBorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, nc vulputate libero et velit interdum, ac aliquet odio mattis. . Nunc vulputate libero.",
     time: "11:30am",
+  },
+];
+
+export const navbar = [
+  {
+    href: "/",
+    name: "Home",
+  },
+  {
+    href: "#",
+    name: "Categories",
+    children: [
+      {
+        category: "Assembler & Installer",
+        children: [
+          {
+            name: "Furniture Assembly",
+            href: "#",
+          },
+          {
+            name: "Home Gym Assembly",
+            href: "#",
+          },
+          {
+            name: "Bed Assembly",
+            href: "#",
+          },
+          {
+            name: "Washing Machine Installation",
+            href: "#",
+          },
+          {
+            name: "Wallpaper Installatio",
+            href: "#",
+          },
+          {
+            name: "Satellite TV Installation",
+            href: "#",
+          },
+          {
+            name: "TV Mounting",
+            href: "#",
+          },
+          {
+            name: "Antenna Installation",
+            href: "#",
+          },
+          {
+            name: "Aircon Installation",
+            href: "#",
+          },
+        ],
+      },
+      {
+        category: "Automobile",
+        children: [
+          {
+            name: "Auto Electrician",
+            href: "#",
+          },
+          {
+            name: "Car Service",
+            href: "#",
+          },
+          {
+            name: "Car Wash",
+            href: "#",
+          },
+          {
+            name: "Mechanic",
+            href: "#",
+          },
+          {
+            name: "Driver",
+            href: "#",
+          },
+          {
+            name: "Car Hire",
+            href: "#",
+          },
+        ],
+      },
+      {
+        category: "Business",
+        children: [
+          {
+            name: "Accounting",
+            href: "#",
+          },
+          {
+            name: "Digital Marketing",
+            href: "#",
+          },
+          {
+            name: "Business Plan",
+            href: "#",
+          },
+          {
+            name: "Business Development",
+            href: "#",
+          },
+          {
+            name: "Business Management",
+            href: "#",
+          },
+          {
+            name: "Strategy Consultant",
+            href: "#",
+          },
+          {
+            name: "Admin Assistant",
+            href: "#",
+          },
+          {
+            name: "Legal Service",
+            href: "#",
+          },
+        ],
+      },
+      {
+        category: "Cleaner",
+        children: [
+          {
+            name: "Home cleaning",
+            href: "#",
+          },
+          {
+            name: "Commercial Cleaning",
+            href: "#",
+          },
+          {
+            name: "Laundry",
+            href: "#",
+          },
+        ],
+      },
+      {
+        category: "Deliverer",
+        children: [
+          {
+            name: "Courier",
+            href: "#",
+          },
+          {
+            name: "Food Delivery",
+            href: "#",
+          },
+          {
+            name: "Furniture Delivery",
+            href: "#",
+          },
+          {
+            name: "Parcel Delivery",
+            href: "#",
+          },
+        ],
+      },
+      {
+        category: "Fashion & Beauty",
+        children: [
+          {
+            name: "Bridal Makeup",
+            href: "#",
+          },
+          {
+            name: "Manicure",
+            href: "#",
+          },
+          {
+            name: "Models",
+            href: "#",
+          },
+          {
+            name: "Haircut",
+            href: "#",
+          },
+          {
+            name: "Event Planning",
+            href: "#",
+          },
+          {
+            name: "Hair dressing",
+            href: "#",
+          },
+          {
+            name: "Tailoring",
+            href: "#",
+          },
+        ],
+      },
+      {
+        category: "Event Planner",
+        children: [
+          {
+            name: "Wedding",
+            href: "#",
+          },
+          {
+            name: "Entertainment",
+            href: "#",
+          },
+          {
+            name: "Ballon Decarotors",
+            href: "#",
+          },
+          {
+            name: "Birthday Decarotors",
+            href: "#",
+          },
+          {
+            name: "Event Management",
+            href: "#",
+          },
+          {
+            name: "Event Planning",
+            href: "#",
+          },
+          {
+            name: "Event Security",
+            href: "#",
+          },
+          {
+            name: "DJ",
+            href: "#",
+          },
+          {
+            name: "Event Setup & Cleaning",
+            href: "#",
+          },
+        ],
+      },
+      {
+        category: "Interior Designer",
+        children: [
+          {
+            name: "Home Decoration",
+            href: "#",
+          },
+        ],
+      },
+      {
+        category: "Home Chef & Caterer",
+        children: [
+          {
+            name: "Party Catering",
+            href: "#",
+          },
+          {
+            name: "Baking",
+            href: "#",
+          },
+          {
+            name: "Home Cooking",
+            href: "#",
+          },
+          {
+            name: "Tradition Meal Preparation",
+            href: "#",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    href: ROUTES.BROWSE_TASK,
+    name: "Browse Tasks",
+  },
+  {
+    href: "#how_it_works",
+    name: "How It Works",
+  },
+];
+
+export const profileMenu = [
+  {
+    icon: Icons.grid,
+    name: "Dashboard",
+    href: ROUTES.DASHBOARD,
+  },
+  {
+    icon: Icons.invite,
+    name: "Share Invite",
+    href: "#",
+  },
+  {
+    icon: Icons.message,
+    name: "Feedback",
+    href: "#",
+  },
+  {
+    icon: Icons.settings,
+    name: "Settings",
+    href: "#",
+  },
+  {
+    icon: Icons.logout,
+    name: "Logout",
+    href: "#",
   },
 ];

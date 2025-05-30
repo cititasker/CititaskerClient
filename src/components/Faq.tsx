@@ -43,7 +43,7 @@ const Faq = () => {
               </div>
               <FormButton
                 text="Contact Us"
-                btnStyle="!bg-white !text-dark-secondary !px-4 !py-3"
+                className="!bg-white !text-dark-secondary !px-4 !py-3"
               />
             </div>
           </div>

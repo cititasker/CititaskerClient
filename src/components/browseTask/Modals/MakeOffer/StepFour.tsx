@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useAppSelector } from "@/store/hook";
 import { initializeName } from "@/utils";
+import { ROUTES } from "@/constant";
 
 export default function StepFour() {
   const {
@@ -34,7 +35,7 @@ export default function StepFour() {
         are plenty of people who need your help.`}
       </p>
 
-      <Link href="/browse-task">
+      <Link href={ROUTES.BROWSE_TASK}>
         <div className="flex gap-5 mt-[148px]">
           <button className=" mt-[58px] border text-white bg-[#236F8E] w-full text-center h-[51px] font-normal text-[16px] rounded-40">
             Browse More Task

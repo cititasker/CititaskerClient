@@ -20,7 +20,7 @@ const DashboardCreditCard = ({ showWallet = false }: IProps) => {
       <Typography className="text-2xl font-semibold text-white">
         ₦59,040.00
       </Typography>
-      <FormButton btnStyle="bg-red-light-1 min-h-[33px] rounded-[10px] py-0 mt-[30px] ml-auto relative z-[1]">
+      <FormButton className="bg-red-light-1 min-h-[33px] rounded-[10px] py-0 mt-[30px] ml-auto relative z-[1]">
         <div className="text-white text-xs flex gap-2 item-center">
           <MdOutlineAdd size={16} /> Withdraw
         </div>

@@ -1,7 +1,7 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
-import { ROLE } from "./constant";
+import { ROLE, ROUTES } from "./constant";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -56,6 +56,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
   },
   pages: {
-    signIn: "/login",
+    signIn: ROUTES.LOGIN,
   },
 });

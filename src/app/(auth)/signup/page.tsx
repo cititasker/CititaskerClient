@@ -1,52 +1,61 @@
 "use client";
+
 import React, { useEffect, useMemo } from "react";
-import { redirect, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { redirect } from "next/navigation";
+import { AnimatePresence } from "framer-motion";
 
 import StepOne from "./_components/StepOne";
 import StepTwo from "./_components/StepTwo";
 import StepThree from "./_components/StepThree";
 import StepFour from "./_components/StepFour";
 import StepFive from "./_components/StepFive";
+import { ROUTES } from "@/constant";
+
+const stepsMap: { [key: number]: React.FC<any> } = {
+  1: StepOne,
+  2: StepTwo,
+  3: StepThree,
+  4: StepFour,
+  5: StepFive,
+};
 
 const SignUpPage = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
   const role = searchParams.get("role");
-  const currentStep = searchParams.get("step");
-  const step = useMemo(
-    () => (currentStep ? Number(currentStep) : 1),
-    [currentStep]
+  const currentStep = useMemo(
+    () => Number(searchParams.get("step") || 1),
+    [searchParams]
   );
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const currentUrl = new URL(window.location.href);
-      currentUrl.searchParams.set("step", `${step}`);
-      router.replace(`${currentUrl}`);
-    }
-  }, []);
+    if (!role) redirect(ROUTES.CREATE_ACCOUNT);
 
-  // Function to go to the next step
-  const handleNextStep = () => {
-    const currentUrl = new URL(window.location.href);
-    currentUrl.searchParams.set("step", `${step + 1}`);
-    if (step !== 1) {
-      router.push(`${currentUrl}`);
-    } else {
-      location.href = `${currentUrl}`;
+    // Ensure URL always includes the step
+    const url = new URL(window.location.href);
+    if (!url.searchParams.get("step")) {
+      url.searchParams.set("step", String(currentStep));
+      router.replace(url.toString());
     }
-    router.push(`${currentUrl}`);
+  }, [role, currentStep, router]);
+
+  const handleNextStep = () => {
+    const nextStep = currentStep + 1;
+    const url = new URL(window.location.href);
+    url.searchParams.set("step", String(nextStep));
+    router.push(url.toString());
   };
-  if (!role) redirect("/create-account");
+
+  const StepComponent = stepsMap[currentStep];
+
   return (
-    <>
-      {step === 1 && <StepOne onNext={handleNextStep} />}
-      {step === 2 && <StepTwo onNext={handleNextStep} />}
-      {step === 3 && <StepThree onNext={handleNextStep} />}
-      {step === 4 && <StepFour onNext={handleNextStep} />}
-      {step === 5 && <StepFive />}
-    </>
+    <AnimatePresence mode="wait">
+      {StepComponent && (
+        <StepComponent onNext={currentStep < 5 ? handleNextStep : undefined} />
+      )}
+    </AnimatePresence>
   );
 };
 

@@ -4,9 +4,10 @@ import { motion, useAnimation, useInView } from "framer-motion";
 import { cn } from "@/utils";
 
 interface IProps {
-  extraClass?: string;
+  className?: string;
   children: React.ReactNode;
   hidden?: any;
+  exit?: any;
   visible?: any;
   transition?: {
     delay?: number;
@@ -16,10 +17,11 @@ interface IProps {
 
 const FadeUp = ({
   children,
-  hidden = { opacity: 0, y: 75 },
+  hidden = { opacity: 0, y: 20 },
   visible = { opacity: 1, y: 0 },
   transition = { duration: 0.5 },
-  extraClass,
+  exit = { opacity: 0, y: -20 },
+  className,
 }: IProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
@@ -37,11 +39,13 @@ const FadeUp = ({
       variants={{
         hidden: hidden,
         visible: visible,
+        exit: exit,
       }}
       initial="hidden"
+      exit="exit"
       animate={mainControls}
       transition={{ ...transition }}
-      className={cn("", extraClass)}
+      className={cn("", className)}
     >
       {children}
     </motion.div>

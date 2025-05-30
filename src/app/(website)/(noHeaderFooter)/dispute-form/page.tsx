@@ -98,7 +98,7 @@ export default function Page() {
                 </Typography>
               </div>
             </label>
-            <FormButton type="submit" btnStyle="w-full mt-8" text="Submit" />
+            <FormButton type="submit" className="w-full mt-8" text="Submit" />
           </form>
         </FormProvider>
       </div>

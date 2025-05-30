@@ -96,7 +96,7 @@ export default function VerificationModal({
             <div className="h-full">
               {!el?.value ? (
                 <FormButton
-                  btnStyle="min-w-[120px] w-fit h-full"
+                  className="min-w-[120px] w-fit h-full"
                   href={el?.href}
                 >
                   {el?.text}

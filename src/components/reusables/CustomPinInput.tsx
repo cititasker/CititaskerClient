@@ -1,22 +1,37 @@
-"use client";
 import React from "react";
-import { PinInput } from "react-input-pin-code";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "../ui/input-otp";
 
-interface IProps {
-  handleChange: any;
-  values: string[];
+interface CustomPinInputProps {
+  value: string;
+  onChange: (value: string) => void;
+  length?: number;
+  className?: string;
+  onComplete?: (...args: any[]) => unknown;
 }
-const CustomPinInput = ({ handleChange, values }: IProps) => {
+
+const CustomPinInput: React.FC<CustomPinInputProps> = ({
+  value,
+  onChange,
+  onComplete,
+  className,
+  length = 4,
+}) => {
   return (
-    <PinInput
-      values={values}
-      size="lg"
-      placeholder="*"
-      // autoFocus
-      containerClassName="!mx-auto !w-fit !gap-[2.5rem]"
-      inputClassName="!rounded-full !mr-0 placeholder:!text-[20px] relative placeholder:absolute placeholder:left-[50%] top-[50%] placeholder:-translate-x-[50%] placeholder:translate-y-[8%]"
-      onChange={handleChange}
-    />
+    <>
+      <InputOTP
+        maxLength={length}
+        value={value}
+        onChange={onChange}
+        onComplete={onComplete}
+        className={className}
+      >
+        <InputOTPGroup className="flex gap-3 w-full">
+          {Array.from({ length }, (_, i) => (
+            <InputOTPSlot key={i} index={i} />
+          ))}
+        </InputOTPGroup>
+      </InputOTP>
+    </>
   );
 };
 

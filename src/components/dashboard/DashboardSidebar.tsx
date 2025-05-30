@@ -16,6 +16,7 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
+import { ROUTES } from "@/constant";
 
 interface MenuItem {
   name: string;
@@ -27,7 +28,7 @@ interface MenuItem {
 const data = [
   {
     name: "Dashboard",
-    href: "/dashboard",
+    href: ROUTES.DASHBOARD,
     icon: Icons.grid,
   },
   {

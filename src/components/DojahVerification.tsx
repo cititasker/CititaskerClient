@@ -66,7 +66,7 @@ function DojahVerification({ text, className, handleSuccess }: IProps) {
     <>
       <FormButton
         type="button"
-        btnStyle={className}
+        className={className}
         handleClick={handleButtonClick}
         loading={isLoading}
       >

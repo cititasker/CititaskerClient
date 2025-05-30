@@ -24,9 +24,11 @@ type schemaType = z.infer<typeof schema>;
 const StepOne = ({ nextStep }: ModalType) => {
   const dispatch = useAppDispatch();
   const { id }: { id: string } = useParams();
-  
-  const { offer, taskersOffer, taskDetails } = useAppSelector((state) => state.task);
-  
+
+  const { offer, taskersOffer, taskDetails } = useAppSelector(
+    (state) => state.task
+  );
+
   const [inputWidth, setInputWidth] = useState(180);
   const maxWidth = 400;
 
@@ -52,20 +54,18 @@ const StepOne = ({ nextStep }: ModalType) => {
   useEffect(() => {
     if (!taskDetails || Object.keys(taskDetails).length === 0) {
       console.log("Fetching and setting task details in Redux...");
-      dispatch(setTaskDetails({ id: +id, budget: 1000 })); 
+      dispatch(setTaskDetails({ id: +id, budget: 1000 }));
     }
   }, [taskDetails, dispatch, id]);
-
 
   useEffect(() => {
     if (taskersOffer?.offer_amount) {
       setValue("task_id", taskersOffer.id);
       setValue("offer_amount", String(taskersOffer.offer_amount));
-    } else if (taskDetails?.budget) { 
+    } else if (taskDetails?.budget) {
       setValue("offer_amount", String(taskDetails.budget));
     }
   }, [taskersOffer, taskDetails, setValue]);
-
 
   useEffect(() => {
     const baseWidth = 180;
@@ -159,7 +159,10 @@ const StepOne = ({ nextStep }: ModalType) => {
         </div>
       </div>
 
-      <FormButton type="submit" btnStyle="text-white mt-[58px] w-full font-normal">
+      <FormButton
+        type="submit"
+        className="text-white mt-[58px] w-full font-normal"
+      >
         Next
       </FormButton>
     </form>

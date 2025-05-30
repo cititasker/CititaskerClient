@@ -220,7 +220,7 @@ export default function VerticalStepper() {
 
                   {/* Action Buttons */}
                   <Box display="flex" gap={2} mt={2}>
-                    <FormButton btnStyle="text-primary border-[1.5px] border-primary bg-transparant">
+                    <FormButton className="text-primary border-[1.5px] border-primary bg-transparant">
                       Accept
                     </FormButton>
                     <FormButton>Reject All</FormButton>

@@ -2,41 +2,19 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import CustomPinInput from "@/components/reusables/CustomPinInput";
+import { useCountdown } from "@/hooks/useCountdown";
+import { ROUTES } from "@/constant";
 
 const ForgotPassword = () => {
-  const [values, setValues] = useState(["", "", "", ""]);
-  const [seconds, setSeconds] = useState(60);
-  const [isTimerRunning, setIsTimerRunning] = useState(false);
-
-  const handleChange = (value: string[], index: number, values: string[]) => {
-    setValues(values);
-    const hasEmptyString = values.some((item) => item === "");
-    if (!hasEmptyString) {
-      console.log(value, values, index);
-    }
-  };
-
-  useEffect(() => {
-    let intervalId: any;
-
-    if (isTimerRunning) {
-      intervalId = setInterval(() => {
-        setSeconds((prevSeconds) => {
-          if (prevSeconds === 0) {
-            clearInterval(intervalId);
-            setIsTimerRunning(false);
-            return 0;
-          }
-          return prevSeconds - 1;
-        });
-      }, 1000);
-    }
-
-    return () => clearInterval(intervalId);
-  }, [isTimerRunning]);
+  const [value, setValue] = useState("");
+  const { secondsLeft, isRunning, start } = useCountdown(60);
 
   const handleResendClick = () => {
-    setIsTimerRunning(true);
+    start();
+  };
+
+  const onComplete = () => {
+    //
   };
 
   return (
@@ -51,21 +29,25 @@ const ForgotPassword = () => {
             expires shortly, so please enter it soon.
           </p>
         </div>
-        <CustomPinInput handleChange={handleChange} values={values} />
+        <CustomPinInput
+          onChange={setValue}
+          value={value}
+          onComplete={onComplete}
+        />
 
-        <div className="mb-10 text-base font-semibold w-fit mx-auto mt-4">
+        <div className="mb-10 text-base font-medium w-fit mx-auto mt-4">
           Didn’t receive an email?{" "}
           <button
             type="button"
             className="text-primary disabled:cursor-not-allowed"
             onClick={handleResendClick}
-            disabled={isTimerRunning}
+            disabled={isRunning}
           >
-            <span>Resend {isTimerRunning ? `(${seconds}s)` : ""}</span>
+            <span>Resend {isRunning ? `in (${secondsLeft}s)` : ""}</span>
           </button>
         </div>
         <Link
-          href="/login"
+          href={ROUTES.LOGIN}
           className="mt-3 underline text-dark-secondary text-sm font-normal text-left w-fit block mx-auto"
         >
           Return to Login

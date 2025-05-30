@@ -1,47 +1,45 @@
+"use client";
+
 import React from "react";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import { useForm, FormProvider, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { verifyPhoneSchema, verifyPhoneSchemaType } from "@/schema/auth";
 import { useMutation } from "@tanstack/react-query";
+
+import { verifyPhoneSchema, verifyPhoneSchemaType } from "@/schema/auth";
 import { sendPhoneVerificationToken } from "@/services/auth";
+import { useSnackbar } from "@/providers/SnackbarProvider";
+
 import FormInput from "@/components/forms/FormInput";
 import FormButton from "@/components/forms/FormButton";
-import { useSnackbar } from "@/providers/SnackbarProvider";
 import Logo from "@/../public/images/cititasker_logo.svg";
 import Image from "next/image";
+import StepWrapper from "./StepWrapper";
 
-interface IProps {
-  onNext: () => void;
-}
-
-const StepThree = ({ onNext }: IProps) => {
+const StepThree = ({ onNext }: { onNext: () => void }) => {
   const { showSnackbar } = useSnackbar();
+
+  const methods = useForm<verifyPhoneSchemaType>({
+    defaultValues: { phone_number: "" },
+    resolver: zodResolver(verifyPhoneSchema),
+  });
 
   const mutation = useMutation({
     mutationFn: sendPhoneVerificationToken,
     onSuccess: (data) => {
       showSnackbar(data?.message, "success");
+      localStorage.setItem("phone_number", methods.getValues("phone_number"));
       onNext();
     },
-    onError(error) {
-      showSnackbar(error?.message, "error");
-    },
+    onError: (error: any) =>
+      showSnackbar(error?.message || "Failed to verify phone", "error"),
   });
 
-  const methods = useForm<verifyPhoneSchemaType>({
-    defaultValues: {
-      phone_number: "",
-    },
-    resolver: zodResolver(verifyPhoneSchema),
-  });
-
-  const onSubmit: SubmitHandler<verifyPhoneSchemaType> = (values) => {
-    localStorage.setItem("phone_number", values.phone_number);
-    mutation.mutate(values);
+  const onSubmit: SubmitHandler<verifyPhoneSchemaType> = (data) => {
+    mutation.mutate(data);
   };
 
   return (
-    <div className="lg:shadow-sm mt-[40px] md:-mt-[3.5rem] max-w-[31.25rem] h-fit w-full mx-auto sm:bg-white rounded-30 px-0 sm:px-5 xl:px-[4.875rem] lg:py-[3.125rem] overflow-hidden">
+    <StepWrapper>
       <FormProvider {...methods}>
         <form
           onSubmit={methods.handleSubmit(onSubmit)}
@@ -53,6 +51,7 @@ const StepThree = ({ onNext }: IProps) => {
             </h2>
             <Image src={Logo} alt="citi-tasker" />
           </div>
+
           <FormInput
             label="Phone Number"
             name="phone_number"
@@ -60,15 +59,16 @@ const StepThree = ({ onNext }: IProps) => {
             placeholder="Enter your phone number"
             wrapperStyle="mb-[65px]"
           />
+
           <FormButton
             text="Verify"
             type="submit"
-            btnStyle="w-full"
+            className="w-full"
             loading={mutation.isPending}
           />
         </form>
       </FormProvider>
-    </div>
+    </StepWrapper>
   );
 };
 

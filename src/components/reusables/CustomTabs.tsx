@@ -20,7 +20,7 @@ const CustomTabs = ({ userType, handleTabToggle, extraStyle }: IProps) => {
         }`}
       ></div>
       <FormButton
-        btnStyle={`!bg-transparent w-1/2 min-h-[2.5rem] sm:!min-h-[3.125rem] z-[2] flex-1 !text-xs sm:!text-base ${
+        className={`!bg-transparent w-1/2 min-h-[2.5rem] sm:!min-h-[3.125rem] z-[2] flex-1 !text-xs sm:!text-base ${
           userType === ROLE.poster ? "!text-white" : "!text-primary"
         }`}
         handleClick={() => handleTabToggle(ROLE.poster)}
@@ -28,7 +28,7 @@ const CustomTabs = ({ userType, handleTabToggle, extraStyle }: IProps) => {
         Join as a Poster
       </FormButton>
       <FormButton
-        btnStyle={`bg-transparent w-1/2 min-h-[2.5rem] sm:!min-h-[3.125rem] z-[2] flex-1 !text-xs sm:!text-base ${
+        className={`bg-transparent w-1/2 min-h-[2.5rem] sm:!min-h-[3.125rem] z-[2] flex-1 !text-xs sm:!text-base ${
           userType === ROLE.tasker ? "!text-white" : "!text-primary"
         }`}
         handleClick={() => handleTabToggle(ROLE.tasker)}

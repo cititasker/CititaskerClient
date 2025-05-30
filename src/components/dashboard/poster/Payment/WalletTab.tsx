@@ -51,12 +51,12 @@ const WalletTab = () => {
           </Typography>
         </div>
         <div className="flex items-center gap-4">
-          <FormButton btnStyle="text-base">
+          <FormButton className="text-base">
             <div className="text-white gap-2 text-xs flex item-center">
               <MdOutlineAdd size={16} /> Top Up
             </div>
           </FormButton>
-          <FormButton btnStyle="bg-red-light-1 text-base">
+          <FormButton className="bg-red-light-1 text-base">
             <div className="text-white gap-2 text-xs flex item-center">
               <MdOutlineAdd size={16} /> Transfer
             </div>

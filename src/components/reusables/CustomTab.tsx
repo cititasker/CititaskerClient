@@ -1,96 +1,86 @@
-import { Box, SxProps, Tab, Tabs, Theme } from "@mui/material";
-import React from "react";
+"use client";
 
-interface IProps {
+import React, { useState, SyntheticEvent, ReactNode } from "react";
+import { Box, SxProps, Tab, Tabs, Theme } from "@mui/material";
+
+interface CustomTabProps {
   tabs: string[];
   defaultIndex?: number;
-  children: any;
-  sx?: any;
+  children: ReactNode[];
+  sx?: SxProps<Theme>;
 }
+
 interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
+  children: ReactNode;
   value: number;
-  [key: string]: any;
+  index: number;
 }
 
-const style: Record<string, SxProps<Theme>> = {
-  container: {
-    borderBottom: 1,
-    borderColor: "divider",
-    mb: "24px",
-
-    ".MuiTab-root": {
-      py: "10px",
-      px: "20px",
-      textTransform: "none",
-      fontSize: "20px",
-      fontWeight: 600,
-      color: "var(--black)",
-    },
-    ".Mui-selected": {
-      color: "var(--primary) !important",
-    },
-    ".MuiTabs-indicator": {
-      bgcolor: "var(--primary)",
-    },
+const styles: SxProps<Theme> = {
+  borderBottom: 1,
+  borderColor: "divider",
+  mb: 3,
+  ".MuiTab-root": {
+    py: 1.25,
+    px: 2.5,
+    textTransform: "none",
+    fontSize: 20,
+    fontWeight: 600,
+    color: "var(--black)",
+  },
+  ".Mui-selected": {
+    color: "var(--primary) !important",
+  },
+  ".MuiTabs-indicator": {
+    bgcolor: "var(--primary)",
   },
 };
 
-function CustomTabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
+const TabPanel: React.FC<TabPanelProps> = ({ children, value, index }) => {
+  return value === index ? (
     <div
       role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
+      id={`tab-panel-${index}`}
+      aria-labelledby={`tab-${index}`}
+      className="h-[calc(100%-48px)] bg-white"
     >
-      {value === index && children}
+      {children}
     </div>
-  );
-}
+  ) : null;
+};
 
-function a11yProps(index: number) {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
-  };
-}
+const CustomTab: React.FC<CustomTabProps> = ({
+  tabs,
+  defaultIndex = 0,
+  children,
+  sx = {},
+}) => {
+  const [value, setValue] = useState(defaultIndex);
 
-const CustomTab = ({ tabs, defaultIndex = 0, children, sx = {} }: IProps) => {
-  const [value, setValue] = React.useState(defaultIndex);
-
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleChange = (_: SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
+
   return (
     <div className="h-full">
-      <Box sx={{ ...style.container, ...sx }}>
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          aria-label="basic tabs example"
-        >
-          {tabs.map((el, i) => (
-            <Tab key={i} label={el} {...a11yProps(i)} className="tab" />
+      <Box sx={{ ...styles, ...sx }}>
+        <Tabs value={value} onChange={handleChange} aria-label="tabs">
+          {tabs.map((label, index) => (
+            <Tab
+              key={index}
+              label={label}
+              id={`tab-${index}`}
+              aria-controls={`tab-panel-${index}`}
+            />
           ))}
         </Tabs>
       </Box>
-      {React.Children.map(children, (child, i) => {
-        return (
-          <CustomTabPanel
-            value={value}
-            index={i}
-            key={i}
-            className="h-[calc(100%-48px)] bg-white"
-          >
-            {child}
-          </CustomTabPanel>
-        );
-      })}
+
+      {children.map((child, index) => (
+        <TabPanel key={index} value={value} index={index}>
+          {child}
+        </TabPanel>
+      ))}
     </div>
   );
 };

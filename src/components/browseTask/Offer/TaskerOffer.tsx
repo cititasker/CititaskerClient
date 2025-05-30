@@ -44,7 +44,7 @@ const TaskerOffer = ({ offer, toggleModal }: IProps) => {
               {offer.tasker.id === user.id ? (
                 <FormButton
                   text="Withdraw"
-                  btnStyle="mb-0"
+                  className="mb-0"
                   handleClick={() => {
                     toggleModal(offer.id);
                   }}

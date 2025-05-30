@@ -1,75 +1,81 @@
+"use client";
+
 import React, { useState } from "react";
-import { errorHandler } from "@/utils";
 import { useMutation } from "@tanstack/react-query";
-import { withdrawOffer } from "@/services/offer";
-import { useSnackbar } from "@/providers/SnackbarProvider";
-import { queryClient } from "@/providers/ServerProvider";
-import { TASK_ID } from "@/queries/queryKeys";
 import { useParams } from "next/navigation";
+
 import TaskerOffer from "./TaskerOffer";
 import ConfirmationModal from "@/components/reusables/Modals/ConfirmationModal";
+
+import { withdrawOffer } from "@/services/offer";
+import { TASK_ID } from "@/queries/queryKeys";
+import { useSnackbar } from "@/providers/SnackbarProvider";
+import { queryClient } from "@/providers/ServerProvider";
 import { useAppDispatch } from "@/store/hook";
 import { setUserTaskOffer } from "@/store/slices/task";
+import { errorHandler } from "@/utils";
 
-const Offer = ({ offers }: { offers: IOffer[] }) => {
-  const [open, setOpen] = useState(false);
-  const { showSnackbar } = useSnackbar();
+interface OfferProps {
+  offers: IOffer[];
+}
+
+const Offer: React.FC<OfferProps> = ({ offers }) => {
   const { id } = useParams();
-  const [offerId, setOfferId] = useState<any>(null);
   const dispatch = useAppDispatch();
+  const { showSnackbar } = useSnackbar();
 
-  const withdrawOfferMutation = useMutation({
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedOfferId, setSelectedOfferId] = useState<string | null>(null);
+
+  const handleToggleModal = (offerId?: string) => {
+    setSelectedOfferId(offerId ?? null);
+    setModalOpen((prev) => !prev);
+  };
+
+  const { mutate, isPending } = useMutation({
     mutationFn: withdrawOffer,
     onSuccess: (data) => {
       dispatch(setUserTaskOffer(null));
       showSnackbar(data.message, "success");
-      toggleModal();
+      handleToggleModal();
       queryClient.invalidateQueries({ queryKey: TASK_ID(id) });
     },
-    onError(error) {
+    onError: (error) => {
       showSnackbar(errorHandler(error), "error");
     },
   });
 
-  const toggleModal = (value?: any) => {
-    setOpen((prev) => {
-      if (prev) {
-        setOfferId(null);
-      } else {
-        setOfferId(value);
-      }
-      return !prev;
-    });
-  };
-
-  const handleSubmit = () => {
-    withdrawOfferMutation.mutate({ offer_id: offerId });
+  const handleWithdraw = () => {
+    if (selectedOfferId) {
+      mutate({ offer_id: selectedOfferId });
+    }
   };
 
   return (
     <>
       <div className="w-full">
-        {offers.length ? (
+        {offers.length > 0 ? (
           offers.map((offer) => (
             <TaskerOffer
               key={offer.id}
               offer={offer}
-              toggleModal={toggleModal}
+              toggleModal={() => handleToggleModal(`${offer.id}`)}
             />
           ))
         ) : (
-          <div>No Offer yet</div>
+          <p>No offer yet.</p>
         )}
       </div>
+
       <ConfirmationModal
-        open={open}
-        onClose={toggleModal}
+        open={modalOpen}
+        onClose={handleToggleModal}
         title="Cancel Offer"
-        cancelText="Back"
         content="Are you sure you want to cancel your offer?"
+        cancelText="Back"
         okStyle="!bg-red-state-color text-white"
-        loading={withdrawOfferMutation.isPending}
-        handleSubmit={handleSubmit}
+        loading={isPending}
+        handleSubmit={handleWithdraw}
       />
     </>
   );

@@ -8,20 +8,13 @@ import { getUserQuery } from "@/queries/user";
 import { useAppDispatch } from "@/store/hook";
 import { setUser } from "@/store/slices/user";
 import theme from "./theme";
-import { useRouter } from "next/navigation";
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const dispatch = useAppDispatch();
-  const router = useRouter();
 
   // Fetch user only when session exists
   const { data } = useQuery(getUserQuery({ enabled: !!session }));
-
-  // Redirect to login if unauthenticated
-  useEffect(() => {
-    if (status === "unauthenticated") router.push("/login");
-  }, [status, router]);
 
   // Dispatch user data when fetched
   useEffect(() => {

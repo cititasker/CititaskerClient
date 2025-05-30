@@ -6,7 +6,7 @@ import { BiLoader } from "react-icons/bi";
 
 interface IProps {
   text?: string;
-  btnStyle?: string;
+  className?: string;
   loading?: boolean;
   disabled?: boolean;
   type?: "submit" | "button";
@@ -18,7 +18,7 @@ interface IProps {
 
 const FormButton = ({
   text = "Submit",
-  btnStyle,
+  className,
   loading,
   disabled,
   type = "button",
@@ -34,7 +34,7 @@ const FormButton = ({
         target={target}
         className={cn(
           "min-w-max h-12 rounded-full transition-all duration-300 whitespace-nowrap px-5 text-base font-normal inline-flex justify-center cursor-pointer gap-3 w-fit bg-primary text-white items-center leading-normal",
-          btnStyle
+          className
         )}
       >
         {children ? children : text}
@@ -47,11 +47,11 @@ const FormButton = ({
         disabled={disabled || loading}
         className={cn(
           "min-w-max h-12 rounded-full transition-all duration-300 disabled:cursor-not-allowed disabled:bg-primary/70 px-5 text-base font-normal flex justify-center cursor-pointer gap-3 w-fit bg-primary text-white items-center leading-normal",
-          btnStyle
+          className
         )}
         onClick={handleClick}
       >
-        {loading && <BiLoader size={24} className="animate-spin" />}
+        {loading && <BiLoader size={20} className="animate-spin" />}
         {children ? children : text}
       </button>
     );

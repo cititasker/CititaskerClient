@@ -38,7 +38,7 @@ const TaskerBanner = () => {
               <FormButton
                 href="#"
                 text="Earn on CitiTasker"
-                btnStyle="bg-secondary"
+                className="bg-secondary"
               />
             </div>
           </div>

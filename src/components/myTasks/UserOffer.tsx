@@ -71,7 +71,7 @@ const UserOffer = ({ offer, task, toggleModal }: IProps) => {
         {offer.status === "pending" && (
           <FormButton
             text="Accept Offer"
-            btnStyle="min-h-[45px] ml-auto max-w-[184px] w-full mb-5 bg-green-state-color"
+            className="min-h-[45px] ml-auto max-w-[184px] w-full mb-5 bg-green-state-color"
             handleClick={() => toggleModal(offer)}
           />
         )}
@@ -79,7 +79,7 @@ const UserOffer = ({ offer, task, toggleModal }: IProps) => {
           task.tasker?.email === offer.tasker.email && (
             <FormButton
               text="Message"
-              btnStyle="text-white min-h-[45px] ml-auto max-w-[184px] w-full mb-5"
+              className="text-white min-h-[45px] ml-auto max-w-[184px] w-full mb-5"
               handleClick={() => {}}
             />
           )}

@@ -36,7 +36,7 @@ const ActionsButtons = ({
       {handleCancel && (
         <FormButton
           text={cancelText}
-          btnStyle={cn(
+          className={cn(
             "flex-1 bg-light-grey text-primary font-normal",
             cancelStyle
           )}
@@ -46,7 +46,7 @@ const ActionsButtons = ({
       <FormButton
         text={okText}
         type={type}
-        btnStyle={cn("flex-1 font-medium", okStyle)}
+        className={cn("flex-1 font-medium", okStyle)}
         loading={loading}
         handleClick={handleSubmit}
         disabled={disabled || loading}

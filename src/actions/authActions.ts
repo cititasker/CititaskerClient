@@ -1,6 +1,7 @@
 "use server";
 
 import { signIn, signOut } from "@/auth";
+import { ROUTES } from "@/constant";
 import { loginSchemaType } from "@/schema/auth";
 import { AuthError } from "next-auth";
 
@@ -17,5 +18,5 @@ export const loginWithCredentials = async (data: loginSchemaType) => {
 };
 
 export const logoutUser = async () => {
-  await signOut({ redirectTo: "/login" });
+  await signOut({ redirectTo: ROUTES.LOGIN });
 };

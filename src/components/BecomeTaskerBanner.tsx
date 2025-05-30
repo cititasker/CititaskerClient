@@ -2,6 +2,7 @@
 import Image from "next/image";
 import React from "react";
 import FormButton from "./forms/FormButton";
+import { ROUTES } from "@/constant";
 
 const BecomeTaskerBanner = () => {
   return (
@@ -28,9 +29,9 @@ const BecomeTaskerBanner = () => {
             </p>
           </div>
           <FormButton
-            href="/tasker"
+            href={ROUTES.TASKER}
             text="Earn on CitiTasker"
-            btnStyle="mt-auto text-xs !bg-white !text-primary"
+            className="mt-auto text-xs !bg-white !text-primary"
           />
         </div>
         <Image

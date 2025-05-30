@@ -15,7 +15,7 @@ const TaskByCategory = () => {
             <TaskCategoryItem key={i} category={el} />
           ))}
         </div>
-        <FormButton text="Start earning on CitiTasker" btnStyle="mx-auto" />
+        <FormButton text="Start earning on CitiTasker" className="mx-auto" />
       </div>
     </div>
   );

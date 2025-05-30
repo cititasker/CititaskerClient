@@ -79,7 +79,7 @@ export default function Map({ tasks }: IProps) {
               <FormButton
                 href={redirectUrl(task.id)}
                 text="View task"
-                btnStyle="!text-white w-full mt-3 h-10"
+                className="!text-white w-full mt-3 h-10"
               />
             </div>
           </Popup>
