@@ -74,7 +74,7 @@ const PersonalDetails = () => {
       {!edit && (
         <div className="flex items-center justify-end px-10 gap-4 mb-5">
           <FormButton
-            btnStyle="p-0 bg-transparent text-primary hover:bg-transparent shadow-none"
+            className="p-0 bg-transparent text-primary hover:bg-transparent shadow-none"
             handleClick={toggleEdit}
           >
             <Icons.edit className="w-4 h-4" />
@@ -82,7 +82,7 @@ const PersonalDetails = () => {
           </FormButton>
 
           <FormButton
-            btnStyle="p-0 bg-transparent text-primary hover:bg-transparent shadow-none"
+            className="p-0 bg-transparent text-primary hover:bg-transparent shadow-none"
             handleClick={toggleEdit}
           >
             <Icons.share className="w-4 h-4 text-primary" />
@@ -132,7 +132,7 @@ const PersonalDetails = () => {
                   <FormButton
                     type="button"
                     text="Add"
-                    btnStyle="px-6 !h-[32px] !bg-white !text-primary"
+                    className="px-6 !h-[32px] !bg-white !text-primary"
                     handleClick={handleAddSkill}
                   />
                 </div>
@@ -211,7 +211,7 @@ const PersonalDetails = () => {
 
                 <FormButton
                   type="button"
-                  btnStyle="!bg-white !text-primary px-4 !h-[36px]"
+                  className="!bg-white !text-primary px-4 !h-[36px]"
                   handleClick={handleAddCertificateField}
                 >
                   <Icons.plus />
@@ -226,12 +226,12 @@ const PersonalDetails = () => {
                 <FormButton
                   type="submit"
                   text="Cancel"
-                  btnStyle="mt-5 max-w-[318px] w-full !bg-[#f3f5f6] !text-primary"
+                  className="mt-5 max-w-[318px] w-full !bg-[#f3f5f6] !text-primary"
                 />
                 <FormButton
                   type="submit"
                   text="Save"
-                  btnStyle="mt-5 max-w-[318px] w-full"
+                  className="mt-5 max-w-[318px] w-full"
                 />
               </div>
             </div>

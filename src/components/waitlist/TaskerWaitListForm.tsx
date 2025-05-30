@@ -103,7 +103,7 @@ const TaskerWaitListForm = ({ toggleSuccessModal }: IProps) => {
         <FormButton
           type="submit"
           text="Join Waitlist"
-          btnStyle="!w-full !h-[3.375rem] mt-[2.5rem]"
+          className="!w-full !h-[3.375rem] mt-[2.5rem]"
           loading={mutation.isPending}
         />
       </form>

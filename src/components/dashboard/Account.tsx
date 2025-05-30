@@ -148,7 +148,7 @@ const Account = () => {
         </div>
         <FormButton
           type="submit"
-          btnStyle="w-full mt-10"
+          className="w-full mt-10"
           loading={updateProfileMutation.isPending}
         >
           Save

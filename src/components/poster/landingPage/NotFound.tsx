@@ -1,5 +1,6 @@
 "use client";
 import FormButton from "@/components/forms/FormButton";
+import { ROUTES } from "@/constant";
 import Image from "next/image";
 import React from "react";
 
@@ -18,9 +19,9 @@ const NotFound = () => {
               our website. You can count on them always
             </p>
             <FormButton
-              href="/post-task"
+              href={ROUTES.POST_TASK}
               text="Post a task for free"
-              btnStyle="mt-12 mx-auto"
+              className="mt-12 mx-auto"
             />
           </div>
         </div>

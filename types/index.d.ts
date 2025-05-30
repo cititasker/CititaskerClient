@@ -116,6 +116,7 @@ interface ITask {
   offers: IOffer[];
   status: string;
   address: string;
+  payment_requested: string;
 }
 
 interface ITaskCategory {

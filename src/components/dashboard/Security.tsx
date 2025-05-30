@@ -87,7 +87,7 @@ const Security = () => {
           </div>
           <FormButton
             text="Deactivate"
-            btnStyle="bg-light-grey min-w-[190px] text-black"
+            className="bg-light-grey min-w-[190px] text-black"
           />
         </div>
         <div className="flex justify-between items-center gap-3">
@@ -102,7 +102,7 @@ const Security = () => {
           </div>
           <FormButton
             text="Delete"
-            btnStyle="bg-red-state-color min-w-[190px] text-white"
+            className="bg-red-state-color min-w-[190px] text-white"
           />
         </div>
       </div>

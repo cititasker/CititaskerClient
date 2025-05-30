@@ -9,6 +9,7 @@ import { forgotPasswordApi } from "@/services/auth";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import FormButton from "@/components/forms/FormButton";
 import FormInput from "@/components/forms/FormInput";
+import { ROUTES } from "@/constant";
 
 const ForgotPassword = () => {
   const { showSnackbar } = useSnackbar();
@@ -56,11 +57,11 @@ const ForgotPassword = () => {
           <FormButton
             type="submit"
             text="Reset Password"
-            btnStyle="w-full mt-4"
+            className="w-full mt-4"
             loading={mutation.isPending}
           />
           <Link
-            href="/login"
+            href={ROUTES.LOGIN}
             className="mt-3 underline text-dark-secondary text-sm font-normal text-left w-fit block mx-auto"
           >
             Return to Login

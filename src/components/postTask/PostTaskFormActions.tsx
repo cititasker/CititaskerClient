@@ -29,7 +29,7 @@ const PostTaskFormActions = ({
       {step > 1 && (
         <FormButton
           text="Back"
-          btnStyle="flex-1 border-[1.5px] border-primary bg-white text-primary font-medium"
+          className="flex-1 border-[1.5px] border-primary bg-white text-primary font-medium"
           handleClick={prevStep}
         />
       )}
@@ -37,7 +37,7 @@ const PostTaskFormActions = ({
       <FormButton
         text={`${step < 4 ? "Next" : step == 4 ? "Preview" : "Submit"}`}
         type={type}
-        btnStyle="flex-1 font-medium"
+        className="flex-1 font-medium"
         loading={loading}
         handleClick={onClick}
       />

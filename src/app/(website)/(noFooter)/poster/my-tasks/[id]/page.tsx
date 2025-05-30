@@ -247,7 +247,7 @@ export default function Offer() {
                     </div>
                     {task.status == "open" ? (
                       <FormButton
-                        btnStyle="bg-transparent text-primary text-sm"
+                        className="bg-transparent text-primary text-sm"
                         handleClick={() =>
                           navigate.push(`/post-task/${task.id}?step=3`)
                         }
@@ -277,7 +277,7 @@ export default function Offer() {
                     </div>
                     {task.status == "open" ? (
                       <FormButton
-                        btnStyle="bg-transparent text-primary text-sm"
+                        className="bg-transparent text-primary text-sm"
                         handleClick={() =>
                           navigate.push(`/post-task/${task.id}?step=4`)
                         }
@@ -347,7 +347,7 @@ export default function Offer() {
               </div>
 
               <FormButton
-                btnStyle="flex-1 text-base"
+                className="flex-1 text-base"
                 handleClick={handleAction}
               >
                 {buttonText}
@@ -450,7 +450,7 @@ export default function Offer() {
               />
               <FormButton
                 text="Securely hold payment"
-                btnStyle="w-full mt-10"
+                className="w-full mt-10"
                 type="submit"
                 loading={paymentIntentMutation.isPending}
               />

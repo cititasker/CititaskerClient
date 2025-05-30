@@ -9,7 +9,7 @@ const HeroButton = () => {
   return (
     <FormButton
       text="Join Waitlist"
-      btnStyle="mx-auto xl:ml-0 mt-[3.375rem] sm:mt-16"
+      className="mx-auto xl:ml-0 mt-[3.375rem] sm:mt-16"
       handleClick={() => dispatch(toggleWaitlistModal())}
     />
   );

@@ -28,7 +28,7 @@ const PaystackButton = ({
   };
   return (
     <FormButton
-      btnStyle={cn("font-medium shadow-md", className)}
+      className={cn("font-medium shadow-md", className)}
       handleClick={handleClick}
     >
       <Image src="/images/paystack_logo.png" alt="" width={20} height={20} />

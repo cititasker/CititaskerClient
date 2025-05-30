@@ -10,6 +10,7 @@ import Link from "next/link";
 import FormButton from "@/components/forms/FormButton";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import FormInput from "@/components/forms/FormInput";
+import { ROUTES } from "@/constant";
 
 const ResetPasswordPage = () => {
   const { showSnackbar } = useSnackbar();
@@ -83,12 +84,12 @@ const ResetPasswordPage = () => {
             disabled={mutation.isPending}
             type="submit"
             text="Reset Password"
-            btnStyle="mt-8 w-full"
+            className="mt-8 w-full"
           />
         </form>
       </FormProvider>
       <Link
-        href={"/login"}
+        href={ROUTES.LOGIN}
         className="underline text-primary my-6 text-center text-[14px]"
       >
         Back to login

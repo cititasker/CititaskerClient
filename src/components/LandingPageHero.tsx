@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import FormButton from "./forms/FormButton";
+import { ROUTES } from "@/constant";
 
 const LandingPageHero = () => {
   return (
@@ -18,8 +19,8 @@ const LandingPageHero = () => {
           <div className="pb-0 md:pb-20">
             <FormButton
               text="Post a task for free"
-              btnStyle="text-sm"
-              href="/post-task"
+              className="text-sm"
+              href={ROUTES.POST_TASK}
             />
           </div>
         </div>

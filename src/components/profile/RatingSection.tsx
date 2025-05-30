@@ -95,7 +95,7 @@ const RatingSection = () => {
         <FormButton
           text="See all reviews"
           handleClick={handleOpen}
-          btnStyle="w-fit !bg-[#D0F0FB] text-primary"
+          className="w-fit !bg-[#D0F0FB] text-primary"
         />
       </div>
 

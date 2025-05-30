@@ -9,9 +9,10 @@ import {
 import api from "./apiService";
 import { AxiosError } from "axios";
 import { QUERY_PATHS } from "@/constant";
+import signupApi from "./signupApi";
 
 export function registerApi(data: loginSchemaType) {
-  return api
+  return signupApi
     .post(`auth/registration`, data)
     .then((data) => {
       return data.data;
@@ -33,7 +34,7 @@ export function loginApi(data: loginSchemaType) {
 }
 
 export function resendEmailVerificationApi() {
-  return api
+  return signupApi
     .post(`auth/resend-email-verification-token`)
     .then((data) => {
       return data.data;
@@ -44,7 +45,7 @@ export function resendEmailVerificationApi() {
 }
 
 export function forgotPasswordApi(data: forgotPasswordSchemaType) {
-  return api
+  return signupApi
     .post(`auth/send-password-reset-link`, data)
     .then((data) => {
       return data.data;
@@ -55,7 +56,7 @@ export function forgotPasswordApi(data: forgotPasswordSchemaType) {
 }
 
 export function otpApi(data: verifyEmailSchemaType) {
-  return api
+  return signupApi
     .post(`auth/verify-email`, data)
     .then((data) => {
       return data.data;
@@ -66,7 +67,7 @@ export function otpApi(data: verifyEmailSchemaType) {
 }
 
 export function resetPasswordApi(data: passwordResetSchemaType) {
-  return api
+  return signupApi
     .post(`auth/reset-password`, data)
     .then((data) => {
       return data.data;
@@ -77,7 +78,7 @@ export function resetPasswordApi(data: passwordResetSchemaType) {
 }
 
 export function sendPhoneVerificationToken(data: verifyPhoneSchemaType) {
-  return api
+  return signupApi
     .post(`auth/send-phone-verification-token`, data)
     .then((data) => {
       return data.data;
@@ -88,7 +89,7 @@ export function sendPhoneVerificationToken(data: verifyPhoneSchemaType) {
 }
 
 export function verifyPhoneNumber(data: { token: string }) {
-  return api
+  return signupApi
     .post(`auth/verify-phone-number`, data)
     .then((data) => {
       return data.data;
@@ -99,7 +100,7 @@ export function verifyPhoneNumber(data: { token: string }) {
 }
 
 export function completeOnboarding(data: signupSchemaType) {
-  return api
+  return signupApi
     .post(
       `auth/complete-onboarding
 `,
@@ -114,7 +115,7 @@ export function completeOnboarding(data: signupSchemaType) {
 }
 
 export function changePassword(data: any) {
-  return api
+  return signupApi
     .post(`auth/change-password`, data)
     .then((data) => {
       return data.data;

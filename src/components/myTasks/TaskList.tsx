@@ -25,8 +25,8 @@ const TaskList = () => {
           </p>
           <FormButton
             text="Post a task"
-            btnStyle="min-h-[39px] min-w-40 text-sm font-normal"
-            href="/post-task"
+            className="min-h-[39px] min-w-40 text-sm font-normal"
+            href={ROUTES.POST_TASK}
           />
         </div>
       </div>

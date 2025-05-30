@@ -9,18 +9,18 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  async redirects() {
-    if (process.env.NODE_ENV === "production") {
-      return [
-        {
-          source: "/",
-          destination: "/waitlist",
-          permanent: false,
-        },
-      ];
-    }
-    return [];
-  },
+  // async redirects() {
+  //   if (process.env.NODE_ENV === "production") {
+  //     return [
+  //       {
+  //         source: "/",
+  //         destination: "/waitlist",
+  //         permanent: false,
+  //       },
+  //     ];
+  //   }
+  //   return [];
+  // },
   eslint: {
     ignoreDuringBuilds: true,
   },

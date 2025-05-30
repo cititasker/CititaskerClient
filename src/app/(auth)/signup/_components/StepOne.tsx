@@ -1,55 +1,51 @@
+"use client";
+
 import React from "react";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import { FormProvider, useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema, loginSchemaType } from "@/schema/auth";
-import Link from "next/link";
 import { useMutation } from "@tanstack/react-query";
+import Link from "next/link";
+import Image from "next/image";
+import { FcGoogle } from "react-icons/fc";
+
+import { loginSchema, loginSchemaType } from "@/schema/auth";
 import { registerApi } from "@/services/auth";
+import { useSnackbar } from "@/providers/SnackbarProvider";
 import { useSearchParams } from "next/navigation";
 import FormInput from "@/components/forms/FormInput";
 import FormButton from "@/components/forms/FormButton";
-import { useSnackbar } from "@/providers/SnackbarProvider";
-import { FcGoogle } from "react-icons/fc";
 import Logo from "@/../public/images/cititasker_logo.svg";
-import Image from "next/image";
+import StepWrapper from "./StepWrapper";
+import { ROUTES } from "@/constant";
 
-interface IAuthService {
-  onNext: () => void;
-}
-
-const StepOne = ({ onNext }: IAuthService) => {
+const StepOne = ({ onNext }: { onNext: () => void }) => {
   const { showSnackbar } = useSnackbar();
+  const role = useSearchParams().get("role") ?? "";
 
-  const searchParams = useSearchParams();
-  const role = searchParams.get("role");
+  const methods = useForm<loginSchemaType>({
+    defaultValues: { email: "", password: "", role },
+    resolver: zodResolver(loginSchema),
+  });
 
   const mutation = useMutation({
     mutationFn: registerApi,
     onSuccess: (data) => {
+      console.log(12, data);
+      localStorage.setItem("signup-token", data.data.token);
       showSnackbar(data?.message, "success");
       onNext();
     },
-    onError(error) {
-      showSnackbar(error?.message, "error");
-    },
+    onError: (error: any) =>
+      showSnackbar(error?.message || "Registration failed", "error"),
   });
 
-  const methods = useForm<loginSchemaType>({
-    defaultValues: {
-      email: "",
-      password: "",
-      role: role ?? "",
-    },
-    resolver: zodResolver(loginSchema),
-  });
-
-  const onSubmit: SubmitHandler<loginSchemaType> = (values) => {
-    localStorage.setItem("email", values.email);
-    mutation.mutate(values);
+  const onSubmit: SubmitHandler<loginSchemaType> = (data) => {
+    localStorage.setItem("email", data.email);
+    mutation.mutate(data);
   };
 
   return (
-    <div className="lg:shadow-sm mt-[40px] md:-mt-[3.5rem] max-w-[31.25rem] h-fit w-full mx-auto sm:bg-white rounded-30 px-0 sm:px-5 xl:px-[4.875rem] lg:py-[3.125rem] overflow-hidden">
+    <StepWrapper>
       <FormProvider {...methods}>
         <form
           onSubmit={methods.handleSubmit(onSubmit)}
@@ -61,6 +57,7 @@ const StepOne = ({ onNext }: IAuthService) => {
             </h2>
             <Image src={Logo} alt="citi-tasker" />
           </div>
+
           <FormInput
             label="Email Address"
             name="email"
@@ -75,37 +72,39 @@ const StepOne = ({ onNext }: IAuthService) => {
             placeholder="******"
             wrapperStyle="mb-0"
           />
-          <p className="mt-8  text-sm font-normal text-left w-fit block ml-auto">
-            By creating an account, I agree to citiTasker&apos;s
+
+          <p className="mt-8 text-sm text-left">
+            By creating an account, I agree to CitiTasker&apos;s{" "}
             <Link href="#" className="text-primary">
-              {" "}
               Terms and Privacy Policy.
             </Link>
           </p>
+
           <div className="mt-3">
             <FormButton
               text="Create an account"
               type="submit"
-              btnStyle="w-full"
+              className="w-full"
               loading={mutation.isPending}
             />
             <span className="uppercase text-center py-4 block">or</span>
-            <FormButton btnStyle="w-full bg-white border border-dark-secondary text-[#1B2149]">
+            <FormButton className="w-full bg-white border border-dark-secondary text-[#1B2149]">
               <div className="flex justify-center items-center">
                 <FcGoogle className="mr-2" size={20} />
                 Continue with Google
               </div>
             </FormButton>
           </div>
+
           <p className="mt-4 text-center text-base">
             Already have an account?{" "}
-            <Link href="/login" className=" text-primary">
+            <Link href={ROUTES.LOGIN} className="text-primary">
               Login
             </Link>
           </p>
         </form>
       </FormProvider>
-    </div>
+    </StepWrapper>
   );
 };
 
