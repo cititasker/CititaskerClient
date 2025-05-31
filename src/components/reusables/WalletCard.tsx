@@ -11,37 +11,23 @@ interface WalletBalanceCardProps {
 
 const WalletBalanceCard: React.FC<WalletBalanceCardProps> = ({ balance }) => {
   return (
-    <div className="flex justify-between">
-      <div className="p-5 bg-primary w-[268px] h-[157px] rounded-[14px] relative overflow-hidden mb-12">
-        <Icons.wallet />
-        <div className="flex items-center gap-1 my-[14px]">
-          <Typography className="text-xs font-normal text-white">
-            Wallet Balance
-          </Typography>
-          <Icons.info className="info" />
-        </div>
-
-        <Typography className="text-2xl font-semibold text-white mt-10">
-          {balance}
+    <div className="p-5 bg-primary w-[268px] h-[157px] rounded-[14px] relative overflow-hidden mb-12">
+      <Icons.wallet />
+      <div className="flex items-center gap-1 my-[14px]">
+        <Typography className="text-xs font-normal text-white">
+          Wallet Balance
         </Typography>
+        <Icons.info className="info" />
+      </div>
 
-        {/* Background bubbles */}
-        <div className="w-[154px] h-[154px] rounded-full bg-[rgba(19,181,234,0.20)] absolute -right-[15%] -bottom-[40%] z-[0]" />
-        <div className="w-[154px] h-[154px] rounded-full bg-[rgba(19,181,234,0.20)] absolute left-[50%] -translate-x-[50%] -bottom-[56%] z-[0]" />
-        <div className="w-[154px] h-[154px] rounded-full bg-[rgba(19,181,234,0.20)] absolute -left-[15%] -bottom-[75%] z-[0]" />
-      </div>
-      <div className="flex  gap-4">
-        <FormButton btnStyle="text-base">
-          <div className="text-white gap-2 text-xs flex item-center">
-            <MdOutlineAdd size={16} /> Top Up
-          </div>
-        </FormButton>
-        <FormButton btnStyle="bg-red-light-1 text-base">
-          <div className="text-white gap-2 text-xs flex item-center">
-            <MdOutlineAdd size={16} /> Transfer
-          </div>
-        </FormButton>
-      </div>
+      <Typography className="text-2xl font-semibold text-white mt-10">
+        {balance}
+      </Typography>
+
+      {/* Background bubbles */}
+      <div className="w-[154px] h-[154px] rounded-full bg-[rgba(19,181,234,0.20)] absolute -right-[15%] -bottom-[40%] z-[0]" />
+      <div className="w-[154px] h-[154px] rounded-full bg-[rgba(19,181,234,0.20)] absolute left-[50%] -translate-x-[50%] -bottom-[56%] z-[0]" />
+      <div className="w-[154px] h-[154px] rounded-full bg-[rgba(19,181,234,0.20)] absolute -left-[15%] -bottom-[75%] z-[0]" />
     </div>
   );
 };

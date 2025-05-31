@@ -84,7 +84,6 @@ const FormAutoComplete = <T,>({
             getOptionLabel={getOptionLabel}
             renderOption={renderOption}
             isOptionEqualToValue={isOptionEqualToValue}
-            sx={{ width: "100%", "& .MuiOutlinedInput-root": { borderRadius: "9999px" } }}
             disabled={disabled}
             onChange={(_, value) => {
               if (onChange) onChange(_, value);

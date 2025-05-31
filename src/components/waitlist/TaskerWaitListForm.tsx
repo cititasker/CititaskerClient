@@ -44,7 +44,7 @@ const TaskerWaitListForm = ({ toggleSuccessModal }: IProps) => {
     defaultValues: {
       name: "",
       email: "",
-      occupation: null, // removed location
+      occupation: null,
     },
     resolver: zodResolver(taskerWaitListFormSchema),
   });
@@ -77,13 +77,6 @@ const TaskerWaitListForm = ({ toggleSuccessModal }: IProps) => {
             type="text"
             placeholder="Enter your first name"
             wrapperStyle="!mb-0"
-            InputProps={{
-              sx: {
-                "&.MuiOutlinedInput-root": {
-                  borderRadius: "9999px",
-                },
-              },
-            }}
           />
           <FormInput
             label="Email"
@@ -91,13 +84,6 @@ const TaskerWaitListForm = ({ toggleSuccessModal }: IProps) => {
             type="email"
             placeholder="Enter your email address"
             wrapperStyle="!mb-0"
-             InputProps={{
-              sx: {
-                "&.MuiOutlinedInput-root": {
-                  borderRadius: "9999px",
-                },
-              },
-            }}
           />
         </div>
 

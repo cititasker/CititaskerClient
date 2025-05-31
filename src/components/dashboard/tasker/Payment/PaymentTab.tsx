@@ -1,4 +1,3 @@
-
 import CustomTable from "@/components/reusables/CustomTable";
 import { Box } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";

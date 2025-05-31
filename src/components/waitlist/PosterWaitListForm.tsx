@@ -49,20 +49,13 @@ const PosterWaitListForm = ({ toggleSuccessModal }: IProps) => {
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
-        <div className="flex items-center justify-between gap-x-8 gap-y-5 flex-col sm:flex-row mb-5">
+        <div className="flex justify-between gap-x-8 gap-y-5 flex-col sm:flex-row mb-5">
           <FormInput
             label="Full Name"
             name="name"
             type="text"
             placeholder="Enter your full name"
             wrapperStyle="!mb-0"
-            InputProps={{
-              sx: {
-                "&.MuiOutlinedInput-root": {
-                  borderRadius: "9999px",
-                },
-              },
-            }}
           />
           <FormInput
             label="Email"
@@ -70,13 +63,6 @@ const PosterWaitListForm = ({ toggleSuccessModal }: IProps) => {
             type="email"
             placeholder="Enter your email address"
             wrapperStyle="!mb-0"
-            InputProps={{
-              sx: {
-                "&.MuiOutlinedInput-root": {
-                  borderRadius: "9999px",
-                },
-              },
-            }}
           />
         </div>
 

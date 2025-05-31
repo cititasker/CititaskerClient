@@ -34,7 +34,7 @@ const EditImageModal = ({
           py: 2,
         }}
       >
-        <h2 className="text-lg font-semibold text-center mb-">Preview</h2>
+        <h2 className="text-lg font-semibold text-center mb-2">Preview</h2>
 
         {selectedImage && (
           <div
@@ -49,7 +49,7 @@ const EditImageModal = ({
               width={300}
               height={300}
               objectFit="cover"
-              className="w-[300px] h-[300px]"
+              className="w-[300px] h-[300px] object-cover"
             />
           </div>
         )}
