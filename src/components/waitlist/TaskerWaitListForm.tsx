@@ -10,7 +10,6 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import FormInput from "../forms/FormInput";
 import FormButton from "../forms/FormButton";
 import { useSnackbar } from "@/providers/SnackbarProvider";
-import SelectState from "../forms/SelectState";
 import { getCategories, joinTaskerApi } from "@/services";
 import FormAutoComplete from "../forms/FormAutoComplete";
 import { capitalize } from "@/utils";
@@ -45,7 +44,6 @@ const TaskerWaitListForm = ({ toggleSuccessModal }: IProps) => {
     defaultValues: {
       name: "",
       email: "",
-      location: null,
       occupation: null,
     },
     resolver: zodResolver(taskerWaitListFormSchema),
@@ -64,11 +62,11 @@ const TaskerWaitListForm = ({ toggleSuccessModal }: IProps) => {
   const onSubmit: SubmitHandler<taskerWaitListFormSchemaType> = (values) => {
     const payload = {
       ...values,
-      location: values.location?.id,
       occupation: values.occupation?.id,
     };
     mutation.mutate(payload);
   };
+
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
@@ -88,15 +86,16 @@ const TaskerWaitListForm = ({ toggleSuccessModal }: IProps) => {
             wrapperStyle="!mb-0"
           />
         </div>
-        <div className="flex items-center justify-between gap-x-8 gap-y-5 flex-col sm:flex-row mb-5">
-          <SelectState label="Location" name="location" />
+
+        <div className="flex items-center justify-between gap-x-8 gap-y-5 flex-col sm:flex-row mb-5 !rounded-full">
           <FormAutoComplete
-            label="Occupation"
+            label="What type of service will you provide?"
             options={categories}
             getOptionLabel={(option: any) => option.name}
             isOptionEqualToValue={(option, value) => option.id === value.id}
             name="occupation"
-            placeholder="Select your occupation"
+            placeholder="Select service category"
+            className="!rounded-full"
           />
         </div>
 

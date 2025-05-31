@@ -11,7 +11,6 @@ import { joinPosterApi } from "@/services";
 import FormInput from "../forms/FormInput";
 import FormButton from "../forms/FormButton";
 import { useSnackbar } from "@/providers/SnackbarProvider";
-import SelectState from "../forms/SelectState";
 
 interface IProps {
   toggleSuccessModal: () => void;
@@ -24,7 +23,6 @@ const PosterWaitListForm = ({ toggleSuccessModal }: IProps) => {
     defaultValues: {
       name: "",
       email: "",
-      location: null,
     },
     resolver: zodResolver(posterWaitListFormSchema),
   });
@@ -43,18 +41,15 @@ const PosterWaitListForm = ({ toggleSuccessModal }: IProps) => {
       showSnackbar(error.message, "error");
     },
   });
+
   const onSubmit: SubmitHandler<posterWaitListFormSchemaType> = (values) => {
-    const payload = {
-      ...values,
-      location: values.location?.id,
-    };
-    mutation.mutate(payload);
+    mutation.mutate(values);
   };
 
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
-        <div className="flex items-center justify-between gap-x-8 gap-y-5 flex-col sm:flex-row mb-5">
+        <div className="flex justify-between gap-x-8 gap-y-5 flex-col sm:flex-row mb-5">
           <FormInput
             label="Full Name"
             name="name"
@@ -70,10 +65,7 @@ const PosterWaitListForm = ({ toggleSuccessModal }: IProps) => {
             wrapperStyle="!mb-0"
           />
         </div>
-        <div className="flex items-center justify-between gap-x-8 gap-y-5 flex-col sm:flex-row mb-5">
-          <SelectState label="Location" name="location" />
-          <div className="flex-1"></div>
-        </div>
+
         <FormButton
           type="submit"
           text="Join Waitlist"
