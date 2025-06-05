@@ -748,3 +748,30 @@ export const profileMenu = [
     href: "#",
   },
 ];
+
+export const menuData = [
+  { name: "Dashboard", href: ROUTES.DASHBOARD, icon: Icons.grid },
+  { name: "Message", href: "/dashboard/message", icon: Icons.chat },
+  {
+    name: "Payment & Billing",
+    href: "/dashboard/payment",
+    icon: Icons.creditCard,
+  },
+  {
+    name: "Notification",
+    href: "/dashboard/notification",
+    icon: Icons.notificationBell,
+  },
+  {
+    name: "Settings",
+    icon: Icons.settings,
+    children: [
+      { name: "Account", href: "/dashboard/account", icon: Icons.grid },
+      {
+        name: "Profile",
+        href: "/dashboard/profile",
+        icon: Icons.profileCircle,
+      },
+    ],
+  },
+];

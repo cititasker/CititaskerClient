@@ -1,5 +1,6 @@
 import { AxiosError } from "axios";
 import api from "./apiService";
+import { API_ROUTES } from "@/constant";
 
 export function getUserApi() {
   return api
@@ -36,7 +37,7 @@ export function updateProfile(data: any) {
 
 export function paymentReference(data: any) {
   return api
-    .post(`payments/create-intent`, data)
+    .post(API_ROUTES.CREATE_PAYMENT_INTENT, data)
     .then((data) => {
       return data.data;
     })

@@ -1,6 +1,7 @@
 import type { Config } from "tailwindcss";
 
 export default {
+  darkMode: ["class"],
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -14,32 +15,75 @@ export default {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       colors: {
-        primary: "#236F8E",
-        "light-primary-1": "#edfafe",
-        "light-primary-2": "#B8E9F9",
-        black: "#161a32",
-        "black-2": "#021637",
-        "light-grey": "#F3F5F6",
-        "dark-grey": "#7c8697",
-        "dark-grey-1": "#CAD7DC",
-        "dark-grey-2": "#7C8698",
-        secondary: "#13B5EA",
-        "dark-secondary": "#161A32",
-        "red-light-1": "#FB9596",
-        "red-state-color": "#EC514B",
-        "green-state-color": "#29C483",
-        "yellow-state-color": "#F2AF42",
-        "light-blue": "#EEFAFE",
-        "text-black": "#1B2149",
-        lapis: "#70A1B6",
-        "cs-dark-4": "var(--Cultured-Secondary-Dark-4)",
-        "cs-dark-5": "var(--Cultured-Secondary-Dark-5)",
-        F9F9F9: "var(--F9F9F9)",
+        primary: {
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
+        },
+        "light-primary-1": "hsl(var(--light-primary-1))",
+        "light-primary-2": "hsl(var(--light-primary-2))",
+        black: "hsl(var(--black))",
+        "black-2": "hsl(var(--black-2))",
+        "light-grey": "hsl(var(--light-grey))",
+        "dark-grey": "hsl(var(--dark-grey))",
+        "dark-grey-1": "hsl(var(--dark-grey-1))",
+        "dark-grey-2": "hsl(var(--dark-grey-2))",
+        secondary: {
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
+        },
+        "dark-secondary": "hsl(var(--dark-secondary))",
+        "red-light-1": "hsl(var(--red-light-1))",
+        "red-state-color": "hsl(var(--red-state-color))",
+        "green-state-color": "hsl(var(--green-state-color))",
+        "yellow-state-color": "hsl(var(--yellow-state-color))",
+        "light-blue": "hsl(var(--light-blue))",
+        "text-black": "hsl(var(--text-black))",
+        lapis: "hsl(var(--Lapis-Blue-Primary-Light-2))",
+        "cs-dark-4": "hsl(var(--Cultured-Secondary-Dark-4))",
+        "cs-dark-5": "hsl(var(--Cultured-Secondary-Dark-5))",
+        F9F9F9: "hsl(var(--F9F9F9))",
+
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
+        },
+        popover: {
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
+        },
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
+        },
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
+        },
+        destructive: {
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
+        },
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        chart: {
+          "1": "hsl(var(--chart-1))",
+          "2": "hsl(var(--chart-2))",
+          "3": "hsl(var(--chart-3))",
+          "4": "hsl(var(--chart-4))",
+          "5": "hsl(var(--chart-5))",
+        },
       },
       borderRadius: {
         "20": "20px",
         "30": "30px",
         "40": "40px",
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
       },
       lineHeight: {
         normal: "1.2",
@@ -72,5 +116,6 @@ export default {
         },
       });
     },
+    require("tailwindcss-animate"),
   ],
 } satisfies Config;

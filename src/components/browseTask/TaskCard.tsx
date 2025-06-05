@@ -1,19 +1,22 @@
-"use client";
-
-import React, { useMemo } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { useParams, useSearchParams } from "next/navigation";
-
-import Icons from "../Icons";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@/components/ui/card";
 import { formatDate, truncate, formatCurrency } from "@/utils";
 import { defaultProfile } from "@/constant/images";
+import Image from "next/image";
+import Link from "next/link";
+import { useMemo } from "react";
+import { useParams, useSearchParams } from "next/navigation";
+import Icons from "../Icons";
 import StatusChip from "../reusables/StatusChip";
 
 interface IProps {
   item: ITask;
   path: string;
-  isActive?: boolean;
 }
 
 const TaskCard = ({ item, path }: IProps) => {
@@ -41,49 +44,54 @@ const TaskCard = ({ item, path }: IProps) => {
       }`}
       aria-current={isActive ? "page" : undefined}
     >
-      {/* Header with avatar and status */}
-      <div className="flex justify-between items-start mb-4">
-        <div className="flex flex-col items-center">
-          <Image
-            src={item.poster_profile_image ?? defaultProfile}
-            alt="Task poster"
-            width={50}
-            height={50}
-            className="w-[50px] h-[50px] object-cover rounded-full mb-1"
-          />
-          <StatusChip status={item.status} isActive={isActive} />
-        </div>
-        {item.budget && (
-          <p className="text-primary text-[20px] font-semibold">
-            {formatCurrency({ value: item.budget, noFraction: true })}
-          </p>
-        )}
-      </div>
+      <Card>
+        <CardHeader className="flex justify-between items-start mb-4">
+          <div className="flex flex-col items-center">
+            <Image
+              src={item.poster_profile_image ?? defaultProfile}
+              alt="Task poster"
+              width={50}
+              height={50}
+              className="w-[50px] h-[50px] object-cover rounded-full mb-1"
+            />
+            <StatusChip status={item.status} isActive={isActive} />
+          </div>
+          {item.budget && (
+            <p className="text-primary text-[20px] font-semibold">
+              {formatCurrency({ value: item.budget, noFraction: true })}
+            </p>
+          )}
+        </CardHeader>
 
-      {/* Title & Description */}
-      <h3 className="font-semibold text-base mb-1">{item.name}</h3>
-      <p className="text-sm text-gray-600">{truncate(item.description, 60)}</p>
+        <CardContent>
+          <CardTitle className="font-semibold text-base mb-1">
+            {item.name}
+          </CardTitle>
+          <CardDescription className="text-sm text-gray-600">
+            {truncate(item.description, 60)}
+          </CardDescription>
+        </CardContent>
 
-      {/* Details */}
-      <div className="mt-4 space-y-3 text-sm text-dark-grey-2">
-        <div className="flex gap-2 items-center">
-          <Icons.calendar className="shrink-0" />
-          <span>On {formatDate(item.date, "D, MMMM YYYY")}</span>
-        </div>
-        <div className="flex gap-2 items-center">
-          <Icons.distance className="shrink-0" />
-          <span>
-            {item.location_type === "in_person" ? "Offline" : "Online"} –{" "}
-            {truncate(item.address, 20)}
-          </span>
-        </div>
-        <div className="flex gap-2 items-center">
-          <Icons.group className="shrink-0" />
-          <span>
-            {item.offer_count} Offer{item.offer_count !== 1 ? "s" : ""}
-          </span>
-        </div>
-      </div>
+        <CardContent className="mt-4 space-y-3 text-sm text-dark-grey-2">
+          <div className="flex gap-2 items-center">
+            <Icons.calendar className="shrink-0" />
+            <span>On {formatDate(item.date, "D, MMMM YYYY")}</span>
+          </div>
+          <div className="flex gap-2 items-center">
+            <Icons.distance className="shrink-0" />
+            <span>
+              {item.location_type === "in_person" ? "Offline" : "Online"} –{" "}
+              {truncate(item.address, 20)}
+            </span>
+          </div>
+          <div className="flex gap-2 items-center">
+            <Icons.group className="shrink-0" />
+            <span>
+              {item.offer_count} Offer{item.offer_count !== 1 ? "s" : ""}
+            </span>
+          </div>
+        </CardContent>
+      </Card>
     </Link>
   );
 };

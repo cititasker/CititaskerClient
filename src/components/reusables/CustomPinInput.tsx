@@ -17,21 +17,19 @@ const CustomPinInput: React.FC<CustomPinInputProps> = ({
   length = 4,
 }) => {
   return (
-    <>
-      <InputOTP
-        maxLength={length}
-        value={value}
-        onChange={onChange}
-        onComplete={onComplete}
-        className={className}
-      >
-        <InputOTPGroup className="flex gap-3 w-full">
-          {Array.from({ length }, (_, i) => (
-            <InputOTPSlot key={i} index={i} />
-          ))}
-        </InputOTPGroup>
-      </InputOTP>
-    </>
+    <InputOTP
+      maxLength={length}
+      value={value}
+      onChange={onChange}
+      onComplete={onComplete}
+      className={className}
+    >
+      <InputOTPGroup className="flex gap-3 w-full">
+        {Array.from({ length }, (_, i) => (
+          <InputOTPSlot key={i} index={i} />
+        ))}
+      </InputOTPGroup>
+    </InputOTP>
   );
 };
 

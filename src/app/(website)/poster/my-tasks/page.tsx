@@ -6,6 +6,15 @@ import React from "react";
 
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
 
+const filter = [
+  { href: "all", name: "All Tasks" },
+  { href: "open", name: "Open Tasks" },
+  { href: "assigned", name: "Assigned Tasks" },
+  { href: "cancelled", name: "Cancelled Offers" },
+  { href: "completed", name: "Completed Tasks" },
+  { href: "expired", name: "Expired Tasks" },
+];
+
 export default async function Page(props: { searchParams: SearchParams }) {
   const searchParams = await props.searchParams;
   const query = searchParams.query;
@@ -18,7 +27,7 @@ export default async function Page(props: { searchParams: SearchParams }) {
   });
 
   return (
-    <MyTasksLayout>
+    <MyTasksLayout filter={filter}>
       <MapWrapper />
     </MyTasksLayout>
   );

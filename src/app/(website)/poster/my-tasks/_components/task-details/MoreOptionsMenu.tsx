@@ -1,0 +1,47 @@
+"use client";
+
+import React from "react";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
+import Icons from "@/components/Icons";
+
+interface Props {
+  moreOptions: { text: string; name: string }[];
+  onSelect?: (item: { text: string; name: string }) => void;
+}
+
+export default function MoreOptionsMenu({ moreOptions, onSelect }: Props) {
+  return (
+    <div className="flex-1">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="outline"
+            className="rounded-[25px] text-base bg-light-grey text-black px-[15px] w-full justify-between"
+          >
+            More Options
+            <Icons.dropdown />
+          </Button>
+        </DropdownMenuTrigger>
+
+        <DropdownMenuContent className="w-full min-w-[200px]">
+          {moreOptions.map((option, idx) => (
+            <DropdownMenuItem
+              key={idx}
+              onSelect={() => {
+                if (onSelect) onSelect(option);
+              }}
+            >
+              {option.text}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
+  );
+}

@@ -1,5 +1,6 @@
 import { AxiosError } from "axios";
 import api from "./apiService";
+import { API_ROUTES } from "@/constant";
 
 export function createTask(data: any) {
   return api
@@ -25,7 +26,7 @@ export function updateTask(data: any) {
 
 export function getAllTasks(data: any) {
   return api
-    .get(`tasks`, data)
+    .get(API_ROUTES.TASKS, data)
     .then((data) => {
       return data.data;
     })

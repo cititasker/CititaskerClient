@@ -1,72 +1,63 @@
 "use client";
-import theme from "@/providers/theme";
-import { IconButton, Modal, Paper, SxProps, Theme } from "@mui/material";
-import Icons from "../Icons";
-import dynamic from "next/dynamic";
 
-const SuccessConfetti = dynamic(() => import("./SuccessConfetti"), {
-  ssr: false,
-});
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogOverlay,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { FC, ReactNode } from "react";
+import SuccessConfetti from "./SuccessConfetti";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { cn } from "@/lib/utils";
 
-interface IProps {
+interface CustomModalProps {
   isOpen: boolean;
   onClose: () => void;
-  children: React.ReactNode;
-  paperStyle?: SxProps<Theme>;
+  children: ReactNode;
+  className?: string; // container wrapper styling
+  contentClassName?: string; // dialog content styling
   showCloseBtn?: boolean;
   confetti?: boolean;
   [key: string]: any;
 }
 
-const style: SxProps<Theme> = {
-  maxWidth: "800px",
-  width: "90%",
-  p: "40px",
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  borderRadius: "12px",
-  outline: "none",
-  maxHeight: "90vh",
-  overflow: "auto",
-};
-
-const cancel: SxProps<Theme> = {
-  position: "absolute",
-  top: "5px",
-  right: "5px",
-  zIndex: 20,
-
-  [theme.breakpoints.up("sm")]: {
-    top: "24px",
-    right: "24px",
-  },
-};
-
-const CustomModal = ({
+const CustomModal: FC<CustomModalProps> = ({
   isOpen,
   onClose,
   children,
-  paperStyle,
-  showCloseBtn = true,
+  className = "",
+  contentClassName = "",
+  showCloseBtn = false,
   confetti = false,
   ...rest
-}: IProps) => {
+}) => {
   return (
-    <Modal open={isOpen} onClose={onClose} {...rest}>
-      <div>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DialogOverlay className="fixed inset-0 bg-black/50" />
+      <DialogContent
+        aria-labelledby={undefined}
+        aria-describedby={undefined}
+        className={cn(
+          "block fixed top-1/2 left-1/2 max-w-3xl w-[90vw] max-h-[90vh] overflow-auto-translate-x-1/2 -translate-y-1/2 !rounded-40 bg-white p-10 focus:outline-none",
+          contentClassName
+        )}
+        {...rest}
+      >
         {confetti && <SuccessConfetti />}
-        <Paper sx={{ ...style, ...paperStyle }}>
-          {showCloseBtn && (
-            <IconButton sx={cancel} onClick={onClose}>
-              <Icons.cancel />
-            </IconButton>
-          )}
-          {children}
-        </Paper>
-      </div>
-    </Modal>
+        <DialogHeader>
+          <VisuallyHidden asChild>
+            <DialogTitle />
+          </VisuallyHidden>
+          <VisuallyHidden asChild>
+            <DialogDescription />
+          </VisuallyHidden>
+        </DialogHeader>
+        <div className={className}>{children}</div>
+      </DialogContent>
+    </Dialog>
   );
 };
 

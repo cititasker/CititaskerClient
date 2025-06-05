@@ -1,6 +1,17 @@
 interface IChildren {
   children: React.ReactNode;
 }
+
+interface IResponse {
+  meta: {
+    current_page: number;
+    from: number;
+    last_page: number;
+    per_page: number;
+    to: number;
+    total: number;
+  };
+}
 type TUseTimer = {
   days: string;
   hours: string;

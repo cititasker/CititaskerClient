@@ -1,19 +1,18 @@
-// components/myTasks/TaskList.tsx
 "use client";
 
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
-import { getUserTasksQuery } from "@/queries/task";
 import { useAppSelector } from "@/store/hook";
-import TaskCard from "../browseTask/TaskCard";
-import FormButton from "../forms/FormButton";
 import { ROUTES } from "@/constant";
+import { useGetUserTasks } from "@/services/poster/tasks/tasks.hook";
+import FormButton from "@/components/forms/FormButton";
+import TaskCard from "@/components/TaskCard";
 
 const TaskList = () => {
   const status = useSearchParams().get("status") || "all";
   const { user } = useAppSelector((state) => state.user);
-  const { data } = useSuspenseQuery(getUserTasksQuery({ status }));
-  const tasks: ITask[] = data?.data?.data || [];
+  const { data } = useGetUserTasks({ status });
+
+  const tasks: ITask[] = data?.data.data || [];
 
   if (tasks.length === 0) {
     return (
@@ -39,7 +38,7 @@ const TaskList = () => {
         <TaskCard
           key={task.id}
           item={task}
-          path={`/${user.role}/${ROUTES.MY_TASKS}`}
+          path={`/${user.role}${ROUTES.MY_TASKS}`}
         />
       ))}
     </div>

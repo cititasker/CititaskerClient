@@ -1,30 +1,25 @@
-import { Chip, SxProps, Theme } from "@mui/material";
+"use client";
+
+import { cn } from "@/lib/utils";
 import React from "react";
 
-interface IProps {
+interface StatusChipProps {
   status: string;
   isActive: boolean;
 }
-const styles = (isActive: boolean): Record<string, SxProps<Theme>> => ({
-  container: {
-    height: "22px",
-    border: "0.8px solid var(--primary)",
 
-    bgcolor: isActive ? "var(--primary)" : "var(--light-primary)",
-
-    ".MuiChip-label": {
-      color: isActive ? "white" : "var(--primary)",
-      fontSize: "10px",
-      px: "12px",
-      textTransform: "capitalize",
-      fontWeight: 500,
-    },
-  },
-});
-
-const StatusChip = ({ status, isActive }: IProps) => {
+const StatusChip: React.FC<StatusChipProps> = ({ status, isActive }) => {
   return (
-    <Chip label={status} variant="outlined" sx={styles(isActive).container} />
+    <span
+      className={cn(
+        "inline-flex h-[22px] items-center rounded-full border px-3 text-[10px] font-medium capitalize transition-colors",
+        isActive
+          ? "bg-primary text-white border-primary"
+          : "bg-[hsl(var(--light-primary-1))] text-primary border-primary"
+      )}
+    >
+      {status}
+    </span>
   );
 };
 

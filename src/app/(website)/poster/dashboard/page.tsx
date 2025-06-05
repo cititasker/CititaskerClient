@@ -25,7 +25,7 @@ export default function Page() {
   ];
   const rows: any = [];
   return (
-    <div className="px-[42px] pt-[56px] pb-10">
+    <div className="px-[42px] pt-[42px] pb-10 paper">
       <div className="mb-10">
         <Typography className="text-xl font-semibold text-black mb-1">
           Good evening {user.first_name ?? "Guest"},

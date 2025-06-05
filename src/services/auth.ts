@@ -8,7 +8,7 @@ import {
 } from "@/schema/auth";
 import api from "./apiService";
 import { AxiosError } from "axios";
-import { QUERY_PATHS } from "@/constant";
+import { API_ROUTES } from "@/constant";
 import signupApi from "./signupApi";
 
 export function registerApi(data: loginSchemaType) {
@@ -138,7 +138,7 @@ export function googleAuth() {
 
 export function updateBankDetails(data: any): Promise<any> {
   return api
-    .post(QUERY_PATHS.AUTH.UPDATE_BANK_DETAILS, data)
+    .post(API_ROUTES.AUTH.UPDATE_BANK_DETAILS, data)
     .then((data) => {
       return data.data.data;
     })

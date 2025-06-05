@@ -1,6 +1,6 @@
 import { AxiosError } from "axios";
 import api from "./apiService";
-import { QUERY_PATHS } from "@/constant";
+import { API_ROUTES } from "@/constant";
 
 export function joinPosterApi(data: any) {
   return api
@@ -60,7 +60,7 @@ export const reverseGeocode = async (
 
 export function getBanks(): Promise<any> {
   return api
-    .get(QUERY_PATHS.UTILITY.BANKS)
+    .get(API_ROUTES.UTILITY.BANKS)
     .then((data) => {
       return data.data.data;
     })
@@ -72,7 +72,7 @@ export function getBanks(): Promise<any> {
 export function verifyAccountNumber(data: any) {
   const queryParams = new URLSearchParams(data).toString();
   return api
-    .get(`${QUERY_PATHS.UTILITY.VERIFY_ACCOUNT_NUMBER}?${queryParams}`)
+    .get(`${API_ROUTES.UTILITY.VERIFY_ACCOUNT_NUMBER}?${queryParams}`)
     .then((data) => {
       return data.data;
     })

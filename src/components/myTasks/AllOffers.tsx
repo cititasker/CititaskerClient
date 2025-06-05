@@ -11,7 +11,7 @@ function AllOffers({ task, toggleModal }: IProps) {
   return (
     <>
       {task.offers.length ? (
-        <div className="paper rounded-none p-8">
+        <div className="paper rounded-none p-8 h-full">
           {task.offers.map((offer) => (
             <Fragment key={offer.id}>
               {task.tasker ? (

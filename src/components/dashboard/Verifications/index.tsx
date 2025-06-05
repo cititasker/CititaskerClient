@@ -22,7 +22,7 @@ import ActionsButtons from "@/components/reusables/ActionButtons";
 import Failed from "@/../public/icons/big_close_circle.svg";
 import Success from "@/../public/icons/big_tick_circle.svg";
 import { updateBankDetails } from "@/services/auth";
-import { QUERY_PATHS } from "@/constant";
+import { API_ROUTES } from "@/constant";
 
 const DojahVerification = dynamic(
   () => import("@/components/DojahVerification"),
@@ -110,7 +110,7 @@ const Verifications = () => {
   } | null>(null);
 
   const getBankQuery = useQuery({
-    queryKey: [QUERY_PATHS.UTILITY.BANKS],
+    queryKey: [API_ROUTES.UTILITY.BANKS],
     queryFn: getBanks,
     enabled: paymentVerification.isOpen,
   });
@@ -158,7 +158,7 @@ const Verifications = () => {
   const name = watch("name");
 
   const resolveAccountQuery = useQuery({
-    queryKey: [QUERY_PATHS.UTILITY.VERIFY_ACCOUNT_NUMBER, bank, account],
+    queryKey: [API_ROUTES.UTILITY.VERIFY_ACCOUNT_NUMBER, bank, account],
     enabled: account.length >= 10 && !!bank,
     queryFn: () =>
       verifyAccountNumber({

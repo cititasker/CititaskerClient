@@ -1,0 +1,29 @@
+import Image from "next/image";
+import Typography from "@mui/material/Typography";
+import { defaultProfile } from "@/constant/images";
+import { initializeName } from "@/utils";
+import { useAppSelector } from "@/store/hook";
+
+const UserProfile = () => {
+  const { user } = useAppSelector((state) => state.user);
+
+  return (
+    <div className="px-5 pb-5 pt-6 border-b border-light-grey flex flex-col items-center mb-[30px]">
+      <Image
+        src={user.profile_image ?? defaultProfile}
+        alt="user profile"
+        width={100}
+        height={100}
+        className="w-[100px] h-[100px] rounded-full mb-2 object-cover"
+      />
+      <Typography className="capitalize text-xl text-black font-medium">
+        {initializeName({
+          first_name: user.first_name,
+          last_name: user.last_name,
+        })}
+      </Typography>
+    </div>
+  );
+};
+
+export default UserProfile;

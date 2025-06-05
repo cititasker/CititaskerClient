@@ -24,7 +24,9 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
     <ThemeProvider theme={theme}>
       <SnackbarProvider>
-        <StyledEngineProvider injectFirst>{children}</StyledEngineProvider>
+        {/* <StyledEngineProvider injectFirst> */}
+        {children}
+        {/* </StyledEngineProvider> */}
       </SnackbarProvider>
     </ThemeProvider>
   );

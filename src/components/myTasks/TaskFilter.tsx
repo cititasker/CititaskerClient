@@ -1,4 +1,3 @@
-// components/myTasks/TaskSection.tsx
 "use client";
 
 import { updateQueryParams } from "@/utils";
@@ -6,16 +5,11 @@ import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
-const list = [
-  { href: "all", name: "All Tasks" },
-  { href: "open", name: "Open Tasks" },
-  { href: "assigned", name: "Assigned Tasks" },
-  { href: "cancelled", name: "Cancelled Offers" },
-  { href: "completed", name: "Completed Tasks" },
-  { href: "expired", name: "Expired Tasks" },
-];
+interface IProps {
+  filter: { href: string; name: string }[];
+}
 
-const TaskSection = () => {
+const TaskFilter = ({ filter }: IProps) => {
   const searchParams = useSearchParams();
   const status = searchParams.get("status") || "all";
   const router = useRouter();
@@ -34,7 +28,7 @@ const TaskSection = () => {
         />
       </div>
       <div className="flex flex-col">
-        {list.map((el, i) => (
+        {filter.map((el, i) => (
           <Link
             key={i}
             href={`?status=${el.href}`}
@@ -52,4 +46,4 @@ const TaskSection = () => {
   );
 };
 
-export default TaskSection;
+export default TaskFilter;
