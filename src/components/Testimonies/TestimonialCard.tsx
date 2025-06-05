@@ -7,9 +7,8 @@ const TestimonialCard = () => {
   return (
     <div className="px-1.5 sm:px-5 py-2.5 sm:py-[2.5rem] rounded-md sm:rounded-[1.25rem] bg-[#FDF0F0]">
       <div className="flex flex-col">
-        <p className="text-xs sm:text-base font-medium font-lato text-dark-secondary leading-normal">
-          Borem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
-          vulputate libero et velit interdum, ac aliquet odio mattis.
+        <p className="text-[14px] sm:text-base font-medium font-lato text-dark-secondary leading-normal">
+         I needed help with moving furniture on short notice, and CitiTasker came through. The Tasker was professional, punctual, and handled everything with care. Highly recommend!
         </p>
         <div className="mt-[0.875rem] sm:mt-[3.125rem]">
           <div className="flex items-center gap-1 sm:gap-x-5 mb-1.5 sm:mb-5">

@@ -14,9 +14,11 @@ const Testimonies = () => {
           height={280}
           className="object-cover absolute -top-1 -left-1 sm:-top-[10%] sm:-left-[10%] w-auto h-[71px] sm:h-[13rem]"
         />
-        <h1 className="w-[80%] max-w-[15.375rem] sm:max-w-[40.625rem] mx-auto text-center text-white text-xl md:text-3xl lg:text-[2.5rem] font-bold leading-normal">
-        See what happy customers are saying about CitiTasker
+
+        <h1 className="w-[80%] max-w-[16.375rem] sm:max-w-[40.625rem] pt-6 mx-auto text-center text-white text-xl md:text-3xl lg:text-[2.5rem] font-bold leading-relaxed md:leading-snug lg:leading-[3.25rem]">
+          See what happy customers are saying about CitiTasker
         </h1>
+
         <div>
           <TestimonialCarousel />
         </div>

@@ -8,14 +8,14 @@ interface PosterTestimoniesProps {
 
   const PosterTestimonies: React.FC<PosterTestimoniesProps> = ({ showHeading = true }) => {
   return (
-    <div className="container pt-[4.875rem] pb-[7.5rem]">
+    <div className="container pt[0] md:pt-[4.875rem] pb-[3rem] md:pb-[7.5rem]">
       {showHeading && (
         <h2 className="header max-w-[35.875rem] mx-auto text-center mb-[3.375rem]">
         Meet our top posters & their testimonies{" "}
       </h2>
       )}
-      <div className="flex justify-between gap-3 min-h-[25rem]">
-        <div className="relative max-w-[50.375rem] w-full h-[25rem] rounded-40 overflow-hidden">
+      <div className="flex flex-col md:flex-row justify-between gap-3 min-h-[25rem]">
+        <div className="relative max-w-[50.375rem] w-full h-[28rem] md:h-[25rem] rounded-40 overflow-hidden">
           <Image
             src="/images/poster_testimony.png"
             alt=""

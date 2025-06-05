@@ -5,9 +5,9 @@ import { ROUTES } from "@/constant";
 
 const LandingPageHero = () => {
   return (
-    <div className="relative w-full min-h-[31.25rem] md:max-h-full">
+    <div className="relative w-full min-h-[400px] md:min-h-[31.25rem] md:max-h-full">
       <div className="absolute top-0 left-0  w-full h-full bg-dark-secondary md:bg-[rgb(2,22,55)]/40 z-10 flex items-center">
-        <div className="max-w-[54.25rem] mx-a text-white px-[57px]">
+        <div className="max-w-[54.25rem] mx-a text-white px-[16px] md:px-[57px]">
           <div className="mb-[2rem] mt-[15%]">
             <h1 className="text-2xl sm:text-[2.875rem] max-w-[822px] md:text-[4.375rem] text-white font-bold leading-normal text-left mb-3 sm:mb-[0.875rem]">
               Get your to-dos done just in minutes.

@@ -48,7 +48,7 @@ const Faq = () => {
             </div>
           </div>
           <div className="flex-1">
-            <h2 className="text-slate-900 text-base sm:text-2xl text-[40px] font-bold mb-5 block lg:hidden text-center">
+            <h2 className="text-slate-900 text-[20px] sm:text-2xl font-bold mb-5 block lg:hidden text-center">
               Common Questions, Clear Answers
             </h2>
             <CustomAccordion data={accordionData} />

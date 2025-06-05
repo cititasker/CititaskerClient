@@ -29,7 +29,7 @@ const AccordionItem = ({
         <p
           className={` ${
             tasker ? "font-bold" : "font-semibold"
-          }  text-xs sm:text-base ${
+          }  text-[14px] sm:text-base ${
             isOpen ? "text-primary" : "text-[#161A32]"
           }`}
         >
@@ -51,7 +51,7 @@ const AccordionItem = ({
             : { height: "0px" }
         }
       >
-        <p className="text-xs sm:text-base">{answer}</p>
+        <p className="text-[14px] sm:text-base">{answer}</p>
       </div>
     </div>
   );
