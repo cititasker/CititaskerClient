@@ -18,6 +18,8 @@ export const API_ROUTES = {
   UTILITY: {
     BANKS: "/utility/banks",
     VERIFY_ACCOUNT_NUMBER: "/utility/verify-account-details",
+    CATEGORY: "/utility/categories",
+    SUB_CATEGORY: "/utility/sub-categories",
   },
   LOGIN: "/auth/login",
   USER: "/auth/get-user",
@@ -25,8 +27,8 @@ export const API_ROUTES = {
   TASKS: "/tasks",
   USER_TASKS: "/tasks/user",
   GET_TASK_BY_ID: (id: string) => `/tasks/${id}`,
-  CREATE_TASK: "/tasks/create",
-  UPDATE_TASK: (id: string) => `/tasks/${id}`,
+
+  // UPDATE_TASK: (id: string) => `/tasks/${id}`,
   DELETE_TASK: (id: string) => `/tasks/${id}`,
 
   TASKER: {
@@ -41,6 +43,8 @@ export const API_ROUTES = {
 
   CREATE_PAYMENT_INTENT: "/payments/create-intent",
   GET_USER_TASK: "tasks/user/single",
+  CREATE_TASK: "/tasks/create",
+  UPDATE_TASK: "tasks/update-task",
 };
 
 const isProd = process.env.NODE_ENV === "production";

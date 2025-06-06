@@ -120,11 +120,11 @@ export default function Offer() {
 
   return (
     <FormProvider {...methods}>
-      <div className="p-top bg-light-grey h-dvh">
+      <div className="p-top bg-light-grey min-h-dvh">
         <div className="max-w-[1300px] mx-auto px-5">
           <HeaderNavigation />
-          <div className="flex gap-8 w-full">
-            <div className="w-2/5">
+          <div className="flex flex-col md:flex-row gap-x-8 w-full">
+            <div className="w-full md:w-2/5">
               <TaskStatusCard
                 date={task.date}
                 offerCount={task.offer_count}
@@ -141,7 +141,7 @@ export default function Offer() {
                 buttonText={buttonText}
               />
             </div>
-            <div className="w-3/5">
+            <div className="w-full md:w-3/5">
               <CustomTab
                 items={tabs}
                 className="h-full"

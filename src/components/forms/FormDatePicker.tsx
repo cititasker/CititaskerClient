@@ -1,86 +1,95 @@
 "use client";
-import React from "react";
-import { Box, FormControl, FormLabel, SxProps, Theme } from "@mui/material";
-import { Controller, useFormContext } from "react-hook-form";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import dayjs, { Dayjs } from "dayjs";
-import { cn } from "@/utils";
-import FormError from "../reusables/FormError";
-import { globalStyles } from "@/globalStyles";
 
-interface IProps {
+import React from "react";
+import moment from "moment";
+import { CalendarIcon } from "lucide-react";
+import { Controller, useFormContext } from "react-hook-form";
+
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { Label } from "@/components/ui/label";
+import FormError from "../reusables/FormError";
+import { cn } from "@/lib/utils";
+
+interface FormDatePickerProps {
   name: string;
-  label: string;
-  labelStyle?: string;
+  label?: string;
   className?: string;
-  [key: string]: any;
+  labelClassName?: string;
+  minDate?: Date;
 }
 
-const style: Record<string, SxProps<Theme>> = {
-  container: {
-    ".MuiOutlinedInput-root": {
-      px: "20px",
-      ".MuiOutlinedInput-input": {
-        pl: "0",
-      },
-    },
-    ".MuiIconButton-root": {
-      m: 0,
-    },
-    ...globalStyles.input,
-  },
-};
-
-const FormDatePicker = ({
+export default function FormDatePicker({
   name,
   label,
-  labelStyle,
   className,
-  ...rest
-}: IProps) => {
-  const {
-    control,
-    formState: { errors },
-  } = useFormContext();
-  return (
-    <Box sx={style.container} className={className}>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <FormControl className="w-full">
-          {label && (
-            <FormLabel htmlFor={name} className={cn("label", labelStyle)}>
-              {label}
-            </FormLabel>
-          )}
-          <Controller
-            name={name}
-            control={control}
-            render={({ field }) => (
-              <DatePicker
-                value={field.value ? dayjs(field.value, "DD-MM-YYYY") : null}
-                onChange={(date: Dayjs | null) => {
-                  const formatedDate = date
-                    ? dayjs(date).format("DD-MM-YYYY")
-                    : "";
-                  field.onChange(formatedDate);
-                }}
-                format="DD/MM/YYYY"
-                slotProps={{
-                  textField: {
-                    fullWidth: true,
-                    error: !!errors.date,
-                  },
-                }}
-                {...rest}
-              />
-            )}
-          />
-        </FormControl>
-        <FormError name={name} />
-      </LocalizationProvider>
-    </Box>
-  );
-};
+  labelClassName,
+  minDate,
+}: FormDatePickerProps) {
+  const { control } = useFormContext();
 
-export default FormDatePicker;
+  return (
+    <div className={cn("space-y-2", className)}>
+      {label && (
+        <Label
+          htmlFor={name}
+          className={cn("block text-sm font-medium", labelClassName)}
+        >
+          {label}
+        </Label>
+      )}
+
+      <Controller
+        name={name}
+        control={control}
+        render={({ field }) => {
+          const selectedDate = field.value
+            ? moment(field.value, "DD-MM-YYYY").toDate()
+            : null;
+
+          return (
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className={cn(
+                    "w-full justify-start text-left font-normal hover:bg-transparent",
+                    !field.value && "text-muted-foreground"
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {field.value
+                    ? moment(field.value, "DD-MM-YYYY").format("DD/MM/YYYY")
+                    : "Pick a date"}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={selectedDate ?? undefined}
+                  onSelect={(date) => {
+                    if (date) {
+                      const formatted = moment(date).format("DD-MM-YYYY");
+                      field.onChange(formatted);
+                    }
+                  }}
+                  initialFocus
+                  disabled={(date) =>
+                    !!minDate && moment(date).isBefore(minDate, "day")
+                  }
+                />
+              </PopoverContent>
+            </Popover>
+          );
+        }}
+      />
+
+      <FormError name={name} />
+    </div>
+  );
+}

@@ -3,12 +3,13 @@
 import { Controller, useFormContext } from "react-hook-form";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import FormError from "../reusables/FormError";
 import { cn } from "@/lib/utils";
+import FormError from "../reusables/FormError";
+import { ReactNode } from "react";
 
 interface FormCheckboxProps {
   name: string;
-  label: React.ReactNode;
+  label: ReactNode;
   className?: string;
   labelClassName?: string;
 }
@@ -27,16 +28,18 @@ export default function FormCheckbox({
         name={name}
         control={control}
         render={({ field }) => (
-          <div className="flex items-start space-x-2">
+          <div className="flex items-center gap-2">
             <Checkbox
               id={name}
-              checked={field.value}
-              onCheckedChange={field.onChange}
-              className="mt-1"
+              checked={!!field.value}
+              onCheckedChange={(checked) => field.onChange(checked)}
             />
             <Label
               htmlFor={name}
-              className={cn("text-sm font-normal leading-snug", labelClassName)}
+              className={cn(
+                "text-sm font-normal leading-snug cursor-pointer",
+                labelClassName
+              )}
             >
               {label}
             </Label>

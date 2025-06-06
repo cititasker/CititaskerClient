@@ -5,7 +5,6 @@ import { Button, ButtonProps } from "@/components/ui/button";
 import Link from "next/link";
 import { BiLoader } from "react-icons/bi";
 import React from "react";
-
 interface FormButtonProps extends ButtonProps {
   text?: string;
   href?: string;
@@ -15,10 +14,6 @@ interface FormButtonProps extends ButtonProps {
   icon?: React.ReactNode;
 }
 
-/**
- * A flexible button component built on top of shadcn/ui Button.
- * Supports loading, icon, variant, and both button/link usage.
- */
 const FormButton: React.FC<FormButtonProps> = ({
   text = "Submit",
   className,
@@ -69,7 +64,7 @@ const FormButton: React.FC<FormButtonProps> = ({
       disabled={disabled || loading}
       onClick={handleClick}
       className={cn(
-        "min-w-max px-5 text-base font-normal !rounded-full flex items-center justify-center gap-2",
+        "min-w-max px-5 text-base font-normal rounded-full flex items-center justify-center gap-2",
         className
       )}
       {...props}

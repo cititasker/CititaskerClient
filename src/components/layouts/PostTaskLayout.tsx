@@ -1,13 +1,13 @@
 "use client";
 import React, { useEffect } from "react";
 import BackTo from "../BackTo";
-import PostTaskHeader from "../postTask/PostTaskHeader";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { getUserTaskByIdQuery } from "@/queries/task";
 import { useAppDispatch } from "@/store/hook";
 import { setTaskData } from "@/store/slices/task";
 import { IState, State } from "country-state-city";
+import PostTaskHeader from "@/app/post-task/_components/PostTaskHeader";
 
 const PostTaskLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -59,8 +59,8 @@ const PostTaskLayout: React.FC<{ children: React.ReactNode }> = ({
   }, [task]);
 
   return (
-    <div>
-      <header className="pl-[4.5rem] py-1.5 mb-5">
+    <div className="relative">
+      <header className="pl-5 md:pl-[4.5rem] py-1.5 sm:mb-5 sticky top-0 z-[10] bg-white">
         <BackTo href="/" />
       </header>
       <div className="max-w-[44.75rem] mx-auto px-5">

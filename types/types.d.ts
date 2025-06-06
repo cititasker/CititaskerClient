@@ -18,3 +18,13 @@ declare module "next-auth/jwt" {
     userData: { token: string; role: string };
   }
 }
+
+declare global {
+  interface Window {
+    google?: {
+      maps?: {
+        places?: any;
+      };
+    };
+  }
+}

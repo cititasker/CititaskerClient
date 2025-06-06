@@ -1,4 +1,4 @@
-import { API_ROUTES, ROUTES } from "@/constant";
+import { API_ROUTES } from "@/constant";
 import api from "@/services/apiService";
 import { AxiosError } from "axios";
 
@@ -40,6 +40,28 @@ export function getUserTaskById(id: string) {
 export function paymentReference(data: any) {
   return api
     .post(API_ROUTES.CREATE_PAYMENT_INTENT, data)
+    .then((data) => {
+      return data.data;
+    })
+    .catch((error: AxiosError) => {
+      throw error.response?.data;
+    });
+}
+
+export function createTask(data: any) {
+  return api
+    .post(API_ROUTES.CREATE_TASK, data)
+    .then((data) => {
+      return data.data;
+    })
+    .catch((error: AxiosError) => {
+      throw error.response?.data;
+    });
+}
+
+export function updateTask(data: any) {
+  return api
+    .post(API_ROUTES.UPDATE_TASK, data)
     .then((data) => {
       return data.data;
     })

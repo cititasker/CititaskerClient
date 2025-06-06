@@ -8,7 +8,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { defaultProfile } from "@/constant/images";
@@ -58,25 +57,28 @@ const UserActions = ({ user, onLogout }: Props) => (
 
         <DropdownMenuContent
           align="end"
-          className="w-[250px] spac-y-1 p-5 mt-5 !rounded-20 z-[99]"
+          className="w-[280px] spac-y-1 py-5 px-5 mt-5 !rounded-20 z-[99]"
         >
-          {/* <div>
-            <DropdownMenuLabel className="text-base text-black-2">
-              {loggedInUser(user.first_name, user.last_name)}
-            </DropdownMenuLabel>
-            <DropdownMenuItem className="text-dark-grey-2 text-sm">
-              {user.email}
-            </DropdownMenuItem>
-          </div> */}
+          <div className="flex gap-2 mb-4">
+            <Image
+              src={user?.profile_image || defaultProfile}
+              alt="profile"
+              width={50}
+              height={50}
+              className="w-[50px] h-[50px] rounded-full object-cover"
+            />
 
-          <DropdownMenuItem asChild>
-            <FormButton
-              variant="default"
-              className="w-full border-primary mb-3"
-            >
-              Switch to {user.role === ROLE.tasker ? "Poster" : "Tasker"}
-            </FormButton>
-          </DropdownMenuItem>
+            <div className="space-y-1">
+              <p className="text-base text-black-2">
+                {loggedInUser(user.first_name, user.last_name)}
+              </p>
+              <p className="text-dark-grey-2 text-sm">{user.email}</p>
+            </div>
+          </div>
+
+          <FormButton variant="default" className="w-full mb-3 rounded-full">
+            Switch to {user.role === ROLE.tasker ? "Poster" : "Tasker"}
+          </FormButton>
 
           {profileMenu.map((el, i) =>
             el.name !== "Logout" ? (
@@ -95,7 +97,7 @@ const UserActions = ({ user, onLogout }: Props) => (
               <DropdownMenuItem
                 key={i}
                 onClick={onLogout}
-                className="text-[#EC514B] flex items-center gap-2"
+                className="!text-[#EC514B] flex items-center gap-2 cursor-pointer focus:bg-transparent"
               >
                 <Icons.logout />
                 <span className="text-base">{el.name}</span>

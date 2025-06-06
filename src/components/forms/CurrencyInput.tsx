@@ -1,63 +1,55 @@
 "use client";
-import React from "react";
-import { NumericFormat, NumericFormatProps } from "react-number-format";
-import FormInput from "./FormInput";
+
+import * as React from "react";
+import { useFormContext } from "react-hook-form";
+import { NumericFormat } from "react-number-format";
+import { Input } from "@/components/ui/input";
+import {
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
+import { cn } from "@/lib/utils";
 
 interface CurrencyInputProps {
   name: string;
   label?: string;
   placeholder?: string;
-  containerStyle?: any;
-  [key: string]: any;
+  className?: string;
 }
 
-interface CustomProps {
-  onChange: (event: { target: { name: string; value: string } }) => void;
-  name: string;
-}
-
-const NumericFormatCustom = React.forwardRef<NumericFormatProps, CustomProps>(
-  function NumericFormatCustom(props, ref) {
-    const { onChange, ...other } = props;
-    return (
-      <NumericFormat
-        {...other}
-        getInputRef={ref}
-        onValueChange={(values) => {
-          onChange({
-            target: {
-              name: props.name,
-              value: values.value,
-            },
-          });
-        }}
-        thousandSeparator
-        valueIsNumericString
-        prefix="₦ "
-      />
-    );
-  }
-);
-
-const CurrencyInput = ({
+const CurrencyInput: React.FC<CurrencyInputProps> = ({
   name,
   label,
   placeholder,
-  containerStyle,
-  ...rest
-}: CurrencyInputProps) => {
+  className,
+}) => {
+  const { control } = useFormContext();
+
   return (
-    <FormInput
-      variant="outlined"
+    <FormField
       name={name}
-      label={label}
-      placeholder={placeholder}
-      InputProps={{
-        inputComponent: NumericFormatCustom as any,
-        sx: { "& .MuiOutlinedInput-input": { px: "20px" } },
-      }}
-      wrapperStyle={containerStyle}
-      {...rest}
+      control={control}
+      render={({ field }) => (
+        <FormItem className={className}>
+          {label && <FormLabel>{label}</FormLabel>}
+          <FormControl>
+            <NumericFormat
+              value={field.value}
+              onValueChange={({ value }) => field.onChange(value)}
+              thousandSeparator
+              valueIsNumericString
+              prefix="₦ "
+              placeholder={placeholder}
+              customInput={Input}
+              className={cn("placeholder:font-normal font-medium px-5")}
+            />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
     />
   );
 };

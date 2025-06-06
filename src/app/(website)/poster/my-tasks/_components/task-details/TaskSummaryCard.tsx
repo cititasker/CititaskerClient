@@ -7,6 +7,7 @@ import { formatCurrency, formatDate } from "@/utils";
 import Icons from "@/components/Icons";
 import FormButton from "@/components/forms/FormButton";
 import MoreOptionsMenu from "./MoreOptionsMenu";
+import { Button } from "@/components/ui/button";
 
 interface TaskSummaryCardProps {
   task: ITask;

@@ -8,12 +8,15 @@ import {
   UseSuspenseQueryOptions,
 } from "@tanstack/react-query";
 import {
+  createTask,
   getAllTasks,
   getUserTaskById,
   getUserTasks,
   paymentReference,
+  updateTask,
 } from "./tasks.api";
 import {
+  CreateTask,
   IntentPayload,
   IntentResponse,
   TaskApiResponse,
@@ -58,7 +61,7 @@ export const useFetchUserTaskById = (
     TaskApiResponse,
     [string, string]
   >({
-    queryKey: ["user-task", data.id],
+    queryKey: [API_ROUTES.GET_USER_TASK, data.id],
     queryFn: () => getUserTaskById(data.id),
     ...opt,
   });
@@ -69,6 +72,22 @@ export const useCreateIntent = (
 ) => {
   return useMutation<IntentResponse, Error, IntentPayload>({
     mutationFn: paymentReference,
+    ...opt,
+  });
+};
+
+export const useCreateTask = (
+  opt?: UseMutationOptions<CreateTask, Error, any>
+) => {
+  return useMutation<CreateTask, Error, any>({
+    mutationFn: createTask,
+    ...opt,
+  });
+};
+
+export const useUpdateTask = (opt?: UseMutationOptions<any, Error, any>) => {
+  return useMutation<any, Error, any>({
+    mutationFn: updateTask,
     ...opt,
   });
 };

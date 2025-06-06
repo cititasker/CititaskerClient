@@ -17,31 +17,29 @@ interface Props {
 
 export default function MoreOptionsMenu({ moreOptions, onSelect }: Props) {
   return (
-    <div className="flex-1">
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="outline"
-            className="rounded-[25px] text-base bg-light-grey text-black px-[15px] w-full justify-between"
-          >
-            More Options
-            <Icons.dropdown />
-          </Button>
-        </DropdownMenuTrigger>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="outline"
+          className="rounded-[25px] text-base bg-light-grey text-black px-[15px] flex-1 justify-between"
+        >
+          More Options
+          <Icons.dropdown />
+        </Button>
+      </DropdownMenuTrigger>
 
-        <DropdownMenuContent className="w-full min-w-[200px]">
-          {moreOptions.map((option, idx) => (
-            <DropdownMenuItem
-              key={idx}
-              onSelect={() => {
-                if (onSelect) onSelect(option);
-              }}
-            >
-              {option.text}
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
+      <DropdownMenuContent className="w-full min-w-[200px]">
+        {moreOptions.map((option, idx) => (
+          <DropdownMenuItem
+            key={idx}
+            onSelect={() => {
+              if (onSelect) onSelect(option);
+            }}
+          >
+            {option.text}
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

@@ -1,103 +1,51 @@
-import {
-  FormControl,
-  FormLabel,
-  SxProps,
-  TextField,
-  Theme,
-} from "@mui/material";
-import { Controller, useFormContext } from "react-hook-form";
-import FormError from "../reusables/FormError";
+// components/form/form-textarea.tsx
 
-interface IProps {
-  label?: string;
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { useFormContext, Controller } from "react-hook-form";
+import { cn } from "@/lib/utils";
+import FormError from "./FormError";
+
+interface FormTextAreaProps {
   name: string;
+  label?: string;
   placeholder?: string;
-  sx?: any;
-  rows?: number;
   required?: boolean;
-  disabled?: boolean;
-  [key: string]: any;
+  className?: string;
 }
 
-const styles: Record<string, SxProps<Theme>> = {
-  container: {
-    mb: "15px",
-
-    ".MuiFormLabel-root": {
-      fontSize: "14px",
-      fontWeight: 500,
-      textAlign: "left",
-      color: "var(--black)",
-      mb: "10px",
-    },
-    ".MuiOutlinedInput-root": {
-      borderRadius: "9.75px",
-      fontSize: "16px",
-
-      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-        border: "1px solid",
-        borderColor: "var(--primary)",
-      },
-
-      ".MuiOutlinedInput-input::placeholder": {
-        color: "var(--dark-grey-2)",
-      },
-      ".MuiOutlinedInput-notchedOutline": {
-        border: "1px solid var(--dark-grey-1)",
-      },
-      ".MuiOutlinedInput-input": {
-        py: 0,
-        height: "100%",
-        bgcolor: "#fff",
-        resize: "both",
-      },
-    },
-    ".required": {
-      color: "rgba(217, 63, 33, 1)",
-      fontSize: "13.7px",
-      fontWeight: "500",
-      lineHeight: "20.48px",
-      textAlign: "left",
-    },
-  },
-};
-
-const FormTextArea = ({
-  label,
+export default function FormTextArea({
   name,
+  label,
   placeholder,
-  sx,
-  rows = 4,
   required,
-  disabled,
-  ...rest
-}: IProps) => {
+  className,
+}: FormTextAreaProps) {
   const { control } = useFormContext();
 
   return (
-    <FormControl fullWidth sx={{ ...styles.container, ...sx }} {...rest}>
+    <div className="space-y-1.5">
       {label && (
-        <FormLabel htmlFor={name} className="label">
-          {label} {required && <span className="required"> *</span>}
-        </FormLabel>
+        <Label htmlFor={name}>
+          {label}
+          {required && <span className="text-red-500 ml-1">*</span>}
+        </Label>
       )}
+
       <Controller
         name={name}
         control={control}
         render={({ field }) => (
-          <TextField
+          <Textarea
             id={name}
-            rows={rows}
-            multiline
             placeholder={placeholder}
-            disabled={disabled}
+            className={cn("min-h-[120px] rounded-[25px]", className)}
             {...field}
           />
         )}
       />
-      <FormError name={name} />
-    </FormControl>
-  );
-};
 
-export default FormTextArea;
+      <FormError name={name} />
+    </div>
+  );
+}

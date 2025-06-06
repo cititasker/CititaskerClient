@@ -23,15 +23,15 @@ const PostTaskHeader = () => {
   return (
     <div className="flex gap-6 flex-col mb-6">
       <div>
-        <p className="text-xl mb-2">{step} of 4</p>
-        <div className="w-full h-[15px] bg-black rounded-[10px] overflow-hidden p-0.5">
+        <p className="text-base sm:text-xl mb-2">{step} of 4</p>
+        <div className="w-full h-3 sm:h-[15px] bg-black rounded-[10px] overflow-hidden p-0.5">
           <div
             className={`transition-all duration-500 bg-light-primary-2 h-full rounded-[10px]`}
             style={{ width: `${bar[step]}%` }}
           ></div>
         </div>
       </div>
-      <h2 className="text-[2rem] font-semibold text-black leading-normal">
+      <h2 className="text-xl md:text-[2rem] font-semibold text-black leading-normal">
         {header[step]}
       </h2>
     </div>

@@ -21,3 +21,8 @@ export type TaskError = unknown;
 export type TaskApiResponse = {
   data: ITask;
 };
+
+export type CreateTask = {
+  message: string;
+  data: ITask;
+};
