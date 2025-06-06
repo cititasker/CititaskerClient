@@ -55,14 +55,14 @@ const PosterWaitListForm = ({ toggleSuccessModal }: IProps) => {
             name="name"
             type="text"
             placeholder="Enter your full name"
-            wrapperStyle="!mb-0"
+            className="!mb-0"
           />
           <FormInput
             label="Email"
             name="email"
             type="email"
             placeholder="Enter your email address"
-            wrapperStyle="!mb-0"
+            className="!mb-0"
           />
         </div>
 

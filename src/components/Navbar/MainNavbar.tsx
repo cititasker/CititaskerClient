@@ -43,7 +43,7 @@ const MainNavbar = ({ isAuth }: IProp) => {
 
   return (
     <div className="fixed w-[95%] left-1/2 -translate-x-1/2 top-5 z-[100]">
-      <div className="shadow-md max-w-[87.5rem] mx-auto h-[4.688rem] flex items-center rounded-[3.125rem] px-5 w-full bg-white overflow-visible">
+      <div className="shadow-none max-w-[87.5rem] mx-auto h-[4.688rem] flex items-center rounded-[3.125rem] px-5 w-full bg-white overflow-visible">
         <div className="w-full flex justify-between items-center">
           <Link href="/">
             <Image
@@ -60,7 +60,7 @@ const MainNavbar = ({ isAuth }: IProp) => {
           {isAuth ? (
             <UserActions user={user} onLogout={handleLogout} />
           ) : (
-            <GuestActions />
+            <GuestActions user={user} />
           )}
 
           <MobileToggle onClick={() => setShowMobileNav((prev) => !prev)} />

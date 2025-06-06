@@ -71,7 +71,7 @@ const StepFive = () => {
             name="first_name"
             type="text"
             placeholder="Enter your first name"
-            wrapperStyle="mb-2"
+            className="mb-2"
           />
 
           <FormInput
@@ -79,7 +79,7 @@ const StepFive = () => {
             name="last_name"
             type="text"
             placeholder="Enter your last name"
-            wrapperStyle="mb-2"
+            className="mb-2"
           />
 
           <FormDatePicker

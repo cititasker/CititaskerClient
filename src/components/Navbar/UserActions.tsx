@@ -24,7 +24,9 @@ interface Props {
 
 const UserActions = ({ user, onLogout }: Props) => (
   <div className="flex items-center gap-8">
-    <FormButton href={ROUTES.POST_TASK}>Post a Task</FormButton>
+    {user.role == ROLE.poster && (
+      <FormButton href={ROUTES.POST_TASK}>Post a Task</FormButton>
+    )}
 
     <div className="flex gap-5 items-center">
       <MdOutlineMessage className="text-2xl cursor-pointer" />
@@ -57,7 +59,7 @@ const UserActions = ({ user, onLogout }: Props) => (
 
         <DropdownMenuContent
           align="end"
-          className="w-[280px] spac-y-1 py-5 px-5 mt-5 !rounded-20 z-[99]"
+          className="w-[280px] space-y-1 py-5 px-5 mt-5 rounded-xl z-[99]"
         >
           <div className="flex gap-2 mb-4">
             <Image

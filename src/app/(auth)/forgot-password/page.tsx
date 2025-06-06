@@ -51,7 +51,7 @@ const ForgotPassword = () => {
             name="email"
             type="email"
             placeholder="Enter your email address"
-            wrapperStyle="mb-2"
+            className="mb-2"
           />
 
           <FormButton

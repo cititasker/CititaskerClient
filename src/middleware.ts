@@ -11,9 +11,12 @@ const protectedRoutes = [ROUTES.DASHBOARD]; // Routes that require authenticatio
 
 export default auth(async (req) => {
   const currentRoute = req.nextUrl.pathname;
+  const user = req.auth?.user;
 
   if (req.auth && authRoutes.includes(currentRoute)) {
-    const absoluteURL = new URL(ROUTES.DASHBOARD, req.url);
+    const userRole = user.role;
+    let redirectTo = `${userRole}/${ROUTES.DASHBOARD}`;
+    const absoluteURL = new URL(redirectTo, req.url);
     return Response.redirect(absoluteURL);
   }
   if (

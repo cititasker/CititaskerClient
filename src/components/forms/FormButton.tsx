@@ -30,11 +30,13 @@ const FormButton: React.FC<FormButtonProps> = ({
   ...props
 }) => {
   const content = (
-    <>
-      {loading && <BiLoader size={18} className="animate-spin mr-2" />}
+    <div className="flex items-center">
+      {loading && (
+        <BiLoader size={20} className="animate-spin mr-2 shrink-0 !w-5 !h-5" />
+      )}
       {icon && !loading && <span className="mr-2">{icon}</span>}
       {children || text}
-    </>
+    </div>
   );
 
   if (href) {

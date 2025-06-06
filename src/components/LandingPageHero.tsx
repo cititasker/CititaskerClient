@@ -19,7 +19,7 @@ const LandingPageHero = () => {
           <div className="pb-0 md:pb-20">
             <FormButton
               text="Post a task for free"
-              className="text-sm"
+              className="w-fit bg-primary"
               href={ROUTES.POST_TASK}
             />
           </div>

@@ -15,7 +15,7 @@ const DesktopNav = ({ isAuth, path, user }: Props) => (
       // Skip "Browse Tasks" if the user is a poster
       if (nav.name === "Browse Tasks" && user?.role === "poster") return null;
 
-      // 🔽 Dropdown support (if any)
+      // Dropdown support (if any)
       if (nav?.children) {
         return <CategoryDropdown key={i} nav={nav} extraClass="" />;
       }

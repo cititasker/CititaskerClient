@@ -59,8 +59,8 @@ export default function FormInput({
               readOnly={readOnly}
               aria-invalid={!!error}
               aria-describedby={error ? errorId : undefined}
-              className={cn("pr-10", error && "border-red-500")}
-              autoComplete="off"
+              className={cn("pl-5 pr-10", error && "border-red-500")}
+              autoComplete="on"
             />
 
             {clearable && field.value && !disabled && !readOnly && (
