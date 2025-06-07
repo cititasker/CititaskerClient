@@ -109,11 +109,7 @@ const TaskDetails = () => {
 
         <CustomTab items={tabs} listClassName="mb-7" />
       </div>
-      <ShareTaskModal
-        open={shareModalOpen}
-        onClose={closeShareModal}
-        // handleOpen={openShareModal}
-      />
+      <ShareTaskModal open={shareModalOpen} onClose={closeShareModal} />
     </Card>
   );
 };

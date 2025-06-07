@@ -6,7 +6,7 @@ export default function MyTasksLayout({
   filter = [],
 }: {
   children: React.ReactNode;
-  filter: { href: string; name: string }[];
+  filter?: { href: string; name: string }[];
 }) {
   return (
     <div className="h-dvh pt-[95px] bg-[#F3F5F6]">

@@ -10,7 +10,6 @@ const filter = [
   { href: "all", name: "All Tasks" },
   { href: "open", name: "Open Tasks" },
   { href: "assigned", name: "Assigned Tasks" },
-  { href: "cancelled", name: "Cancelled Offers" },
   { href: "completed", name: "Completed Tasks" },
   { href: "expired", name: "Expired Tasks" },
 ];
