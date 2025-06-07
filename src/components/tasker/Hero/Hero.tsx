@@ -32,7 +32,7 @@ const Hero = () => {
           <FormButton
             text="Start earning on citiTasker"
             href="#"
-            className="bg-primary"
+            className="w-fit"
           />
         </div>
         <div className="max-w-[38.125rem] w-full">

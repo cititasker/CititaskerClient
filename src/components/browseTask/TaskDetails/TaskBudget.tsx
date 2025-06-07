@@ -17,10 +17,12 @@ import VerificationModal from "../Modals/VerifyModal/Verify";
 import MakeOfferModal from "../Modals";
 import { formatCurrency } from "@/utils";
 import useModal from "@/hooks/useModal";
-import { TASK_ID } from "@/queries/queryKeys";
+import { GET_TASK_BY_ID } from "@/queries/queryKeys";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import { useAppSelector } from "@/store/hook";
+import BudgetDisplay from "./BudgetDisplay";
+import MoreOptionsMenu from "./MoreOptionsMenu";
 
 interface TaskBudgetProps {
   task: ITask;
@@ -74,7 +76,9 @@ const TaskBudget: React.FC<TaskBudgetProps> = ({ task, hasMadeOffer }) => {
         {
           onSuccess(data) {
             showSnackbar(data.message, "success");
-            queryClient.invalidateQueries({ queryKey: [TASK_ID(task.id)] });
+            queryClient.invalidateQueries({
+              queryKey: [GET_TASK_BY_ID(task.id)],
+            });
           },
           onError(error) {
             showSnackbar(error.message, "error");
@@ -105,66 +109,11 @@ const TaskBudget: React.FC<TaskBudgetProps> = ({ task, hasMadeOffer }) => {
   return (
     <>
       <div>
-        <div className="rounded-[10px] p-[17px] bg-light-primary-1 text-center">
-          <p className="text-dark-grey-2 text-sm mb-5">Estimated Task Budget</p>
-          <div className="space-y-3">
-            <h2 className="text-[2rem] font-semibold text-black-2">
-              {formatCurrency({ value: task.budget, noFraction: true })}
-            </h2>
-            <button
-              onClick={increaseBudget}
-              className="bg-white py-2 max-w-[175px] w-full mx-auto text-secondary text-xs font-medium rounded-20"
-            >
-              + Increase Price
-            </button>
-            <FormButton
-              handleClick={handleButtonClick}
-              className="text-base font-normal w-full"
-              disabled={isButtonDisabled}
-              loading={requestPaymentMutation.isPending}
-            >
-              {buttonText}
-            </FormButton>
-          </div>
-        </div>
+        <BudgetDisplay budget={task.budget} onIncrease={increaseBudget} />
 
         {isAuth && (
-          <div className="mt-2">
-            <Button
-              ref={moreOptionsRef}
-              onClick={handleToggleMoreOptions}
-              className="!bg-light-grey w-full text-black-2"
-            >
-              More Options
-            </Button>
-            <Popper
-              open={openMoreOptions}
-              anchorEl={moreOptionsRef.current}
-              placement="bottom-start"
-              transition
-              disablePortal
-              className="max-w-[194px] w-full bg-white border border-light-grey"
-            >
-              {({ TransitionProps }) => (
-                <Grow
-                  {...TransitionProps}
-                  style={{ transformOrigin: "left top" }}
-                >
-                  <Paper elevation={0} className="w-full">
-                    <ClickAwayListener onClickAway={handleCloseMoreOptions}>
-                      <MenuList autoFocusItem={openMoreOptions} disablePadding>
-                        <MenuItem component={Link} href="/profile">
-                          Profile
-                        </MenuItem>
-                        <MenuItem component={Link} href="/dashboard">
-                          My account
-                        </MenuItem>
-                      </MenuList>
-                    </ClickAwayListener>
-                  </Paper>
-                </Grow>
-              )}
-            </Popper>
+          <div className="mt-1">
+            <MoreOptionsMenu />
           </div>
         )}
       </div>

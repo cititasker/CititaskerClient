@@ -715,10 +715,6 @@ export const navbar = [
     href: ROUTES.BROWSE_TASK,
     name: "Browse Tasks",
   },
-  {
-    href: "#how_it_works",
-    name: "How It Works",
-  },
 ];
 
 export const profileMenu = [

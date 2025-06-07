@@ -35,10 +35,10 @@ const CustomTab: React.FC<CustomTabProps> = ({
   const defaultValue = defaultId ?? tabItems[0]?.id;
 
   return (
-    <Tabs defaultValue={defaultValue} className={className}>
+    <Tabs defaultValue={defaultValue} className={cn("pb-10", className)}>
       <TabsList
         className={cn(
-          "bg-transparent p-0 gap-4 border-b border-border",
+          "bg-transparent p-0 gap-4 border-b border-border rounded-none shadow-none",
           listClassName
         )}
       >

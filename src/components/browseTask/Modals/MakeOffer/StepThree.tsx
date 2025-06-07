@@ -13,7 +13,7 @@ import { makeOffer, updateOffer } from "@/services/offer";
 import { useSession } from "next-auth/react";
 import { useParams, useRouter } from "next/navigation";
 import { queryClient } from "@/providers/ServerProvider";
-import { TASK_ID } from "@/queries/queryKeys";
+import { GET_TASK_BY_ID } from "@/queries/queryKeys";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import { connectionFee } from "@/constant";
 import { purgeStateData } from "@/store/slices/task";
@@ -37,7 +37,7 @@ export default function StepThree({ nextStep, prevStep }: ModalType) {
   const mutation = useMutation({
     mutationFn: makeOffer,
     onSuccess() {
-      queryClient.invalidateQueries({ queryKey: TASK_ID(id) });
+      queryClient.invalidateQueries({ queryKey: GET_TASK_BY_ID(id) });
       nextStep();
       dispatch(purgeStateData({ path: "offer" }));
     },
@@ -49,7 +49,7 @@ export default function StepThree({ nextStep, prevStep }: ModalType) {
   const updateMutation = useMutation({
     mutationFn: updateOffer,
     onSuccess() {
-      queryClient.invalidateQueries({ queryKey: TASK_ID(id) });
+      queryClient.invalidateQueries({ queryKey: GET_TASK_BY_ID(id) });
       nextStep();
       dispatch(purgeStateData({ path: "offer" }));
     },

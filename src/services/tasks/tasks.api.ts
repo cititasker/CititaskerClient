@@ -1,10 +1,24 @@
 import { API_ROUTES } from "@/constant";
 import api from "@/services/apiService";
 import { AxiosError } from "axios";
+import { TaskData } from "./tasks.types";
 
-export function getAllTasks(data: any) {
+export const getAllTasks = async (
+  queryParams?: Record<string, any>
+): Promise<TaskData> => {
+  const query = new URLSearchParams(queryParams).toString();
+
   return api
-    .get(API_ROUTES.TASKS, data)
+    .get(`${API_ROUTES.TASKS}?${query}`)
+    .then((data) => data.data)
+    .catch((error: AxiosError) => {
+      throw error.response?.data;
+    });
+};
+
+export function getTaskById(id: string) {
+  return api
+    .get(`${API_ROUTES.GET_TASK_BY_ID}/${id}`)
     .then((data) => {
       return data.data;
     })
@@ -28,7 +42,7 @@ export function getUserTasks({ status }: any) {
 
 export function getUserTaskById(id: string) {
   return api
-    .get(`${API_ROUTES.GET_USER_TASK}/${id}`)
+    .get(`${API_ROUTES.GET_TASK_BY_ID}/${id}`)
     .then((data) => {
       return data.data;
     })

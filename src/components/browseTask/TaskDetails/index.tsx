@@ -9,23 +9,23 @@ import ShareTaskModal from "../Modals/ShareTaskModal";
 import ImageGallery from "../Modals/ImageGalleryModal/ImageGallery";
 import CustomTab from "@/components/reusables/CustomTab";
 import Offer from "../Offer";
-import Question from "../Question";
+// import Question from "../Question";
 
 import useModal from "@/hooks/useModal";
-import { styles } from "./styles";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { getSingleTaskQuery } from "@/queries/task";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { setTaskDetails, setUserTaskOffer } from "@/store/slices/task";
 import PosterInfo from "./PosterInfo";
+import { useFetchTaskById } from "@/services/tasks/tasks.hook";
+import { Card } from "@/components/ui/card";
 
 const TaskDetails = () => {
-  const { id } = useParams() as { id: string };
+  const params = useParams() as { id: string };
+  const id = params.id as string;
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { user } = useAppSelector((state) => state.user);
 
-  const { data } = useSuspenseQuery(getSingleTaskQuery(id));
+  const { data } = useFetchTaskById({ id });
   const task: ITask = data.data;
 
   const {
@@ -55,12 +55,17 @@ const TaskDetails = () => {
     { icon: Icons.bookmark, name: "Save task" },
   ];
 
+  const tabs = [
+    {
+      label: `Offers (${task.offer_count})`,
+      value: "offers",
+      content: <Offer offers={task.offers} />,
+    },
+    // { label: "Questions (3)", value: "questions", content: <Question /> },
+  ];
+
   return (
-    <Paper
-      sx={styles.container}
-      elevation={0}
-      className="hide-scrollbar relative"
-    >
+    <Card className="hide-scrollbar relative">
       <div className="px-12 h-[65px] flex justify-between items-center border-b sticky top-0 z-[20] bg-white">
         <Link
           href="#"
@@ -102,17 +107,14 @@ const TaskDetails = () => {
           )}
         </div>
 
-        <CustomTab tabs={["Offers", "Questions"]}>
-          <Offer offers={task.offers} />
-          <Question />
-        </CustomTab>
+        <CustomTab items={tabs} listClassName="mb-7" />
       </div>
       <ShareTaskModal
         open={shareModalOpen}
-        handleClose={closeShareModal}
-        handleOpen={openShareModal}
+        onClose={closeShareModal}
+        // handleOpen={openShareModal}
       />
-    </Paper>
+    </Card>
   );
 };
 

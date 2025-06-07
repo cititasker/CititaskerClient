@@ -3,7 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { useAppSelector } from "@/store/hook";
 import { ROUTES } from "@/constant";
-import { useGetUserTasks } from "@/services/poster/tasks/tasks.hook";
+import { useGetUserTasks } from "@/services/tasks/tasks.hook";
 import FormButton from "@/components/forms/FormButton";
 import TaskCard from "@/components/TaskCard";
 

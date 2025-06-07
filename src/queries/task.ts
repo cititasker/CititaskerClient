@@ -6,7 +6,7 @@ import {
   requestPayment,
 } from "@/services/task";
 import { queryOptions, useMutation } from "@tanstack/react-query";
-import { TASK_ID, USER_TASK_ID, USER_TASKS } from "./queryKeys";
+import { GET_TASK_BY_ID, USER_TASK_ID, USER_TASKS } from "./queryKeys";
 
 export const getAllTasksQuery = () => {
   return queryOptions({
@@ -17,7 +17,7 @@ export const getAllTasksQuery = () => {
 
 export const getSingleTaskQuery = (id: string) => {
   return queryOptions({
-    queryKey: TASK_ID(id),
+    queryKey: GET_TASK_BY_ID(id),
     queryFn: () => getSingleTask(id),
     enabled: !!id,
   });

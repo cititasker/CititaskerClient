@@ -1,6 +1,11 @@
+"use client";
+
 import Link from "next/link";
-import CategoryDropdown from "../CategoryDropdown";
 import { ROUTES } from "@/constant";
+import CategoryDropdown from "../CategoryDropdown";
+import clsx from "clsx";
+import { NavItem } from "./nav";
+import HowItWorksDropdown from "./HowItWorksDropdown";
 import { navbar } from "../../../data";
 
 interface Props {
@@ -9,39 +14,49 @@ interface Props {
   user: Partial<IUser>;
 }
 
-const DesktopNav = ({ isAuth, path, user }: Props) => (
-  <ul className="hidden items-center mx-2 lg:flex">
-    {navbar.map((nav, i) => {
-      // Skip "Browse Tasks" if the user is a poster
-      if (nav.name === "Browse Tasks" && user?.role === "poster") return null;
+export default function DesktopNav({ isAuth, path, user }: Props) {
+  const isPoster = user?.role === "poster";
 
-      // Dropdown support (if any)
-      if (nav?.children) {
-        return <CategoryDropdown key={i} nav={nav} extraClass="" />;
-      }
+  return (
+    <ul className="hidden lg:flex items-center gap-4">
+      {navbar.map((nav: NavItem, index) => {
+        if (nav.name === "Browse Tasks" && isPoster) return null;
 
-      return (
-        <li
-          key={i}
-          className={`text-dark-secondary text-base mr-4 p-2.5 ${
-            path === nav.href && "border-b-[3px] border-primary"
-          }`}
-        >
-          <Link href={nav.href}>{nav.name}</Link>
+        return nav.children ? (
+          <CategoryDropdown key={index} nav={nav} />
+        ) : (
+          <li key={index}>
+            <Link
+              href={nav.href}
+              className={clsx(
+                "text-base font-normal px-3 py-2 hover:text-primary",
+                {
+                  "border-b-2 border-primary": path === nav.href,
+                }
+              )}
+            >
+              {nav.name}
+            </Link>
+          </li>
+        );
+      })}
+
+      {isAuth && user?.role && (
+        <li>
+          <Link
+            href={`/${user.role}${ROUTES.MY_TASKS}`}
+            className={clsx(
+              "text-base font-normal px-3 py-2 hover:text-primary",
+              {
+                "border-b-2 border-primary": path.includes("/my-tasks"),
+              }
+            )}
+          >
+            My Tasks
+          </Link>
         </li>
-      );
-    })}
-
-    {isAuth && user?.role && (
-      <li
-        className={`text-dark-secondary text-base mr-4 p-2.5 ${
-          path.includes("/my-tasks") && "border-b-[3px] border-primary"
-        }`}
-      >
-        <Link href={`/${user.role}/${ROUTES.MY_TASKS}`}>My Tasks</Link>
-      </li>
-    )}
-  </ul>
-);
-
-export default DesktopNav;
+      )}
+      <HowItWorksDropdown />
+    </ul>
+  );
+}

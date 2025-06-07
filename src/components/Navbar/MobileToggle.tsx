@@ -6,7 +6,7 @@ const MobileToggle = ({ onClick }: { onClick: () => void }) => (
     alt="hamburger-icon"
     width={20}
     height={40}
-    className="xl:hidden cursor-pointer w-auto h-auto"
+    className="md:hidden cursor-pointer w-auto h-auto"
     onClick={onClick}
   />
 );

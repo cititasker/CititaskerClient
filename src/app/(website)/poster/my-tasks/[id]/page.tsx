@@ -26,7 +26,7 @@ import CustomTab from "@/components/reusables/CustomTab";
 import {
   useCreateIntent,
   useFetchUserTaskById,
-} from "@/services/poster/tasks/tasks.hook";
+} from "@/services/tasks/tasks.hook";
 
 const schema = z.object({
   agreed: z.boolean().refine((v) => v, {
@@ -145,6 +145,7 @@ export default function Offer() {
               <CustomTab
                 items={tabs}
                 className="h-full"
+                listClassName="mb-0"
                 contentClassName="max-h-[calc(100dvh-250px)] h-full"
               />
             </div>

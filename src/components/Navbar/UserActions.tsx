@@ -24,7 +24,7 @@ interface Props {
 
 const UserActions = ({ user, onLogout }: Props) => (
   <div className="flex items-center gap-8">
-    {user.role == ROLE.poster && (
+    {(!user || user.role === ROLE.poster) && (
       <FormButton href={ROUTES.POST_TASK}>Post a Task</FormButton>
     )}
 

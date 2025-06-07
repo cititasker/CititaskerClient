@@ -26,7 +26,7 @@ export const API_ROUTES = {
 
   TASKS: "/tasks",
   USER_TASKS: "/tasks/user",
-  GET_TASK_BY_ID: (id: string) => `/tasks/${id}`,
+  // GET_TASK_BY_ID: (id: string) => `/tasks/${id}`,
 
   // UPDATE_TASK: (id: string) => `/tasks/${id}`,
   DELETE_TASK: (id: string) => `/tasks/${id}`,
@@ -45,6 +45,7 @@ export const API_ROUTES = {
   GET_USER_TASK: "tasks/user/single",
   CREATE_TASK: "/tasks/create",
   UPDATE_TASK: "tasks/update-task",
+  GET_TASK_BY_ID: "/tasks/single",
 };
 
 const isProd = process.env.NODE_ENV === "production";

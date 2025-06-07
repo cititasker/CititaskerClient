@@ -41,7 +41,7 @@ const CustomModal: FC<CustomModalProps> = ({
         aria-labelledby={undefined}
         aria-describedby={undefined}
         className={cn(
-          "block fixed top-1/2 left-1/2 max-w-3xl w-[90vw] max-h-[90vh] overflow-auto-translate-x-1/2 -translate-y-1/2 !rounded-40 bg-white p-10 focus:outline-none",
+          "block fixed top-1/2 left-1/2 max-w-3xl w-[90vw] max-h-[90vh] overflow-auto-translate-x-1/2 -translate-y-1/2 rounded-20  sm:rounded-40 bg-white p-10 focus:outline-none",
           contentClassName
         )}
         {...rest}

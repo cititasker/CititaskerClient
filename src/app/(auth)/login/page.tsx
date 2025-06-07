@@ -51,7 +51,7 @@ export default function Page() {
         ? decodeURIComponent(redirect)
         : userRole === ROLE.poster
         ? ROUTES.POSTER
-        : `/${userRole}/${ROUTES.DASHBOARD}`;
+        : ROUTES.TASKER;
 
       window.location.href = redirectTo;
     } else {

@@ -5,7 +5,7 @@ import {
   UseQueryOptions,
   UseMutationOptions,
   useSuspenseQuery,
-  UseSuspenseQueryOptions,
+  useInfiniteQuery,
 } from "@tanstack/react-query";
 import {
   createTask,
@@ -22,7 +22,38 @@ import {
   TaskApiResponse,
   TaskData,
   TaskError,
-} from "./types";
+  UseFetchUserTaskByIdOptions,
+} from "./tasks.types";
+
+export const useGetAllTasks = () =>
+  useInfiniteQuery<TaskData, TaskError>({
+    queryKey: [API_ROUTES.TASKS],
+    queryFn: async ({ pageParam = 1 }) => getAllTasks({ page: pageParam }),
+    initialPageParam: 1,
+    getNextPageParam: (data) => {
+      const lastPage = data.data as any;
+      const currentPage = lastPage?.meta?.current_page ?? 1;
+      const totalPages = lastPage?.meta?.last_page ?? 1;
+
+      return currentPage < totalPages ? currentPage + 1 : undefined;
+    },
+  });
+
+export const useFetchTaskById = ({
+  id,
+  ...options
+}: UseFetchUserTaskByIdOptions) => {
+  return useSuspenseQuery<
+    TaskApiResponse,
+    Error,
+    TaskApiResponse,
+    [string, string]
+  >({
+    queryKey: [API_ROUTES.GET_TASK_BY_ID, id],
+    queryFn: () => getUserTaskById(id),
+    ...options,
+  });
+};
 
 export const useGetUserTasks = (
   params: Record<string, any>,
@@ -35,35 +66,19 @@ export const useGetUserTasks = (
   });
 };
 
-export const useGetAllTasks = (opt?: UseQueryOptions<TaskData, TaskError>) => {
-  return useQuery<TaskData, TaskError>({
-    queryKey: [API_ROUTES.TASKS],
-    queryFn: getAllTasks,
-    ...opt,
-  });
-};
-
-export const useFetchUserTaskById = (
-  data: { id: string },
-  opt?: Omit<
-    UseSuspenseQueryOptions<
-      TaskApiResponse,
-      Error,
-      TaskApiResponse,
-      [string, string]
-    >,
-    "queryKey" | "queryFn"
-  >
-) => {
+export const useFetchUserTaskById = ({
+  id,
+  ...options
+}: UseFetchUserTaskByIdOptions) => {
   return useSuspenseQuery<
     TaskApiResponse,
     Error,
     TaskApiResponse,
     [string, string]
   >({
-    queryKey: [API_ROUTES.GET_USER_TASK, data.id],
-    queryFn: () => getUserTaskById(data.id),
-    ...opt,
+    queryKey: [API_ROUTES.GET_USER_TASK, id],
+    queryFn: () => getUserTaskById(id),
+    ...options,
   });
 };
 

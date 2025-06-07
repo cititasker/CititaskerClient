@@ -23,10 +23,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import Typography from "@mui/material/Typography";
 import { createTask, updateTask } from "@/services/task";
-import {
-  useCreateTask,
-  useUpdateTask,
-} from "@/services/poster/tasks/tasks.hook";
+import { useCreateTask, useUpdateTask } from "@/services/tasks/tasks.hook";
 import FormButton from "@/components/forms/FormButton";
 import PostTaskFormActions from "./PostTaskFormActions";
 

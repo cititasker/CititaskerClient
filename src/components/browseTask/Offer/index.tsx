@@ -8,7 +8,7 @@ import TaskerOffer from "./TaskerOffer";
 import ConfirmationModal from "@/components/reusables/Modals/ConfirmationModal";
 
 import { withdrawOffer } from "@/services/offer";
-import { TASK_ID } from "@/queries/queryKeys";
+import { GET_TASK_BY_ID } from "@/queries/queryKeys";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import { queryClient } from "@/providers/ServerProvider";
 import { useAppDispatch } from "@/store/hook";
@@ -38,7 +38,7 @@ const Offer: React.FC<OfferProps> = ({ offers }) => {
       dispatch(setUserTaskOffer(null));
       showSnackbar(data.message, "success");
       handleToggleModal();
-      queryClient.invalidateQueries({ queryKey: TASK_ID(id) });
+      queryClient.invalidateQueries({ queryKey: GET_TASK_BY_ID(id) });
     },
     onError: (error) => {
       showSnackbar(errorHandler(error), "error");
