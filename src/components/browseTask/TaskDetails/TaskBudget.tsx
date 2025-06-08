@@ -1,115 +1,94 @@
 "use client";
-import React, { useMemo, useRef, useEffect, useState } from "react";
-import {
-  Button,
-  Paper,
-  Popper,
-  Grow,
-  MenuList,
-  MenuItem,
-  ClickAwayListener,
-} from "@mui/material";
-import Link from "next/link";
-
+import React, { useMemo, useState } from "react";
 import { useRequestPayment } from "@/queries/task";
-import FormButton from "@/components/forms/FormButton";
 import VerificationModal from "../Modals/VerifyModal/Verify";
 import MakeOfferModal from "../Modals";
-import { formatCurrency } from "@/utils";
 import useModal from "@/hooks/useModal";
-import { GET_TASK_BY_ID } from "@/queries/queryKeys";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import { useAppSelector } from "@/store/hook";
 import BudgetDisplay from "./BudgetDisplay";
 import MoreOptionsMenu from "./MoreOptionsMenu";
+import { API_ROUTES } from "@/constant";
 
 interface TaskBudgetProps {
   task: ITask;
-  hasMadeOffer: boolean;
 }
 
-const TaskBudget: React.FC<TaskBudgetProps> = ({ task, hasMadeOffer }) => {
+const TaskBudget: React.FC<TaskBudgetProps> = ({ task }) => {
   const [verifyModalOpen, setVerifyModalOpen] = useState(false);
-  const {
-    isOpen: offerModalOpen,
-    openModal: openOfferModal,
-    closeModal: closeOfferModal,
-  } = useModal();
+  const { isOpen: offerModalOpen, openModal, closeModal } = useModal();
+  const [isIncreaseBudget, setIsIncreaseBudget] = useState(false);
+
   const queryClient = useQueryClient();
   const { showSnackbar } = useSnackbar();
-  const { isAuth } = useAppSelector((state) => state.user);
-
-  const moreOptionsRef = useRef<HTMLButtonElement>(null);
-  const [openMoreOptions, setOpenMoreOptions] = useState(false);
-  const prevOpen = useRef(openMoreOptions);
-  const [isIncreaseBudget, setIsIncreaseBudget] = useState(false);
+  const { isAuth, user } = useAppSelector((state) => state.user);
 
   const requestPaymentMutation = useRequestPayment();
 
-  const verifications = useMemo(
-    () => ({ face: false, id: false, bank: false, home: false }),
-    []
-  );
-
-  const isRequested = task.payment_requested === "true";
   const isOpen = task.status === "open";
   const isAssigned = task.status === "assigned";
+  const isRequested = task.payment_requested === "true";
+
+  const hasMadeOffer = useMemo(
+    () => task.offers.some((el) => el.tasker.id === user?.id),
+    [task, user]
+  );
+
+  const canMakeOffer = isOpen && !hasMadeOffer;
+  const canUpdateOffer = isOpen && hasMadeOffer;
+  const canRequestPayment = isAssigned && hasMadeOffer && !isRequested;
 
   const buttonText = useMemo(() => {
-    if (isOpen) return hasMadeOffer ? "Update Offer" : "Make an Offer";
-    if (hasMadeOffer)
-      return isRequested ? "Requested Payment" : "Request Payment";
-    if (isAssigned) return "Assigned";
-    return "Unavailable";
-  }, [isOpen, isAssigned, isRequested, hasMadeOffer]);
+    if (canMakeOffer) return "Make an Offer";
+    if (canUpdateOffer) return "Update Offer";
+    if (canRequestPayment) return "Request Payment";
+    if (isRequested) return "Payment Requested";
+    return "Assigned";
+  }, [canMakeOffer, canUpdateOffer, canRequestPayment, isRequested]);
 
-  const isButtonDisabled = (!isOpen && !hasMadeOffer) || isRequested;
+  const isButtonDisabled =
+    isRequested || (!canMakeOffer && !canUpdateOffer && !canRequestPayment);
 
   const handleButtonClick = () => {
-    const isAllVerified = Object.values(verifications).every(Boolean);
-    if (isAllVerified) {
-      setVerifyModalOpen(true);
-    } else if (hasMadeOffer) {
+    if (canMakeOffer || canUpdateOffer) {
+      openModal();
+      setIsIncreaseBudget(false);
+    } else if (canRequestPayment) {
       requestPaymentMutation.mutate(
         { task_id: task.id },
         {
-          onSuccess(data) {
+          onSuccess: (data) => {
             showSnackbar(data.message, "success");
             queryClient.invalidateQueries({
-              queryKey: [GET_TASK_BY_ID(task.id)],
+              queryKey: [API_ROUTES.GET_TASK_BY_ID, task.id],
             });
           },
-          onError(error) {
+          onError: (error) => {
             showSnackbar(error.message, "error");
           },
         }
       );
-    } else {
-      openOfferModal();
     }
   };
 
-  const increaseBudget = () => {
+  const handleIncreaseBudget = () => {
     setIsIncreaseBudget(true);
-    openOfferModal();
+    openModal();
   };
-
-  const handleToggleMoreOptions = () => setOpenMoreOptions((prev) => !prev);
-  const handleCloseMoreOptions = (event: Event | React.SyntheticEvent) => {
-    if (moreOptionsRef.current?.contains(event.target as HTMLElement)) return;
-    setOpenMoreOptions(false);
-  };
-
-  useEffect(() => {
-    if (prevOpen.current && !openMoreOptions) moreOptionsRef.current?.focus();
-    prevOpen.current = openMoreOptions;
-  }, [openMoreOptions]);
 
   return (
     <>
       <div>
-        <BudgetDisplay budget={task.budget} onIncrease={increaseBudget} />
+        <BudgetDisplay
+          budget={task.budget}
+          buttonText={buttonText}
+          onIncrease={handleIncreaseBudget}
+          handleButtonClick={handleButtonClick}
+          isButtonDisabled={isButtonDisabled}
+          loading={requestPaymentMutation.isPending}
+          canIncreaseOffer={canRequestPayment}
+        />
 
         {isAuth && (
           <div className="mt-1">
@@ -122,16 +101,14 @@ const TaskBudget: React.FC<TaskBudgetProps> = ({ task, hasMadeOffer }) => {
       <VerificationModal
         open={verifyModalOpen}
         handleClose={() => setVerifyModalOpen(false)}
-        verifications={verifications}
+        verifications={{ face: false, id: false, bank: false, home: false }}
       />
+
       <MakeOfferModal
         open={offerModalOpen}
-        handleClose={closeOfferModal}
-        handleOpen={() => {
-          openOfferModal();
-          setIsIncreaseBudget(false);
-        }}
+        handleClose={closeModal}
         isIncreaseBudget={isIncreaseBudget}
+        isEdit={hasMadeOffer}
       />
     </>
   );

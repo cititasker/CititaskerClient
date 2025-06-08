@@ -12,6 +12,7 @@ interface FormTextAreaProps {
   placeholder?: string;
   required?: boolean;
   className?: string;
+  maxLength?: number;
 }
 
 export default function FormTextArea({
@@ -20,6 +21,7 @@ export default function FormTextArea({
   placeholder,
   required,
   className,
+  maxLength,
 }: FormTextAreaProps) {
   const { control } = useFormContext();
 
@@ -40,6 +42,7 @@ export default function FormTextArea({
             id={name}
             placeholder={placeholder}
             className={cn("min-h-[120px] rounded-[25px]", className)}
+            maxLength={maxLength}
             {...field}
           />
         )}

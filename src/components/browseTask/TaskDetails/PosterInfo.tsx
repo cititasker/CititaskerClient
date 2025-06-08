@@ -18,7 +18,6 @@ import Image from "next/image";
 
 interface PosterInfoProps {
   task: ITask;
-  hasMadeOffer: boolean;
 }
 
 const STATUS_COLORS: Record<string, string> = {
@@ -27,7 +26,7 @@ const STATUS_COLORS: Record<string, string> = {
   completed: "bg-green-100 text-green-700",
 };
 
-const PosterInfo: React.FC<PosterInfoProps> = ({ task, hasMadeOffer }) => {
+const PosterInfo: React.FC<PosterInfoProps> = ({ task }) => {
   const posterName = initializeName(task.poster?.profile);
 
   const infoItems = [
@@ -101,7 +100,7 @@ const PosterInfo: React.FC<PosterInfoProps> = ({ task, hasMadeOffer }) => {
             </div>
           </div>
 
-          <TaskBudget task={task} hasMadeOffer={hasMadeOffer} />
+          <TaskBudget task={task} />
         </div>
       </div>
     </div>

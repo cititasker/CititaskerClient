@@ -26,7 +26,7 @@ export default function PaymentSuccessModal({
     <CustomModal
       isOpen={isOpen}
       onClose={onClose}
-      confetti
+      confetti={isOpen}
       contentClassName="max-w-[576px] px-6 py-10 sm:px-10 sm:py-12 rounded-3xl"
     >
       <div className="flex flex-col items-center text-center">

@@ -1,149 +1,83 @@
 "use client";
-import * as React from "react";
-import Image from "next/image";
-import { errorHandler, formatCurrency } from "@/utils";
-import { FormProvider, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { offerSchema, offerSchemaType } from "@/schema/offer";
-import { z } from "zod";
-import { useAppDispatch, useAppSelector } from "@/store/hook";
-import FormCheckbox from "../../../forms/FormCheckbox";
-import { useMutation } from "@tanstack/react-query";
-import { makeOffer, updateOffer } from "@/services/offer";
-import { useSession } from "next-auth/react";
-import { useParams, useRouter } from "next/navigation";
-import { queryClient } from "@/providers/ServerProvider";
-import { GET_TASK_BY_ID } from "@/queries/queryKeys";
-import { useSnackbar } from "@/providers/SnackbarProvider";
-import { connectionFee } from "@/constant";
-import { purgeStateData } from "@/store/slices/task";
-import ActionsButtons from "@/components/reusables/ActionButtons";
 
-interface ModalType {
+import { useRouter, useParams } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { useMutation } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useAppDispatch, useAppSelector } from "@/store/hook";
+import { queryClient } from "@/providers/ServerProvider";
+import { purgeStateData } from "@/store/slices/task";
+import { useSnackbar } from "@/providers/SnackbarProvider";
+import { offerSchema, offerSchemaType } from "@/schema/offer";
+import { makeOffer, updateOffer } from "@/services/offer";
+import StepThreeForm from "./StepThreeForm";
+import { calculateFees } from "@/utils";
+import { API_ROUTES, ROUTES } from "@/constant";
+import { useMakeOrUpdateOffer } from "@/services/offers/offers.hook";
+
+const schema = offerSchema.pick({ accepted: true });
+
+interface StepThreeProps {
   nextStep: () => void;
   prevStep: () => void;
+  isEdit: boolean;
 }
-const schema = offerSchema.pick({ accepted: true });
-type schemaType = z.infer<typeof schema>;
 
-export default function StepThree({ nextStep, prevStep }: ModalType) {
-  const { showSnackbar } = useSnackbar();
-  const { offer, taskersOffer } = useAppSelector((state) => state.task);
-  const dispatch = useAppDispatch();
-  const { data: session } = useSession();
-  const { push } = useRouter();
+export default function StepThree({
+  nextStep,
+  prevStep,
+  isEdit,
+}: StepThreeProps) {
   const { id } = useParams();
+  const { data: session } = useSession();
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const { showSnackbar } = useSnackbar();
 
-  const mutation = useMutation({
-    mutationFn: makeOffer,
-    onSuccess() {
-      queryClient.invalidateQueries({ queryKey: GET_TASK_BY_ID(id) });
-      nextStep();
-      dispatch(purgeStateData({ path: "offer" }));
-    },
-    onError(error) {
-      showSnackbar(errorHandler(error), "error");
-    },
-  });
+  const { offer, taskersOffer } = useAppSelector((state) => state.task);
 
-  const updateMutation = useMutation({
-    mutationFn: updateOffer,
-    onSuccess() {
-      queryClient.invalidateQueries({ queryKey: GET_TASK_BY_ID(id) });
-      nextStep();
-      dispatch(purgeStateData({ path: "offer" }));
-    },
-    onError(error) {
-      showSnackbar(errorHandler(error), "error");
-    },
-  });
-
-  const method = useForm<schemaType>({
-    defaultValues: {
-      accepted: false,
-    },
+  const form = useForm({
     resolver: zodResolver(schema),
+    defaultValues: { accepted: false },
   });
-  const { handleSubmit } = method;
 
-  const onSubmit = (data: schemaType) => {
-    if (session?.user) {
-      const newData = { ...offer, ...data } as offerSchemaType;
-      if (taskersOffer) {
-        updateMutation.mutate({ ...newData, offer_id: taskersOffer.id });
-      } else {
-        mutation.mutate(newData);
-      }
-    } else {
-      push(`/login?redirect=${encodeURIComponent(window.location.href)}`);
+  const mutation = useMakeOrUpdateOffer({
+    isUpdating: isEdit,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [API_ROUTES.GET_TASK_BY_ID, id],
+      });
+      dispatch(purgeStateData({ path: "offer" }));
+      nextStep();
+    },
+    onError: (error) => {
+      showSnackbar(error.message, "error");
+    },
+  });
+
+  const handleSubmit = (data: { accepted: boolean }) => {
+    if (!session?.user) {
+      router.push(
+        `${ROUTES.LOGIN}?redirect=${encodeURIComponent(window.location.href)}`
+      );
+      return;
     }
+    const payload = isEdit ? { ...offer, offer_id: taskersOffer?.id } : offer;
+    mutation.mutate(payload as offerSchemaType);
   };
 
-  const connectionFeeTotal = offer.offer_amount
-    ? (connectionFee / 100) * Number(offer.offer_amount)
-    : "0";
+  const feeInfo = calculateFees(Number(offer.offer_amount));
 
   return (
-    <FormProvider {...method}>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <p className="text-black-2 font-[600] text-2xl">Preview Offer</p>
-        <p className="mt-9 text-dark-grey-2 text-base font-normal text-center ">
-          Your Offer
-        </p>
-        <div className="mt-2 mx-auto bg-light-blue rounded-20 px-[34px] py-[20px] w-fit">
-          <p className="text-[32px] text-black-2 font-semibold">
-            {formatCurrency({
-              value: Number(offer.offer_amount),
-              noFraction: true,
-            })}
-          </p>
-        </div>
-
-        <div className="grid gap-10 mt-10">
-          <div className="w-full flex justify-between">
-            <p className="text-[16px] font-normal text-black-2">
-              10% Connection Fee
-            </p>
-            <p className="text-[16px] font-normal text-black-2">
-              - {formatCurrency({ value: `${connectionFeeTotal}` })}
-            </p>
-          </div>
-          <div className="w-full flex justify-between">
-            <div className="flex items-center gap-1">
-              <p className="text-[16px] font-normal text-black-2">
-                You’ll Receive
-              </p>
-              <Image
-                src="/icons/circle_notice.svg"
-                alt="notice"
-                width={14}
-                height={14}
-              />
-            </div>
-            <p className="text-[16px] font-normal text-black-2">
-              {formatCurrency({
-                value: Number(offer.offer_amount) - Number(connectionFeeTotal),
-              })}
-            </p>
-          </div>
-        </div>
-
-        <div className="mt-24">
-          <FormCheckbox
-            name="accepted"
-            label="I accept the Terms & Conditions including Insurance."
-          />
-        </div>
-
-        <ActionsButtons
-          type="submit"
-          cancelText="Back"
-          okText={!!taskersOffer ? "Update Offer" : "Send Offer"}
-          className="mt-5 sm:gap-x-5"
-          handleCancel={prevStep}
-          loading={mutation.isPending || updateMutation.isPending}
-        />
-      </form>
-    </FormProvider>
+    <StepThreeForm
+      form={form}
+      onSubmit={form.handleSubmit(handleSubmit)}
+      prevStep={prevStep}
+      feeInfo={feeInfo}
+      isSubmitting={mutation.isPending}
+      isUpdating={isEdit}
+      offerAmount={Number(offer.offer_amount)}
+    />
   );
 }

@@ -19,7 +19,7 @@ interface CustomModalProps {
   children: ReactNode;
   className?: string; // container wrapper styling
   contentClassName?: string; // dialog content styling
-  showCloseBtn?: boolean;
+  hideClose?: boolean;
   confetti?: boolean;
   [key: string]: any;
 }
@@ -30,23 +30,24 @@ const CustomModal: FC<CustomModalProps> = ({
   children,
   className = "",
   contentClassName = "",
-  showCloseBtn = false,
+  hideClose = false,
   confetti = false,
   ...rest
 }) => {
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogOverlay className="fixed inset-0 bg-black/50" />
+      {confetti && <SuccessConfetti />}
       <DialogContent
         aria-labelledby={undefined}
         aria-describedby={undefined}
         className={cn(
-          "block fixed top-1/2 left-1/2 max-w-3xl w-[90vw] max-h-[90vh] overflow-auto-translate-x-1/2 -translate-y-1/2 rounded-20  sm:rounded-40 bg-white p-10 focus:outline-none",
+          "block fixed top-1/2 left-1/2 max-w-[576px] w-[90vw] max-h-[90vh] overflow-hidden -translate-x-1/2 -translate-y-1/2 rounded-[20px] sm:rounded-[30px] bg-white p-5 sm:px-8 sm:py-6 focus:outline-none",
           contentClassName
         )}
+        hideClose={hideClose}
         {...rest}
       >
-        {confetti && <SuccessConfetti />}
         <DialogHeader>
           <VisuallyHidden asChild>
             <DialogTitle />
@@ -55,7 +56,7 @@ const CustomModal: FC<CustomModalProps> = ({
             <DialogDescription />
           </VisuallyHidden>
         </DialogHeader>
-        <div className={className}>{children}</div>
+        <div className={cn("overflow-x-hidden", className)}>{children}</div>
       </DialogContent>
     </Dialog>
   );

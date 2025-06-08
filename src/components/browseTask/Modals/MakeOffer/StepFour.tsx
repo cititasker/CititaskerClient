@@ -6,7 +6,7 @@ import { useAppSelector } from "@/store/hook";
 import { initializeName } from "@/utils";
 import { ROUTES } from "@/constant";
 
-export default function StepFour() {
+export default function StepFour({ isEdit }: { isEdit: boolean }) {
   const {
     taskDetails: { poster_profile },
   } = useAppSelector((state) => state.task);
@@ -36,7 +36,7 @@ export default function StepFour() {
       </p>
 
       <Link href={ROUTES.BROWSE_TASK}>
-        <div className="flex gap-5 mt-[148px]">
+        <div className="flex gap-5 mt-[80px]">
           <button className=" mt-[58px] border text-white bg-[#236F8E] w-full text-center h-[51px] font-normal text-[16px] rounded-40">
             Browse More Task
           </button>

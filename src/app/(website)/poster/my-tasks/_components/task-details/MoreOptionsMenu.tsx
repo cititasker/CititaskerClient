@@ -21,7 +21,7 @@ export default function MoreOptionsMenu({ moreOptions, onSelect }: Props) {
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
-          className="rounded-[25px] text-base bg-light-grey text-black px-[15px] flex-1 justify-between"
+          className="rounded-[25px] font-normal border-none text-base bg-light-grey px-[15px] flex-1 justify-between"
         >
           More Options
           <Icons.dropdown />

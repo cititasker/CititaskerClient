@@ -1,13 +1,11 @@
-"use client";
-
-import * as React from "react";
+import React from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 
 interface TabItem {
   label: string;
-  id?: string; // Optional key to avoid using label directly
-  content: React.ReactNode;
+  id?: string;
+  render: () => React.ReactNode;
 }
 
 interface CustomTabProps {
@@ -27,15 +25,33 @@ const CustomTab: React.FC<CustomTabProps> = ({
   triggerClassName,
   contentClassName,
 }) => {
-  const tabItems = items.map((item) => ({
-    ...item,
-    id: item.id ?? item.label.toLowerCase().replace(/\s+/g, "-"),
-  }));
+  const tabItems = React.useMemo(
+    () =>
+      items.map((item) => ({
+        ...item,
+        id: item.id ?? item.label.toLowerCase().replace(/\s+/g, "-"),
+      })),
+    [items]
+  );
 
-  const defaultValue = defaultId ?? tabItems[0]?.id;
+  const [selectedTab, setSelectedTab] = React.useState(
+    defaultId ?? tabItems[0]?.id
+  );
+
+  React.useEffect(() => {
+    if (tabItems.length && !tabItems.find((tab) => tab.id === selectedTab)) {
+      setSelectedTab(tabItems[0]?.id);
+    }
+  }, [tabItems, selectedTab]);
+
+  if (!tabItems.length) return null;
 
   return (
-    <Tabs defaultValue={defaultValue} className={cn("pb-10", className)}>
+    <Tabs
+      value={selectedTab}
+      onValueChange={(val) => setSelectedTab(val)}
+      className={cn("pb-10", className)}
+    >
       <TabsList
         className={cn(
           "bg-transparent p-0 gap-4 border-b border-border rounded-none shadow-none",
@@ -56,13 +72,13 @@ const CustomTab: React.FC<CustomTabProps> = ({
         ))}
       </TabsList>
 
-      {tabItems.map(({ id, content }) => (
+      {tabItems.map(({ id, render }) => (
         <TabsContent
           key={id}
           value={id}
           className={cn("overflow-y-auto", contentClassName)}
         >
-          {content}
+          {render()}
         </TabsContent>
       ))}
     </Tabs>

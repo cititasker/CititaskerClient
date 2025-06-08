@@ -39,7 +39,7 @@ export default function AcceptOfferModal({
     <CustomModal
       isOpen={open}
       onClose={onClose}
-      showCloseBtn
+      hideClose
       contentClassName="max-w-[576px] px-6 py-8 sm:px-10 sm:py-12"
     >
       <FormProvider {...methods}>

@@ -5,7 +5,6 @@ import { useParams, useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
-import { USER_TASK_ID } from "@/queries/queryKeys";
 import { queryClient } from "@/providers/ServerProvider";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 
@@ -27,6 +26,7 @@ import {
   useCreateIntent,
   useFetchUserTaskById,
 } from "@/services/tasks/tasks.hook";
+import { API_ROUTES } from "@/constant";
 
 const schema = z.object({
   agreed: z.boolean().refine((v) => v, {
@@ -49,8 +49,6 @@ export default function Offer() {
   const { data } = useFetchUserTaskById({ id });
   const task = data.data;
   const status = task?.status;
-
-  console.log(89, data);
 
   const methods = useForm<SchemaType>({
     resolver: zodResolver(schema),
@@ -83,7 +81,9 @@ export default function Offer() {
   }
 
   function handleSuccess() {
-    queryClient.invalidateQueries({ queryKey: USER_TASK_ID(id) });
+    queryClient.invalidateQueries({
+      queryKey: [API_ROUTES.GET_USER_TASK, id],
+    });
     toggleSuccessModal();
   }
 
@@ -112,10 +112,10 @@ export default function Offer() {
     {
       label: `Offers (${task.offer_count})`,
       value: "offers",
-      content: <AllOffers task={task} toggleModal={toggleAcceptModal} />,
+      render: () => <AllOffers task={task} toggleModal={toggleAcceptModal} />,
     },
-    { label: "Questions (3)", value: "questions", content: <Questions /> },
-    { label: "Reviews", value: "reviews", content: <Reviews /> },
+    { label: "Questions (0)", value: "questions", render: () => <Questions /> },
+    { label: "Reviews", value: "reviews", render: () => <Reviews /> },
   ];
 
   return (

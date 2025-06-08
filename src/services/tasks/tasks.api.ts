@@ -2,6 +2,7 @@ import { API_ROUTES } from "@/constant";
 import api from "@/services/apiService";
 import { AxiosError } from "axios";
 import { TaskData } from "./tasks.types";
+import { offerSchemaType } from "@/schema/offer";
 
 export const getAllTasks = async (
   queryParams?: Record<string, any>

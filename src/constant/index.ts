@@ -46,6 +46,8 @@ export const API_ROUTES = {
   CREATE_TASK: "/tasks/create",
   UPDATE_TASK: "tasks/update-task",
   GET_TASK_BY_ID: "/tasks/single",
+  MAKE_OFFER: "/tasks/make-offer",
+  UPDATE_OFFER: "/tasks/edit-offer",
 };
 
 const isProd = process.env.NODE_ENV === "production";
@@ -62,4 +64,12 @@ export const ROUTES = {
   WAITLIST: "/waitlist",
   POST_TASK: isProd ? "/waitlist" : "/post-task",
   BROWSE_TASK: "/browse-task",
+} as const;
+
+export const animationVariants = {
+  enterFromLeft: { x: 100, opacity: 0 },
+  enterFromRight: { x: -100, opacity: 0 },
+  center: { x: 0, opacity: 1 },
+  exitToLeft: { x: -100, opacity: 0 },
+  exitToRight: { x: 100, opacity: 0 },
 } as const;

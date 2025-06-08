@@ -11,7 +11,6 @@ import PadLock from "@/../public/images/padlock.png";
 import Image from "next/image";
 import { useAppSelector } from "@/store/hook";
 import dynamic from "next/dynamic";
-import FormAutoComplete from "@/components/forms/FormAutoComplete";
 import { z } from "zod";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { FormProvider, useForm } from "react-hook-form";
@@ -23,6 +22,7 @@ import Failed from "@/../public/icons/big_close_circle.svg";
 import Success from "@/../public/icons/big_tick_circle.svg";
 import { updateBankDetails } from "@/services/auth";
 import { API_ROUTES } from "@/constant";
+import { FormAutoComplete } from "@/components/forms/FormAutoComplete";
 
 const DojahVerification = dynamic(
   () => import("@/components/DojahVerification"),
@@ -243,7 +243,7 @@ const Verifications = () => {
             minHeight: "496px",
           },
         }}
-        showCloseBtn={false}
+        hideClose={true}
       >
         <div className="mb-9">
           <h3 className="text-xl font-semibold mb-3">Verify Identity</h3>
@@ -288,7 +288,6 @@ const Verifications = () => {
             borderRadius: "24px",
           },
         }}
-        showCloseBtn={true}
       >
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)} className="relative">

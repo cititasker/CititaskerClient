@@ -1,25 +1,40 @@
-import Icons from "@/components/Icons";
-import FormError from "@/components/reusables/FormError";
-import { defaultProfile } from "@/constant/images";
-import { replyOffer } from "@/services/offer";
-import { useAppSelector } from "@/store/hook";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { IconButton } from "@mui/material";
-import { useMutation } from "@tanstack/react-query";
-import Image from "next/image";
+"use client";
+
 import React from "react";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import Image from "next/image";
+import { useAppSelector } from "@/store/hook";
+import { replyOffer } from "@/services/offer";
+import { useMutation } from "@tanstack/react-query";
+import { useForm, FormProvider, SubmitHandler } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
+import FormError from "@/components/reusables/FormError";
+import Icons from "@/components/Icons";
+import { defaultProfile } from "@/constant/images";
 
 const schema = z.object({
   content: z.string().min(1, "Please write your reply"),
   offer_id: z.number().nullable(),
 });
-type schemaType = z.infer<typeof schema>;
 
-const CommentBox = ({ item }: { item: IOffer }) => {
+type SchemaType = z.infer<typeof schema>;
+
+interface CommentBoxProps {
+  item: IOffer;
+}
+
+const CommentBox = ({ item }: CommentBoxProps) => {
   const { user } = useAppSelector((state) => state.user);
-  const postCommentMutation = useMutation({
+
+  const mutation = useMutation({
     mutationFn: replyOffer,
     onSuccess(data) {
       console.log(324, data);
@@ -28,57 +43,91 @@ const CommentBox = ({ item }: { item: IOffer }) => {
       console.log(123, error);
     },
   });
-  const methods = useForm<schemaType>({
+
+  const methods = useForm<SchemaType>({
     defaultValues: {
       content: "",
       offer_id: item.id ?? null,
     },
     resolver: zodResolver(schema),
   });
-  const { handleSubmit, register } = methods;
-  const onSubmit: SubmitHandler<schemaType> = (values) => {
-    postCommentMutation.mutate(values);
+
+  const onSubmit: SubmitHandler<SchemaType> = (values) => {
+    mutation.mutate(values);
   };
+
   return (
     <FormProvider {...methods}>
-      <div className="flex gap-4 mt-4">
+      <form
+        onSubmit={methods.handleSubmit(onSubmit)}
+        className="flex gap-4 mt-4"
+        noValidate
+      >
         <Image
           src={user.profile_image ?? defaultProfile}
-          alt=""
-          width={60}
-          height={60}
-          className="rounded-full shrink-0 object-cover w-[60px] h-[60px]"
+          alt="User avatar"
+          width={48}
+          height={48}
+          className="rounded-full object-cover shrink-0"
         />
-        <div className="w-full">
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="w-full pt-4 pb-1 px-5 bg-light-primary-1 rounded-[10px]"
-          >
-            <textarea
-              placeholder="Reply"
-              {...register("content")}
-              className="focus:outline-none bg-transparent w-full resize-none text-sm"
-            ></textarea>
-            <div className="flex justify-between items-center gap-2 w-full">
-              <div className="flex items-center gap-2">
-                <IconButton>
-                  <Icons.emoji />
-                </IconButton>
-                <IconButton>
-                  <Icons.attachment />
-                </IconButton>
-                <IconButton>
-                  <Icons.insertLink />
-                </IconButton>
-              </div>
-              <IconButton size="small" type="submit">
-                <Icons.send />
-              </IconButton>
-            </div>
-          </form>
+        <div className="flex flex-col flex-1">
+          <Textarea
+            placeholder="Reply"
+            {...methods.register("content")}
+            rows={3}
+            className="resize-none"
+          />
           <FormError name="content" />
+          <div className="flex justify-between items-center mt-2">
+            <div className="flex space-x-2">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    type="button"
+                    aria-label="Insert emoji"
+                  >
+                    <Icons.emoji />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Insert emoji</TooltipContent>
+              </Tooltip>
+
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    type="button"
+                    aria-label="Attach file"
+                  >
+                    <Icons.attachment />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Attach file</TooltipContent>
+              </Tooltip>
+
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    type="button"
+                    aria-label="Insert link"
+                  >
+                    <Icons.insertLink />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Insert link</TooltipContent>
+              </Tooltip>
+            </div>
+            <Button size="sm" type="submit" aria-label="Send reply">
+              <Icons.send />
+            </Button>
+          </div>
         </div>
-      </div>
+      </form>
     </FormProvider>
   );
 };

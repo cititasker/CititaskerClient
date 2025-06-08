@@ -1,6 +1,8 @@
-import { formatTime } from "@/utils";
-import { Button, Typography } from "@mui/material";
+"use client";
+
 import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { formatTime } from "@/utils";
 import CommentBox from "./CommentBox";
 import Icons from "@/components/Icons";
 
@@ -11,22 +13,20 @@ interface IProps {
 const ReplyOffer = ({ offer }: IProps) => {
   const [showComment, setShowComment] = useState(false);
 
-  const toggleComment = () => {
-    setShowComment((prev) => !prev);
-  };
   return (
     <div>
-      <div className="w-full  p-5 bg-light-grey rounded-b-[25px] rounded-tr-[25px]">
+      <div className="w-full p-5 bg-muted rounded-b-[25px] rounded-tr-[25px]">
         <p className="text-sm mb-2">{offer.description}</p>
-        <div className="flex items-center gap-2">
-          <Typography className="text-dark-grey-2 text-xs">
-            {formatTime(offer.created_at)}
-          </Typography>
+        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+          <span>{formatTime(offer.created_at)}</span>
           <Button
-            startIcon={<Icons.reply width={10} height={10} />}
-            className="text-xs text-primary"
-            onClick={toggleComment}
+            variant="link"
+            size="sm"
+            className="flex items-center"
+            onClick={() => setShowComment((prev) => !prev)}
+            aria-expanded={showComment}
           >
+            <Icons.reply width={14} height={14} />
             Reply
           </Button>
         </div>
