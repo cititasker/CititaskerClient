@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import Chef from "@/../public/images/hiw-4.svg";
+import Chef from "@/assets/images/chef.png";
 import BgShape from "@/../public/images/shape_bg/bg_shape_4.png";
 import HeroButton from "./HeroButton";
 import UnderlinedHeader from "@/components/reusables/UnderlinedHeader";

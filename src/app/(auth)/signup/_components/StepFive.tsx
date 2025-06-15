@@ -12,11 +12,11 @@ import FormDatePicker from "@/components/forms/FormDatePicker";
 import FormSelect from "@/components/forms/FormSelect";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import Logo from "@/../public/images/cititasker_logo.svg";
 import StepWrapper from "./StepWrapper";
 import Link from "next/link";
 import { maxDate } from "@/utils";
 import { ROUTES } from "@/constant";
+import { Logo } from "@/constant/icons";
 
 const options = [
   { id: "male", name: "Male" },
@@ -63,7 +63,7 @@ const StepFive = () => {
             <h2 className="text-center text-xl font-semibold mr-2">
               Sign Up on
             </h2>
-            <Image src={Logo} alt="citi-tasker" />
+            <Logo />
           </div>
 
           <FormInput
