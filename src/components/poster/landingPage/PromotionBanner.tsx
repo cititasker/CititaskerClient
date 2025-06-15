@@ -31,89 +31,62 @@ const PromotionBanner = () => {
       })} just by referring your family & friends.`,
     },
   ];
+
   return (
-    <div className="relative w-full max-w-[79.375rem] h-[25.5rem] mx-auto">
+    <div className="relative w-full max-w-[79.375rem] h-[25.5rem] mx-auto  md:px-10">
       <Carousel
-        additionalTransfrom={0}
         arrows
         customLeftArrow={<CustomArrow />}
         customRightArrow={<CustomArrow dir="right" />}
         autoPlay
         autoPlaySpeed={5000}
-        centerMode={false}
-        className=""
-        containerClass=""
         draggable
-        focusOnSelect={false}
         infinite
-        itemClass="px-5"
         keyBoardControl
-        minimumTouchDrag={80}
-        pauseOnHover
-        renderArrowsWhenDisabled={false}
-        renderButtonGroupOutside={false}
-        renderDotsOutside={false}
         responsive={{
-          desktop: {
-            breakpoint: {
-              max: 3000,
-              min: 1024,
-            },
-            items: 1,
-          },
-          mobile: {
-            breakpoint: {
-              max: 464,
-              min: 0,
-            },
-            items: 1,
-          },
-          tablet: {
-            breakpoint: {
-              max: 1024,
-              min: 464,
-            },
-            items: 1,
-          },
+          desktop: { breakpoint: { max: 3000, min: 1024 }, items: 1 },
+          tablet: { breakpoint: { max: 1024, min: 640 }, items: 1 },
+          mobile: { breakpoint: { max: 640, min: 0 }, items: 1 },
         }}
-        rewind={false}
-        rewindWithAnimation={false}
-        rtl={false}
-        shouldResetAutoplay
-        sliderClass=""
+        itemClass="px-2 sm:px-5"
         slidesToSlide={1}
         swipeable
       >
         {slides.map((el, i) => (
           <div
             key={i}
-            className="w-full h-[25.5rem] bg-dark-secondary rounded-40 px-32"
+            className="w-full h-[25.5rem] bg-dark-secondary rounded-40 md:px-20 lg:px-20"
           >
-            <div className="relative flex justify-between items-center h-full">
-              <div className="max-w-[35.125rem] w-full h-fit">
+            <div className="relative flex flex-col-reverse lg:flex-row justify-between items-center h-full gap-6 lg:gap-0">
+              {/* Text Section */}
+              <div className="w-full max-w-[35.125rem] text-center lg:text-left">
                 <p className="text-dark-grey-1 text-base mb-2 font-semibold">
                   {el.text}
                 </p>
-                <h2 className="text-[3rem] font-bold text-light-primary-1 leading-normal">
+               <h2 className="text-[40px] font-bold text-light-primary-1 leading-snug">
                   {el.title}
                 </h2>
               </div>
-              <div className="image_clip overflow-hidden max-w-[400px] w-full h-[85%]">
+
+              {/* Image */}
+              <div className="image_clip overflow-hidden max-w-[300px] sm:max-w-[350px] lg:max-w-[400px] w-full h-[60%] sm:h-[75%] lg:h-[85%]">
                 <Image
                   src={el.img}
                   alt=""
                   className="w-full h-full object-cover"
                 />
               </div>
+
+              {/* Decorative Icons */}
               <Image
                 src={Curl}
                 alt=""
-                className="absolute top-[70%] left-[30%]"
+                className="absolute top-[75%] left-[20%] sm:top-[70%] sm:left-[30%]"
               />
               <Image
                 src={Star}
                 alt=""
-                className="absolute top-[10%] -left-[2%]"
+                className="absolute top-[5%] left-[5%] sm:top-[10%] sm:-left-[2%]"
               />
             </div>
           </div>
