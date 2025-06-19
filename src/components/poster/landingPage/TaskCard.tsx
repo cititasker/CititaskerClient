@@ -4,13 +4,15 @@ import React from "react";
 import { FaStar } from "react-icons/fa";
 import Location from "@/../public/icons/location.svg";
 import Database from "@/../public/icons/database.svg";
-import { truncate } from "@/utils/index";
+import { formatCurrency, truncate } from "@/utils/index";
 import Link from "next/link";
 import { MdBookmarkBorder } from "react-icons/md";
 import StatusBadge from "@/components/reusables/StatusBadge";
+import { ROUTES } from "@/constant";
+import { PLACEHOLDER } from "@/constant/images";
 
 interface IProps {
-  data: any;
+  data: ITask;
 }
 const TaskCard = ({ data }: IProps) => {
   return (
@@ -18,29 +20,29 @@ const TaskCard = ({ data }: IProps) => {
       <div className="relative h-44 w-full rounded-20 overflow-hidden">
         <Link href={`/tasks/${data.id}`} className="block w-full h-full">
           <Image
-            src={data.img}
+            src={data.images?.[0] ?? PLACEHOLDER}
             alt=""
+            width={200}
+            height={176}
             className="h-full w-full object-cover hover:opacity-[0.8]"
           />
         </Link>
 
-        <StatusBadge className="absolute top-3 left-3" />
+        <StatusBadge status="open" className="absolute top-3 left-3" />
         <div className="cursor-pointer w-7 h-7 rounded-full flex items-center justify-center absolute top-3 right-3 bg-[rgba(2,22,55,0.25)]">
           <MdBookmarkBorder className="text-white text-lg" />
         </div>
       </div>
-      <Link href={`/tasks/${data.id}`} className="mt-4 block">
+      <Link href={`${ROUTES.BROWSE_TASK}/${data.id}`} className="mt-4 block">
         <div className="flex justify-between gap-2">
           <p className="text-base font-semibold leading-normal text-dark-secondary">
-            {data.todo}
+            {data.name}
           </p>
 
           <div className="flex items-center gap-1">
             <FaStar className="text-base text-yellow-state-color" />
-            <span className="text-sm ">{data.rating}</span>
-            <span className="text-dark-grey-2 text-sm">
-              ({data.jobCompletion})
-            </span>
+            <span className="text-sm ">{4.5}</span>
+            <span className="text-dark-grey-2 text-sm">({120})</span>
           </div>
         </div>
         <p className="text-sm my-4 font-normal leading-normal">
@@ -48,10 +50,11 @@ const TaskCard = ({ data }: IProps) => {
         </p>
         <div className="flex items-center text-dark-grey-2 text-sm leading-normal mb-3">
           <Image src={Database} alt="" className="mr-2.5" />
-          {data.budget}
+          {formatCurrency({ value: data.budget })}
         </div>
         <div className="flex items-center text-dark-grey-2 text-sm leading-normal">
-          <Image src={Location} alt="" className="mr-2.5" /> {data.location}
+          <Image src={Location} alt="" className="mr-2.5" />{" "}
+          {data.location_type}
         </div>
       </Link>
     </div>

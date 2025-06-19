@@ -1,46 +1,36 @@
-import { Card, Skeleton } from "@mui/material";
+import { Skeleton } from "@/components/ui/skeleton";
 import React from "react";
 
 const TaskCardSkeleton = () => {
   return (
-    <Card elevation={0} className="px-7 py-4 rounded-[25px]">
-      <div className="flex justify-between items-center w-full mb-4">
-        <Skeleton animation="wave" variant="circular" width={50} height={50} />
-        <Skeleton animation="wave" variant="rounded" width={47} height={20} />
+    <div className="rounded-xl lg:rounded-3xl border border-muted p-6 space-y-4 bg-white shadow-sm">
+      {/* Header: Avatar + Badge */}
+      <div className="flex justify-between items-center">
+        <Skeleton className="w-12 h-12 rounded-full" />
+        <Skeleton className="w-12 h-5 rounded-md" />
       </div>
-      <Skeleton animation="wave" variant="text" width="144px" height={20} />
-      <Skeleton animation="wave" variant="text" width="80%" height={20} />
-      <Skeleton animation="wave" variant="text" width="100%" height={20} />
-      <div className="mt-3 flex flex-col gap-2">
+
+      {/* Title + Description */}
+      <Skeleton className="w-36 h-5" />
+      <Skeleton className="w-4/5 h-5" />
+      <Skeleton className="w-full h-5" />
+
+      {/* Metadata (e.g. location, time, price) */}
+      <div className="mt-3 space-y-2">
         <div className="flex items-center gap-2">
-          <Skeleton
-            animation="wave"
-            variant="circular"
-            width={18}
-            height={18}
-          />
-          <Skeleton animation="wave" variant="text" width="130px" height={20} />
+          <Skeleton className="w-4 h-4 rounded-full" />
+          <Skeleton className="w-32 h-4" />
         </div>
         <div className="flex items-center gap-2">
-          <Skeleton
-            animation="wave"
-            variant="circular"
-            width={18}
-            height={18}
-          />
-          <Skeleton animation="wave" variant="text" width="70%" height={20} />
+          <Skeleton className="w-4 h-4 rounded-full" />
+          <Skeleton className="w-3/4 h-4" />
         </div>
         <div className="flex items-center gap-2">
-          <Skeleton
-            animation="wave"
-            variant="circular"
-            width={18}
-            height={18}
-          />
-          <Skeleton animation="wave" variant="text" width="20%" height={20} />
+          <Skeleton className="w-4 h-4 rounded-full" />
+          <Skeleton className="w-1/4 h-4" />
         </div>
       </div>
-    </Card>
+    </div>
   );
 };
 

@@ -1,40 +1,29 @@
-import { cn } from "@/utils";
-import React from "react";
+"use client";
+
+import { cn } from "@/lib/utils";
 import Icons from "@/components/Icons";
-import { Box } from "@mui/material";
+import { HTMLAttributes } from "react";
 
-const style = {
-  container: {
-    ".info": {
-      width: "25px",
-      height: "25px",
-      path: {
-        fill: "var(--primary)",
-      },
-    },
-  },
-};
-
-const ExtraInfo = ({
-  className,
-  children,
-}: {
-  className?: string;
+interface ExtraInfoProps extends HTMLAttributes<HTMLDivElement> {
   children: string;
-}) => {
+}
+
+const ExtraInfo = ({ className, children, ...props }: ExtraInfoProps) => {
   return (
-    <Box
-      sx={style.container}
+    <div
       className={cn(
-        `px-10 py-[30px] bg-light-primary-1 rounded-[10px]`,
+        "p-4 sm:px-10 sm:py-[30px] bg-light-primary-1 rounded-[10px]",
         className
       )}
+      {...props}
     >
       <div className="flex gap-5">
-        <Icons.info className="info flex-shrink-0" />
-        <p className="text-black-2 text-base font-normal">{children}</p>
+        <Icons.info className="w-[25px] h-[25px] flex-shrink-0 text-primary" />
+        <p className="text-black-2 text-sm sm:text-base font-normal">
+          {children}
+        </p>
       </div>
-    </Box>
+    </div>
   );
 };
 

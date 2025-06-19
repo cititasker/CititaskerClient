@@ -1,8 +1,8 @@
 import React from "react";
 import { HiOutlineChevronRight } from "react-icons/hi";
-import TaskCard from "./TaskCard";
+// import TaskCard from "./TaskCard";
 import Link from "next/link";
-import { tasks } from "../../../../data";
+// import { tasks } from "../../../../data";
 
 const FeaturedTasks = () => {
   return (
@@ -16,11 +16,11 @@ const FeaturedTasks = () => {
           <HiOutlineChevronRight className="ml-1.5 text-primary text-lg" />
         </Link>
       </div>
-      <div className="w-full overflow-x-auto flex gap-8 pb-10 hide-scrollbar">
+      {/* <div className="w-full overflow-x-auto flex gap-8 pb-10 hide-scrollbar">
         {tasks.map((el, i) => (
           <TaskCard key={i} data={el} />
         ))}
-      </div>
+      </div> */}
     </div>
   );
 };

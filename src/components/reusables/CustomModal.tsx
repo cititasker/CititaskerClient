@@ -1,72 +1,66 @@
 "use client";
-import theme from "@/providers/theme";
-import { IconButton, Modal, Paper, SxProps, Theme } from "@mui/material";
-import Icons from "../Icons";
-import dynamic from "next/dynamic";
 
-const SuccessConfetti = dynamic(() => import("./SuccessConfetti"), {
-  ssr: false,
-});
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogOverlay,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { FC, ReactNode } from "react";
+import SuccessConfetti from "./SuccessConfetti";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { cn } from "@/lib/utils";
 
-interface IProps {
+interface CustomModalProps {
   isOpen: boolean;
   onClose: () => void;
-  children: React.ReactNode;
-  paperStyle?: SxProps<Theme>;
-  showCloseBtn?: boolean;
+  children: ReactNode;
+  className?: string; // container wrapper styling
+  contentClassName?: string; // dialog content styling
+  hideClose?: boolean;
   confetti?: boolean;
   [key: string]: any;
 }
 
-const style: SxProps<Theme> = {
-  maxWidth: "800px",
-  width: "90%",
-  p: "40px",
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  borderRadius: "12px",
-  outline: "none",
-  maxHeight: "90vh",
-  overflow: "auto",
-};
-
-const cancel: SxProps<Theme> = {
-  position: "absolute",
-  top: "5px",
-  right: "5px",
-  zIndex: 20,
-
-  [theme.breakpoints.up("sm")]: {
-    top: "24px",
-    right: "24px",
-  },
-};
-
-const CustomModal = ({
+const CustomModal: FC<CustomModalProps> = ({
   isOpen,
   onClose,
   children,
-  paperStyle,
-  showCloseBtn = true,
+  className = "",
+  contentClassName = "",
+  hideClose = false,
   confetti = false,
   ...rest
-}: IProps) => {
+}) => {
   return (
-    <Modal open={isOpen} onClose={onClose} {...rest}>
-      <div>
-        {confetti && <SuccessConfetti />}
-        <Paper sx={{ ...style, ...paperStyle }}>
-          {showCloseBtn && (
-            <IconButton sx={cancel} onClick={onClose}>
-              <Icons.cancel />
-            </IconButton>
-          )}
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DialogOverlay className="fixed inset-0 bg-black/50" />
+      {confetti && <SuccessConfetti />}
+      <DialogContent
+        aria-labelledby={undefined}
+        aria-describedby={undefined}
+        className={cn(
+          "block fixed top-1/2 left-1/2 max-w-[576px] w-[90vw] max-h-[90vh] overflow-x-hidden overflow-y-auto no-scrollbar -translate-x-1/2 -translate-y-1/2 rounded-[20px] sm:rounded-[30px] bg-white p-5 sm:px-8 sm:py-6 focus:outline-none",
+          contentClassName
+        )}
+        hideClose={hideClose}
+        {...rest}
+      >
+        <DialogHeader>
+          <VisuallyHidden asChild>
+            <DialogTitle />
+          </VisuallyHidden>
+          <VisuallyHidden asChild>
+            <DialogDescription />
+          </VisuallyHidden>
+        </DialogHeader>
+        <div className={cn("overflow-x-hidden w-full", className)}>
           {children}
-        </Paper>
-      </div>
-    </Modal>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 };
 

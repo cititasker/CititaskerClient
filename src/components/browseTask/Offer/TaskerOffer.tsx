@@ -1,58 +1,58 @@
-import FormButton from "@/components/forms/FormButton";
-import Icons from "@/components/Icons";
-import { defaultProfile } from "@/constant/images";
+"use client";
+
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useAppSelector } from "@/store/hook";
 import { formatCurrency, loggedInUser } from "@/utils";
-import Typography from "@mui/material/Typography";
-import Image from "next/image";
-import React from "react";
 import ReplyOffer from "./ReplyOffer";
+import Icons from "@/components/Icons";
+import FormButton from "@/components/forms/FormButton";
 
-interface IProps {
+interface TaskerOfferProps {
   offer: IOffer;
-  toggleModal: any;
+  toggleModal: (id: number) => void;
 }
-const TaskerOffer = ({ offer, toggleModal }: IProps) => {
+
+const TaskerOffer: React.FC<TaskerOfferProps> = ({ offer, toggleModal }) => {
   const { user } = useAppSelector((state) => state.user);
+  const isOwner = offer.tasker.id === user?.id;
+  const isPending = offer.status === "pending";
+
+  const fullName = loggedInUser(
+    offer.tasker.first_name,
+    offer.tasker.last_name
+  );
 
   return (
-    <div className="w-full flex gap-4 mb-6 last:mb-0">
-      <Image
-        src={offer.tasker.profile_image ?? defaultProfile}
-        alt="taskers profile"
-        width={60}
-        height={60}
-        className="w-[60px] h-[60px] rounded-full object-cover shrink-0"
-      />
-      <div className="w-full">
-        <div className="w-full mb-2 flex justify-between items-center gap-3">
-          <div className="flex items-center gap-1">
-            <Typography className="text-black-2 text-xl">
-              {loggedInUser(offer.tasker.first_name, offer.tasker.last_name)}
-            </Typography>
+    <div className="flex gap-4 mb-6 last:mb-0">
+      <Avatar className="h-[60px] w-[60px]">
+        <AvatarImage src={offer.tasker.profile_image} alt="Tasker profile" />
+        <AvatarFallback>{offer.tasker.first_name?.[0]}</AvatarFallback>
+      </Avatar>
+
+      <div className="flex-1 space-y-2">
+        <div className="flex justify-between items-center gap-3">
+          <div className="flex items-center gap-1 text-xl font-medium text-muted-foreground">
+            {fullName}
             <Icons.info />
           </div>
-          {offer.status == "pending" && (
-            <div className="flex items-center gap-6">
-              <Typography className="text-[#000] font-semibold">
+
+          {isPending && (
+            <div className="flex items-center gap-4">
+              <span className="font-semibold text-primary">
                 {formatCurrency({
                   value: offer.offer_amount,
                   noFraction: true,
                 })}
-              </Typography>
-
-              {offer.tasker.id === user.id ? (
-                <FormButton
-                  text="Withdraw"
-                  className="mb-0"
-                  handleClick={() => {
-                    toggleModal(offer.id);
-                  }}
-                />
-              ) : null}
+              </span>
+              {isOwner && (
+                <FormButton size="lg" onClick={() => toggleModal(offer.id)}>
+                  Withdraw
+                </FormButton>
+              )}
             </div>
           )}
         </div>
+
         <ReplyOffer offer={offer} />
       </div>
     </div>

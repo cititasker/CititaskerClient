@@ -1,6 +1,17 @@
 interface IChildren {
   children: React.ReactNode;
 }
+
+interface IResponse {
+  meta: {
+    current_page: number;
+    from: number;
+    last_page: number;
+    per_page: number;
+    to: number;
+    total: number;
+  };
+}
 type TUseTimer = {
   days: string;
   hours: string;
@@ -42,6 +53,13 @@ interface IUser {
   user_id: number;
   location: string | null;
   occupation: string | null;
+  kyc_stage: {
+    bank: boolean;
+    face_verification: boolean;
+    home_address: boolean;
+    id_verification: boolean;
+    profile: boolean;
+  };
 }
 
 type TRole = "tasker" | "poster";

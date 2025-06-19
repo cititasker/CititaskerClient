@@ -241,6 +241,14 @@ export const statsData = [
 import Tasker from "./public/images/tasker.png";
 import Icons from "@/components/Icons";
 import { ROUTES } from "@/constant";
+import {
+  IChat,
+  ICreditCard,
+  IGridView,
+  INotifications,
+  IProfileCircle,
+  ISettings,
+} from "@/constant/icons";
 export const tasks = [
   {
     id: "1",
@@ -715,10 +723,6 @@ export const navbar = [
     href: ROUTES.BROWSE_TASK,
     name: "Browse Tasks",
   },
-  {
-    href: "#how_it_works",
-    name: "How It Works",
-  },
 ];
 
 export const profileMenu = [
@@ -746,5 +750,32 @@ export const profileMenu = [
     icon: Icons.logout,
     name: "Logout",
     href: "#",
+  },
+];
+
+export const menuData = [
+  { name: "Dashboard", href: ROUTES.DASHBOARD, icon: IGridView },
+  { name: "Message", href: "/dashboard/message", icon: IChat },
+  {
+    name: "Payment & Billing",
+    href: "/dashboard/payment",
+    icon: ICreditCard,
+  },
+  {
+    name: "Notification",
+    href: "/dashboard/notification",
+    icon: INotifications,
+  },
+  {
+    name: "Settings",
+    icon: ISettings,
+    children: [
+      { name: "Account", href: "/dashboard/account", icon: IGridView },
+      {
+        name: "Profile",
+        href: "/profile",
+        icon: IProfileCircle,
+      },
+    ],
   },
 ];

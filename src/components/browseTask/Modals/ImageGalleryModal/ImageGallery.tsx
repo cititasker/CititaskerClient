@@ -1,93 +1,85 @@
+"use client";
+
 import { useState } from "react";
 import Image from "next/image";
-import { Modal, IconButton } from "@mui/material";
-import Icons from "@/components/Icons";
-import useModal from "@/hooks/useModal";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import { cn } from "@/lib/utils";
+import CustomModal from "@/components/reusables/CustomModal";
 
-const ImageGallery = ({ images }: { images: string[] }) => {
-  const [selectedIndex, setSelectedIndex] = useState<number>(0);
-  const previewModal = useModal();
+interface ImageGalleryProps {
+  images: string[];
+}
 
-  const openModal = (index: number) => {
-    setSelectedIndex(index);
-    previewModal.openModal();
-  };
-  const closeModal = () => {
-    setSelectedIndex(0);
-    previewModal.closeModal();
-  };
+export default function ImageGallery({ images }: ImageGalleryProps) {
+  const [open, setOpen] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-  const prevImage = () => {
-    setSelectedIndex((prev) => (prev - 1 + images?.length) % images?.length);
-  };
-
-  const nextImage = () => {
-    setSelectedIndex((prev) => (prev + 1) % images?.length);
+  const handleOpen = (index: number) => {
+    setCurrentIndex(index);
+    setOpen(true);
   };
 
   return (
-    <div className="grid grid-cols-[repeat(auto-fill,minmax(100px,1fr))] gap-2 items-center">
-      {images.map((img, i) => (
-        <Image
-          key={i}
-          src={img}
-          alt={`Image ${i + 1}`}
-          width={100}
-          height={90}
-          className="h-[90px] object-cover rounded-[10px] border border-dark-grey-1 overflow-hidden cursor-pointer"
-          onClick={() => openModal(i)}
-        />
-      ))}
-
-      <Modal open={previewModal.isOpen} onClose={closeModal} className="jus">
-        <div className="relative max-w-[360px] w-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-          <div className="overflow-auto w-full rounded-lg">
-            <div
-              className="flex flex-row transition-all duration-300"
-              style={{ transform: `translateX(-${selectedIndex * 100}%)` }}
-            >
-              {images.map((img, i) => (
-                <Image
-                  key={i}
-                  src={img}
-                  alt="Preview"
-                  width={360}
-                  height={300}
-                  className="rounded-lg min-w-full"
-                />
-              ))}
-            </div>
-          </div>
-
-          {/* Navigation Buttons*/}
-          {images.length > 1 && (
-            <>
-              <IconButton
-                className="absolute -left-10 top-1/2 -translate-y-1/2 text-white rounded-full p-2"
-                onClick={prevImage}
-              >
-                <Icons.iconLeft />
-              </IconButton>
-              <IconButton
-                className="absolute -right-10 top-1/2 -translate-y-1/2 text-white rounded-full p-2"
-                onClick={nextImage}
-              >
-                <Icons.iconRight />
-              </IconButton>
-            </>
-          )}
-
-          {/* Close Button*/}
-          <IconButton
-            className="absolute -top-[30px] -right-[20px] text-white rounded-full p-2"
-            onClick={closeModal}
+    <div className="space-y-4">
+      {/* Thumbnails */}
+      <div className="grid grid-cols-4 gap-2">
+        {images.map((src, index) => (
+          <div
+            key={index}
+            className={cn(
+              "relative aspect-square cursor-pointer overflow-hidden rounded-md",
+              currentIndex === index && "ring-2 ring-primary"
+            )}
+            onClick={() => handleOpen(index)}
           >
-            <Icons.cancel />
-          </IconButton>
-        </div>
-      </Modal>
+            <Image
+              src={src}
+              alt={`Image ${index + 1}`}
+              fill
+              className="object-cover rounded-md"
+            />
+          </div>
+        ))}
+      </div>
+
+      {/* Image Preview Dialog */}
+      <CustomModal
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        contentClassName="!p-0 max-w-xl"
+        hideClose
+      >
+        <Carousel
+          opts={{
+            loop: true,
+            startIndex: currentIndex,
+          }}
+          className="relative"
+        >
+          <CarouselContent>
+            {images.map((src, index) => (
+              <CarouselItem key={index}>
+                <div className="aspect-video w-full relative">
+                  <Image
+                    src={src}
+                    alt={`Image ${index + 1}`}
+                    fill
+                    className="object-cover rounded-md"
+                  />
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2" />
+          <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2" />
+        </Carousel>
+      </CustomModal>
     </div>
   );
-};
-
-export default ImageGallery;
+}

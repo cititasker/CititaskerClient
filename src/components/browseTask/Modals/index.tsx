@@ -1,88 +1,109 @@
 "use client";
-import * as React from "react";
-import { useState } from "react";
-import { purgeStateData } from "@/store/slices/task";
+import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
+import { purgeStateData } from "@/store/slices/task";
 import CustomModal from "@/components/reusables/CustomModal";
-import theme from "@/providers/theme";
 import StepOne from "./MakeOffer/StepOne";
 import StepTwo from "./MakeOffer/StepTwo";
 import StepThree from "./MakeOffer/StepThree";
 import StepFour from "./MakeOffer/StepFour";
+import { AnimatePresence, motion } from "framer-motion";
+import { animationVariants } from "@/constant";
 
-interface ModalType {
+interface MakeOfferModalProps {
   open: boolean;
-  handleOpen: () => void;
   handleClose: () => void;
   isIncreaseBudget?: boolean;
+  isEdit?: boolean; // explicitly control edit mode from parent
 }
 
-export default function MakeOfferModal({
+const MakeOfferModal: React.FC<MakeOfferModalProps> = ({
   open,
   handleClose,
-  isIncreaseBudget,
-}: ModalType) {
+  isIncreaseBudget = false,
+  isEdit,
+}) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [edit, setEdit] = useState(false);
+  const [direction, setDirection] = useState<"forward" | "backward">("forward");
+  const [showConfetti, setShowConfetti] = useState(false);
+
+  const dispatch = useAppDispatch();
   const { isAuth } = useAppSelector((state) => state.user);
   const { taskersOffer } = useAppSelector((state) => state.task);
-  const dispatch = useAppDispatch();
 
-  React.useEffect(() => {
-    setEdit(!!taskersOffer);
-  }, []);
+  useEffect(() => {
+    if (open) {
+      setEdit(isEdit ?? !!taskersOffer);
+      setCurrentStep(1);
+    }
+  }, [open]);
 
   const nextStep = () => {
-    if (currentStep < 4) {
-      setCurrentStep((prevStep) => prevStep + 1);
-    }
+    const next = currentStep + 1;
+    setDirection("forward");
+    setCurrentStep(next);
+    if (next === 4 && !edit) setShowConfetti(true);
   };
 
   const prevStep = () => {
     if (currentStep > 1) {
-      setCurrentStep((prevStep) => prevStep - 1);
+      setDirection("backward");
+      setCurrentStep((prev) => prev - 1);
     }
   };
 
   const renderStepContent = () => {
     switch (currentStep) {
       case 1:
-        return <StepOne nextStep={nextStep} />;
+        return <StepOne nextStep={nextStep} isEdit={edit} />;
       case 2:
-        return <StepTwo nextStep={nextStep} prevStep={prevStep} />;
+        return (
+          <StepTwo nextStep={nextStep} prevStep={prevStep} isEdit={edit} />
+        );
       case 3:
-        return <StepThree nextStep={nextStep} prevStep={prevStep} />;
+        return (
+          <StepThree nextStep={nextStep} prevStep={prevStep} isEdit={edit} />
+        );
       case 4:
-        return <StepFour />;
+        return <StepFour isEdit={edit} />;
       default:
         return null;
     }
   };
+
   const closeModal = () => {
     if (isAuth) {
       dispatch(purgeStateData({ path: "offer" }));
     }
+    setShowConfetti(false);
     handleClose();
   };
+
+  console.log(12, currentStep, edit);
+
   return (
     <CustomModal
       isOpen={open}
       onClose={closeModal}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-      confetti={currentStep === 4 && !edit}
-      paperStyle={{
-        maxWidth: "576px",
-        p: "20px",
-
-        [theme.breakpoints.up("sm")]: {
-          px: "34px",
-          py: "24px",
-          borderRadius: "40px",
-        },
-      }}
+      aria-labelledby="make-offer-modal-title"
+      aria-describedby="make-offer-modal-description"
+      confetti={showConfetti}
     >
-      {renderStepContent()}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentStep}
+          initial={direction === "forward" ? "enterFromRight" : "enterFromLeft"}
+          animate="center"
+          exit={direction === "forward" ? "exitToLeft" : "exitToRight"}
+          variants={animationVariants}
+          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        >
+          {renderStepContent()}
+        </motion.div>
+      </AnimatePresence>
     </CustomModal>
   );
-}
+};
+
+export default MakeOfferModal;

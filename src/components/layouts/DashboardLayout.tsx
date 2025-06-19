@@ -1,15 +1,18 @@
+import { auth } from "@/auth";
+import DashboardSidebar from "@/components/dashboard/sidebar/DashboardSidebar";
 import React from "react";
-import DashboardSidebar from "../dashboard/DashboardSidebar";
 
-const DashboardLayout = ({ children }: IChildren) => {
+const DashboardLayout = async ({ children }: IChildren) => {
+  const session = await auth();
+  const user = session?.user;
+
   return (
-    <div className=" p-top bg-light-grey h-dvh relative">
-      <div className="container hide-scrollbar h-full relative overflow-y-auto">
-        {/* <VerificationBanner /> */}
-        <div className="w-full h-[calc(100%-14px)] flex gap-5 mt-[14px]">
-          <DashboardSidebar />
-          <div className="paper hide-scrollbar h-full overflow-y-auto flex-1 rounded-b-none">
-            <div className="w-full">{children}</div>
+    <div className="bg-light-grey relative">
+      <div className="container relative">
+        <div className="h-dvh relative p-top w-full flex gap-5 overflow-y-auto hide-scrollbar">
+          <DashboardSidebar role={user?.role} />
+          <div className="paper h-full w-full flex-1 rounded-b-none overflow-auto no-scrollbar">
+            {children}
           </div>
         </div>
       </div>

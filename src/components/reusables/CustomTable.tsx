@@ -1,49 +1,30 @@
-import React from "react";
-import { DataGrid } from "@mui/x-data-grid";
-import { SxProps, Theme, Typography } from "@mui/material";
-import SearchAndFilterBar from "./SearchAndFilterBar";
+"use client";
 
-interface IProps {
-  rows: any;
-  columns: any;
+import React from "react";
+import { ColumnDef, RowData } from "@tanstack/react-table";
+import SearchAndFilterBar from "./SearchAndFilterBar";
+import DataTable from "./DataTable";
+
+interface CustomTableProps<TData extends RowData> {
   title: string;
-  checkboxSelection?: boolean;
+  columns: ColumnDef<TData, any>[];
+  data: TData[];
+  headerClass?: string;
 }
 
-const style: Record<string, SxProps<Theme>> = {
-  conatiner: {
-    borderRadius: "20px",
-    ".MuiDataGrid-columnHeader": {
-      bgcolor: "var(--light-primary-1)",
-      minHeight: "70px",
-    },
-  },
-};
-
-const CustomTable = ({
+export function CustomTable<TData extends RowData>({
   title,
-  checkboxSelection = false,
-  rows = [],
-  columns = [],
-}: IProps) => {
+  columns,
+  data,
+  headerClass,
+}: CustomTableProps<TData>) {
   return (
-    <div>
-      <div className="flex items-center justify-between w-full mb-[22px]">
-        <Typography className="text-2xl font-semibold text-[#101828]">
-          {title}
-        </Typography>
+    <div className="w-full">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-2xl font-semibold text-[#101828]">{title}</h2>
         <SearchAndFilterBar />
       </div>
-      <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          checkboxSelection={checkboxSelection}
-          sx={style.conatiner}
-        />
-      </div>
+      <DataTable columns={columns} data={data} headerClass={headerClass} />
     </div>
   );
-};
-
-export default CustomTable;
+}

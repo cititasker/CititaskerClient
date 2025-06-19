@@ -57,7 +57,7 @@ const StepThree = ({ onNext }: { onNext: () => void }) => {
             name="phone_number"
             type="text"
             placeholder="Enter your phone number"
-            wrapperStyle="mb-[65px]"
+            className="mb-[65px]"
           />
 
           <FormButton

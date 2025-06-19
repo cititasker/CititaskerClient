@@ -4,6 +4,8 @@ import dayjs from "dayjs";
 import LocalizedFormat from "dayjs/plugin/localizedFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import { connectionFee } from "@/constant";
+import moment from "moment";
 dayjs.extend(LocalizedFormat);
 dayjs.extend(relativeTime);
 dayjs.extend(customParseFormat);
@@ -200,7 +202,7 @@ export function formatTime(dateString: string, format = "hh:mm a"): string {
   // Parse the date string and format it as time (11:23 am)
   return dayjs(dateString).format(format);
 }
-export const maxDate = dayjs().subtract(18, "year");
+export const maxDate = moment().endOf("day").toDate();
 
 export const updateQueryParams = (
   searchParams: URLSearchParams,
@@ -214,4 +216,10 @@ export const updateQueryParams = (
     params.delete(key);
   }
   return params.toString();
+};
+
+export const calculateFees = (amount: number) => {
+  const fee = (connectionFee / 100) * amount;
+  const receive = amount - fee;
+  return { fee, receive };
 };

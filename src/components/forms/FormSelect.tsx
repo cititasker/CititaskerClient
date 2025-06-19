@@ -1,100 +1,82 @@
-import { globalStyles } from "@/globalStyles";
-import { cn } from "@/utils";
+"use client";
+
 import {
-  FormControl,
-  FormHelperText,
-  FormLabel,
-  MenuItem,
   Select,
-} from "@mui/material";
-import React from "react";
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { cn } from "@/utils";
 import { Controller, useFormContext } from "react-hook-form";
 
 interface IProps {
-  options: any[];
+  options: { id: string | number; name: string }[];
   name: string;
   label?: string;
   required?: boolean;
   placeholder?: string;
-  inputLabel?: boolean;
-  sx?: any;
-  multiple?: boolean;
   labelStyle?: string;
+  inputLabel?: boolean;
   [key: string]: any;
 }
-
-const style = {
-  container: {
-    ...globalStyles.input,
-    ".MuiOutlinedInput-root": {
-      border: "none",
-      color: "var(--black)",
-      pr: 0,
-      borderRadius: "8px",
-      fontSize: "16px",
-      overflow: "hidden",
-      height: "48px",
-
-      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-        border: "1px solid",
-        borderColor: "var(--primary)",
-        boxShadow: "none",
-      },
-    },
-  },
-};
 
 const FormSelect = ({
   options,
   name,
   label,
   required,
-  placeholder,
-  inputLabel,
-  multiple,
+  placeholder = "Select an option",
   labelStyle,
+  inputLabel,
+  ...props
 }: IProps) => {
   const {
     control,
-    formState: { errors: err },
+    formState: { errors },
   } = useFormContext();
-  const errors = err as any;
+
+  const error = errors[name]?.message;
 
   return (
-    <FormControl fullWidth sx={style.container}>
+    <div className="w-full space-y-1">
       {label && !inputLabel && (
-        <FormLabel className={cn("label block mb-2", labelStyle)}>
-          {label} {required && <span className="required">*</span>}
-        </FormLabel>
+        <Label className={cn("block text-sm font-medium", labelStyle)}>
+          {label} {required && <span className="text-red-500">*</span>}
+        </Label>
       )}
+
       <Controller
         name={name}
         control={control}
         render={({ field }) => (
           <Select
-            variant="outlined"
-            fullWidth
-            displayEmpty
-            {...field}
-            multiple={multiple}
-            label={inputLabel ? label : null}
+            onValueChange={field.onChange}
+            defaultValue={field.value}
+            {...props}
           >
-            <MenuItem value="" disabled>
-              {placeholder}
-            </MenuItem>
-            {options?.map((el) => (
-              <MenuItem key={el.id} value={`${el.id}`}>
-                {el.name}
-              </MenuItem>
-            ))}
+            <SelectTrigger
+              className={cn(
+                "rounded-[40px] h-[3.125rem] px-6",
+                error && "border-red-500"
+              )}
+            >
+              <SelectValue placeholder={placeholder} />
+            </SelectTrigger>
+            <SelectContent>
+              {options?.map((option) => (
+                <SelectItem key={option.id} value={String(option.id)}>
+                  {option.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
           </Select>
         )}
       />
 
-      <FormHelperText className="form__error">
-        {errors[name]?.message}
-      </FormHelperText>
-    </FormControl>
+      {error && <p className="text-xs text-red-500 mt-1">{String(error)}</p>}
+    </div>
   );
 };
 

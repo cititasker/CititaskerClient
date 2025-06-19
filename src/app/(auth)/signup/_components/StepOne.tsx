@@ -63,14 +63,14 @@ const StepOne = ({ onNext }: { onNext: () => void }) => {
             name="email"
             type="email"
             placeholder="Enter your email address"
-            wrapperStyle="mb-2"
+            className="mb-2"
           />
           <FormInput
             label="Password"
             name="password"
             type="password"
             placeholder="******"
-            wrapperStyle="mb-0"
+            className="mb-0"
           />
 
           <p className="mt-8 text-sm text-left">

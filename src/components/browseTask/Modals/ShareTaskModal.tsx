@@ -1,80 +1,55 @@
 "use client";
-import * as React from "react";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import CustomModal from "@/components/reusables/CustomModal";
-import theme from "@/providers/theme";
 
-interface ModalType {
+interface ShareTaskModalProps {
   open: boolean;
-  handleOpen: () => void;
-  handleClose: () => void;
+  onClose: () => void;
 }
 
-export default function ShareTaskModal({ open, handleClose }: ModalType) {
+const socialMedia = [
+  { src: "/icons/facebook.svg", alt: "Facebook", size: [24, 26] },
+  { src: "/icons/whatsapp.svg", alt: "WhatsApp", size: [28, 28] },
+  { src: "/icons/twitter.svg", alt: "Twitter", size: [28, 28] },
+  { src: "/icons/instagram.svg", alt: "Instagram", size: [28, 28] },
+];
+
+export default function ShareTaskModal({ open, onClose }: ShareTaskModalProps) {
   return (
-    <div>
-      <CustomModal
-        isOpen={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-        paperStyle={{
-          maxWidth: "576px",
-          p: "20px",
-
-          [theme.breakpoints.up("sm")]: {
-            px: "34px",
-            py: "24px",
-            borderRadius: "40px",
-          },
-        }}
-      >
-        <div className="flex flex-col">
-          <div className="mx-auto text-center mt-20">
-            <p className="text font-semibold text-2xl text-black-2">
-              Share this task
-            </p>
-            <p className="text-center font-normal mt-2 text-base text-wrap w-[417px]">
-              Spread the word about this task on your social media account
-            </p>
-          </div>
-
-          <div className="flex gap-4 mt-[44px] mb-20 mx-auto">
-            <div className="cursor-pointer border border-dark-grey-1 w-14 h-14 shrink-0 grow-0 rounded-full grid place-content-center">
-              <Image
-                src="/icons/facebook.svg"
-                alt="facebook"
-                width={24}
-                height={26}
-              />
-            </div>
-            <div className="cursor-pointer border border-dark-grey-1 w-14 h-14 shrink-0 grow-0 rounded-full grid place-content-center">
-              <Image
-                src="/icons/whatsapp.svg"
-                alt="facebook"
-                width={28}
-                height={28}
-              />
-            </div>
-            <div className="cursor-pointer border border-dark-grey-1 w-14 h-14 shrink-0 grow-0 rounded-full grid place-content-center">
-              <Image
-                src="/icons/twitter.svg"
-                alt="facebook"
-                width={28}
-                height={28}
-              />
-            </div>
-            <div className="cursor-pointer border border-dark-grey-1 w-14 h-14 shrink-0 grow-0 rounded-full grid place-content-center">
-              <Image
-                src="/icons/instagram.svg"
-                alt="facebook"
-                width={28}
-                height={28}
-              />
-            </div>
-          </div>
+    <CustomModal
+      isOpen={open}
+      onClose={onClose}
+      contentClassName="max-w-[578px] p-6 sm:px-8 sm:py-12"
+    >
+      <div className="max-w-[478px] w-full mx-auto">
+        <div className="text-center mb-8">
+          <p className="text-2xl font-semibold text-black-2">Share this task</p>
+          <p className="text-base mt-2 text-gray-600">
+            Spread the word about this task on your social media account.
+          </p>
         </div>
-      </CustomModal>
-    </div>
+        <div className="flex justify-center gap-4">
+          {socialMedia.map(({ src, alt, size }, index) => (
+            <Button
+              key={index}
+              variant="outline"
+              size="icon"
+              className="rounded-full w-14 h-14 border-dark-grey-1"
+            >
+              <Image src={src} alt={alt} width={size[0]} height={size[1]} />
+            </Button>
+          ))}
+        </div>
+      </div>
+    </CustomModal>
   );
 }

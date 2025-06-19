@@ -3,17 +3,16 @@
 import React, { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
-
 import TaskerOffer from "./TaskerOffer";
 import ConfirmationModal from "@/components/reusables/Modals/ConfirmationModal";
-
 import { withdrawOffer } from "@/services/offer";
-import { TASK_ID } from "@/queries/queryKeys";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import { queryClient } from "@/providers/ServerProvider";
 import { useAppDispatch } from "@/store/hook";
 import { setUserTaskOffer } from "@/store/slices/task";
 import { errorHandler } from "@/utils";
+import { API_ROUTES } from "@/constant";
+import Empty from "@/components/myTasks/Empty";
 
 interface OfferProps {
   offers: IOffer[];
@@ -38,7 +37,9 @@ const Offer: React.FC<OfferProps> = ({ offers }) => {
       dispatch(setUserTaskOffer(null));
       showSnackbar(data.message, "success");
       handleToggleModal();
-      queryClient.invalidateQueries({ queryKey: TASK_ID(id) });
+      queryClient.invalidateQueries({
+        queryKey: [API_ROUTES.GET_TASK_BY_ID, id],
+      });
     },
     onError: (error) => {
       showSnackbar(errorHandler(error), "error");
@@ -63,7 +64,7 @@ const Offer: React.FC<OfferProps> = ({ offers }) => {
             />
           ))
         ) : (
-          <p>No offer yet.</p>
+          <Empty text=" No offer has been made yet" />
         )}
       </div>
 
@@ -73,7 +74,7 @@ const Offer: React.FC<OfferProps> = ({ offers }) => {
         title="Cancel Offer"
         content="Are you sure you want to cancel your offer?"
         cancelText="Back"
-        okStyle="!bg-red-state-color text-white"
+        okVariant="destructive"
         loading={isPending}
         handleSubmit={handleWithdraw}
       />

@@ -1,60 +1,79 @@
 "use client";
-import { cn } from "@/utils";
-import Link from "next/link";
-import React from "react";
-import { BiLoader } from "react-icons/bi";
 
-interface IProps {
+import { cn } from "@/lib/utils";
+import { Button, ButtonProps } from "@/components/ui/button";
+import Link from "next/link";
+import { BiLoader } from "react-icons/bi";
+import React from "react";
+interface FormButtonProps extends ButtonProps {
   text?: string;
-  className?: string;
-  loading?: boolean;
-  disabled?: boolean;
-  type?: "submit" | "button";
-  target?: "_blank" | "_parent" | "_self" | "_top";
   href?: string;
-  children?: React.ReactNode;
+  target?: "_blank" | "_parent" | "_self" | "_top";
+  loading?: boolean;
   handleClick?: () => void;
+  icon?: React.ReactNode;
 }
 
-const FormButton = ({
+const FormButton: React.FC<FormButtonProps> = ({
   text = "Submit",
   className,
-  loading,
-  disabled,
+  loading = false,
+  disabled = false,
   type = "button",
-  target,
   href,
+  target,
   children,
+  icon,
   handleClick,
-}: IProps) => {
-  if (href)
+  variant = "default",
+  size = "default",
+  ...props
+}) => {
+  const content = (
+    <>
+      {loading && (
+        <BiLoader size={20} className="animate-spin shrink-0 !w-5 !h-5" />
+      )}
+      {icon && !loading && <span>{icon}</span>}
+      {children || text}
+    </>
+  );
+
+  if (href) {
     return (
-      <Link
-        href={href}
-        target={target}
+      <Button
+        asChild
+        variant={variant}
+        size={size}
         className={cn(
-          "min-w-max h-12 rounded-full transition-all duration-300 whitespace-nowrap px-5 text-base font-normal inline-flex justify-center cursor-pointer gap-3 w-fit bg-primary text-white items-center leading-normal",
+          "w-fit min-w-max px-5 text-base font-normal rounded-full flex items-center justify-center gap-2",
           className
         )}
+        {...props}
       >
-        {children ? children : text}
-      </Link>
+        <Link href={href} target={target}>
+          {content}
+        </Link>
+      </Button>
     );
-  else
-    return (
-      <button
-        type={type}
-        disabled={disabled || loading}
-        className={cn(
-          "min-w-max h-12 rounded-full transition-all duration-300 disabled:cursor-not-allowed disabled:bg-primary/70 px-5 text-base font-normal flex justify-center cursor-pointer gap-3 w-fit bg-primary text-white items-center leading-normal",
-          className
-        )}
-        onClick={handleClick}
-      >
-        {loading && <BiLoader size={20} className="animate-spin" />}
-        {children ? children : text}
-      </button>
-    );
+  }
+
+  return (
+    <Button
+      type={type}
+      variant={variant}
+      size={size}
+      disabled={disabled || loading}
+      onClick={handleClick}
+      className={cn(
+        "min-w-max px-5 text-base font-normal rounded-full flex items-center justify-center gap-2",
+        className
+      )}
+      {...props}
+    >
+      {content}
+    </Button>
+  );
 };
 
 export default FormButton;

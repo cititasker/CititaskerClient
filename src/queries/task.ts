@@ -6,7 +6,8 @@ import {
   requestPayment,
 } from "@/services/task";
 import { queryOptions, useMutation } from "@tanstack/react-query";
-import { TASK_ID, USER_TASK_ID, USER_TASKS } from "./queryKeys";
+import { USER_TASKS } from "./queryKeys";
+import { API_ROUTES } from "@/constant";
 
 export const getAllTasksQuery = () => {
   return queryOptions({
@@ -17,7 +18,7 @@ export const getAllTasksQuery = () => {
 
 export const getSingleTaskQuery = (id: string) => {
   return queryOptions({
-    queryKey: TASK_ID(id),
+    queryKey: [API_ROUTES.GET_TASK_BY_ID, id],
     queryFn: () => getSingleTask(id),
     enabled: !!id,
   });
@@ -25,7 +26,7 @@ export const getSingleTaskQuery = (id: string) => {
 
 export const getUserTaskByIdQuery = (id: string) => {
   return queryOptions({
-    queryKey: USER_TASK_ID(id),
+    queryKey: [API_ROUTES.GET_TASK_BY_ID, id],
     queryFn: () => getUserTaskById(id),
     enabled: !!id,
   });

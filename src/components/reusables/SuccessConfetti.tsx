@@ -5,5 +5,9 @@ import Confetti from "react-confetti";
 
 export default function SuccessConfetti() {
   const { width, height } = useWindowSize();
-  return <Confetti width={width} height={height} />;
+  return (
+    <div className="fixed top-0 left-0 w-screen h-screen z-[60] pointer-events-none">
+      <Confetti width={width} height={height} />
+    </div>
+  );
 }

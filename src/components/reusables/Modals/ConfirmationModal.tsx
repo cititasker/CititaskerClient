@@ -1,7 +1,8 @@
 import React from "react";
 import CustomModal from "../CustomModal";
-import theme from "@/providers/theme";
 import ActionsButtons from "../ActionButtons";
+import { VariantProps } from "class-variance-authority";
+import { buttonVariants } from "@/components/ui/button";
 
 interface IProps {
   loading?: boolean;
@@ -17,6 +18,7 @@ interface IProps {
   handleSubmit?: any;
   type?: "button" | "submit";
   showBtnActions?: boolean;
+  okVariant?: VariantProps<typeof buttonVariants>["variant"];
 }
 const ConfirmationModal = ({
   loading,
@@ -32,23 +34,10 @@ const ConfirmationModal = ({
   handleSubmit,
   type = "button",
   showBtnActions = true,
+  okVariant = "default",
 }: IProps) => {
   return (
-    <CustomModal
-      isOpen={open}
-      onClose={onClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-      paperStyle={{
-        maxWidth: "560px",
-        p: "20px",
-        [theme.breakpoints.up("sm")]: {
-          px: "34px",
-          py: "24px",
-          borderRadius: "40px",
-        },
-      }}
-    >
+    <CustomModal isOpen={open} onClose={onClose}>
       <>
         {title && <p className="text-black-2 font-[600] text-2xl">{title}</p>}
         {content ? (
@@ -66,6 +55,7 @@ const ConfirmationModal = ({
             type={type}
             handleSubmit={handleSubmit}
             loading={loading}
+            okVariant={okVariant}
           />
         )}
       </>

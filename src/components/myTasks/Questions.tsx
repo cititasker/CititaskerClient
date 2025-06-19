@@ -1,7 +1,12 @@
 import React from "react";
+import Empty from "./Empty";
 
 const Questions = () => {
-  return <div className="p-5">Questions</div>;
+  return (
+    <div className="h-full">
+      <Empty text="No Questions" />
+    </div>
+  );
 };
 
 export default Questions;

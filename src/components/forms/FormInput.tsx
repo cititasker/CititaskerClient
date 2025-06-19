@@ -1,142 +1,107 @@
-"use client";
-import React from "react";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import { Controller, useFormContext } from "react-hook-form";
-import {
-  FormControl,
-  FormLabel,
-  IconButton,
-  InputAdornment,
-  SxProps,
-  TextField,
-  Theme,
-} from "@mui/material";
-import { cn } from "@/utils";
-import { globalStyles } from "@/globalStyles";
+import { useState } from "react";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
+import { cn } from "@/lib/utils";
+import FormError from "../reusables/FormError";
 
-interface IProps {
+interface FormInputProps {
+  name: string;
   label?: string;
   type?: string;
-  name: string;
   placeholder?: string;
-  inputstyle?: string;
-  wrapperStyle?: string;
-  labelStyle?: string;
   disabled?: boolean;
-  sx?: any;
-  InputProps?: any;
-  [key: string]: any;
+  className?: string;
+  inputClassName?: string;
+  readOnly?: boolean;
+  clearable?: boolean;
+  onClear?: () => void;
 }
 
-const style: Record<string, SxProps<Theme>> | any = {
-  container: {
-    mb: "15px",
-
-    ".required": {
-      color: "rgba(217, 63, 33, 1)",
-      fontSize: "13.7px",
-      fontWeight: "500",
-      lineHeight: "20.48px",
-      textAlign: "left",
-    },
-    ...globalStyles.input,
-    ".MuiFormHelperText-root": {
-      ml: 0,
-    },
-    // ".Mui-disabled": {
-    //   ".MuiOutlinedInput-notchedOutline": {
-    //     borderColor: "#d32f2f",
-    //   },
-    // },
-  },
-};
-
-const FormInput = ({
+export default function FormInput({
+  name,
   label,
   type = "text",
-  name,
   placeholder,
-  labelStyle,
-  wrapperStyle,
-  disabled = false,
-  sx,
-  InputProps,
-  ...rest
-}: IProps) => {
-  const [showPassword, setShowPassword] = React.useState(false);
-  const {
-    control,
-    formState: { errors },
-  } = useFormContext();
+  disabled,
+  className,
+  inputClassName,
+  readOnly,
+  clearable,
+  onClear,
+}: FormInputProps) {
+  const { control, formState } = useFormContext();
+  const error = formState.errors[name];
+  const [showPassword, setShowPassword] = useState(false);
+  const isPassword = type === "password";
 
-  const handleTogglePasswordVisibility = () => {
-    setShowPassword((prevShowPassword) => !prevShowPassword);
-  };
+  const inputType = isPassword ? (showPassword ? "text" : "password") : type;
+  const errorId = `${name}-error`;
 
   return (
-    <FormControl
-      fullWidth
-      sx={{ ...style.container, ...sx }}
-      disabled={disabled}
-      {...rest}
-      className={cn("w-full mb-5 flex-1", wrapperStyle)}
-    >
+    <div className={cn("space-y-1 w-full", className)}>
       {label && (
-        <FormLabel htmlFor={name} className={cn("label", labelStyle)}>
+        <Label htmlFor={name} className="text-sm text-black">
           {label}
-        </FormLabel>
+        </Label>
       )}
+
       <Controller
         name={name}
         control={control}
         render={({ field }) => (
-          <TextField
-            id={name}
-            fullWidth
-            sx={style}
-            error={errors.hasOwnProperty(name)}
-            helperText={errors[name]?.message as any}
-            disabled={disabled}
-            {...field}
-            autoComplete="on"
-            type={
-              type === "password"
-                ? showPassword
-                  ? "text"
-                  : "password"
-                : "text"
-            }
-            variant="outlined"
-            placeholder={placeholder}
-            InputProps={
-              InputProps ?? {
-                endAdornment: type === "password" && (
-                  <InputAdornment position="end" sx={{ ml: 0 }}>
-                    <IconButton
-                      onClick={handleTogglePasswordVisibility}
-                      edge="end"
-                      className="absolute right-5"
-                    >
-                      {showPassword ? <IoEyeOutline /> : <IoEyeOffOutline />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-                sx: {
-                  ".MuiOutlinedInput-input": {
-                    pl: "20px",
-                    py: 0,
-                    height: "48px",
-                    pr: `${type == "password" ? "45px" : "20px"}`,
-                  },
-                },
-              }
-            }
-            {...rest}
-          />
+          <div className="relative">
+            <Input
+              id={name}
+              {...field}
+              type={inputType}
+              placeholder={placeholder}
+              disabled={disabled}
+              readOnly={readOnly}
+              aria-invalid={!!error}
+              aria-describedby={error ? errorId : undefined}
+              className={cn(
+                "pl-5 pr-10 w-full",
+                error && "border-red-500",
+                inputClassName
+              )}
+              autoComplete="on"
+            />
+
+            {clearable && field.value && !disabled && !readOnly && (
+              <button
+                type="button"
+                onClick={() => {
+                  field.onChange("");
+                  if (onClear) onClear();
+                }}
+                className="absolute right-5 top-1/2 -translate-y-1/2 text-muted-foreground focus:outline-none"
+                aria-label="Clear input"
+              >
+                ✕
+              </button>
+            )}
+
+            {isPassword && (
+              <button
+                type="button"
+                onClick={() => setShowPassword((s) => !s)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground focus:outline-none"
+                tabIndex={-1}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? (
+                  <IoEyeOutline size={18} />
+                ) : (
+                  <IoEyeOffOutline size={18} />
+                )}
+              </button>
+            )}
+          </div>
         )}
       />
-    </FormControl>
+      <FormError name={name} />
+    </div>
   );
-};
-
-export default FormInput;
+}

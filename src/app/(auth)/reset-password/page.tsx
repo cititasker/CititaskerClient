@@ -70,14 +70,14 @@ const ResetPasswordPage = () => {
             name="password"
             type="password"
             placeholder="******"
-            wrapperStyle="mb-2"
+            className="mb-2"
           />
           <FormInput
             label="Confirm Password"
             name="password_confirmation"
             type="password"
             placeholder="******"
-            wrapperStyle="mb-0"
+            className="mb-0"
           />
           <FormButton
             loading={mutation.isPending}

@@ -1,11 +1,13 @@
-import { createContext, useContext, useState, ReactNode, FC } from "react";
-import { Snackbar, SnackbarOrigin, Alert } from "@mui/material";
+"use client";
+
+import React, { createContext, useContext, ReactNode, FC } from "react";
+// import { Toaster } from "@/components/ui/sonner";
+import { toast, Toaster } from "sonner";
+
+type SnackbarSeverity = "success" | "info" | "warning" | "error";
 
 interface SnackbarContextType {
-  showSnackbar: (
-    message: string,
-    severity?: "success" | "info" | "warning" | "error"
-  ) => void;
+  showSnackbar: (message: string, severity?: SnackbarSeverity) => void;
 }
 
 const SnackbarContext = createContext<SnackbarContextType | undefined>(
@@ -25,60 +27,30 @@ interface SnackbarProviderProps {
 }
 
 export const SnackbarProvider: FC<SnackbarProviderProps> = ({ children }) => {
-  const [snackbarState, setSnackbarState] = useState<{
-    open: boolean;
-    message: string;
-    severity?: "success" | "info" | "warning" | "error";
-  }>({
-    open: false,
-    message: "",
-  });
+  // Map severity to sonner toast types
+  const variantMap: Record<
+    SnackbarSeverity,
+    "success" | "error" | "warning" | "info"
+  > = {
+    success: "success",
+    info: "info",
+    warning: "warning",
+    error: "error",
+  };
 
   const showSnackbar = (
     message: string,
-    severity: "success" | "info" | "warning" | "error" = "info"
+    severity: SnackbarSeverity = "info"
   ) => {
-    setSnackbarState({
-      open: true,
-      message,
-      severity,
+    toast[variantMap[severity]](message, {
+      duration: 5000,
     });
-  };
-
-  const handleClose = () => {
-    setSnackbarState({ ...snackbarState, open: false });
   };
 
   return (
     <SnackbarContext.Provider value={{ showSnackbar }}>
       {children}
-      <Snackbar
-        open={snackbarState.open}
-        autoHideDuration={6000}
-        onClose={handleClose}
-        anchorOrigin={
-          { vertical: "top", horizontal: "right" } as SnackbarOrigin
-        }
-        sx={{
-          "& .MuiSnackbarContent-root": {
-            backgroundColor: "#00e673",
-            color: "#FFFFFF",
-          },
-        }}
-      >
-        <Alert
-          variant="filled"
-          sx={{
-            width: "400px",
-            backgroundColor:
-              snackbarState.severity === "success" ? "#2DBF29" : "#ff3333",
-          }}
-          onClose={handleClose}
-          severity={snackbarState.severity}
-        >
-          {snackbarState.message}
-        </Alert>
-      </Snackbar>
+      <Toaster position="top-right" richColors expand />
     </SnackbarContext.Provider>
   );
 };

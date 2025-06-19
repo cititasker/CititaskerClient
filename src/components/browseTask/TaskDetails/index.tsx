@@ -1,32 +1,30 @@
 "use client";
-import React, { useEffect, useMemo } from "react";
+
+import React, { useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { Paper } from "@mui/material";
 
 import Icons from "@/components/Icons";
 import ShareTaskModal from "../Modals/ShareTaskModal";
 import ImageGallery from "../Modals/ImageGalleryModal/ImageGallery";
 import CustomTab from "@/components/reusables/CustomTab";
 import Offer from "../Offer";
-import Question from "../Question";
 
 import useModal from "@/hooks/useModal";
-import { styles } from "./styles";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { getSingleTaskQuery } from "@/queries/task";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { setTaskDetails, setUserTaskOffer } from "@/store/slices/task";
 import PosterInfo from "./PosterInfo";
+import { useFetchTaskById } from "@/services/tasks/tasks.hook";
+import { Card } from "@/components/ui/card";
 
 const TaskDetails = () => {
   const { id } = useParams() as { id: string };
-  const dispatch = useAppDispatch();
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.user);
 
-  const { data } = useSuspenseQuery(getSingleTaskQuery(id));
-  const task: ITask = data.data;
+  const { data } = useFetchTaskById({ id });
+  const task: ITask = data?.data;
 
   const {
     isOpen: shareModalOpen,
@@ -35,32 +33,41 @@ const TaskDetails = () => {
   } = useModal();
 
   useEffect(() => {
-    if (task) dispatch(setTaskDetails(task));
-  }, [task]);
+    if (task) {
+      dispatch(setTaskDetails(task));
 
-  const hasMadeOffer = useMemo(
-    () => task.offers.some((el) => el.tasker.id === user?.id),
-    [task, user]
+      const taskerOffer = task.offers.find(
+        (offer) => offer.tasker.id === user?.id
+      );
+      dispatch(setUserTaskOffer(taskerOffer ?? null));
+    }
+  }, [task, user?.id, dispatch]);
+
+  const headerMenu = useMemo(
+    () => [
+      { icon: Icons.share, name: "Share task", action: openShareModal },
+      { icon: Icons.flag, name: "Report task", action: () => {} },
+      { icon: Icons.bookmark, name: "Save task", action: () => {} },
+    ],
+    [openShareModal]
   );
 
-  useEffect(() => {
-    const taskerOffer =
-      task.offers.find((el) => el.tasker.id === user?.id) ?? null;
-    dispatch(setUserTaskOffer(taskerOffer));
-  }, [hasMadeOffer, task]);
+  const tabs = task
+    ? [
+        {
+          label: `Offers (${task.offer_count})`,
+          value: "offers",
+          render: () => <Offer offers={task.offers} />,
+        },
+      ]
+    : [];
 
-  const headerMenu = [
-    { icon: Icons.share, name: "Share task", action: openShareModal },
-    { icon: Icons.flag, name: "Report task" },
-    { icon: Icons.bookmark, name: "Save task" },
-  ];
+  console.log(77, task.offers);
+
+  if (!task) return null;
 
   return (
-    <Paper
-      sx={styles.container}
-      elevation={0}
-      className="hide-scrollbar relative"
-    >
+    <Card className="hide-scrollbar relative">
       <div className="px-12 h-[65px] flex justify-between items-center border-b sticky top-0 z-[20] bg-white">
         <Link
           href="#"
@@ -70,49 +77,41 @@ const TaskDetails = () => {
           <Icons.arrowLeft /> Back to Map
         </Link>
         <div className="flex items-center gap-5">
-          {headerMenu.map((item) => (
+          {headerMenu.map(({ icon: Icon, name, action }) => (
             <button
-              key={item.name}
-              onClick={item.action}
+              key={name}
+              onClick={action}
               className="flex items-center gap-2"
             >
-              <item.icon fill="red" />
-              <p className="text-dark-grey-2 text-sm font-normal">
-                {item.name}
-              </p>
+              <Icon fill="red" />
+              <p className="text-dark-grey-2 text-sm font-normal">{name}</p>
             </button>
           ))}
         </div>
       </div>
 
       <div className="px-[30px] pt-[28px] mb-10">
-        <PosterInfo task={task} hasMadeOffer={hasMadeOffer} />
+        <PosterInfo task={task} />
 
-        <div className="mb-7">
-          <p className="text-xl font-semibold mb-4">Description</p>
+        <section className="mb-7">
+          <h2 className="text-xl font-semibold mb-4">Description</h2>
           <p className="text-sm text-black-2">{task.description}</p>
-        </div>
+        </section>
 
-        <div className="mb-7">
-          <p className="text-xl font-semibold mb-4">Pictures</p>
+        <section className="mb-7">
+          <h2 className="text-xl font-semibold mb-4">Pictures</h2>
           {task.images?.length ? (
             <ImageGallery images={task.images} />
           ) : (
             <p>No images available for this task.</p>
           )}
-        </div>
+        </section>
 
-        <CustomTab tabs={["Offers", "Questions"]}>
-          <Offer offers={task.offers} />
-          <Question />
-        </CustomTab>
+        <CustomTab items={tabs} listClassName="mb-7" />
       </div>
-      <ShareTaskModal
-        open={shareModalOpen}
-        handleClose={closeShareModal}
-        handleOpen={openShareModal}
-      />
-    </Paper>
+
+      <ShareTaskModal open={shareModalOpen} onClose={closeShareModal} />
+    </Card>
   );
 };
 

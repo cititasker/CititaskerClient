@@ -1,6 +1,8 @@
 import React from "react";
 import FormButton from "../forms/FormButton";
 import { cn } from "@/utils";
+import { VariantProps } from "class-variance-authority";
+import { buttonVariants } from "../ui/button";
 
 interface IProps {
   loading?: boolean;
@@ -13,6 +15,7 @@ interface IProps {
   handleSubmit?: any;
   type?: "submit" | "button";
   disabled?: boolean;
+  okVariant?: VariantProps<typeof buttonVariants>["variant"];
 }
 const ActionsButtons = ({
   loading,
@@ -25,31 +28,34 @@ const ActionsButtons = ({
   okText = "Submit",
   cancelText = "Cancel",
   disabled = false,
+  okVariant = "default",
 }: IProps) => {
   return (
     <div
       className={cn(
-        "flex gap-x-4 sm:gap-x-8 items-center mt-auto pb-5",
+        "flex flex-col sm:flex-row gap-y-3 gap-x-4 sm:gap-x-8 items-center mt-auto w-full",
         className
       )}
     >
       {handleCancel && (
         <FormButton
+          variant="ghost"
           text={cancelText}
           className={cn(
-            "flex-1 bg-light-grey text-primary font-normal",
+            "flex-1 bg-light-grey text-primary w-full",
             cancelStyle
           )}
-          handleClick={handleCancel}
+          onClick={handleCancel}
         />
       )}
       <FormButton
         text={okText}
         type={type}
-        className={cn("flex-1 font-medium", okStyle)}
+        className={cn("flex-1 w-full", okStyle)}
         loading={loading}
-        handleClick={handleSubmit}
+        onClick={handleSubmit}
         disabled={disabled || loading}
+        variant={okVariant}
       />
     </div>
   );

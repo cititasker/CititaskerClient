@@ -1,109 +1,126 @@
 "use client";
-import { globalStyles } from "@/globalStyles";
-import { cn } from "@/utils";
-import {
-  Autocomplete,
-  FormControl,
-  FormLabel,
-  SxProps,
-  TextField,
-  Theme,
-} from "@mui/material";
-import React from "react";
-import { Controller, useFormContext } from "react-hook-form";
 
-interface IProps<T> {
-  options: T[];
+import {
+  useFormContext,
+  Controller,
+  FieldPath,
+  FieldValues,
+} from "react-hook-form";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
+import {
+  Command,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandEmpty,
+} from "@/components/ui/command";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
+import { useState } from "react";
+import FormError from "../reusables/FormError";
+
+interface FormAutoCompleteProps<TOption, TFieldValues extends FieldValues> {
+  name: FieldPath<TFieldValues>;
   label?: string;
-  disabled?: boolean;
-  name: string;
+  options: TOption[];
   placeholder?: string;
-  onChange?: (event: any, value: T | null) => void; // Add onChange prop for external handlers
-  value?: T;
-  getOptionLabel: (option: T) => string;
-  renderOption?: (
-    props: React.HTMLAttributes<HTMLLIElement>,
-    option: T
-  ) => React.ReactNode;
-  isOptionEqualToValue?: (option: T, value: T) => boolean;
+  disabled?: boolean;
   className?: string;
-  [key: string]: any;
+  getOptionLabel: (option: TOption) => string;
+  isOptionEqualToValue?: (a: TOption, b: TOption) => boolean;
+  onChange?: (value: TOption | null) => void;
+  renderOption?: (option: TOption, selected: boolean) => React.ReactNode;
 }
 
-const styles: Record<string, SxProps<Theme>> | any = {
-  container: {
-    mb: "15px",
-
-    ".required": {
-      color: "rgba(217, 63, 33, 1)",
-      fontSize: "13.7px",
-      fontWeight: "500",
-      lineHeight: "20.48px",
-      textAlign: "left",
-    },
-    ...globalStyles.input,
-  },
-};
-
-const FormAutoComplete = <T,>({
-  options,
-  label,
-  disabled,
+export function FormAutoComplete<TOption, TFieldValues extends FieldValues>({
   name,
-  placeholder,
-  getOptionLabel,
-  renderOption,
-  isOptionEqualToValue,
-  onChange,
+  label,
+  options,
+  placeholder = "Select...",
+  disabled,
   className,
-}: IProps<T>) => {
-  const {
-    control,
-    formState: { errors },
-  } = useFormContext();
+  getOptionLabel,
+  isOptionEqualToValue = (a, b) => a === b,
+  onChange,
+  renderOption,
+}: FormAutoCompleteProps<TOption, TFieldValues>) {
+  const { control } = useFormContext<TFieldValues>();
+  const [open, setOpen] = useState(false);
 
   return (
-    <FormControl
-      fullWidth
-      sx={styles.container}
-      className={cn("w-full flex-1 mb-5", className)}
-    >
-      <FormLabel htmlFor={label} className="label">
-        {label}
-      </FormLabel>
+    <div className={cn("space-y-1 flex-1 w-full", className)}>
+      {label && <Label htmlFor={name}>{label}</Label>}
+
       <Controller
         name={name}
         control={control}
-        render={({ field }) => (
-          <Autocomplete
-            {...field}
-            disablePortal
-            fullWidth
-            id={label}
-            options={options}
-            getOptionLabel={getOptionLabel}
-            renderOption={renderOption}
-            isOptionEqualToValue={isOptionEqualToValue}
-            disabled={disabled}
-            onChange={(_, value) => {
-              if (onChange) onChange(_, value);
-              field.onChange(value);
-            }}
-            renderInput={(params: any) => {
-              return (
-                <TextField
-                  {...params}
-                  placeholder={placeholder}
-                  error={errors.hasOwnProperty(name)}
-                  helperText={errors[name]?.message}
-                />
-              );
-            }}
-          />
-        )}
-      />
-    </FormControl>
-  );
-};
+        render={({ field }) => {
+          const selected = options.find((opt) =>
+            isOptionEqualToValue(opt, field.value)
+          );
+          const selectedLabel = selected ? getOptionLabel(selected) : "";
 
-export default FormAutoComplete;
+          return (
+            <Popover open={open} onOpenChange={setOpen}>
+              <PopoverTrigger asChild>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="default"
+                  role="combobox"
+                  aria-expanded={open}
+                  disabled={disabled}
+                  className={cn(
+                    "w-full justify-between font-normal hover:bg-transparent shadow-none rounded-[40px]",
+                    !field.value && "text-muted-foreground"
+                  )}
+                >
+                  {selectedLabel || placeholder}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent
+                side="bottom"
+                align="start"
+                className="w-[var(--radix-popover-trigger-width)] p-0"
+              >
+                <Command>
+                  <CommandInput placeholder="Search..." />
+                  <CommandEmpty>No results found.</CommandEmpty>
+                  <CommandList>
+                    {options.map((option, index) => {
+                      const isSelected =
+                        selected && isOptionEqualToValue(option, selected);
+                      return (
+                        <CommandItem
+                          key={index}
+                          value={getOptionLabel(option)}
+                          onSelect={() => {
+                            field.onChange(option);
+                            if (onChange) onChange(option);
+                            setOpen(false);
+                          }}
+                          className="cursor-pointer"
+                        >
+                          {renderOption
+                            ? renderOption(option, !!isSelected)
+                            : getOptionLabel(option)}
+                        </CommandItem>
+                      );
+                    })}
+                  </CommandList>
+                </Command>
+              </PopoverContent>
+            </Popover>
+          );
+        }}
+      />
+
+      <FormError name={name} />
+    </div>
+  );
+}

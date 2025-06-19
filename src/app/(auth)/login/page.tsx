@@ -12,7 +12,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
 import Logo from "@/../public/images/cititasker_logo.svg";
 import { useSearchParams } from "next/navigation";
-import { signIn, useSession } from "next-auth/react";
+import { getSession, signIn } from "next-auth/react";
 import { ROLE, ROUTES } from "@/constant";
 import FadeUp from "@/components/reusables/FadeUp";
 
@@ -20,7 +20,6 @@ export default function Page() {
   const [loading, setLoading] = useState(false);
   const { showSnackbar } = useSnackbar();
   const searchParams = useSearchParams();
-  const { data: session } = useSession();
 
   const methods = useForm<loginSchemaType>({
     defaultValues: {
@@ -38,14 +37,23 @@ export default function Page() {
     setLoading(true);
     const res = await loginWithCredentials(values);
 
+    console.log(11, res);
+
     if (res?.success) {
       showSnackbar(res.message, "success");
+      const updatedSession = await getSession();
+      const userRole = updatedSession?.user?.role;
+
+      console.log(userRole);
+
       const redirect = searchParams.get("redirect");
-      window.location.href = redirect
+      const redirectTo = redirect
         ? decodeURIComponent(redirect)
-        : session?.user?.role === ROLE.poster
+        : userRole === ROLE.poster
         ? ROUTES.POSTER
-        : ROUTES.DASHBOARD;
+        : ROUTES.TASKER;
+
+      window.location.href = redirectTo;
     } else {
       showSnackbar(res.message, "error");
     }
@@ -69,14 +77,14 @@ export default function Page() {
               name="email"
               type="email"
               placeholder="Enter your email address"
-              wrapperStyle="mb-2"
+              className="mb-2"
             />
             <FormInput
               label="Password"
               name="password"
               type="password"
               placeholder="******"
-              wrapperStyle="mb-0"
+              className="mb-0"
             />
             <Link
               href={ROUTES.FORGOT_PASSWORD}
@@ -91,8 +99,11 @@ export default function Page() {
                 type="submit"
                 className="w-full"
               />
-              <span className="uppercase text-center py-4 block">or</span>
+              <span className="uppercase text-center py-3 block text-sm text-black">
+                or
+              </span>
               <FormButton
+                variant="outline"
                 handleClick={handleGoogleAuth}
                 className="w-full py-4 bg-white border border-dark-secondary text-[#1B2149]"
               >

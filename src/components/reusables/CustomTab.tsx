@@ -1,87 +1,87 @@
-"use client";
+import React from "react";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { cn } from "@/lib/utils";
 
-import React, { useState, SyntheticEvent, ReactNode } from "react";
-import { Box, SxProps, Tab, Tabs, Theme } from "@mui/material";
+interface TabItem {
+  label: string;
+  id?: string;
+  render: () => React.ReactNode;
+}
 
 interface CustomTabProps {
-  tabs: string[];
-  defaultIndex?: number;
-  children: ReactNode[];
-  sx?: SxProps<Theme>;
+  items: TabItem[];
+  defaultId?: string;
+  className?: string;
+  listClassName?: string;
+  triggerClassName?: string;
+  contentClassName?: string;
 }
-
-interface TabPanelProps {
-  children: ReactNode;
-  value: number;
-  index: number;
-}
-
-const styles: SxProps<Theme> = {
-  borderBottom: 1,
-  borderColor: "divider",
-  mb: 3,
-  ".MuiTab-root": {
-    py: 1.25,
-    px: 2.5,
-    textTransform: "none",
-    fontSize: 20,
-    fontWeight: 600,
-    color: "var(--black)",
-  },
-  ".Mui-selected": {
-    color: "var(--primary) !important",
-  },
-  ".MuiTabs-indicator": {
-    bgcolor: "var(--primary)",
-  },
-};
-
-const TabPanel: React.FC<TabPanelProps> = ({ children, value, index }) => {
-  return value === index ? (
-    <div
-      role="tabpanel"
-      id={`tab-panel-${index}`}
-      aria-labelledby={`tab-${index}`}
-      className="h-[calc(100%-48px)] bg-white"
-    >
-      {children}
-    </div>
-  ) : null;
-};
 
 const CustomTab: React.FC<CustomTabProps> = ({
-  tabs,
-  defaultIndex = 0,
-  children,
-  sx = {},
+  items,
+  defaultId,
+  className,
+  listClassName,
+  triggerClassName,
+  contentClassName,
 }) => {
-  const [value, setValue] = useState(defaultIndex);
+  const tabItems = React.useMemo(
+    () =>
+      items.map((item) => ({
+        ...item,
+        id: item.id ?? item.label.toLowerCase().replace(/\s+/g, "-"),
+      })),
+    [items]
+  );
 
-  const handleChange = (_: SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  };
+  const [selectedTab, setSelectedTab] = React.useState(
+    defaultId ?? tabItems[0]?.id
+  );
+
+  React.useEffect(() => {
+    if (tabItems.length && !tabItems.find((tab) => tab.id === selectedTab)) {
+      setSelectedTab(tabItems[0]?.id);
+    }
+  }, [tabItems, selectedTab]);
+
+  if (!tabItems.length) return null;
 
   return (
-    <div className="h-full">
-      <Box sx={{ ...styles, ...sx }}>
-        <Tabs value={value} onChange={handleChange} aria-label="tabs">
-          {tabs.map((label, index) => (
-            <Tab
-              key={index}
-              label={label}
-              id={`tab-${index}`}
-              aria-controls={`tab-panel-${index}`}
-            />
-          ))}
-        </Tabs>
-      </Box>
+    <Tabs
+      value={selectedTab}
+      onValueChange={(val) => setSelectedTab(val)}
+      className={cn("pb-10", className)}
+    >
+      <TabsList
+        className={cn(
+          "bg-transparent p-0 gap-4 border-b border-border rounded-none shadow-none",
+          listClassName
+        )}
+      >
+        {tabItems.map(({ label, id }) => (
+          <TabsTrigger
+            key={id}
+            value={id}
+            className={cn(
+              "py-2 px-4 text-sm sm:text-base font-semibold text-muted-foreground border-b-2 border-transparent data-[state=active]:text-primary data-[state=active]:border-primary rounded-none",
+              triggerClassName
+            )}
+          >
+            {label}
+          </TabsTrigger>
+        ))}
+      </TabsList>
 
-      {children.map((child, index) => (
-        <TabPanel key={index} value={value} index={index}>
-          {child}
-        </TabPanel>
+      {tabItems.map(({ id, render }) => (
+        <TabsContent
+          key={id}
+          value={id}
+          className={cn("overflow-y-auto", contentClassName)}
+        >
+          {render()}
+        </TabsContent>
       ))}
-    </div>
+    </Tabs>
   );
 };
 

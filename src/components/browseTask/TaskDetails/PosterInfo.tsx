@@ -1,7 +1,6 @@
 "use client";
+
 import React from "react";
-import Image from "next/image";
-import { Chip } from "@mui/material";
 import { ROLE } from "@/constant";
 import { defaultProfile } from "@/constant/images";
 import {
@@ -13,80 +12,95 @@ import {
 } from "@/utils";
 import Icons from "@/components/Icons";
 import TaskBudget from "./TaskBudget";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import Image from "next/image";
 
 interface PosterInfoProps {
   task: ITask;
-  hasMadeOffer: boolean;
 }
 
-const PosterInfo: React.FC<PosterInfoProps> = ({ task, hasMadeOffer }) => {
+const STATUS_COLORS: Record<string, string> = {
+  open: "bg-light-primary-2 text-black",
+  assigned: "bg-yellow-100 text-yellow-700",
+  completed: "bg-green-100 text-green-700",
+};
+
+const PosterInfo: React.FC<PosterInfoProps> = ({ task }) => {
+  const posterName = initializeName(task.poster?.profile);
+
+  const infoItems = [
+    {
+      icon: <Icons.distance width={20} height={20} />,
+      label: "Location",
+      value: truncate(task.address, 20),
+    },
+    {
+      icon: <Icons.calendar width={18} height={18} />,
+      label: "Due Date",
+      value: convertDate(task.date, "MMM DD, YYYY"),
+    },
+    {
+      icon: <Icons.avTimer />,
+      label: "Posted",
+      value: formatDateAgo(task.created_at),
+    },
+  ];
+
   return (
-    <div className="flex gap-7 mb-[48px]">
-      <div className="shrink-0">
+    <div className="flex gap-7 mb-12">
+      {/* Avatar and Poster Info */}
+      <div className="shrink-0 text-center">
         <Image
           src={task.poster_profile_image ?? defaultProfile}
           alt={ROLE.poster}
           width={60}
           height={60}
-          className="rounded-full object-cover shrink-0 w-[60px] h-[60px]"
+          className="w-[60px] h-[60px] mx-auto rounded-full object-cover"
         />
-        <div className="text-center mt-2">
-          <p className="text-black-2 text-xs font-semibold mb-1">Posted by</p>
-          <p className="text-dark-grey-2 text-xs">
-            {initializeName(task.poster?.profile)}
-          </p>
-        </div>
+        <p className="text-black-2 text-xs font-semibold mt-2">Posted by</p>
+        <p className="text-dark-grey-2 text-xs">{posterName}</p>
       </div>
 
-      <div className="flex-1">
-        <div className="flex gap-3 mb-5">
+      {/* Task Info */}
+      <div className="flex-1 space-y-5">
+        {/* Status Chips */}
+        <div className="flex gap-2">
           {["open", "assigned", "completed"].map((status) => (
-            <Chip
+            <Badge
               key={status}
-              label={status.charAt(0).toUpperCase() + status.slice(1)}
+              variant="outline"
               className={cn(
-                "text-xs h-[26px] font-normal",
-                task.status === status ? "bg-light-primary-2" : "bg-light-grey"
+                "text-xs px-[14px] py-[7px] capitalize",
+                STATUS_COLORS[status],
+                task.status !== status && "bg-light-grey text-black-2"
               )}
-            />
+            >
+              {status}
+            </Badge>
           ))}
         </div>
 
-        <div className="flex justify-between gap-5">
-          <div className="max-w-[250px]">
+        {/* Name and Details */}
+        <div className="flex justify-between gap-5 items-start">
+          <div className="max-w-[250px] space-y-5">
             <h1 className="text-2xl font-semibold text-black-2">{task.name}</h1>
-            <div className="mt-5 flex flex-col gap-4">
-              {[
-                {
-                  icon: <Icons.distance width={20} height={20} />,
-                  label: "Location",
-                  value: truncate(task.address, 20),
-                },
-                {
-                  icon: <Icons.calendar width={18} height={18} />,
-                  label: "Due Date",
-                  value: convertDate(task.date, "MMM DD, YYYY"),
-                },
-                {
-                  icon: <Icons.avTimer />,
-                  label: "Posted",
-                  value: formatDateAgo(task.created_at),
-                },
-              ].map((item, index) => (
-                <div key={index} className="flex items-start gap-4">
-                  {item.icon}
+            <div className="space-y-4">
+              {infoItems.map(({ icon, label, value }, index) => (
+                <div key={index} className="flex items-start gap-3">
+                  <span className="pt-0.5">{icon}</span>
                   <div>
-                    <p className="text-black-2 text-xs font-semibold mb-0.5">
-                      {item.label}
+                    <p className="text-black-2 text-xs font-semibold">
+                      {label}
                     </p>
-                    <p className="text-dark-grey-2 text-xs">{item.value}</p>
+                    <p className="text-dark-grey-2 text-xs">{value}</p>
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          <TaskBudget task={task} hasMadeOffer={hasMadeOffer} />
+          <TaskBudget task={task} />
         </div>
       </div>
     </div>

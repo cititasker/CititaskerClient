@@ -40,7 +40,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     authorized: ({ auth }) => !!auth,
     jwt: ({ token, user, account }) => {
       if (account?.provider === "credentials" && user) {
-        token.userData = { ...user, role: ROLE.poster };
+        token.userData = { ...user, role: user.role };
       }
       return token;
     },

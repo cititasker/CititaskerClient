@@ -1,23 +1,25 @@
-"use client";
-import Faq from "@/components/Faq";
-import Hero from "@/components/tasker/Hero/Hero";
-import HowItWorks from "@/components/tasker/HowItWorks/HowItWorks";
-import TaskByCategory from "@/components/tasker/TaskByCategory/TaskByCategory";
-import TaskerBanner from "@/components/tasker/TaskerBanner";
-import Testimonies from "@/components/tasker/Testimonies/Testimonies";
-import WhyCitiTasker from "@/components/tasker/WhyCitiTasker/WhyCitiTasker";
+import BrowseCategories from "@/components/poster/landingPage/BrowseCategories/BrowseCategories";
+import FeaturedTasks from "@/components/poster/landingPage/FeaturedTasks";
+import NotFound from "@/components/poster/landingPage/NotFound";
+import PromotionBanner from "@/components/poster/landingPage/PromotionBanner";
+import Recommended from "@/components/poster/landingPage/Recommended";
 import React from "react";
 
 export default function Page() {
   return (
-    <div>
-      <Hero />
-      <TaskByCategory />
-      <HowItWorks />
-      <WhyCitiTasker />
-      <Testimonies />
-      <Faq />
-      <TaskerBanner />
-    </div>
+    <main className="bg-light-primary-1">
+      <div className="container pt-[133px] pb-0">
+        <PromotionBanner />
+        {/* <Search extraClass="mx-auto absolute bottom-[38px] left-1/2 -translate-x-1/2" /> */}
+        {/* <PopularCategories /> */}
+      </div>
+      <div className="py-[3.875rem]">
+        <Recommended />
+        <FeaturedTasks />
+      </div>
+      <BrowseCategories />
+      <NotFound />
+      {/* <PosterTestimonies /> */}
+    </main>
   );
 }
