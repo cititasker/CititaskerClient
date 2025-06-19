@@ -53,6 +53,13 @@ interface IUser {
   user_id: number;
   location: string | null;
   occupation: string | null;
+  kyc_stage: {
+    bank: boolean;
+    face_verification: boolean;
+    home_address: boolean;
+    id_verification: boolean;
+    profile: boolean;
+  };
 }
 
 type TRole = "tasker" | "poster";

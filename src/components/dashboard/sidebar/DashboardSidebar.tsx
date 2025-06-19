@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import { List } from "@mui/material";
 import UserProfile from "./UserProfile";
 import SidebarMenuItem from "./SidebarMenuItem";
 import { menuData } from "../../../../data";
+import { Card } from "@/components/ui/card";
 
 interface IProps {
   role: TRole;
@@ -18,21 +18,20 @@ const DashboardSidebar = ({ role }: IProps) => {
   };
 
   return (
-    <div className="paper max-w-[300px] w-full h-fit overflow-hidden sticky top-0">
+    <Card className="max-w-[300px] w-full h-fit overflow-hidden sticky top-0 rounded-[30px] pb-10">
       <UserProfile />
-      <List disablePadding>
+      <div>
         {menuData.map((item, index) => (
           <SidebarMenuItem
             key={index}
             item={item}
             role={role}
-            menuKey={String(index)}
             openMenus={openMenus}
             toggleMenu={toggleMenu}
           />
         ))}
-      </List>
-    </div>
+      </div>
+    </Card>
   );
 };
 

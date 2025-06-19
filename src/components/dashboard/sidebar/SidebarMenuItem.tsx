@@ -1,31 +1,30 @@
 "use client";
 
-import React, { Fragment } from "react";
+import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  Collapse,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-} from "@mui/material";
-import Typography from "@mui/material/Typography";
-import Icons from "@/components/Icons";
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { cn } from "@/lib/utils";
+import { IArrowDown } from "@/constant/icons";
 
-interface MenuItemProps {
-  item: {
-    name: string;
-    href?: string;
-    icon: any;
-    children?: MenuItemProps["item"][];
-  };
+interface MenuItem {
+  name: string;
+  href?: string;
+  icon: any;
+  children?: MenuItem[];
+}
+
+interface SidebarMenuItemProps {
+  item: MenuItem;
   level?: number;
   openMenus: Record<string, boolean>;
   toggleMenu: (key: string) => void;
-  menuKey: string;
-  role: TRole;
+  role: string;
+  className?: string;
 }
 
 const SidebarMenuItem = ({
@@ -33,64 +32,73 @@ const SidebarMenuItem = ({
   level = 0,
   openMenus,
   toggleMenu,
-  menuKey,
   role,
-}: MenuItemProps) => {
+}: SidebarMenuItemProps) => {
   const pathname = usePathname();
-  const isActive = pathname.startsWith(`/${role}${item.href}`);
-  const hasChildren = !!item.children;
+  const key = `${role}-${item.href || item.name}`;
+  const isOpen = openMenus[key];
+  const fullPath = `/${role}${item.href ?? ""}`;
+  const isActive = pathname === fullPath;
 
-  const paddingLeft = level === 0 ? "pl-[50px]" : "pl-[70px]";
-  const classes = `flex gap-3 h-[59px] items-center ${paddingLeft} border-r-2 cursor-pointer ${
-    isActive ? "border-primary bg-light-primary-1" : "border-transparent"
-  }`;
+  const hasChildren = Boolean(item.children?.length);
+  const padding = level === 0 ? "pl-[50px] pr-5" : "px-[70px]";
+
+  const baseStyles = cn(
+    "flex items-center cursor-pointer gap-3 h-[56px] w-full rounded-none border-r-2 text-base font-normal transition-colors",
+    padding,
+    isActive
+      ? "bg-light-primary-1 border-primary text-primary"
+      : "border-transparent text-balck-2 hover:bg-current/40"
+  );
+
+  const Icon = item.icon;
 
   if (hasChildren) {
     return (
-      <Fragment key={menuKey}>
-        <ListItemButton onClick={() => toggleMenu(menuKey)} className={classes}>
-          <div className="flex gap-3 items-center flex-1">
-            <item.icon />
-            <ListItemText>{item.name}</ListItemText>
-          </div>
-          <ListItemIcon>
-            <Icons.dropdown
-              width={20}
-              height={20}
-              className={`transition-all ${
-                openMenus[menuKey] ? "rotate-180" : "rotate-0"
-              }`}
+      <Collapsible
+        open={isOpen}
+        onOpenChange={() => toggleMenu(key)}
+        className="w-full"
+      >
+        <CollapsibleTrigger asChild>
+          <button
+            className={baseStyles}
+            aria-expanded={isOpen}
+            aria-controls={`${key}-children`}
+          >
+            <div className="flex flex-1 items-center gap-3">
+              <Icon />
+              <span>{item.name}</span>
+            </div>
+            <IArrowDown
+              className={cn(
+                "transform transition-transform",
+                isOpen ? "rotate-180" : "rotate-0"
+              )}
             />
-          </ListItemIcon>
-        </ListItemButton>
-        <Collapse in={openMenus[menuKey]} timeout="auto" unmountOnExit>
-          <List disablePadding>
-            {(item.children ?? []).map((child, index) => (
-              <SidebarMenuItem
-                key={`${menuKey}-${index}`}
-                item={child}
-                level={level + 1}
-                openMenus={openMenus}
-                toggleMenu={toggleMenu}
-                menuKey={`${menuKey}-${index}`}
-                role={role}
-              />
-            ))}
-          </List>
-        </Collapse>
-      </Fragment>
+          </button>
+        </CollapsibleTrigger>
+        <CollapsibleContent id={`${key}-children`} className="">
+          {item.children?.map((child, idx) => (
+            <SidebarMenuItem
+              key={`${key}-child-${idx}`}
+              item={child}
+              level={level + 1}
+              openMenus={openMenus}
+              toggleMenu={toggleMenu}
+              role={role}
+            />
+          ))}
+        </CollapsibleContent>
+      </Collapsible>
     );
   }
 
   return (
-    <ListItem
-      component={Link}
-      href={`/${role}${item.href ?? "#"}`}
-      className={classes}
-    >
-      <item.icon />
-      <Typography>{item.name}</Typography>
-    </ListItem>
+    <Link href={`/${role}${item.href ?? "#"}`} className={baseStyles}>
+      <Icon />
+      <span>{item.name}</span>
+    </Link>
   );
 };
 

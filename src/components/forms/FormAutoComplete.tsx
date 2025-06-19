@@ -22,7 +22,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
-import FormError from "./FormError";
+import FormError from "../reusables/FormError";
 
 interface FormAutoCompleteProps<TOption, TFieldValues extends FieldValues> {
   name: FieldPath<TFieldValues>;

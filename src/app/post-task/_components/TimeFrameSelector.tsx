@@ -1,6 +1,6 @@
 import { LuCalendarDays } from "react-icons/lu";
-import FormError from "@/components/forms/FormError";
 import { OptionCardSelector } from "@/components/reusables/OptionCardSelector";
+import FormError from "@/components/reusables/FormError";
 
 export const TimeFrameSelector = () => {
   const TIME_FRAME_OPTIONS = [

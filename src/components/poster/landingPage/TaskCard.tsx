@@ -28,7 +28,7 @@ const TaskCard = ({ data }: IProps) => {
           />
         </Link>
 
-        <StatusBadge className="absolute top-3 left-3" />
+        <StatusBadge status="open" className="absolute top-3 left-3" />
         <div className="cursor-pointer w-7 h-7 rounded-full flex items-center justify-center absolute top-3 right-3 bg-[rgba(2,22,55,0.25)]">
           <MdBookmarkBorder className="text-white text-lg" />
         </div>

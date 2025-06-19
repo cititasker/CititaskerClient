@@ -32,11 +32,6 @@ const TaskDetails = () => {
     closeModal: closeShareModal,
   } = useModal();
 
-  const hasMadeOffer = useMemo(
-    () => task?.offers?.some((offer) => offer.tasker.id === user?.id),
-    [task, user]
-  );
-
   useEffect(() => {
     if (task) {
       dispatch(setTaskDetails(task));

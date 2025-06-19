@@ -1,6 +1,5 @@
 import React from "react";
-import { Typography } from "@mui/material";
-import Icons from "@/components/Icons";
+import { IInfo, IWallet } from "@/constant/icons";
 
 interface WalletBalanceCardProps {
   balance: string;
@@ -10,17 +9,13 @@ interface WalletBalanceCardProps {
 const WalletBalanceCard: React.FC<WalletBalanceCardProps> = ({ balance }) => {
   return (
     <div className="p-5 bg-primary max-w-[268px] h-[157px] rounded-[14px] relative overflow-hidden mb-12">
-      <Icons.wallet />
+      <IWallet />
       <div className="flex items-center gap-1 my-[14px]">
-        <Typography className="text-xs font-normal text-white">
-          Wallet Balance
-        </Typography>
-        <Icons.info className="info" />
+        <p className="text-xs font-normal text-white">Wallet Balance</p>
+        <IInfo />
       </div>
 
-      <Typography className="text-2xl font-semibold text-white mt-10">
-        {balance}
-      </Typography>
+      <p className="text-2xl font-semibold text-white mt-10">{balance}</p>
 
       {/* Background bubbles */}
       <div className="w-[154px] h-[154px] rounded-full bg-[rgba(19,181,234,0.20)] absolute -right-[15%] -bottom-[40%] z-[0]" />

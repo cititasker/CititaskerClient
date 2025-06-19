@@ -22,6 +22,7 @@ interface FormDatePickerProps {
   className?: string;
   labelClassName?: string;
   minDate?: Date;
+  maxDate?: Date;
 }
 
 export default function FormDatePicker({
@@ -30,11 +31,12 @@ export default function FormDatePicker({
   className,
   labelClassName,
   minDate,
+  maxDate,
 }: FormDatePickerProps) {
   const { control } = useFormContext();
 
   return (
-    <div className={cn("space-y-2", className)}>
+    <div className={cn("space-y-2 w-full", className)}>
       {label && (
         <Label
           htmlFor={name}
@@ -79,9 +81,13 @@ export default function FormDatePicker({
                     }
                   }}
                   initialFocus
-                  disabled={(date) =>
-                    !!minDate && moment(date).isBefore(minDate, "day")
-                  }
+                  disabled={(date) => {
+                    const beforeMin =
+                      !!minDate && moment(date).isBefore(minDate, "day");
+                    const afterMax =
+                      !!maxDate && moment(date).isAfter(maxDate, "day");
+                    return beforeMin || afterMax;
+                  }}
                 />
               </PopoverContent>
             </Popover>

@@ -11,8 +11,8 @@ import FormInput from "../forms/FormInput";
 import FormButton from "../forms/FormButton";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import { getCategories, joinTaskerApi } from "@/services";
-import FormAutoComplete from "../forms/FormAutoComplete";
 import { capitalize } from "@/utils";
+import { FormAutoComplete } from "../forms/FormAutoComplete";
 
 interface IProps {
   toggleSuccessModal: () => void;
@@ -92,7 +92,7 @@ const TaskerWaitListForm = ({ toggleSuccessModal }: IProps) => {
             label="What type of service will you provide?"
             options={categories}
             getOptionLabel={(option: any) => option.name}
-            isOptionEqualToValue={(option, value) => option.id === value.id}
+            isOptionEqualToValue={(option, value) => option?.id === value?.id}
             name="occupation"
             placeholder="Select service category"
             className="!rounded-full"

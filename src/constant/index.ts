@@ -22,10 +22,12 @@ export const API_ROUTES = {
     SUB_CATEGORY: "/utility/sub-categories",
   },
   LOGIN: "/auth/login",
-  USER: "/auth/get-user",
+  GET_USER_DETAILS: "auth/user-details",
 
   TASKS: "/tasks",
   USER_TASKS: "/tasks/user",
+  UPLOAD_PROFILE: "auth/upload-profile-image",
+  UPDATE_PROFILE: "auth/update-profile",
   // GET_TASK_BY_ID: (id: string) => `/tasks/${id}`,
 
   // UPDATE_TASK: (id: string) => `/tasks/${id}`,

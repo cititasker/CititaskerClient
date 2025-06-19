@@ -241,6 +241,14 @@ export const statsData = [
 import Tasker from "./public/images/tasker.png";
 import Icons from "@/components/Icons";
 import { ROUTES } from "@/constant";
+import {
+  IChat,
+  ICreditCard,
+  IGridView,
+  INotifications,
+  IProfileCircle,
+  ISettings,
+} from "@/constant/icons";
 export const tasks = [
   {
     id: "1",
@@ -746,27 +754,27 @@ export const profileMenu = [
 ];
 
 export const menuData = [
-  { name: "Dashboard", href: ROUTES.DASHBOARD, icon: Icons.grid },
-  { name: "Message", href: "/dashboard/message", icon: Icons.chat },
+  { name: "Dashboard", href: ROUTES.DASHBOARD, icon: IGridView },
+  { name: "Message", href: "/dashboard/message", icon: IChat },
   {
     name: "Payment & Billing",
     href: "/dashboard/payment",
-    icon: Icons.creditCard,
+    icon: ICreditCard,
   },
   {
     name: "Notification",
     href: "/dashboard/notification",
-    icon: Icons.notificationBell,
+    icon: INotifications,
   },
   {
     name: "Settings",
-    icon: Icons.settings,
+    icon: ISettings,
     children: [
-      { name: "Account", href: "/dashboard/account", icon: Icons.grid },
+      { name: "Account", href: "/dashboard/account", icon: IGridView },
       {
         name: "Profile",
-        href: "/dashboard/profile",
-        icon: Icons.profileCircle,
+        href: "/profile",
+        icon: IProfileCircle,
       },
     ],
   },

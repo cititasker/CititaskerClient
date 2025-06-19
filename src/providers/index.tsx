@@ -13,10 +13,8 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
   const { data: session } = useSession();
   const dispatch = useAppDispatch();
 
-  // Fetch user only when session exists
   const { data } = useQuery(getUserQuery({ enabled: !!session }));
 
-  // Dispatch user data when fetched
   useEffect(() => {
     if (data) dispatch(setUser(data.data));
   }, [data, dispatch]);

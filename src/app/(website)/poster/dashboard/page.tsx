@@ -1,60 +1,56 @@
 "use client";
-import DashboardCard from "@/components/dashboard/DashboardCard";
-import DoughnutChart from "@/components/dashboard/DoughnutChart";
-import CustomTable from "@/components/reusables/CustomTable";
+import { DashboardCard } from "@/components/dashboard/DashboardCard";
+// import { DoughnutChart } from "@/components/dashboard/DoughnutChart";
+import { CustomTable } from "@/components/reusables/CustomTable";
 import { useAppSelector } from "@/store/hook";
-import Typography from "@mui/material/Typography";
-import { GridColDef } from "@mui/x-data-grid";
-import React from "react";
-import { MdOutlineRemoveRedEye } from "react-icons/md";
+import { columns, RecentTask } from "./_components/column";
+import { DoughnutChart } from "@/components/shared/doughnut-chart";
+import { Card } from "@/components/ui/card";
 
 export default function Page() {
   const { user } = useAppSelector((state) => state.user);
-  const columns: GridColDef[] = [
-    { field: "s/n", headerName: "S/N", flex: 1 },
-    { field: "poster", headerName: "Poster", flex: 1 },
-    { field: "location", headerName: "Location", flex: 1 },
-    { field: "date", headerName: "Date", flex: 1 },
-    { field: "status", headerName: "Task Status", flex: 1 },
+
+  const data: RecentTask[] = [
     {
-      field: "actions",
-      headerName: "Actions",
-      width: 150,
-      renderCell: () => <MdOutlineRemoveRedEye />,
+      sn: "#3066",
+      poster: "Alice",
+      location: "Idimu",
+      date: "12-08-2025",
+      status: "pending",
     },
   ];
-  const rows: any = [];
+
   return (
-    <div className="px-[42px] pt-[42px] pb-10 paper">
+    <Card className="relative p-5 sm:px-[42px] pt-[42px] pb-10">
       <div className="mb-10">
-        <Typography className="text-xl font-semibold text-black mb-1">
+        <h1 className="text-xl font-semibold text-black mb-1">
           Good evening {user.first_name ?? "Guest"},
-        </Typography>
-        <Typography className="text-base font-normal text-dark-grey-2">
-          Manage all your task here on your dashboard.
-        </Typography>
+        </h1>
+        <p className="text-base font-normal text-dark-grey-2">
+          Manage all your tasks here on your dashboard.
+        </p>
       </div>
-      <div>
+      <div className="">
         <div className="grid grid-cols-[repeat(auto-fit,minmax(270px,1fr))] gap-5 mb-10">
-          <DashboardCard />
-          <DashboardCard />
-          <DashboardCard />
+          <DashboardCard title="Completed Task" value={18} percentage={90.78} />
+
+          <DashboardCard title="Pending Task" value={5} percentage={45.12} />
+
+          <DashboardCard title="Overdue Task" value={2} percentage={12.34} />
         </div>
-        <div className="flex w-full gap-5 mb-10">
-          <div className="max-w-[650px] w-full rounded-30 border border-dark-grey p-[30px]"></div>
-          <div className="max-w-[288px] w-full rounded-30 border border-dark-grey py-5 px-4">
-            <DoughnutChart />
+        <div className="flex gap-5 mb-10">
+          <div className="max-w-[650px] w-full rounded-2xl border p-8">
+            {/* <DoughnutChart /> */}
           </div>
+          <DoughnutChart />
         </div>
-        <div>
-          <CustomTable
-            title="Recent Activity"
-            rows={rows}
-            columns={columns}
-            checkboxSelection={false}
-          />
-        </div>
+        <CustomTable
+          title="Recent Activity"
+          columns={columns}
+          data={data}
+          headerClass="bg-primary text-white"
+        />
       </div>
-    </div>
+    </Card>
   );
 }

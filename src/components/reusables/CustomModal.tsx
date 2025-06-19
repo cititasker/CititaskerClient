@@ -42,7 +42,7 @@ const CustomModal: FC<CustomModalProps> = ({
         aria-labelledby={undefined}
         aria-describedby={undefined}
         className={cn(
-          "block fixed top-1/2 left-1/2 max-w-[576px] w-[90vw] max-h-[90vh] overflow-hidden -translate-x-1/2 -translate-y-1/2 rounded-[20px] sm:rounded-[30px] bg-white p-5 sm:px-8 sm:py-6 focus:outline-none",
+          "block fixed top-1/2 left-1/2 max-w-[576px] w-[90vw] max-h-[90vh] overflow-x-hidden overflow-y-auto no-scrollbar -translate-x-1/2 -translate-y-1/2 rounded-[20px] sm:rounded-[30px] bg-white p-5 sm:px-8 sm:py-6 focus:outline-none",
           contentClassName
         )}
         hideClose={hideClose}
@@ -56,7 +56,9 @@ const CustomModal: FC<CustomModalProps> = ({
             <DialogDescription />
           </VisuallyHidden>
         </DialogHeader>
-        <div className={cn("overflow-x-hidden", className)}>{children}</div>
+        <div className={cn("overflow-x-hidden w-full", className)}>
+          {children}
+        </div>
       </DialogContent>
     </Dialog>
   );

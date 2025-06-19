@@ -4,7 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useFormContext, Controller } from "react-hook-form";
 import { cn } from "@/lib/utils";
-import FormError from "./FormError";
+import FormError from "../reusables/FormError";
 
 interface FormTextAreaProps {
   name: string;

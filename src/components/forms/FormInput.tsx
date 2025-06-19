@@ -1,10 +1,10 @@
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
-import FormError from "./FormError";
 import { Controller, useFormContext } from "react-hook-form";
 import { useState } from "react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
+import FormError from "../reusables/FormError";
 
 interface FormInputProps {
   name: string;
@@ -13,6 +13,7 @@ interface FormInputProps {
   placeholder?: string;
   disabled?: boolean;
   className?: string;
+  inputClassName?: string;
   readOnly?: boolean;
   clearable?: boolean;
   onClear?: () => void;
@@ -25,6 +26,7 @@ export default function FormInput({
   placeholder,
   disabled,
   className,
+  inputClassName,
   readOnly,
   clearable,
   onClear,
@@ -38,7 +40,7 @@ export default function FormInput({
   const errorId = `${name}-error`;
 
   return (
-    <div className={cn("space-y-1", className)}>
+    <div className={cn("space-y-1 w-full", className)}>
       {label && (
         <Label htmlFor={name} className="text-sm text-black">
           {label}
@@ -59,7 +61,11 @@ export default function FormInput({
               readOnly={readOnly}
               aria-invalid={!!error}
               aria-describedby={error ? errorId : undefined}
-              className={cn("pl-5 pr-10", error && "border-red-500")}
+              className={cn(
+                "pl-5 pr-10 w-full",
+                error && "border-red-500",
+                inputClassName
+              )}
               autoComplete="on"
             />
 
@@ -95,7 +101,7 @@ export default function FormInput({
           </div>
         )}
       />
-      <FormError name={name} id={errorId} />
+      <FormError name={name} />
     </div>
   );
 }

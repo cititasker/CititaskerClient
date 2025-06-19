@@ -12,10 +12,9 @@ import FormInput from "@/components/forms/FormInput";
 import SelectState from "@/components/forms/SelectState";
 import { GooglePlacesAutocomplete } from "@/components/forms/GooglePlacesAutocomplete";
 import { reverseGeocode } from "@/services";
-import FormError from "@/components/forms/FormError";
 import PostTaskFormActions from "./PostTaskFormActions";
-import { OptionCardSelector } from "@/components/reusables/OptionCardSelector";
 import { LocationTypeSelector } from "./LocationTypeSelector";
+import FormError from "@/components/reusables/FormError";
 
 const schema = postTaskSchema.pick({
   location_type: true,
@@ -25,11 +24,6 @@ const schema = postTaskSchema.pick({
 });
 
 type SchemaType = z.infer<typeof schema>;
-
-const OPTIONS = [
-  { label: "In-Person", value: "in_person" },
-  { label: "Online", value: "online" },
-];
 
 const StepTwo = () => {
   const { task } = useAppSelector((state) => state.task);
