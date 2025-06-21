@@ -8,10 +8,9 @@ const BrowseCategories = () => {
       <div className="container pb-[5.75rem] pt-[4.375rem]">
         <div className="relative bg-primary pt-[2.875rem] pb-[5.375rem] rounded-[3.75rem]">
           <div className="max-w-[36.75rem] mx-auto w-full mb-10">
-            <h2 className="header text-white mb-5">Browse all categories</h2>
+            <h2 className="header text-white mb-3">Popular categories</h2>
             <p className="sub_header">
-              Borem ipsum dolor sit amet, consectetur adipiscing elit. Borem
-              ipsum dolor sit amet, consectetur adipiscing elit.
+              Explore the top categories  and choose the tasks you love
             </p>
           </div>
           <BrowseCategoryCarousel />

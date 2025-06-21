@@ -10,6 +10,7 @@ import ICloseCirle from "@/assets/icons/close-circle.svg";
 import IInfo from "@/assets/icons/info.svg";
 import IWallet from "@/assets/icons/wallet.svg";
 import IDistance from "@/assets/icons/distance.svg";
+import Logo from "@/assets/icons/cititasker_logo.svg";
 
 export {
   IChat,
@@ -22,6 +23,7 @@ export {
   IInfo,
   IWallet,
   IDistance,
+  Logo,
 
   // Big Icons
   ITickCircle,

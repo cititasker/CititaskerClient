@@ -119,7 +119,7 @@ const TaskCategories = () => {
     <div className="bg-light-primary-1">
       <div className="container pt-[4.375rem] pb-20">
         <h2 className="header mb-[3.5rem] max-w-[56.25rem] mx-auto">
-        See some of the top rated Taskers        </h2>
+        See some of the top rated Taskers</h2>
         <div className="w-full overflow-x-auto mb-5 md:mb-[3.875rem] hide-scrollbar">
           <div className="flex items-center">
             {tabs.map((item, i) => (

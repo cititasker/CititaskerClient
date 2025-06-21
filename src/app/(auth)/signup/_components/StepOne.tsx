@@ -14,9 +14,9 @@ import { useSnackbar } from "@/providers/SnackbarProvider";
 import { useSearchParams } from "next/navigation";
 import FormInput from "@/components/forms/FormInput";
 import FormButton from "@/components/forms/FormButton";
-import Logo from "@/../public/images/cititasker_logo.svg";
 import StepWrapper from "./StepWrapper";
 import { ROUTES } from "@/constant";
+import { Logo } from "@/constant/icons";
 
 const StepOne = ({ onNext }: { onNext: () => void }) => {
   const { showSnackbar } = useSnackbar();
@@ -55,7 +55,7 @@ const StepOne = ({ onNext }: { onNext: () => void }) => {
             <h2 className="text-center text-xl font-semibold mr-2">
               Sign Up on
             </h2>
-            <Image src={Logo} alt="citi-tasker" />
+            <Logo />
           </div>
 
           <FormInput

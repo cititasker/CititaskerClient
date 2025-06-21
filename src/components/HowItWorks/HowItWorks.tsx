@@ -27,10 +27,8 @@ const HowItWorks = () => {
         <h1 className="header mb-[0.688rem] sm:mb-5">
           How does CitiTasker work?
         </h1>
-        <p className="text-xs font-normal sm:text-base text-center">
-          Borem ipsum dolor sit amet, consectetur adipiscing elit. Borem ipsum
-          dolor sit amet, consectetur adipiscing elit. adipiscing elit. Borem
-          ipsum dolor sit amet, consectetur adipiscing.
+        <p className="text-[14px] md:text-[18px] font-normal text-center">
+         CitiTasker connects you with verified Taskers to get your tasks done effortlessly. Here's how it works:
         </p>
       </div>
       <div className="max-w-[74rem] mx-auto gap-x-5 flex justify-between items-center flex-col xl:flex-row">

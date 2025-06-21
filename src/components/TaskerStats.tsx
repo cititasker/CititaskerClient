@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import React from "react";
-import Stats from "@/../public/images/tasker_stats.svg";
+import Stats from "@/assets/images/task_stats.png";
 import { cn } from "@/utils";
 
 interface IProps {

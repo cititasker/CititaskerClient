@@ -10,11 +10,11 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
-import Logo from "@/../public/images/cititasker_logo.svg";
 import { useSearchParams } from "next/navigation";
 import { getSession, signIn } from "next-auth/react";
 import { ROLE, ROUTES } from "@/constant";
 import FadeUp from "@/components/reusables/FadeUp";
+import { Logo } from "@/constant/icons";
 
 export default function Page() {
   const [loading, setLoading] = useState(false);
@@ -70,7 +70,7 @@ export default function Page() {
               <h2 className="text-center text-xl font-semibold mr-2">
                 Login on
               </h2>
-              <Image src={Logo} alt="citi-tasker" />
+              <Logo />
             </div>
             <FormInput
               label="Email Address"

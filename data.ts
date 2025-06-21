@@ -723,6 +723,11 @@ export const navbar = [
     href: ROUTES.BROWSE_TASK,
     name: "Browse Tasks",
   },
+
+    {
+    name: "About Us",
+    href: "/about",
+  },
 ];
 
 export const profileMenu = [
@@ -779,3 +784,64 @@ export const menuData = [
     ],
   },
 ];
+
+export const categoryItems = [
+  {
+    label: "Cleaning",
+    icon: Icons.cleaning,
+  },
+  {
+    label: "Cooking & Catering",
+    icon: Icons.cleaning,
+  },
+  {
+    label: "Delivery",
+    icon: Icons.cleaning,
+  },
+  {
+    label: "Event",
+    icon: Icons.cleaning,
+  },
+  {
+    label: "Handyman",
+    icon: Icons.cleaning,
+  },
+  {
+    label: "Installation & Assembling",
+    icon: Icons.cleaning,
+  },
+  {
+    label: "Fashion & Beauty",
+    icon: Icons.cleaning,
+  },
+  {
+    label: "Interior Design",
+    icon: Icons.cleaning,
+  },
+];
+
+export const popularTasks = [
+  {
+    label: "AC Installation",
+    icon: "/images/acman.svg",
+  },
+  {
+    label: "Catering",
+   icon: "/images/catering.svg",
+  },
+  {
+    label: "Plumbing",
+   icon: "/images/acman.svg",
+  },
+  {
+    label: "Electrical",
+    icon: "/images/acman.svg",
+  },
+  {
+    label: "Cleaning",
+     icon: "/images/acman.svg",
+  },
+];
+
+
+
