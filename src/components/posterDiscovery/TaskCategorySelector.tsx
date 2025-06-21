@@ -9,9 +9,11 @@ const TaskCategorySelector = () => {
   return (
     <main className="px-4 md:px-16 md:pb-20">
       <div>
-        <h3 className="text-[20px] md:text-[24px] font-semibold pb-3">Get your to-dos done today</h3>
+        <h3 className="text-[20px] md:text-[24px] font-semibold pb-3">
+          Get your to-dos done today
+        </h3>
       </div>
-     <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-6">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(126px,1fr))] gap-6">
         {categoryItems.map((item) => {
           const isActive = selected === item.label;
           const Icon = item.icon;
@@ -21,7 +23,7 @@ const TaskCategorySelector = () => {
               key={item.label}
               onClick={() => setSelected(item.label)}
               className={cn(
-                "w-[126px] h-[126px] px-3 rounded-2xl flex flex-col items-center justify-center text-center shadow-sm border transition-colors duration-200",
+                "h-[126px] px-3 rounded-2xl flex flex-col items-center justify-center text-center shadow-sm border transition-colors duration-200",
                 isActive
                   ? "bg-primary text-white"
                   : "bg-white text-black border-gray-200"

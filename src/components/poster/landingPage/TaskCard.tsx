@@ -2,8 +2,8 @@
 import Image from "next/image";
 import React from "react";
 import { FaStar } from "react-icons/fa";
-import Location from "@/../public/icons/location.svg";
-import Database from "@/../public/icons/database.svg";
+import Location from "@/../public/icons/location.svg?url";
+import Database from "@/../public/icons/database.svg?url";
 import { formatCurrency, truncate } from "@/utils/index";
 import Link from "next/link";
 import { MdBookmarkBorder } from "react-icons/md";

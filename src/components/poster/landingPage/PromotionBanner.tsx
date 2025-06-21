@@ -3,10 +3,10 @@ import Image from "next/image";
 import React from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import Tasker1 from "@/../public/images/plumbing.svg";
-import Tasker2 from "@/../public/images/makeup_artist.svg";
-import Curl from "@/../public/icons/curl.svg";
-import Star from "@/../public/icons/star.svg";
+import Tasker1 from "@/../public/images/plumbing.svg?url";
+import Tasker2 from "@/../public/images/makeup_artist.svg?url";
+import Curl from "@/../public/icons/curl.svg?url";
+import Star from "@/../public/icons/star.svg?url";
 import CustomArrow from "./CustomArrow";
 import { useAppSelector } from "@/store/hook";
 import { formatCurrency } from "@/utils";
@@ -63,7 +63,7 @@ const PromotionBanner = () => {
                 <p className="text-dark-grey-1 text-base mb-2 font-semibold">
                   {el.text}
                 </p>
-               <h2 className="text-[40px] font-bold text-light-primary-1 leading-snug">
+                <h2 className="text-[40px] font-bold text-light-primary-1 leading-snug">
                   {el.title}
                 </h2>
               </div>
