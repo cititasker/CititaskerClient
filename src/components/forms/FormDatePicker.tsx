@@ -15,7 +15,6 @@ import { Calendar } from "@/components/ui/calendar";
 import { Label } from "@/components/ui/label";
 import FormError from "../reusables/FormError";
 import { cn } from "@/lib/utils";
-import { Dayjs } from "dayjs";
 
 interface FormDatePickerProps {
   name: string;
