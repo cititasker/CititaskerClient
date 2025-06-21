@@ -21,7 +21,7 @@ const WaitlistModalForm = () => {
   const [user, setUser] = useState<TRole>(ROLE.poster);
   const { showWaitlistForm } = useAppSelector((state) => state.general);
   const dispatch = useAppDispatch();
-  const [success, setSuccess] = useState(true);
+  const [success, setSuccess] = useState(false);
 
   const handleTabToggle = (value: TRole) => {
     setUser(value);
