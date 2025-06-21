@@ -15,14 +15,15 @@ const TaskerBanner = () => {
           <div className="transition-all duration-300 p-5 sm:py-[62px] sm:px-[73px] bg-dark-secondary xl:bg-secondary rounded-[1.25rem] sm:rounded-[1.875rem] flex-1">
             <div className="mb-5 sm:mb-[3.25rem]">
               <h2 className="text-base sm:text-xl md:text-3xl lg:text-[2.5rem] font-bold text-white mb-2 sm:mb-5">
-              Get Started for Free
+                Get Started for Free
               </h2>
               <p className="text-white text-xs sm:text-base">
-              Becoming a Tasker is completely free! No hidden charges or subscription fees—just sign up and start earning.
+                Becoming a Tasker is completely free! No hidden charges or
+                subscription fees—just sign up and start earning.
               </p>
             </div>
             <FormButton
-              text="Join Waitlist"
+              text="Join waitlist"
               handleClick={() => dispatch(toggleWaitlistModal())}
             />
           </div>

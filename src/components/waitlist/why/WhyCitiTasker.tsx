@@ -13,9 +13,9 @@ const WhyCitiTasker = () => {
     setUser(value);
   };
   return (
-    <div className="bg-light-primary-1 relative">
+    <div className="bg-light-primary-1 relative w-full">
       <div id="why_cititasker" className="absolute w-full -top-[95px]" />
-      <div className="container pt-[1.625rem] sm:pt-[3.75rem] pb-[3.125rem] sm:pb-[6.25rem]">
+      <div className="sm:container pt-[1.625rem] sm:pt-[3.75rem] pb-[3.125rem] sm:pb-[6.25rem]">
         <div className="max-w-[49.375rem] mx-auto mb-[1.75rem] sm:mb-[4rem]">
           <div className="w-fit font-bold mx-auto text-center text-base sm:text-[2.5rem] mb-[0.875rem] sm:mb-[1.875rem]">
             Why Join{" "}
@@ -28,7 +28,7 @@ const WhyCitiTasker = () => {
             makes it simple and hassle-free.
           </p>
         </div>
-        <div className="w-full rounded-[2.5rem] bg-white pt-[1.625rem] pb-[3.75rem] sm:py-[3.25rem] px-5 md:px-[5.875rem]">
+        <div className="w-full sm:rounded-[2.5rem] bg-white pt-[1.625rem] pb-[3.75rem] sm:py-[3.25rem] px-5 md:px-[5.875rem]">
           <CustomTabs
             userType={user}
             handleTabToggle={handleTabToggle}

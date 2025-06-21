@@ -3,7 +3,9 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { BsArrowLeft } from "react-icons/bs";
-import AuthBg1 from "@/assets/images/AuthSlideImg1.png";
+import AuthBg1 from "../../../public/images/hiw-1.svg?url";
+import AuthBg2 from "../../../public/images/hiw-2.svg?url";
+import AuthBg3 from "../../../public/images/hiw-3.svg?url";
 import { cn } from "@/utils";
 import { usePathname } from "next/navigation";
 import { ROUTES } from "@/constant";
@@ -19,11 +21,11 @@ const data = [
     text: "CitiTasker insurance covers Taskers liability to the third parties for personal injury or property damage while performing most task activities (T&C apply) – so you can work with your mind at rest",
   },
   {
-    img: AuthBg1,
+    img: AuthBg2,
     text: "Pay easily, with peace of mind. We hold payments secure in CitiTasker pay escrow account until the task has been completed and you're 100% satisfied.",
   },
   {
-    img: AuthBg1,
+    img: AuthBg3,
     text: "You have to be registered on CitiTasker to be a Tasker. Create an account on our website, it only takes a minute and costs nothing. Jumpstart your reputation by setting up your profile, set your skills and verify your info. ",
   },
 ];

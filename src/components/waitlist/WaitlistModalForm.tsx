@@ -1,31 +1,19 @@
 "use client";
 import React, { useState } from "react";
 import CustomModal from "../reusables/CustomModal";
-import CustomTabs from "../reusables/CustomTabs";
 import Image from "next/image";
 import Icons from "../Icons";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
-import { toggleWaitlistModal, updateModalState } from "@/store/slices/general";
+import { toggleWaitlistModal } from "@/store/slices/general";
 import PosterWaitListForm from "./PosterWaitListForm";
 import TaskerWaitListForm from "./TaskerWaitListForm";
-import { ROLE } from "@/constant";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "../ui/dialog";
-import { VisuallyHidden } from "../ui/visually-hidden";
+import { CITITASKER } from "@/constant/images";
+import CustomTab from "../reusables/CustomTab";
 
 const WaitlistModalForm = () => {
-  const [user, setUser] = useState<TRole>(ROLE.poster);
   const { showWaitlistForm } = useAppSelector((state) => state.general);
   const dispatch = useAppDispatch();
   const [success, setSuccess] = useState(false);
-
-  const handleTabToggle = (value: TRole) => {
-    setUser(value);
-  };
 
   const toggleSuccessModal = () => {
     if (showWaitlistForm) dispatch(toggleWaitlistModal());
@@ -33,43 +21,46 @@ const WaitlistModalForm = () => {
   };
 
   const handleClose = () => {
-    dispatch(updateModalState(false));
+    dispatch(toggleWaitlistModal());
   };
+
+  const tabs = [
+    {
+      label: "Poster",
+      value: "poster",
+      render: () => (
+        <PosterWaitListForm toggleSuccessModal={toggleSuccessModal} />
+      ),
+    },
+    {
+      label: "Tasker",
+      value: "tasker",
+      render: () => (
+        <TaskerWaitListForm toggleSuccessModal={toggleSuccessModal} />
+      ),
+    },
+  ];
 
   return (
     <>
-      <Dialog open={showWaitlistForm} onOpenChange={handleClose}>
-        <DialogContent className="max-w-[824px] px-[54px] py-[57px] !rounded-[40px]">
-          <div>
-            <VisuallyHidden asChild>
-              <DialogTitle />
-            </VisuallyHidden>
-            <VisuallyHidden asChild>
-              <DialogDescription />
-            </VisuallyHidden>
-            <div className="flex gap-x-2 items-center w-fit mx-auto mb-5 sm:mb-[1.75rem]">
-              <Image
-                src="/images/logo.svg"
-                alt="logo"
-                width={86}
-                height={17}
-                className=""
-              />
-              <span className="inline-block bg-light-primary-2 !text-primary text-white text-[0.625rem] px-4 py-2 rounded-[1.25rem]">
-                Coming soon
-              </span>
-            </div>
-            <div>
-              <CustomTabs userType={user} handleTabToggle={handleTabToggle} />
-              {user === ROLE.poster ? (
-                <PosterWaitListForm toggleSuccessModal={toggleSuccessModal} />
-              ) : (
-                <TaskerWaitListForm toggleSuccessModal={toggleSuccessModal} />
-              )}
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <CustomModal
+        isOpen={showWaitlistForm}
+        onClose={handleClose}
+        contentClassName="h-fit max-w-[824px] md:p-[50px] sm:p-8 p-5"
+      >
+        <div className="flex gap-x-2 items-center w-fit mx-auto mb-5 sm:mb-[1.75rem]">
+          <Image src={CITITASKER} alt="logo" width={86} height={17} />
+          <span className="inline-block bg-light-primary-2 !text-primary text-white text-[0.625rem] px-4 py-2 rounded-[1.25rem]">
+            Coming soon
+          </span>
+        </div>
+        <CustomTab
+          items={tabs}
+          className="pb-0"
+          listClassName="flex justify-center border border-primary p-0.5 rounded-[40px] max-w-[444px] mx-auto"
+          triggerClassName="text-primary data-[state=active]:bg-primary data-[state=active]:text-white w-full max-w-[222px] rounded-[40px]"
+        />
+      </CustomModal>
       <CustomModal
         isOpen={success}
         onClose={toggleSuccessModal}

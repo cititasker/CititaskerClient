@@ -70,7 +70,7 @@ const TaskerWaitListForm = ({ toggleSuccessModal }: IProps) => {
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
-        <div className="flex items-center justify-between gap-x-8 gap-y-5 flex-col sm:flex-row mb-5">
+        <div className="w-full space-y-5">
           <FormInput
             label="Full Name"
             name="name"
@@ -85,9 +85,6 @@ const TaskerWaitListForm = ({ toggleSuccessModal }: IProps) => {
             placeholder="Enter your email address"
             className="!mb-0"
           />
-        </div>
-
-        <div className="flex items-center justify-between gap-x-8 gap-y-5 flex-col sm:flex-row mb-5 !rounded-full">
           <FormAutoComplete
             label="What type of service will you provide?"
             options={categories}
@@ -101,8 +98,8 @@ const TaskerWaitListForm = ({ toggleSuccessModal }: IProps) => {
 
         <FormButton
           type="submit"
-          text="Join Waitlist"
-          className="!w-full !h-[3.375rem] mt-[2.5rem]"
+          text="Join waitlist"
+          className="w-full mt-[28px] sm:mt-[5rem]"
           loading={mutation.isPending}
         />
       </form>

@@ -8,7 +8,7 @@ const HeroButton = () => {
   const dispatch = useAppDispatch();
   return (
     <FormButton
-      text="Join Waitlist"
+      text="Join waitlist"
       className="mx-auto xl:ml-0 mt-[3.375rem] sm:mt-16"
       handleClick={() => dispatch(toggleWaitlistModal())}
     />

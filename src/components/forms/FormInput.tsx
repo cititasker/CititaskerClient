@@ -40,9 +40,9 @@ export default function FormInput({
   const errorId = `${name}-error`;
 
   return (
-    <div className={cn("space-y-1 w-full", className)}>
+    <div className={cn("w-full", className)}>
       {label && (
-        <Label htmlFor={name} className="text-sm text-black">
+        <Label htmlFor={name} className="text-sm text-black mb-2">
           {label}
         </Label>
       )}

@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 const CountDownTimer = () => {
   const [isClient, setIsClient] = useState(false);
   const { days, hours, minutes, seconds } = useTimer(
-    new Date("2025-05-02").getTime()
+    new Date("2025-07-01").getTime()
   );
   useEffect(() => {
     setIsClient(true);

@@ -1,7 +1,9 @@
 "use client";
+
 import React from "react";
 import FormButton from "../forms/FormButton";
 import { ROLE } from "@/constant";
+import { cn } from "@/lib/utils";
 
 interface IProps {
   userType: string;
@@ -9,32 +11,39 @@ interface IProps {
   extraStyle?: string;
 }
 
+const tabs = [
+  { label: "Join as a Poster", value: ROLE.poster },
+  { label: "Join as a Tasker", value: ROLE.tasker },
+];
+
 const CustomTabs = ({ userType, handleTabToggle, extraStyle }: IProps) => {
+  const activeIndex = tabs.findIndex((tab) => tab.value === userType);
+
   return (
     <div
-      className={`mb-5 sm:mb-[2.75rem] mx-auto max-w-[30rem] w-full p-1 border border-primary rounded-[2.5rem] flex gap-x-2 relative ${extraStyle}`}
+      className={cn(
+        "mb-5 sm:mb-[2.75rem] mx-auto max-w-[30rem] w-full p-1 border border-primary rounded-[2.5rem] flex gap-x-2 relative",
+        extraStyle
+      )}
     >
+      {/* Background indicator */}
       <div
-        className={`h-[calc(100%-8px)] rounded-[40px] bg-primary absolute top-1 left-1 w-1/2 transition-transform duration-150 ${
-          userType === ROLE.tasker ? "translate-x-[calc(100%-0.5rem)]" : ""
-        }`}
-      ></div>
-      <FormButton
-        className={`!bg-transparent w-1/2 min-h-[2.5rem] sm:!min-h-[3.125rem] z-[2] flex-1 !text-xs sm:!text-base ${
-          userType === ROLE.poster ? "!text-white" : "!text-primary"
-        }`}
-        handleClick={() => handleTabToggle(ROLE.poster)}
-      >
-        Join as a Poster
-      </FormButton>
-      <FormButton
-        className={`bg-transparent w-1/2 min-h-[2.5rem] sm:!min-h-[3.125rem] z-[2] flex-1 !text-xs sm:!text-base ${
-          userType === ROLE.tasker ? "!text-white" : "!text-primary"
-        }`}
-        handleClick={() => handleTabToggle(ROLE.tasker)}
-      >
-        Join as a Tasker
-      </FormButton>
+        className="h-[calc(100%-8px)] w-[calc(50%-4px)] rounded-[40px] bg-primary absolute top-1 transition-transform duration-150"
+        style={{ transform: `translateX(${activeIndex * 100}%)` }}
+      />
+
+      {tabs.map((tab) => (
+        <FormButton
+          key={tab.value}
+          className={cn(
+            "bg-transparent w-1/2 z-[2] flex-1 font-medium",
+            userType === tab.value ? "text-white" : "text-primary"
+          )}
+          handleClick={() => handleTabToggle(tab.value)}
+        >
+          {tab.label}
+        </FormButton>
+      ))}
     </div>
   );
 };

@@ -48,8 +48,11 @@ const PosterWaitListForm = ({ toggleSuccessModal }: IProps) => {
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)}>
-        <div className="flex justify-between gap-x-8 gap-y-5 flex-col sm:flex-row mb-5">
+      <form
+        onSubmit={methods.handleSubmit(onSubmit)}
+        className="flex flex-col justify-between"
+      >
+        <div className="w-full space-y-5">
           <FormInput
             label="Full Name"
             name="name"
@@ -68,8 +71,8 @@ const PosterWaitListForm = ({ toggleSuccessModal }: IProps) => {
 
         <FormButton
           type="submit"
-          text="Join Waitlist"
-          className="!w-full !h-[3.375rem] mt-[28px] sm:mt-[2.5rem]"
+          text="Join waitlist"
+          className="w-full mt-[28px] sm:mt-[5rem]"
           loading={mutation.isPending}
         />
       </form>

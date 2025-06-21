@@ -15,11 +15,8 @@ const generalSlice = createSlice({
     toggleWaitlistModal: (state) => {
       state.showWaitlistForm = !state.showWaitlistForm;
     },
-    updateModalState: (state, { payload }) => {
-      state.showWaitlistForm = payload;
-    },
   },
 });
 
-export const { toggleWaitlistModal, updateModalState } = generalSlice.actions;
+export const { toggleWaitlistModal } = generalSlice.actions;
 export default generalSlice.reducer;
