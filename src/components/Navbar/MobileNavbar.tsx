@@ -18,7 +18,7 @@ export default function MobileNavbar({
   return (
     <div
       className={cn(
-        "xl:hidden fixed inset-0 z-50 overflow-y-auto px-5 p-top bg-white transition-transform duration-300 ease-in-out",
+        "xl:hidden fixed inset-0 z-30 overflow-y-auto px-5 p-top bg-white transition-transform duration-500 ease-in-out",
         showMobileNav ? "translate-y-0" : "-translate-y-full"
       )}
       role="dialog"

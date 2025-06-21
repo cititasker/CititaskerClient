@@ -20,7 +20,7 @@ const responsive = {
   },
   mobile: {
     breakpoint: { max: 600, min: 0 },
-    items: 2,
+    items: 1,
   },
 };
 
@@ -34,7 +34,7 @@ const TestimonialCarousel = () => {
         additionalTransfrom={0}
         arrows={false}
         autoPlay
-        autoPlaySpeed={2000}
+        autoPlaySpeed={10000}
         centerMode={false}
         className=""
         containerClass="container-with-dots"
