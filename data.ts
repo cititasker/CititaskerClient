@@ -724,7 +724,7 @@ export const navbar = [
     name: "Browse Tasks",
   },
 
-    {
+  {
     name: "About Us",
     href: "/about",
   },
@@ -760,25 +760,25 @@ export const profileMenu = [
 
 export const menuData = [
   { name: "Dashboard", href: ROUTES.DASHBOARD, icon: IGridView },
-  { name: "Message", href: "/dashboard/message", icon: IChat },
+  { name: "Message", href: ROUTES.DASHBOARD_MESSAGE, icon: IChat },
   {
     name: "Payment & Billing",
-    href: "/dashboard/payment",
+    href: ROUTES.DASHBOARD_PAYMENT,
     icon: ICreditCard,
   },
   {
     name: "Notification",
-    href: "/dashboard/notification",
+    href: ROUTES.DASHBOARD_NOTIFICATION,
     icon: INotifications,
   },
   {
     name: "Settings",
     icon: ISettings,
     children: [
-      { name: "Account", href: "/dashboard/account", icon: IGridView },
+      { name: "Account", href: ROUTES.DASHBOARD_ACCOUNT, icon: IGridView },
       {
         name: "Profile",
-        href: "/profile",
+        href: ROUTES.PROFILE,
         icon: IProfileCircle,
       },
     ],
@@ -827,11 +827,11 @@ export const popularTasks = [
   },
   {
     label: "Catering",
-   icon: "/images/catering.svg",
+    icon: "/images/catering.svg",
   },
   {
     label: "Plumbing",
-   icon: "/images/acman.svg",
+    icon: "/images/acman.svg",
   },
   {
     label: "Electrical",
@@ -839,9 +839,6 @@ export const popularTasks = [
   },
   {
     label: "Cleaning",
-     icon: "/images/acman.svg",
+    icon: "/images/acman.svg",
   },
 ];
-
-
-

@@ -76,7 +76,7 @@ const UserActions = ({ user, onLogout }: Props) => {
 
           <DropdownMenuContent
             align="end"
-            className="w-[280px] space-y-1 py-5 px-5 mt-5 rounded-xl z-[99]"
+            className="w-[280px] space-y-2 py-5 px-7 mt-5 rounded-[20px] z-[99]"
           >
             <div className="flex gap-2 mb-4">
               <Image
@@ -95,13 +95,17 @@ const UserActions = ({ user, onLogout }: Props) => {
               </div>
             </div>
 
-            <FormButton variant="default" className="w-full mb-3 rounded-full">
+            <FormButton size="default" className="w-full mb-3 rounded-full">
               Switch to {user.role === ROLE.tasker ? "Poster" : "Tasker"}
             </FormButton>
 
             {menu.map((el, i) =>
               el.name !== "Logout" ? (
-                <DropdownMenuItem key={i} asChild>
+                <DropdownMenuItem
+                  key={i}
+                  asChild
+                  className="focus:bg-transparent"
+                >
                   <Link
                     href={el.href}
                     className="flex items-center gap-4 cursor-pointer"

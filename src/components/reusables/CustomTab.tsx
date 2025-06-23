@@ -51,6 +51,7 @@ const CustomTab: React.FC<CustomTabProps> = ({
       value={selectedTab}
       onValueChange={(val) => setSelectedTab(val)}
       className={cn("pb-10", className)}
+      defaultValue={defaultId}
     >
       <TabsList
         className={cn(

@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Typography from "@mui/material/Typography";
 import { defaultProfile } from "@/constant/images";
 import { initializeName } from "@/utils";
 import { useAppSelector } from "@/store/hook";
@@ -16,12 +15,12 @@ const UserProfile = () => {
         height={100}
         className="w-[100px] h-[100px] rounded-full mb-2 object-cover"
       />
-      <Typography className="capitalize text-xl text-black font-medium">
+      <p className="capitalize text-xl text-black font-medium">
         {initializeName({
           first_name: user.first_name,
           last_name: user.last_name,
         })}
-      </Typography>
+      </p>
     </div>
   );
 };

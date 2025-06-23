@@ -18,6 +18,7 @@ import { useSnackbar } from "@/providers/SnackbarProvider";
 import IDVerificationModal from "./IDVerificationModal";
 import BankVerificationModal from "./BankVerification";
 import VerificationResultModal from "./VerificationResultModal";
+import { useSearchParams } from "next/navigation";
 
 interface IOption {
   id: number;
@@ -37,6 +38,16 @@ const Verifications = () => {
   } | null>(null);
   const queryClient = useQueryClient();
   const { showSnackbar } = useSnackbar();
+  const searchParams = useSearchParams();
+  const type = searchParams.get("type");
+
+  useEffect(() => {
+    if (type !== "bank") {
+      idVerification.openModal();
+    } else {
+      paymentVerification.openModal();
+    }
+  }, [type]);
 
   const getBankQuery = useQuery({
     queryKey: [API_ROUTES.UTILITY.BANKS],

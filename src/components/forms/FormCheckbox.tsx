@@ -31,8 +31,8 @@ export default function FormCheckbox({
           <div className="flex items-center gap-2">
             <Checkbox
               id={name}
-              checked={!!field.value}
-              onCheckedChange={(checked) => field.onChange(checked)}
+              checked={field.value ?? false}
+              onCheckedChange={field.onChange}
             />
             <Label
               htmlFor={name}

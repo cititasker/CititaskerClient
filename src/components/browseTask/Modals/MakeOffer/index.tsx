@@ -3,24 +3,22 @@ import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { purgeStateData } from "@/store/slices/task";
 import CustomModal from "@/components/reusables/CustomModal";
-import StepOne from "./MakeOffer/StepOne";
-import StepTwo from "./MakeOffer/StepTwo";
-import StepThree from "./MakeOffer/StepThree";
-import StepFour from "./MakeOffer/StepFour";
+import StepTwo from "./StepTwo";
+import StepThree from "./StepThree";
+import StepFour from "./StepFour";
 import { AnimatePresence, motion } from "framer-motion";
 import { animationVariants } from "@/constant";
+import StepOne from "../shared/StepOne";
 
 interface MakeOfferModalProps {
   open: boolean;
   handleClose: () => void;
-  isIncreaseBudget?: boolean;
-  isEdit?: boolean; // explicitly control edit mode from parent
+  isEdit?: boolean;
 }
 
 const MakeOfferModal: React.FC<MakeOfferModalProps> = ({
   open,
   handleClose,
-  isIncreaseBudget = false,
   isEdit,
 }) => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -56,7 +54,14 @@ const MakeOfferModal: React.FC<MakeOfferModalProps> = ({
   const renderStepContent = () => {
     switch (currentStep) {
       case 1:
-        return <StepOne nextStep={nextStep} isEdit={edit} />;
+        return (
+          <StepOne
+            nextStep={nextStep}
+            title="Make Offer"
+            budgetLabel="Enter your offer amount"
+            firstRowLabel="Total offer"
+          />
+        );
       case 2:
         return (
           <StepTwo nextStep={nextStep} prevStep={prevStep} isEdit={edit} />
@@ -79,8 +84,6 @@ const MakeOfferModal: React.FC<MakeOfferModalProps> = ({
     setShowConfetti(false);
     handleClose();
   };
-
-  console.log(12, currentStep, edit);
 
   return (
     <CustomModal

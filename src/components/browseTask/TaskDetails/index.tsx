@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useCallback } from "react";
+import React, { useEffect, useMemo } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 
@@ -9,7 +9,6 @@ import ShareTaskModal from "../Modals/ShareTaskModal";
 import ImageGallery from "../Modals/ImageGalleryModal/ImageGallery";
 import CustomTab from "@/components/reusables/CustomTab";
 import Offer from "../Offer";
-
 import useModal from "@/hooks/useModal";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { setTaskDetails, setUserTaskOffer } from "@/store/slices/task";

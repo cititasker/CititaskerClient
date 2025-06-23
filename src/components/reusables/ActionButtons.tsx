@@ -33,7 +33,7 @@ const ActionsButtons = ({
   return (
     <div
       className={cn(
-        "flex flex-col sm:flex-row gap-y-3 gap-x-4 sm:gap-x-8 items-center mt-auto w-full",
+        "flex flex-col-reverse sm:flex-row gap-y-3 gap-x-4 sm:gap-x-8 items-center mt-auto w-full",
         className
       )}
     >
@@ -42,7 +42,7 @@ const ActionsButtons = ({
           variant="ghost"
           text={cancelText}
           className={cn(
-            "flex-1 bg-light-grey text-primary w-full",
+            "flex-1 bg-light-grey !text-primary w-full border-[1.5px] border-primary",
             cancelStyle
           )}
           onClick={handleCancel}

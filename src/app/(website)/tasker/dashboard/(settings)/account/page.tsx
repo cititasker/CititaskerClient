@@ -1,14 +1,18 @@
 "use client";
-import React from "react";
+import React, { useMemo } from "react";
 import { tabs } from "./_components/data";
 import CustomTab from "@/components/reusables/CustomTab";
+import { useSearchParams } from "next/navigation";
 
 export default function Page() {
+  const searchParams = useSearchParams();
+  const activeTab = searchParams.get("tab");
+
   return (
     <div className="relative">
       <CustomTab
         items={tabs}
-        className=""
+        defaultId={activeTab ?? undefined}
         triggerClassName="py-5 px-[30px] font-normal"
         listClassName="mb-[30px] sticky top-0 bg-white z-10"
         contentClassName="px-[50px]"

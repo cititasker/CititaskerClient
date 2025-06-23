@@ -1,4 +1,3 @@
-import Typography from "@mui/material/Typography";
 import React from "react";
 
 const Sidebar = () => {
@@ -10,34 +9,26 @@ const Sidebar = () => {
       <div className="px-[30px] py-3">
         <div className="w-full flex justify-between items-center mb-10">
           <div className="max-w-[209px]">
-            <Typography className="text-dark-grey-2 mb-1">
-              Task Status
-            </Typography>
-            <Typography className="text-black-2">Status</Typography>
+            <p className="text-dark-grey-2 mb-1">Task Status</p>
+            <p className="text-black-2">Status</p>
           </div>
           <div className="max-w-[209px]">
-            <Typography className="text-dark-grey-2 mb-1">Proposal</Typography>
-            <Typography className="text-black-2">Partial Refund </Typography>
+            <p className="text-dark-grey-2 mb-1">Proposal</p>
+            <p className="text-black-2">Partial Refund </p>
           </div>
         </div>
         <div className="w-full flex justify-between items-center mb-10">
           <div className="max-w-[209px]">
-            <Typography className="text-dark-grey-2 mb-1">Reason</Typography>
-            <Typography className="text-black-2">
-              Taskers requested to cancel the task
-            </Typography>
+            <p className="text-dark-grey-2 mb-1">Reason</p>
+            <p className="text-black-2">Taskers requested to cancel the task</p>
           </div>
           <div className="max-w-[209px]">
-            <Typography className="text-dark-grey-2 mb-1">
-              Refund Amount
-            </Typography>
-            <Typography className="text-black-2">N60,000.00</Typography>
+            <p className="text-dark-grey-2 mb-1">Refund Amount</p>
+            <p className="text-black-2">N60,000.00</p>
           </div>
         </div>
         <div className="mb-8">
-          <Typography className="text-xl text-dark-grey-2 mb-2">
-            Details
-          </Typography>
+          <p className="text-xl text-dark-grey-2 mb-2">Details</p>
           <div className="text-black-2">
             Horem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu
             turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus

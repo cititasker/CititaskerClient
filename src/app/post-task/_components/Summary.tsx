@@ -18,7 +18,6 @@ import { API_ROUTES, ROUTES } from "@/constant";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 
 import { Label } from "@/components/ui/label";
-import Typography from "@mui/material/Typography";
 import { useCreateTask, useUpdateTask } from "@/services/tasks/tasks.hook";
 import PostTaskFormActions from "./PostTaskFormActions";
 
@@ -37,9 +36,7 @@ interface SummaryFieldProps {
 const SummaryField = ({ label, value }: SummaryFieldProps) => (
   <div>
     <Label className="text-sm text-muted-foreground mb-1.5">{label}</Label>
-    <Typography className="text-base text-foreground">
-      {value ?? "N/A"}
-    </Typography>
+    <p className="text-base text-foreground">{value ?? "N/A"}</p>
   </div>
 );
 

@@ -14,11 +14,12 @@ export type profileSchemaType = z.infer<typeof profileSchema>;
 
 export const accountSchema = z.object({
   profile_image: z.any(),
-  full_name: z.string().optional(),
-  email: z.string().optional(),
-  phone_number: z.string().optional(),
-  location: z.string().optional(),
-  occupation: z.string().optional(),
+  first_name: z.string().min(1, "First name is required"),
+  last_name: z.string().min(1, "Last name is required"),
+  email: z.string().email().min(1, "Email is required"),
+  phone_number: z.string().min(1, "Phone number is required"),
+  date_of_birth: z.string().min(1, "Date of birth is required"),
+  gender: z.string().optional(),
 });
 
 export type accountSchemaType = z.infer<typeof accountSchema>;

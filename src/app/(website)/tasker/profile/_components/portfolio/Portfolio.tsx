@@ -5,7 +5,6 @@ import { z } from "zod";
 import Image from "next/image";
 import { convertToBase64 } from "@/utils";
 import { BsTrash } from "react-icons/bs";
-import { IconButton } from "@mui/material";
 import EditImageModal from "./EditImageModal";
 import Icons from "@/components/Icons";
 
@@ -66,9 +65,7 @@ const Portfolio = () => {
                 />
                 <div className="absolute w-full h-full top-0 left-0 bg-[#000]/20 hidden group-hover:block">
                   <div className="flex items-center absolute bottom-5 right-5">
-                    <IconButton onClick={() => {}}>
-                      <BsTrash className="text-red-500" />
-                    </IconButton>
+                    <BsTrash className="text-red-500" />
                   </div>
                 </div>
               </div>

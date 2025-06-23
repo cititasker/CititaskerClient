@@ -9,14 +9,15 @@ import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { queryClient } from "@/providers/ServerProvider";
 import { purgeStateData } from "@/store/slices/task";
 import { useSnackbar } from "@/providers/SnackbarProvider";
-import { offerSchema, offerSchemaType } from "@/schema/offer";
-import { makeOffer, updateOffer } from "@/services/offer";
+import { baseSchema, offerSchemaType } from "@/schema/offer";
 import StepThreeForm from "./StepThreeForm";
 import { calculateFees } from "@/utils";
 import { API_ROUTES, ROUTES } from "@/constant";
 import { useMakeOrUpdateOffer } from "@/services/offers/offers.hook";
+import { z } from "zod";
 
-const schema = offerSchema.pick({ accepted: true });
+const schema = baseSchema.pick({ accepted: true });
+type SchemaType = z.infer<typeof schema>;
 
 interface StepThreeProps {
   nextStep: () => void;
@@ -37,7 +38,7 @@ export default function StepThree({
 
   const { offer, taskersOffer } = useAppSelector((state) => state.task);
 
-  const form = useForm({
+  const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     defaultValues: { accepted: false },
   });

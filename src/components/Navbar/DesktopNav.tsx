@@ -17,8 +17,6 @@ interface Props {
 export default function DesktopNav({ isAuth, path, user }: Props) {
   const isPoster = user?.role === "poster";
 
-  console.log(44, user);
-
   return (
     <ul className="hidden lg:flex items-center gap-4">
       {navbar.map((nav: NavItem, index) => {

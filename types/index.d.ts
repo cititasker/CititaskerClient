@@ -87,6 +87,7 @@ interface ITaskerProfile {
 interface IOffer {
   created_at: string;
   description: string;
+  reason: string;
   id: number;
   offer_amount: number;
   status: string;

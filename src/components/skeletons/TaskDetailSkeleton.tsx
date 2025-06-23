@@ -1,151 +1,73 @@
-import { Card, Skeleton } from "@mui/material";
+"use client";
+
+import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import React from "react";
 
 const TaskDetailSkeleton = () => {
   return (
-    <Card elevation={0} className="h-full px-[52px] py-5 rounded-[25px] mt-3">
-      <div className="w-full h-[48px] items-center justify-between flex mb-8">
-        <Skeleton animation="wave" variant="text" width={92} height={20} />
+    <Card className="h-full px-[52px] py-5 rounded-[25px] mt-3">
+      {/* Header Row */}
+      <div className="w-full h-[48px] flex items-center justify-between mb-8">
+        <Skeleton className="w-[92px] h-[20px]" />
         <div className="flex gap-3 items-center">
-          <Skeleton animation="wave" variant="text" width={67} height={20} />
-          <Skeleton animation="wave" variant="text" width={74} height={20} />
-          <Skeleton animation="wave" variant="text" width={60} height={20} />
+          <Skeleton className="w-[67px] h-[20px]" />
+          <Skeleton className="w-[74px] h-[20px]" />
+          <Skeleton className="w-[60px] h-[20px]" />
         </div>
       </div>
 
-      <div className="flex gap-4 flex-row justify-between w-full mb-[48px]">
+      {/* Profile and Details */}
+      <div className="flex gap-4 justify-between w-full mb-[48px]">
         <div className="flex gap-4">
           <div className="flex flex-col items-center">
-            <Skeleton
-              animation="wave"
-              variant="circular"
-              width={80}
-              height={80}
-              className="mb-2"
-            />
-            <Skeleton
-              animation="wave"
-              variant="text"
-              width={65}
-              height={18}
-              className="mb-1"
-            />
-            <Skeleton animation="wave" variant="text" width={52} height={16} />
+            <Skeleton className="w-[80px] h-[80px] rounded-full mb-2" />
+            <Skeleton className="w-[65px] h-[18px] mb-1" />
+            <Skeleton className="w-[52px] h-[16px]" />
           </div>
-          <div className="">
+          <div>
             <div className="flex gap-2 mb-5">
-              <Skeleton
-                animation="wave"
-                variant="rectangular"
-                width={54}
-                height={20}
-                className="rounded-[40px]"
-              />
-              <Skeleton
-                animation="wave"
-                variant="rectangular"
-                width={70}
-                height={20}
-                className="rounded-[40px]"
-              />
-              <Skeleton
-                animation="wave"
-                variant="rectangular"
-                width={80}
-                height={20}
-                className="rounded-[40px]"
-              />
+              <Skeleton className="w-[54px] h-[20px] rounded-full" />
+              <Skeleton className="w-[70px] h-[20px] rounded-full" />
+              <Skeleton className="w-[80px] h-[20px] rounded-full" />
             </div>
-            <Skeleton
-              animation="wave"
-              variant="text"
-              width={205}
-              height={35}
-              className="mb-5"
-            />
+            <Skeleton className="w-[205px] h-[35px] mb-5" />
             <div className="flex flex-col gap-3">
               {Array.from({ length: 3 }).map((_, i) => (
                 <div key={i} className="flex gap-2">
-                  <Skeleton
-                    animation="wave"
-                    variant="circular"
-                    width={20}
-                    height={20}
-                    className="shrink-0"
-                  />
+                  <Skeleton className="w-[20px] h-[20px] rounded-full shrink-0" />
                   <div className="w-full">
-                    <Skeleton
-                      animation="wave"
-                      variant="text"
-                      width={106}
-                      height={18}
-                    />
-                    <Skeleton
-                      animation="wave"
-                      variant="text"
-                      width={60}
-                      height={14}
-                    />
+                    <Skeleton className="w-[106px] h-[18px]" />
+                    <Skeleton className="w-[60px] h-[14px]" />
                   </div>
                 </div>
               ))}
             </div>
           </div>
         </div>
+
+        {/* Sidebar */}
         <div className="mt-5 max-w-[217px] w-full">
-          <Skeleton
-            animation="wave"
-            variant="rounded"
-            width="100%"
-            height={180}
-            className="mb-2"
-          />
-          <Skeleton
-            animation="wave"
-            variant="rounded"
-            width="100%"
-            height={51}
-            className="mt-2 rounded-[10px]"
-          />
+          <Skeleton className="w-full h-[180px] mb-2 rounded-md" />
+          <Skeleton className="w-full h-[51px] mt-2 rounded-[10px]" />
         </div>
       </div>
 
+      {/* Description Section */}
       <div className="w-full mb-7">
-        <Skeleton
-          animation="wave"
-          variant="text"
-          width={109}
-          height={30}
-          className="mb-3"
-        />
-        <Skeleton animation="wave" variant="text" width="100%" height={20} />
-        <Skeleton animation="wave" variant="text" width="100%" height={20} />
-        <Skeleton animation="wave" variant="text" width="80%" height={20} />
-        <Skeleton animation="wave" variant="text" width="30%" height={20} />
+        <Skeleton className="w-[109px] h-[30px] mb-3" />
+        <Skeleton className="w-full h-[20px]" />
+        <Skeleton className="w-full h-[20px]" />
+        <Skeleton className="w-[80%] h-[20px]" />
+        <Skeleton className="w-[30%] h-[20px]" />
       </div>
+
+      {/* Attachments Section */}
       <div className="w-full mb-7">
-        <Skeleton
-          animation="wave"
-          variant="text"
-          width={109}
-          height={30}
-          className="mb-3"
-        />
+        <Skeleton className="w-[109px] h-[30px] mb-3" />
         <div className="flex items-center gap-5">
-          <Skeleton
-            animation="wave"
-            variant="rounded"
-            width={100}
-            height={90}
-            className="rounded-[10px]"
-          />
-          <Skeleton
-            animation="wave"
-            variant="rounded"
-            width={100}
-            height={90}
-            className="rounded-[10px]"
-          />
+          <Skeleton className="w-[100px] h-[90px] rounded-[10px]" />
+          <Skeleton className="w-[100px] h-[90px] rounded-[10px]" />
         </div>
       </div>
     </Card>

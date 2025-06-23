@@ -11,6 +11,9 @@ import IInfo from "@/assets/icons/info.svg";
 import IWallet from "@/assets/icons/wallet.svg";
 import IDistance from "@/assets/icons/distance.svg";
 import Logo from "@/assets/icons/cititasker_logo.svg";
+import IInfoCircle from "@/assets/icons/info-circle.svg";
+import IEdit2 from "@/assets/icons/edit-2.svg";
+import IShieldTick from "@/assets/icons/shield-tick.svg";
 
 export {
   IChat,
@@ -23,6 +26,9 @@ export {
   IInfo,
   IWallet,
   IDistance,
+  IInfoCircle,
+  IEdit2,
+  IShieldTick,
   Logo,
 
   // Big Icons

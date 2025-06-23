@@ -66,6 +66,14 @@ export const ROUTES = {
   WAITLIST: "/waitlist",
   POST_TASK: isProd ? "/waitlist" : "/post-task",
   BROWSE_TASK: "/browse-task",
+
+  PROFILE: "/profile",
+
+  // Dashboard
+  DASHBOARD_PAYMENT: "/dashboard/payment",
+  DASHBOARD_NOTIFICATION: "/dashboard/notification",
+  DASHBOARD_ACCOUNT: "/dashboard/account",
+  DASHBOARD_MESSAGE: "/dashboard/message",
 } as const;
 
 export const animationVariants = {

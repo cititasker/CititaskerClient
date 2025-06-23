@@ -1,71 +1,67 @@
-import Typography from "@mui/material/Typography";
+"use client";
+
 import React, { useState } from "react";
-import FormSwitch from "../../../../../../../components/forms/FormSwitch";
+import FormSwitch from "@/components/forms/FormSwitch";
 
 const Notification = () => {
   const [email, setEmail] = useState(false);
   const [sms, setSms] = useState(false);
 
-  const toggleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.checked);
+  const toggleEmail = (checked: boolean) => {
+    setEmail(checked);
   };
-  const toggleSMS = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSms(e.target.checked);
+
+  const toggleSMS = (checked: boolean) => {
+    setSms(checked);
   };
+
+  const sections = [
+    {
+      title: "Transactional",
+      desc: "You will always receive important notifications about any payments, cancellations and your account.",
+      name: "transaction",
+    },
+    {
+      title: "Task Reminder",
+      desc: "Friendly reminders if you’ve forgotten to accept an offer, release a payment or leave a review.",
+      name: "reminder",
+    },
+    {
+      title: "Task Update",
+      desc: "Receive updates on any new comments, messages, offers and reviews.",
+      name: "task_update",
+    },
+    {
+      title: "Task Alert",
+      desc: "Get notified about tasks we think you’d be interested in based on your alert settings and activities on CitiTasker.",
+      name: "task_alert",
+    },
+    {
+      title: "Updates and Newsletters",
+      desc: "Get exciting updates on new features and learn about how to earn more and find the right people for your tasks with helpful tips and advice.",
+      name: "newsletters",
+    },
+  ];
+
   return (
-    <div className="w-full">
-      <div className="w-full rounded-30 border-[0.8px] border-solid border-light-grey px-8 py-6">
-        <Typography className="text-xl text-black font-semibold mb-2">
-          Transactional
-        </Typography>
-        <Typography className="text-black font-normal">
-          You will always receive important notifications about any payments,
-          cancellations and your account.
-        </Typography>
-        <div className="mt-8 flex items-center gap-8">
-          <FormSwitch value={email} handleChange={toggleEmail} label="Email" />
-          <FormSwitch value={sms} handleChange={toggleSMS} label="SMS" />
+    <div className="w-full space-y-6">
+      {sections.map(({ title, desc, name }, i) => (
+        <div
+          key={i}
+          className="w-full rounded-2xl border border-muted px-8 py-6"
+        >
+          <p className="text-black font-semibold mb-2">{title}</p>
+          <p className="text-black font-normal">{desc}</p>
+          <div className="mt-8 flex items-center gap-8">
+            <FormSwitch
+              label="Email"
+              value={email}
+              handleChange={toggleEmail}
+            />
+            <FormSwitch label="SMS" value={sms} handleChange={toggleSMS} />
+          </div>
         </div>
-      </div>
-      <div className="w-full rounded-30 border-[0.8px] border-solid border-light-grey px-8 py-6">
-        <Typography className="text-xl text-black font-semibold mb-2">
-          Message
-        </Typography>
-        <Typography className="text-black font-normal">
-          You will always receive important notifications about any payments,
-          cancellations and your account.
-        </Typography>
-        <div className="mt-8 flex items-center gap-8">
-          <FormSwitch value={email} handleChange={toggleEmail} label="Email" />
-          <FormSwitch value={sms} handleChange={toggleSMS} label="SMS" />
-        </div>
-      </div>
-      <div className="w-full rounded-30 border-[0.8px] border-solid border-light-grey px-8 py-6">
-        <Typography className="text-xl text-black font-semibold mb-2">
-          Reminder
-        </Typography>
-        <Typography className="text-black font-normal">
-          You will always receive important notifications about any payments,
-          cancellations and your account.
-        </Typography>
-        <div className="mt-8 flex items-center gap-8">
-          <FormSwitch value={email} handleChange={toggleEmail} label="Email" />
-          <FormSwitch value={sms} handleChange={toggleSMS} label="SMS" />
-        </div>
-      </div>
-      <div className="w-full rounded-30 border-[0.8px] border-solid border-light-grey px-8 py-6">
-        <Typography className="text-xl text-black font-semibold mb-2">
-          Others
-        </Typography>
-        <Typography className="text-black font-normal">
-          You will always receive important notifications about any payments,
-          cancellations and your account.
-        </Typography>
-        <div className="mt-8 flex items-center gap-8">
-          <FormSwitch value={email} handleChange={toggleEmail} label="Email" />
-          <FormSwitch value={sms} handleChange={toggleSMS} label="SMS" />
-        </div>
-      </div>
+      ))}
     </div>
   );
 };

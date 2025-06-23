@@ -1,57 +1,58 @@
-import { defaultProfile } from "@/constant/images";
-import { queryClient } from "@/providers/ServerProvider";
-import { useSnackbar } from "@/providers/SnackbarProvider";
-import { USERS } from "@/queries/queryKeys";
-import { accountSchemaType, profileSchema, profileSchemaType } from "@/schema";
-import { useAppSelector } from "@/store/hook";
-import { zodResolver } from "@hookform/resolvers/zod";
-import Grid from "@mui/material/Grid2";
-import { useMutation } from "@tanstack/react-query";
-import Image from "next/image";
+"use client";
+
 import React, { useEffect } from "react";
+import Image from "next/image";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { BiLoader } from "react-icons/bi";
 import { MdOutlineCameraAlt } from "react-icons/md";
-import FormInput from "../../../../../../../components/forms/FormInput";
-import FormButton from "../../../../../../../components/forms/FormButton";
-import { errorHandler, maxDate } from "@/utils";
-import FormDatePicker from "../../../../../../../components/forms/FormDatePicker";
-import FormSelect from "../../../../../../../components/forms/FormSelect";
-import { updateProfile, uploadProfile } from "@/services/user/users.api";
 
-const options = [
+import { useMutation } from "@tanstack/react-query";
+import { updateProfile, uploadProfile } from "@/services/user/users.api";
+import { useSnackbar } from "@/providers/SnackbarProvider";
+import { queryClient } from "@/providers/ServerProvider";
+import { USERS } from "@/queries/queryKeys";
+import { profileSchema, profileSchemaType, accountSchemaType } from "@/schema";
+import { useAppSelector } from "@/store/hook";
+import { errorHandler, maxDate } from "@/utils";
+import { defaultProfile } from "@/constant/images";
+
+import FormInput from "@/components/forms/FormInput";
+import FormSelect from "@/components/forms/FormSelect";
+import FormDatePicker from "@/components/forms/FormDatePicker";
+import FormButton from "@/components/forms/FormButton";
+
+const genderOptions = [
   { id: "male", name: "Male" },
   { id: "female", name: "Female" },
 ];
 
-const Account = () => {
+export default function Account() {
   const { user } = useAppSelector((state) => state.user);
   const { showSnackbar } = useSnackbar();
 
-  const mutation = useMutation({
+  const profileUpload = useMutation({
     mutationFn: uploadProfile,
     onSuccess: (data) => {
       showSnackbar(data.message, "success");
       queryClient.invalidateQueries({ queryKey: [USERS] });
     },
-    onError(error) {
-      showSnackbar(errorHandler(error), "error");
-    },
+    onError: (error) => showSnackbar(errorHandler(error), "error"),
   });
-  const updateProfileMutation = useMutation({
+
+  const profileUpdate = useMutation({
     mutationFn: updateProfile,
     onSuccess: (data) => {
       showSnackbar(data.message, "success");
       queryClient.invalidateQueries({ queryKey: [USERS] });
     },
-    onError(error) {
-      showSnackbar(errorHandler(error), "error");
-    },
+    onError: (error) => showSnackbar(errorHandler(error), "error"),
   });
 
   const methods = useForm<profileSchemaType>({
+    resolver: zodResolver(profileSchema),
     defaultValues: {
-      profile_image: "",
+      profile_image: user.profile_image ?? "",
       first_name: user.first_name ?? "",
       last_name: user.last_name ?? "",
       email: user.email ?? "",
@@ -59,37 +60,40 @@ const Account = () => {
       gender: user.gender ?? "",
       date_of_birth: user.date_of_birth ?? "",
     },
-    resolver: zodResolver(profileSchema),
   });
+
   const { handleSubmit, setValue } = methods;
 
   useEffect(() => {
-    if (user?.profile_image) setValue("profile_image", user.profile_image);
-    if (user.first_name) setValue("first_name", user.first_name);
-    if (user.last_name) setValue("last_name", user.last_name);
-    if (user.email) setValue("email", user.email);
-    if (user?.phone_number) setValue("phone_number", user.phone_number);
-    if (user?.gender) setValue("gender", user.gender);
-    if (user?.date_of_birth) setValue("date_of_birth", user.date_of_birth);
+    if (user) {
+      setValue("profile_image", user.profile_image ?? "");
+      setValue("first_name", user.first_name ?? "");
+      setValue("last_name", user.last_name ?? "");
+      setValue("email", user.email ?? "");
+      setValue("phone_number", user.phone_number ?? "");
+      setValue("gender", user.gender ?? "");
+      setValue("date_of_birth", user.date_of_birth ?? "");
+    }
   }, [user]);
 
-  const handleUpload = (e: any) => {
-    const file = e.target.files[0];
+  const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
     if (file) {
       const formData = new FormData();
       formData.append("profile_image", file);
-      mutation.mutate(formData);
+      profileUpload.mutate(formData);
     }
   };
 
-  const onSubmit: SubmitHandler<accountSchemaType> = (value) => {
-    const { profile_image, ...rest } = value;
-    updateProfileMutation.mutate(rest);
-    console.log(profile_image);
+  const onSubmit: SubmitHandler<accountSchemaType> = (values) => {
+    const { profile_image, ...rest } = values;
+    profileUpdate.mutate(rest);
   };
+
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)} className="max-w-[716px]">
+        {/* Profile Image Upload */}
         <label
           htmlFor="upload"
           className="inline-block w-[100px] h-[100px] rounded-full relative overflow-hidden group"
@@ -97,18 +101,18 @@ const Account = () => {
           <Image
             src={user.profile_image ?? defaultProfile}
             alt="user profile"
-            className="w-full h-full rounded-full object-cover"
             width={100}
             height={100}
+            className="object-cover w-full h-full rounded-full"
           />
           <div
-            className={`absolute top-0 left-0 cursor-pointer inline-flex items-center justify-center w-full h-full bg-[#000]/30 ${
-              mutation.isPending
+            className={`absolute inset-0 flex items-center justify-center bg-black/30 transition-opacity ${
+              profileUpload.isPending
                 ? "opacity-100"
                 : "opacity-0 group-hover:opacity-100"
             }`}
           >
-            {mutation.isPending ? (
+            {profileUpload.isPending ? (
               <BiLoader size={24} className="text-white animate-spin" />
             ) : (
               <MdOutlineCameraAlt size={24} className="text-white" />
@@ -116,34 +120,41 @@ const Account = () => {
           </div>
           <input id="upload" type="file" hidden onChange={handleUpload} />
         </label>
+
+        {/* Form Fields */}
         <div className="mt-6 space-y-6">
-          <div className="w-full flex justify-between gap-8">
+          {/* Name */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormInput name="first_name" label="First Name" />
             <FormInput name="last_name" label="Last Name" />
           </div>
-          <div className="w-full flex justify-between gap-8">
+
+          {/* Email & Phone */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormInput name="email" label="Email" />
             <FormInput name="phone_number" label="Phone Number" />
           </div>
-          <div className="w-full flex justify-between gap-8">
+
+          {/* Date of Birth & Gender */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormDatePicker
               name="date_of_birth"
               label="Date of Birth"
               maxDate={maxDate}
             />
-            <FormSelect name="gender" label="Gender" options={options} />
+            <FormSelect name="gender" label="Gender" options={genderOptions} />
           </div>
         </div>
+
+        {/* Submit */}
         <FormButton
           type="submit"
           className="w-full mt-10"
-          loading={updateProfileMutation.isPending}
+          loading={profileUpdate.isPending}
         >
           Save
         </FormButton>
       </form>
     </FormProvider>
   );
-};
-
-export default Account;
+}

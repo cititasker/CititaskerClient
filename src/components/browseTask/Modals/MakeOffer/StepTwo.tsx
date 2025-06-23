@@ -5,7 +5,7 @@ import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
-import { offerSchema } from "@/schema/offer";
+import { baseSchema } from "@/schema/offer";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { setOfferData } from "@/store/slices/task";
 import { maxLengthChar } from "@/constant";
@@ -20,7 +20,17 @@ interface StepTwoProps {
   isEdit: boolean;
 }
 
-const schema = offerSchema.pick({ description: true });
+const schema = baseSchema
+  .pick({ description: true })
+  .superRefine((data, ctx) => {
+    if (!data.description?.trim()) {
+      ctx.addIssue({
+        path: ["description"],
+        code: z.ZodIssueCode.custom,
+        message: "Description is required",
+      });
+    }
+  });
 type SchemaType = z.infer<typeof schema>;
 
 export default function StepTwo({ nextStep, prevStep, isEdit }: StepTwoProps) {
@@ -29,7 +39,7 @@ export default function StepTwo({ nextStep, prevStep, isEdit }: StepTwoProps) {
 
   const methods = useForm<SchemaType>({
     defaultValues: {
-      description: offer.description ?? "",
+      description: offer?.description ?? "",
     },
     resolver: zodResolver(schema),
   });
@@ -41,8 +51,10 @@ export default function StepTwo({ nextStep, prevStep, isEdit }: StepTwoProps) {
     formState: { errors },
   } = methods;
 
+  console.log(555, errors);
+
   const description = watch("description");
-  const remainingChars = maxLengthChar - description.length;
+  const remainingChars = maxLengthChar - (description?.length || 0);
 
   React.useEffect(() => {
     if (taskersOffer?.description) {

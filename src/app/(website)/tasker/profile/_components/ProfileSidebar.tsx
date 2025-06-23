@@ -4,7 +4,7 @@ import { initializeName } from "@/utils";
 import Image from "next/image";
 import React from "react";
 import Badge1 from "@/../public/images/license1.jpg";
-import { IDistance } from "@/constant/icons";
+import { IDistance, IShieldTick } from "@/constant/icons";
 import { StarRating } from "@/components/reusables/StarRating";
 
 const skills = ["Mould Accessment and", "Plumbing"];
@@ -21,11 +21,12 @@ const ProfileSidebar = () => {
           width={100}
           height={100}
         />
-        <p className="capitalise text-xl text-black font-medium">
+        <p className="capitalise text-xl text-black font-medium flex items-center gap-1">
           {initializeName({
             first_name: user.first_name,
             last_name: user.last_name,
           })}
+          <IShieldTick />
         </p>
       </div>
       <div>

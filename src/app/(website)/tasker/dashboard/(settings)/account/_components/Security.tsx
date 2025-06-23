@@ -1,15 +1,14 @@
 import { securitySchema, securitySchemaType } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Typography from "@mui/material/Typography";
 import React from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import FormInput from "../../../../../../../components/forms/FormInput";
-import ActionsButtons from "../../../../../../../components/reusables/ActionButtons";
-import FormButton from "../../../../../../../components/forms/FormButton";
 import { useMutation } from "@tanstack/react-query";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import { errorHandler } from "@/utils";
 import { changePassword } from "@/services/auth";
+import FormInput from "@/components/forms/FormInput";
+import ActionsButtons from "@/components/reusables/ActionButtons";
+import FormButton from "@/components/forms/FormButton";
 
 const Security = () => {
   const { showSnackbar } = useSnackbar();
@@ -41,13 +40,11 @@ const Security = () => {
     <div>
       <div className="w-full rounded-30 border-[0.8px] border-solid border-light-grey px-12 py-8 mb-8">
         <div className="mb-8">
-          <Typography className="mb-4 text-xl text-black font-semibold">
-            Password
-          </Typography>
-          <Typography className="text-black">
+          <p className="mb-4 text-xl text-black font-semibold">Password</p>
+          <p className="text-black">
             You will always receive important notifications about any payments,
             cancellations and your account.
-          </Typography>
+          </p>
         </div>
         <FormProvider {...methods}>
           <form
@@ -80,13 +77,11 @@ const Security = () => {
       <div className="w-full rounded-30 border-[0.8px] border-solid border-light-grey px-12 py-8 mb-8">
         <div className="flex justify-between items-center gap-3 mb-[60px]">
           <div className="max-w-[509px]">
-            <Typography className="mb-4 text-xl text-black font-semibold">
-              Password
-            </Typography>
-            <Typography className="text-black">
+            <p className="mb-4 text-xl text-black font-semibold">Password</p>
+            <p className="text-black">
               You will always receive important notifications about any
               payments, cancellations and your account.
-            </Typography>
+            </p>
           </div>
           <FormButton
             text="Deactivate"
@@ -95,13 +90,13 @@ const Security = () => {
         </div>
         <div className="flex justify-between items-center gap-3">
           <div className="max-w-[509px]">
-            <Typography className="mb-4 text-xl text-red-state-color font-semibold">
+            <p className="mb-4 text-xl text-red-state-color font-semibold">
               Delete
-            </Typography>
-            <Typography className="text-black">
+            </p>
+            <p className="text-black">
               You will always receive important notifications about any
               payments, cancellations and your account.
-            </Typography>
+            </p>
           </div>
           <FormButton
             text="Delete"
