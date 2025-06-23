@@ -28,7 +28,6 @@ interface SingleAccordionProps {
 
 interface MultipleAccordionProps {
   type: "multiple";
-  collapsible?: boolean;
   defaultValue?: string[];
   items: AccordionBaseItem[];
   accordionClassName?: string;
@@ -48,9 +47,9 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({
   return (
     <Accordion
       type={type}
-      collapsible={collapsible}
-      defaultValue={defaultValue as any} // safely cast based on discriminated union
+      defaultValue={defaultValue as any}
       className={accordionClassName}
+      {...(type === "single" ? { collapsible } : {})}
     >
       {items.map((item) => (
         <AccordionItem

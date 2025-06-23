@@ -50,7 +50,7 @@ export default function CategoryDropdown({ nav }: Props) {
       <DropdownMenuContent
         align="center"
         sideOffset={13}
-        className="max-w-[1000px] w-full max-h-[600px] overflow-y-auto hide-scrollbar z-[100] p-10 rounded-[20px]"
+        className="max-w-[1400px] w-full max-h-[600px] overflow-y-auto hide-scrollbar z-[100] p-10 rounded-[20px]"
       >
         {/* Sticky Search */}
         <div className="sticky top-0 bg-white pb-2 z-10">
