@@ -36,18 +36,22 @@ interface MultipleAccordionProps {
 
 type CustomAccordionProps = SingleAccordionProps | MultipleAccordionProps;
 
-const CustomAccordion: React.FC<CustomAccordionProps> = ({
-  type,
-  collapsible = true,
-  defaultValue,
-  items,
-  accordionClassName = "",
-  itemWrapperClassName = "",
-}) => {
+const CustomAccordion: React.FC<CustomAccordionProps> = (props) => {
+  const {
+    type,
+    defaultValue,
+    items,
+    accordionClassName = "",
+    itemWrapperClassName = "",
+  } = props;
+
+  // Only access collapsible if type is single
+  const collapsible = type === "single" ? props.collapsible ?? true : undefined;
+
   return (
     <Accordion
       type={type}
-      defaultValue={defaultValue as any}
+      defaultValue={defaultValue as any} // safe cast based on discriminated union
       className={accordionClassName}
       {...(type === "single" ? { collapsible } : {})}
     >
