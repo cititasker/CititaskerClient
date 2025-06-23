@@ -36,7 +36,6 @@ const FilterList = () => {
       <CustomAccordion
         items={items}
         type="multiple"
-        collapsible
         defaultValue={["category"]}
         itemWrapperClassName="px-5 border-b-[0.8px] border-light-grey"
       />
