@@ -117,7 +117,7 @@ const TaskCategories = () => {
   const [activeTab, setActiveTab] = useState("Assembler & Installer");
   return (
     <div className="bg-light-primary-1">
-      <div className="container pt-[4.375rem] pb-20">
+      <div className="container pt-[4.375rem] pb-14">
         <h2 className="header mb-[3.5rem] max-w-[56.25rem] mx-auto">
         See some of the top rated Taskers</h2>
         <div className="w-full overflow-x-auto mb-5 md:mb-[3.875rem] hide-scrollbar">

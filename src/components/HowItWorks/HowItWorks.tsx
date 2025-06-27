@@ -22,7 +22,7 @@ const data = [
 
 const HowItWorks = () => {
   return (
-    <div className="container bg-white py-[5.125rem]" id="how_it_works">
+    <div className="container bg-white py-[2.3rem] md:py-[5.125rem]" id="how_it_works">
       <div className="mb-[3.375rem] sm:mb-[3.75rem] max-w-[45.625rem] mx-auto">
         <h1 className="header mb-[0.688rem] sm:mb-5">
           How does CitiTasker work?

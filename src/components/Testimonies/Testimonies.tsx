@@ -5,7 +5,7 @@ import TestimonialCarousel from "./TestimonialCarousel";
 
 const Testimonies = () => {
   return (
-    <div className="container py-[4.25rem]">
+    <div className="container py-[2.25rem] md:py-[4.25rem]">
       <div className="h-fit w-full rounded-[13px] md:rounded-[3.125rem] bg-dark-secondary relative overflow-hidden pt-6 pb-8 sm:py-[6.25rem]">
         <Image
           src="/images/dotted_shape.svg"
