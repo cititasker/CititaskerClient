@@ -50,7 +50,7 @@ const WhyChooseCitiTasker = () => {
         className="hidden md:block absolute bottom-0 right-0 w-[200px] h-auto pointer-events-none z-0"
       />
 
-      <div className="container bg-black md:bg-[#F5F5F5] relative z-10 pb-[3rem] md:pb-[5.75rem] pt-[2rem] md:pt-[4.375rem]">
+      <div className="container bg-black md:bg-[#F5F5F5] relative z-10 pb-[2.5rem] md:pb-[5.75rem] pt-[2rem] md:pt-[4.375rem]">
         <div className="w-fit font-bold mx-auto text-white md:text-black text-center text-[24px] md:text-[2.6rem] mb-3.5 md:mb-[3.625rem]">
           Why Choose{" "}
           <UnderlinedHeader
@@ -60,7 +60,7 @@ const WhyChooseCitiTasker = () => {
         </div>
 
         <div className="w-full flex flex-col lg:flex-row gap-x-5 justify-between items-center">
-          <div className="overflow-hidden max-w-full lg:max-w-[32.875rem] w-full mb-[4.375rem] lg:mb-0  relative pl-12 sm:pl-20 before:content-[''] before:absolute before:left-0 before:top-0 before:w-[5px] before:h-full before:bg-dark-grey-2 before:rounded-20">
+          <div className="overflow-hidden max-w-full lg:max-w-[32.875rem] w-full mb-[4.375rem] lg:mb-0  relative pl-8 sm:pl-20 before:content-[''] before:absolute before:left-0 before:top-0 before:w-[5px] before:h-full before:bg-dark-grey-2 before:rounded-20">
             <div
               className="w-[5px] bg-primary absolute top-0 left-0 rounded-20 transition-transform duration-300"
               style={{
@@ -77,14 +77,14 @@ const WhyChooseCitiTasker = () => {
               >
                 <div className="py-[1.5rem]">
                   <h2
-                    className={`mb-2.5 sm:mb-4 text-[16px] md:text-base font-semibold ${
+                    className={`mb-2.5 sm:mb-4 text-[18px] md:text-base font-semibold ${
                       activeIndex === i ? "text-primary" : "text-dark-grey-2"
                     }`}
                   >
                     {el.title}
                   </h2>
                   <p
-                    className={`text-[14px] leading-0 md:text-base font-normal ${
+                    className={`text-[16px] leading-0 md:text-base font-normal ${
                       activeIndex === i
                         ? "text-white sm:text-black"
                         : "text-dark-grey-2"
