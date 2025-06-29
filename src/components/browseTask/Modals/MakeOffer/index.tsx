@@ -6,9 +6,8 @@ import CustomModal from "@/components/reusables/CustomModal";
 import StepTwo from "./StepTwo";
 import StepThree from "./StepThree";
 import StepFour from "./StepFour";
-import { AnimatePresence, motion } from "framer-motion";
-import { animationVariants } from "@/constant";
 import StepOne from "../shared/StepOne";
+import AnimatedStep from "@/components/reusables/AnimatedStep";
 
 interface MakeOfferModalProps {
   open: boolean;
@@ -57,9 +56,10 @@ const MakeOfferModal: React.FC<MakeOfferModalProps> = ({
         return (
           <StepOne
             nextStep={nextStep}
-            title="Make Offer"
-            budgetLabel="Enter your offer amount"
+            title={edit ? "Update Offer" : "Make Offer"}
+            budgetLabel={`${edit ? "Update" : "Enter"} your offer amount`}
             firstRowLabel="Total offer"
+            increasePrice={edit}
           />
         );
       case 2:
@@ -93,18 +93,11 @@ const MakeOfferModal: React.FC<MakeOfferModalProps> = ({
       aria-describedby="make-offer-modal-description"
       confetti={showConfetti}
     >
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={currentStep}
-          initial={direction === "forward" ? "enterFromRight" : "enterFromLeft"}
-          animate="center"
-          exit={direction === "forward" ? "exitToLeft" : "exitToRight"}
-          variants={animationVariants}
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        >
-          {renderStepContent()}
-        </motion.div>
-      </AnimatePresence>
+      <AnimatedStep
+        direction={direction}
+        currentStep={currentStep}
+        renderStepContent={renderStepContent}
+      />
     </CustomModal>
   );
 };

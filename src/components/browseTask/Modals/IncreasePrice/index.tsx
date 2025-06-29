@@ -10,6 +10,7 @@ import StepThree from "./StepThree";
 import StepOne from "../shared/StepOne";
 import Success from "@/components/reusables/Success";
 import { initializeName } from "@/utils";
+import { useStepFormAction } from "@/hooks/useStepFormAction";
 
 interface MakeOfferModalProps {
   open: boolean;
@@ -20,33 +21,14 @@ const IncreasePriceModal: React.FC<MakeOfferModalProps> = ({
   open,
   handleClose,
 }) => {
-  const [currentStep, setCurrentStep] = useState(1);
-  const [direction, setDirection] = useState<"forward" | "backward">("forward");
+  const { currentStep, direction, nextStep, prevStep } =
+    useStepFormAction(open);
 
   const dispatch = useAppDispatch();
   const { isAuth } = useAppSelector((state) => state.user);
   const {
     taskDetails: { poster_profile },
   } = useAppSelector((state) => state.task);
-
-  useEffect(() => {
-    if (open) {
-      setCurrentStep(1);
-    }
-  }, [open]);
-
-  const nextStep = () => {
-    const next = currentStep + 1;
-    setDirection("forward");
-    setCurrentStep(next);
-  };
-
-  const prevStep = () => {
-    if (currentStep > 1) {
-      setDirection("backward");
-      setCurrentStep((prev) => prev - 1);
-    }
-  };
 
   const renderStepContent = () => {
     switch (currentStep) {

@@ -24,6 +24,7 @@ interface FormDatePickerProps {
   labelClassName?: string;
   minDate?: Date;
   maxDate?: Date;
+  triggerClass?: string;
 }
 
 export default function FormDatePicker({
@@ -33,6 +34,7 @@ export default function FormDatePicker({
   labelClassName,
   minDate,
   maxDate,
+  triggerClass,
 }: FormDatePickerProps) {
   const { control } = useFormContext();
 
@@ -62,7 +64,8 @@ export default function FormDatePicker({
                   variant="outline"
                   className={cn(
                     "w-full justify-start text-left font-normal hover:bg-transparent",
-                    !field.value && "text-muted-foreground"
+                    !field.value && "text-muted-foreground",
+                    triggerClass
                   )}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />

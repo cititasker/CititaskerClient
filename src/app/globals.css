@@ -109,6 +109,9 @@ body {
 }
 
 @layer components {
+  .ProseMirror {
+    @apply min-h-[96px] outline-none whitespace-pre-wrap py-0;
+  }
   .label {
     @apply text-sm text-dark-secondary font-normal;
   }
@@ -218,4 +221,9 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.prose p {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
 }

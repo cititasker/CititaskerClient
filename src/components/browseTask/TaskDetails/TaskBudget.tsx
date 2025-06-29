@@ -91,6 +91,10 @@ const TaskBudget: React.FC<TaskBudgetProps> = ({ task }) => {
     };
   }, [user.kyc_stage]);
 
+  const handleCloseModal = () => {
+    closeModal();
+  };
+
   return (
     <>
       <div>

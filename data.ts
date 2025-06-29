@@ -767,18 +767,13 @@ export const menuData = [
     icon: ICreditCard,
   },
   {
-    name: "Notification",
-    href: ROUTES.DASHBOARD_NOTIFICATION,
-    icon: INotifications,
-  },
-  {
     name: "Settings",
     icon: ISettings,
     children: [
       { name: "Account", href: ROUTES.DASHBOARD_ACCOUNT, icon: IGridView },
       {
         name: "Profile",
-        href: ROUTES.PROFILE,
+        href: ROUTES.DASHBOARD_PROFILE,
         icon: IProfileCircle,
       },
     ],

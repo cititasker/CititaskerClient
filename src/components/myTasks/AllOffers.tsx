@@ -1,5 +1,5 @@
 import React from "react";
-import UserOffer from "./UserOffer";
+import UserOffer from "../browseTask/Offer/UserOffer";
 import Empty from "./Empty";
 
 interface IProps {

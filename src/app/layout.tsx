@@ -3,6 +3,7 @@ import { SessionProvider } from "next-auth/react";
 import "./globals.css";
 import Providers from "@/providers";
 import AppProvider from "@/providers/AppProvider";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 export const metadata: Metadata = {
   title: "CitiTasker",
@@ -26,7 +27,9 @@ export default function RootLayout({
       <body className="relative">
         <SessionProvider>
           <AppProvider>
-            <Providers>{children}</Providers>
+            <Providers>
+              <TooltipProvider>{children}</TooltipProvider>
+            </Providers>
           </AppProvider>
         </SessionProvider>
       </body>

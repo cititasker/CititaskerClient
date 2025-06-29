@@ -5,6 +5,7 @@ import { useFieldArray, useFormContext } from "react-hook-form";
 import { FormSchema } from "../../_utils/schema";
 import FormInput from "@/components/forms/FormInput";
 import { Plus, Trash2 } from "lucide-react";
+import FormDatePicker from "@/components/forms/FormDatePicker";
 
 const CertificatesSection = () => {
   const { control } = useFormContext<FormSchema>();
@@ -19,7 +20,7 @@ const CertificatesSection = () => {
   });
 
   return (
-    <div className="px-5 sm:px-[47px] pb-6 border-b-[0.5px] border-[#EBEBEB]">
+    <div className="pb-6 border-b-[0.5px] border-[#EBEBEB]">
       <div className="max-w-[653px] space-y-4">
         <label className="text-sm font-semibold mb-1.5 text-black-2">
           Certifications
@@ -40,10 +41,11 @@ const CertificatesSection = () => {
                     label="Awarded by:"
                     inputClassName="rounded-md bg-light-grey"
                   />
-                  <FormInput
+                  <FormDatePicker
                     name={`certificates[${index}].year`}
                     label="Year:"
-                    inputClassName="rounded-md bg-light-grey"
+                    labelClassName="font-normal"
+                    triggerClass="rounded-md bg-light-grey"
                   />
                 </div>
                 <FormButton

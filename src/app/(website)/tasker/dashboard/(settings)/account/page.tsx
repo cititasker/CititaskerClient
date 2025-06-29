@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo } from "react";
+import React from "react";
 import { tabs } from "./_components/data";
 import CustomTab from "@/components/reusables/CustomTab";
 import { useSearchParams } from "next/navigation";

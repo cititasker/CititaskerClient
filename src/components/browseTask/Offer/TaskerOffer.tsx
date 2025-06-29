@@ -3,9 +3,12 @@
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useAppSelector } from "@/store/hook";
 import { formatCurrency, loggedInUser } from "@/utils";
-import ReplyOffer from "./ReplyOffer";
 import Icons from "@/components/Icons";
 import FormButton from "@/components/forms/FormButton";
+import CommentThread from "./CommentThread";
+import { useQuery } from "@tanstack/react-query";
+import { API_ROUTES } from "@/constant";
+import { getOfferReplies } from "@/services/offers/offers.api";
 
 interface TaskerOfferProps {
   offer: IOffer;
@@ -21,6 +24,11 @@ const TaskerOffer: React.FC<TaskerOfferProps> = ({ offer, toggleModal }) => {
     offer.tasker.first_name,
     offer.tasker.last_name
   );
+
+  const { data } = useQuery({
+    queryKey: [API_ROUTES.OFFER_REPLIES],
+    queryFn: () => getOfferReplies(`${offer.id}`),
+  });
 
   return (
     <div className="flex gap-4 mb-6 last:mb-0">
@@ -53,7 +61,7 @@ const TaskerOffer: React.FC<TaskerOfferProps> = ({ offer, toggleModal }) => {
           )}
         </div>
 
-        <ReplyOffer offer={offer} />
+        <CommentThread offer={data?.data} />
       </div>
     </div>
   );

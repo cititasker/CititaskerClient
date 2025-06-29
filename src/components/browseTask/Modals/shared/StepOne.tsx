@@ -16,6 +16,7 @@ import ActionsButtons from "@/components/reusables/ActionButtons";
 
 const schema = baseSchema.pick({
   task_id: true,
+  offer_id: true,
   offer_amount: true,
 });
 type SchemaType = z.infer<typeof schema>;
@@ -35,26 +36,30 @@ const StepOne = ({
   firstRowLabel = "Total offer",
   increasePrice = false,
 }: Props) => {
-  const { id } = useParams();
+  const params = useParams();
+  const task_id = Number(params.id);
   const dispatch = useAppDispatch();
   const { taskersOffer, offer } = useAppSelector((state) => state.task);
+
+  console.log(899, taskersOffer);
 
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
-      task_id: Number(id),
+      task_id,
+      offer_id: undefined,
       offer_amount: offer.offer_amount || "",
     },
   });
 
   useEffect(() => {
     if (taskersOffer) {
-      const payload = {
-        offer_id: taskersOffer.id,
-        task_id: id,
-        offer_amount: `${taskersOffer.offer_amount}`,
-      };
-      dispatch(setOfferData({ ...payload, ...offer }));
+      const { id, offer_amount } = taskersOffer;
+      form.reset({
+        task_id,
+        offer_id: id,
+        offer_amount: `${offer_amount}`,
+      });
     }
   }, [taskersOffer]);
 

@@ -42,9 +42,9 @@ const Verifications = () => {
   const type = searchParams.get("type");
 
   useEffect(() => {
-    if (type !== "bank") {
+    if (type === "id") {
       idVerification.openModal();
-    } else {
+    } else if (type == "bank") {
       paymentVerification.openModal();
     }
   }, [type]);
@@ -133,7 +133,7 @@ const Verifications = () => {
   };
 
   return (
-    <div className="relative px-12 pt-7">
+    <div className="relative pt-7">
       <div className="mb-8">
         <h3 className="text-xl font-bold mb-1">Verify Account</h3>
         <p className="text-cs-dark-4">

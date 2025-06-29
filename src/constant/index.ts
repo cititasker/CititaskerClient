@@ -50,6 +50,7 @@ export const API_ROUTES = {
   GET_TASK_BY_ID: "/tasks/single",
   MAKE_OFFER: "/tasks/make-offer",
   UPDATE_OFFER: "/tasks/edit-offer",
+  OFFER_REPLIES: "/tasks/offer-replies",
 };
 
 const isProd = process.env.NODE_ENV === "production";
@@ -66,14 +67,13 @@ export const ROUTES = {
   WAITLIST: "/waitlist",
   POST_TASK: isProd ? "/waitlist" : "/post-task",
   BROWSE_TASK: "/browse-task",
-
-  PROFILE: "/profile",
+  PUBLIC_PROFILE: "/profile",
 
   // Dashboard
   DASHBOARD_PAYMENT: "/dashboard/payment",
-  DASHBOARD_NOTIFICATION: "/dashboard/notification",
   DASHBOARD_ACCOUNT: "/dashboard/account",
   DASHBOARD_MESSAGE: "/dashboard/message",
+  DASHBOARD_PROFILE: "/dashboard/profile",
 } as const;
 
 export const animationVariants = {

@@ -14,6 +14,10 @@ import Logo from "@/assets/icons/cititasker_logo.svg";
 import IInfoCircle from "@/assets/icons/info-circle.svg";
 import IEdit2 from "@/assets/icons/edit-2.svg";
 import IShieldTick from "@/assets/icons/shield-tick.svg";
+import ISend2 from "@/assets/icons/send-2.svg";
+import ILink from "@/assets/icons/link.svg";
+import IEmojiCLip from "@/assets/icons/emoji-clip.svg";
+import IEmojiSmile from "@/assets/icons/emoji-smile.svg";
 
 export {
   IChat,
@@ -30,6 +34,10 @@ export {
   IEdit2,
   IShieldTick,
   Logo,
+  ISend2,
+  ILink,
+  IEmojiCLip,
+  IEmojiSmile,
 
   // Big Icons
   ITickCircle,

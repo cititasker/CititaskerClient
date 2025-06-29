@@ -20,6 +20,7 @@ interface CustomModalProps {
   contentClassName?: string; // dialog content styling
   hideClose?: boolean;
   confetti?: boolean;
+  disableAutoFocus?: boolean;
   [key: string]: any;
 }
 
@@ -31,6 +32,7 @@ const CustomModal: FC<CustomModalProps> = ({
   contentClassName = "",
   hideClose = false,
   confetti = false,
+  disableAutoFocus = true,
   ...rest
 }) => {
   return (
@@ -44,6 +46,9 @@ const CustomModal: FC<CustomModalProps> = ({
           contentClassName
         )}
         hideClose={hideClose}
+        onOpenAutoFocus={(e) => {
+          if (disableAutoFocus) e.preventDefault();
+        }}
         {...rest}
       >
         <DialogHeader>

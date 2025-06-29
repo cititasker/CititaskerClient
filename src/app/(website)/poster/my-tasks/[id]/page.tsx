@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
@@ -27,6 +27,10 @@ import {
   useFetchUserTaskById,
 } from "@/services/tasks/tasks.hook";
 import { API_ROUTES } from "@/constant";
+import PaySurChargeModal from "../_components/surcharge/PaySurChargeModal";
+import useModal from "@/hooks/useModal";
+import { useAppDispatch } from "@/store/hook";
+import { purgeStateData } from "@/store/slices/task";
 
 const schema = z.object({
   agreed: z.boolean().refine((v) => v, {
@@ -45,10 +49,16 @@ export default function Offer() {
   const [showAcceptModal, setShowAcceptModal] = useState(false);
   const [selectedOffer, setSelectedOffer] = useState<IOffer | null>(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const surchargeModal = useModal();
+  const dispatch = useAppDispatch();
 
   const { data } = useFetchUserTaskById({ id });
   const task = data.data;
   const status = task?.status;
+
+  const acceptedOffer = useMemo(() => {
+    return task.offers.find((offer) => offer.status == "accepted");
+  }, [task.offers]);
 
   const methods = useForm<SchemaType>({
     resolver: zodResolver(schema),
@@ -98,8 +108,15 @@ export default function Offer() {
   function handlePrimaryAction() {
     if (status === "open") {
       router.push(`/post-task/${id}`);
+    } else if (status == "assigned") {
+      surchargeModal.openModal();
     }
   }
+
+  const closeSurcharge = () => {
+    dispatch(purgeStateData({ path: "offer" }));
+    surchargeModal.closeModal();
+  };
 
   const buttonText =
     status === "open"
@@ -159,7 +176,6 @@ export default function Offer() {
           onSubmit={onSubmit}
           loading={paymentMutation.isPending}
           selectedOffer={selectedOffer}
-          taskName={task.name}
         />
 
         {/* Payment Success Modal */}
@@ -167,6 +183,13 @@ export default function Offer() {
           isOpen={showSuccessModal}
           onClose={toggleSuccessModal}
           selectedOffer={selectedOffer}
+        />
+
+        {/* Pay surcharge modal */}
+        <PaySurChargeModal
+          isOpen={surchargeModal.isOpen}
+          onClose={closeSurcharge}
+          acceptedOffer={acceptedOffer}
         />
       </div>
     </FormProvider>

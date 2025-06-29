@@ -3,22 +3,32 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { formatTime } from "@/utils";
-import CommentBox from "./CommentBox";
 import Icons from "@/components/Icons";
+import CommentBox from "./CommentBox";
+import DOMPurify from "dompurify";
 
 interface IProps {
-  offer: IOffer;
+  offer: ICommenThreadProps | undefined;
+  level?: number;
 }
 
-const ReplyOffer = ({ offer }: IProps) => {
-  const [showComment, setShowComment] = useState(false);
+const ReplyOffer = ({ offer, level = 0 }: IProps) => {
+  const [showComment, setShowComment] = useState(level === 0);
 
   return (
-    <div>
-      <div className="w-full p-5 bg-muted rounded-b-[25px] rounded-tr-[25px]">
-        <p className="text-sm mb-2">{offer.description}</p>
+    <div className="w-full space-y-4">
+      <div
+        className="p-5 bg-muted rounded-b-[25px] rounded-tr-[25px]"
+        style={{ marginLeft: `${level * 30}px` }}
+      >
+        <div
+          className="text-sm mb-2 prose max-w-none"
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(offer?.content || ""),
+          }}
+        />
         <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          <span>{formatTime(offer.created_at)}</span>
+          {offer && <span>{formatTime(offer.created_at)}</span>}
           <Button
             variant="link"
             size="sm"
@@ -31,7 +41,13 @@ const ReplyOffer = ({ offer }: IProps) => {
           </Button>
         </div>
       </div>
-      {showComment && <CommentBox item={offer} />}
+      {showComment && offer?.id && <CommentBox offer_id={offer.id} />}
+
+      <div className="space-y-4 w-full">
+        {offer?.replies?.map((reply) => (
+          <ReplyOffer key={reply.id} offer={reply} level={level + 1} />
+        ))}
+      </div>
     </div>
   );
 };

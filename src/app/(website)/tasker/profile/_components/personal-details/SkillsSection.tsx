@@ -27,7 +27,7 @@ const SkillsSection = () => {
   };
 
   return (
-    <div className="px-5 sm:px-[47px] pb-6 border-b-[0.5px] border-[#EBEBEB]">
+    <div className="pb-6 border-b-[0.5px] border-[#EBEBEB]">
       <div className="max-w-[653px]">
         <label className="text-sm font-semibold mb-1.5 text-black-2">
           Skills
