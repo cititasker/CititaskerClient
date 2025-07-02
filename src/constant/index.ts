@@ -53,7 +53,7 @@ export const API_ROUTES = {
   OFFER_REPLIES: "/tasks/offer-replies",
 };
 
-const isProd = process.env.NODE_ENV === "production";
+const isProd = process.env.NEXT_PUBLIC_NODE_ENV === "production";
 
 export const ROUTES = {
   MY_TASKS: "/my-tasks",
