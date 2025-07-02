@@ -76,7 +76,7 @@ export function FormAutoComplete<TOption, TFieldValues extends FieldValues>({
                   aria-expanded={open}
                   disabled={disabled}
                   className={cn(
-                    "w-full justify-between font-normal hover:bg-transparent shadow-none rounded-[40px]",
+                    "h-[50px] w-full justify-between font-normal hover:bg-transparent shadow-none rounded-[40px]",
                     !field.value && "text-muted-foreground"
                   )}
                 >

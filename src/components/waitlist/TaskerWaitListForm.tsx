@@ -86,13 +86,12 @@ const TaskerWaitListForm = ({ toggleSuccessModal }: IProps) => {
             className="!mb-0"
           />
           <FormAutoComplete
-            label="What type of service will you provide?"
-            options={categories}
-            getOptionLabel={(option: any) => option.name}
-            isOptionEqualToValue={(option, value) => option?.id === value?.id}
             name="occupation"
+            label="Category"
+            options={categories}
+            getOptionLabel={(opt) => opt.name}
+            isOptionEqualToValue={(a, b) => a?.id === b?.id}
             placeholder="Select service category"
-            className="!rounded-full"
           />
         </div>
 
