@@ -9,21 +9,21 @@ import React from "react";
 export default function Page() {
   return (
     <main className="bg-light-primary-1">
-      <div className="container pt-[133px] pb-0">
+      <div className="container pt-[100px] sm:pt-[133px] pb-0">
         <PromotionBanner />
       </div>
       <div className="py-[3.875rem]">
         <Recommended />
-        <FeaturedTasks />
+        {/* <FeaturedTasks /> */}
       </div>
       <BrowseCategories />
-       <CantFind
-      title="Can’t find the task you want?"
-      description="No worries! There are many tasks that deserve your skills on CitiTasker."
-      buttonText="Browse Task"
-      buttonLink={ROUTES.BROWSE_TASK}
-      className="min-h-[247px]" 
-    />
+      <CantFind
+        title="Can’t find the task you want?"
+        description="No worries! There are many tasks that deserve your skills on CitiTasker."
+        buttonText="Browse Task"
+        buttonLink={ROUTES.BROWSE_TASK}
+        className="min-h-[247px]"
+      />
     </main>
   );
 }

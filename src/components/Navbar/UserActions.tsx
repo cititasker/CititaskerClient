@@ -57,11 +57,11 @@ const UserActions = ({ user, onLogout }: Props) => {
           <DropdownMenuTrigger asChild>
             <button className="flex items-center gap-2 focus-visible:outline-none">
               <Image
-                width={30}
-                height={30}
+                width={60}
+                height={60}
                 src={user.profile_image || defaultProfile}
                 alt="user_profile"
-                className="w-[1.875rem] h-[1.875rem] rounded-full object-cover"
+                className="w-[1.875rem] h-[1.875rem] rounded-full object-cover object-top"
               />
               <span className="text-[17px] text-dark-secondary font-medium">
                 {loggedInUser(user.first_name, user.last_name)}
@@ -84,7 +84,7 @@ const UserActions = ({ user, onLogout }: Props) => {
                 alt="profile"
                 width={50}
                 height={50}
-                className="w-[50px] h-[50px] rounded-full object-cover"
+                className="w-[50px] h-[50px] rounded-full object-cover object-top"
               />
 
               <div className="space-y-1">

@@ -11,9 +11,9 @@ const UserProfile = () => {
       <Image
         src={user.profile_image ?? defaultProfile}
         alt="user profile"
-        width={100}
-        height={100}
-        className="w-[100px] h-[100px] rounded-full mb-2 object-cover"
+        width={200}
+        height={200}
+        className="w-[100px] h-[100px] rounded-full mb-2 object-cover object-top"
       />
       <p className="capitalize text-xl text-black font-medium">
         {initializeName({

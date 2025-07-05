@@ -15,7 +15,6 @@ import { Calendar } from "@/components/ui/calendar";
 import { Label } from "@/components/ui/label";
 import FormError from "../reusables/FormError";
 import { cn } from "@/lib/utils";
-import { Dayjs } from "dayjs";
 
 interface FormDatePickerProps {
   name: string;
@@ -63,7 +62,7 @@ export default function FormDatePicker({
                 <Button
                   variant="outline"
                   className={cn(
-                    "w-full justify-start text-left font-normal hover:bg-transparent",
+                    "w-full justify-start text-left font-normal hover:bg-transparent shadow-none h-[50px]",
                     !field.value && "text-muted-foreground",
                     triggerClass
                   )}
@@ -77,6 +76,7 @@ export default function FormDatePicker({
               <PopoverContent className="w-auto p-0" align="start">
                 <Calendar
                   mode="single"
+                  captionLayout="dropdown"
                   selected={selectedDate ?? undefined}
                   onSelect={(date) => {
                     if (date) {
@@ -84,7 +84,7 @@ export default function FormDatePicker({
                       field.onChange(formatted);
                     }
                   }}
-                  initialFocus
+                  autoFocus
                   disabled={(date) => {
                     const beforeMin =
                       !!minDate && moment(date).isBefore(minDate, "day");

@@ -13,7 +13,7 @@ type Props = {
   className?: string;
 };
 
-export const StarRating = ({
+const Rating = ({
   value = 0,
   onChange,
   max = 5,
@@ -50,3 +50,5 @@ export const StarRating = ({
     </div>
   );
 };
+
+export default Rating;

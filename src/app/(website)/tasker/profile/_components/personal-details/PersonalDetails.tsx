@@ -40,6 +40,7 @@ const PersonalDetails = () => {
       <PersonalDetailsPreview
         data={{ bio, skills, certificates }}
         onEdit={() => setEdit(true)}
+        isEdit={true}
       />
     );
   }

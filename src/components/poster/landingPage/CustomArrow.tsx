@@ -13,7 +13,7 @@ const CustomArrow = ({ dir = "left", onClick, extraClass }: IProps) => {
     <div
       className={cn(
         `z-[99] cursor-pointer select-none absolute rounded-full h-8 w-8 flex justify-center items-center bg-light-primary-1 ${
-          dir == "left" ? "left-[5%]" : "right-[5%]"
+          dir == "left" ? "left-[2%]" : "right-[2%]"
         }`,
         extraClass
       )}

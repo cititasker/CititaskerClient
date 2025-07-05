@@ -4,7 +4,8 @@ import React, { useState } from "react";
 import RatingCard from "@/components/reusables/RatingCard";
 import FormButton from "@/components/forms/FormButton";
 import ReviewModal from "./ReviewModal";
-import { StarRating } from "@/components/reusables/StarRating";
+import { useAppSelector } from "@/store/hook";
+import Rating from "@/components/reusables/Rating";
 
 export type ReviewItem = {
   image: string;
@@ -40,6 +41,7 @@ const ReviewSection: React.FC<ReviewSectionProps> = ({
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const { user } = useAppSelector((state) => state.user);
 
   return (
     <div className="space-y-4">
@@ -63,7 +65,7 @@ const ReviewSection: React.FC<ReviewSectionProps> = ({
       ) : (
         <div className="p-5 bg-light-grey rounded-20 min-h-[214px] flex justify-center items-center w-full">
           <div className="w-fit h-fit text-center flex flex-col items-center">
-            <StarRating size={30} value={0} readOnly />
+            <Rating size={30} value={0} readOnly />
             <p className="text-center text-sm mt-[10px]">
               Judith N. doesn’t have a review yet.
             </p>

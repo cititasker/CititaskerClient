@@ -12,7 +12,7 @@ const Recommended = () => {
   const tasks = data?.pages.flatMap((page) => page.data?.data || []) || [];
 
   return (
-    <div className="container mb-[3.75rem]">
+    <div className="container">
       <div className="flex justify-between items-center mb-7">
         <h2 className="text-2xl font-semibold leading-normal">
           Recommended for you

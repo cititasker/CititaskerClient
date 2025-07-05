@@ -77,7 +77,7 @@ const CommentBox = ({ offer_id }: CommentBoxProps) => {
           alt="User avatar"
           width={48}
           height={48}
-          className="rounded-full object-cover shrink-0 h-[48px] w-[48px]"
+          className="rounded-full object-cover shrink-0 h-[48px] w-[48px] object-top"
         />
 
         <div className="flex flex-col flex-1 relative">

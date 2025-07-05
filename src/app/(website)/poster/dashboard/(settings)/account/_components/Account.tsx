@@ -101,9 +101,9 @@ export default function Account() {
           <Image
             src={user.profile_image ?? defaultProfile}
             alt="user profile"
-            width={100}
-            height={100}
-            className="object-cover w-full h-full rounded-full"
+            width={200}
+            height={200}
+            className="object-cover w-full h-full rounded-full object-top"
           />
           <div
             className={`absolute inset-0 flex items-center justify-center bg-black/30 transition-opacity ${

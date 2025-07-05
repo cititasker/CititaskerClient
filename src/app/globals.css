@@ -165,6 +165,12 @@ body {
   );
 }
 
+@media (max-width: 768px) {
+  .image_clip {
+    clip-path: none; /* Reverts to rectangular shape */
+  }
+}
+
 .poster_popular_categories a:nth-child(1) {
   grid-area: 1 / 1 / span 2 / span 3;
 }

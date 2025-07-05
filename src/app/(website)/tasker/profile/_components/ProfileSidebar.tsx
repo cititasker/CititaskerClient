@@ -5,7 +5,7 @@ import Image from "next/image";
 import React from "react";
 import Badge1 from "@/../public/images/license1.jpg";
 import { IDistance, IShieldTick } from "@/constant/icons";
-import { StarRating } from "@/components/reusables/StarRating";
+import Rating from "@/components/reusables/Rating";
 
 const skills = ["Mould Accessment and", "Plumbing"];
 
@@ -17,9 +17,9 @@ const ProfileSidebar = () => {
         <Image
           src={user.profile_image ?? defaultProfile}
           alt="user profile"
-          className="w-[100px] h-[100px] rounded-full mb-2 object-cover"
-          width={100}
-          height={100}
+          className="w-[100px] h-[100px] rounded-full mb-2 object-cover object-top"
+          width={200}
+          height={200}
         />
         <p className="capitalise text-xl text-black font-medium flex items-center gap-1">
           {initializeName({
@@ -37,7 +37,7 @@ const ProfileSidebar = () => {
           </div>
           <div className="flex items-center gap-1 mb-6">
             <div className="flex items-center gap-1">
-              <StarRating value={3} onChange={() => {}} />
+              <Rating value={3} onChange={() => {}} />
               <p className="text-sm text-black">3.0</p>
             </div>
             <p className="text-sm text-black">(3259 reviews)</p>

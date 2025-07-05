@@ -77,7 +77,7 @@ const CustomTab: React.FC<CustomTabProps> = ({
         <TabsContent
           key={id}
           value={id}
-          className={cn("overflow-y-auto", contentClassName)}
+          className={cn("overflow-y-auto no-scrollbar", contentClassName)}
         >
           {render()}
         </TabsContent>

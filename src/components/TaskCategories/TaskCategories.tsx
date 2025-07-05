@@ -2,6 +2,10 @@
 import React, { useState } from "react";
 import TaskCategoriesCarousel from "./TaskCategoriesCarousel";
 import { IoBriefcaseOutline } from "react-icons/io5";
+import { useGetCategories } from "@/services/general/index.hook";
+import FormButton from "../forms/FormButton";
+import { cn } from "@/lib/utils";
+import { capitalize } from "@/utils";
 
 const tabs = [
   {
@@ -114,25 +118,32 @@ const data = [
 ];
 
 const TaskCategories = () => {
-  const [activeTab, setActiveTab] = useState("Assembler & Installer");
+  const [activeTab, setActiveTab] = useState<number>(1);
+  const { data: rawCategories = [] } = useGetCategories();
+
+  console.log(78, rawCategories);
+
   return (
     <div className="bg-light-primary-1">
       <div className="container pt-[4.375rem] pb-20">
         <h2 className="header mb-[3.5rem] max-w-[56.25rem] mx-auto">
-        See some of the top rated Taskers</h2>
+          See some of the top rated Taskers
+        </h2>
         <div className="w-full overflow-x-auto mb-5 md:mb-[3.875rem] hide-scrollbar">
           <div className="flex items-center">
-            {tabs.map((item, i) => (
-              <button
-                key={i}
-                onClick={() => setActiveTab(item.name)}
-                className={`px-5 py-3 flex items-center rounded-40 text-base font-normal whitespace-nowrap ${
-                  activeTab === item.name ? "bg-primary text-white" : "bg-none"
-                }`}
+            {rawCategories.map((item) => (
+              <FormButton
+                key={item.id}
+                onClick={() => setActiveTab(item.id)}
+                className={cn(
+                  "px-5 py-3 flex items-center rounded-40 text-base font-normal whitespace-nowrap capitalize",
+                  activeTab === item.id
+                    ? "bg-primary text-white"
+                    : "bg-transparent text-black-2"
+                )}
               >
-                <IoBriefcaseOutline className="mr-2 text-2xl" />
-                {item.name}
-              </button>
+                <span className="capitalize">{capitalize(item.name)}</span>
+              </FormButton>
             ))}
           </div>
         </div>
