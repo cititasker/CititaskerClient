@@ -1,7 +1,8 @@
 import TaskDetails from "@/components/browseTask/TaskDetails";
-import { getSingleTaskQuery } from "@/queries/task";
 import { getSingleTask } from "@/services/task";
 import { queryClient } from "@/providers/ServerProvider";
+import { API_ROUTES } from "@/constant";
+import { getUserTaskById } from "@/services/tasks/tasks.api";
 
 type Params = Promise<{ id: string }>;
 
@@ -22,6 +23,9 @@ export async function generateMetadata({ params }: { params: Params }) {
 
 export default async function Page({ params }: { params: Params }) {
   const { id } = await params;
-  await queryClient.prefetchQuery(getSingleTaskQuery(id));
-  return <TaskDetails />;
+  await queryClient.prefetchQuery({
+    queryKey: [API_ROUTES.GET_TASK_BY_ID, id],
+    queryFn: () => getUserTaskById(id),
+  });
+  return <TaskDetails back="/tasker/my-tasks" />;
 }

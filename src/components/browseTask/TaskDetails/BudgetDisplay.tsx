@@ -25,7 +25,7 @@ const BudgetDisplay: React.FC<BudgetDisplayProps> = ({
     <p className="text-dark-grey-2 text-xs sm:text-sm mb-1.5 sm:mb-5">
       Estimated Task Budget
     </p>
-    <div className="space-y-1.5 sm:space-y-3">
+    <div className="space-y-2 sm:space-y-3">
       <h2 className="text-xl sm:text-[2rem] font-semibold text-black-2">
         {formatCurrency({ value: budget, noFraction: true })}
       </h2>

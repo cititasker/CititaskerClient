@@ -4,7 +4,7 @@ import Tasklist from "../browseTask/Tasklist";
 
 const BrowseTasklayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="h-dvh pt-[95px] bg-[#F3F5F6]">
+    <div className="h-dvh pt-[90px] bg-[#F3F5F6]">
       <div className="container flex flex-row gap-3 relative   overflow-y-auto">
         <div className="basis-1/4 w-fit sticky top-5 pt-3 hidden xl:inline-block">
           <FilterList />

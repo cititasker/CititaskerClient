@@ -19,7 +19,7 @@ const ProfileSidebar = () => {
 
   return (
     <div className="paper md:max-w-[300px] h-fit">
-      <div className="px-5 pb-5 pt-6 border-b-[0.8px] border-light-grey flex flex-col items-center mb-[30px]">
+      <div className="px-5 pb-5 pt-6 border-b-[0.8px] border-light-grey flex flex-col items-center">
         <Image
           src={defaultProfile}
           alt="user profile"
@@ -36,7 +36,7 @@ const ProfileSidebar = () => {
         </p>
       </div>
       <div>
-        <div className="p-5 pb-8 border-b border-light-grey mb-5">
+        <div className="p-5 pb-5 sm:pb-8 border-b border-light-grey">
           <div className="flex items-center gap-1 mb-4">
             <IDistance className="shrink-0" />
             <p className="text-sm text-black">Bodore Ajah, Lagos</p>

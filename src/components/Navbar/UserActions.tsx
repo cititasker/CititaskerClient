@@ -26,8 +26,6 @@ interface Props {
 const UserActions = ({ user, onLogout }: Props) => {
   const [menu, setMenu] = useState(profileMenu);
 
-  console.log(67, user);
-
   useEffect(() => {
     const newMenu = profileMenu.map((el) => {
       if (el.name == "Dashboard") {

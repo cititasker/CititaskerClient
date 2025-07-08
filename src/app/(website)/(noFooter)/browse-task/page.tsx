@@ -16,7 +16,7 @@ export default function Page() {
 
   return (
     <>
-      <div className="w-full md:hidden lg:basis-1/3 h-full overflow-y-auto pt-3 hide-scrollbar">
+      <div className="w-full md:hidden lg:basis-1/3 h-full overflow-y-auto md:pt-3 hide-scrollbar">
         <TaskList />
       </div>
       <motion.div

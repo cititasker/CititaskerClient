@@ -62,13 +62,15 @@ const TaskDetails = ({ task }: { task: ITask }) => {
     {
       icon: <Icons.avTimer />,
       label: "Posted",
-      value: formatDateAgo(task.created_at),
+      value: formatDateAgo(task?.created_at),
     },
   ];
 
   return (
-    <div className="space-y-5">
-      <h1 className="text-2xl font-semibold text-black-2">{task.name}</h1>
+    <div>
+      <h1 className="mb-3 sm:mb-5 text-lg sm:text-2xl font-semibold text-black-2">
+        {task.name}
+      </h1>
       <div className="grid grid-cols-[repeat(auto-fit,minmax(140px,1fr))] gap-4">
         {infoItems.map(({ icon, label, value }, index) => (
           <div key={index} className="flex items-start gap-3">
@@ -85,13 +87,15 @@ const TaskDetails = ({ task }: { task: ITask }) => {
 };
 
 const PosterInfo: React.FC<PosterInfoProps> = ({ task }) => {
-  const posterName = initializeName(task.poster?.profile);
+  const posterName = task.poster?.profile
+    ? initializeName(task.poster?.profile)
+    : "N/A";
 
   return (
-    <div className="flex gap-7 mb-12">
+    <div className="flex gap-7 mb-6 sm:mb-12">
       {/* Avatar for large screen */}
       <PosterAvatar
-        image={task.poster_profile_image}
+        image={task?.poster_profile_image}
         name={posterName}
         className="hidden lg:inline-block"
       />
@@ -105,7 +109,7 @@ const PosterInfo: React.FC<PosterInfoProps> = ({ task }) => {
               key={status}
               variant="outline"
               className={cn(
-                "text-xs px-[14px] py-[7px] capitalize",
+                "text-xs px-[14px] py-1.5 capitalize",
                 STATUS_COLORS[status],
                 task.status !== status && "bg-light-grey text-black-2"
               )}
@@ -120,7 +124,7 @@ const PosterInfo: React.FC<PosterInfoProps> = ({ task }) => {
           <div className="flex gap-5 items-start flex-col lg:flex-row">
             {/* Avatar for small screen */}
             <PosterAvatar
-              image={task.poster_profile_image}
+              image={task?.poster_profile_image}
               name={posterName}
               className="lg:hidden"
             />

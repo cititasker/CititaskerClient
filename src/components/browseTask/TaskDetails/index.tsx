@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo } from "react";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 
 import Icons from "@/components/Icons";
 import ShareTaskModal from "../Modals/ShareTaskModal";
@@ -18,9 +18,11 @@ import { Card } from "@/components/ui/card";
 import CustomDropdown from "@/components/reusables/CustomDropdown";
 import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
 
-const TaskDetails = () => {
+interface IProps {
+  back: string;
+}
+const TaskDetails = ({ back }: IProps) => {
   const { id } = useParams() as { id: string };
-  const router = useRouter();
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.user);
 
@@ -63,19 +65,18 @@ const TaskDetails = () => {
       ]
     : [];
 
-  console.log(77, task.offers);
-
   if (!task) return null;
 
   return (
     <Card className="hide-scrollbar relative">
-      <div className="pl-6 pr-1 sm:px-12 h-[65px] flex justify-between items-center border-b sticky top-0 z-[20] bg-white">
+      <div className="pl-4 pr-1 sm:px-12 h-[65px] flex justify-between items-center border-b sticky top-0 z-[20] bg-white">
         <Link
-          href="#"
-          onClick={router.back}
+          href={back}
           className="flex items-center gap-2 text-base text-primary font-normal"
         >
-          <Icons.arrowLeft /> Back to Map
+          <Icons.arrowLeft />{" "}
+          <span className="hidden md:inline-block">Back to Map</span>
+          <span className="md:hidden">Back</span>
         </Link>
         <div className="sm:hidden">
           <CustomDropdown>
@@ -108,13 +109,13 @@ const TaskDetails = () => {
       <div className="px-5 sm:px-[30px] pt-5 sm:pt-[28px] mb-10">
         <PosterInfo task={task} />
 
-        <section className="mb-7">
-          <h2 className="text-xl font-semibold mb-4">Description</h2>
+        <section className="mb-6">
+          <h2 className="text-lg sm:text-xl font-semibold mb-4">Description</h2>
           <p className="text-sm text-black-2">{task.description}</p>
         </section>
 
-        <section className="mb-7">
-          <h2 className="text-xl font-semibold mb-4">Pictures</h2>
+        <section className="mb-6">
+          <h2 className="text-lg sm:text-xl font-semibold mb-4">Pictures</h2>
           {task.images?.length ? (
             <ImageGallery images={task.images} />
           ) : (

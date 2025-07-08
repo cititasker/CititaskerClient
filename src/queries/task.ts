@@ -16,14 +16,6 @@ export const getAllTasksQuery = () => {
   });
 };
 
-export const getSingleTaskQuery = (id: string) => {
-  return queryOptions({
-    queryKey: [API_ROUTES.GET_TASK_BY_ID, id],
-    queryFn: () => getSingleTask(id),
-    enabled: !!id,
-  });
-};
-
 export const getUserTaskByIdQuery = (id: string) => {
   return queryOptions({
     queryKey: [API_ROUTES.GET_TASK_BY_ID, id],
