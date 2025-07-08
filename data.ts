@@ -723,11 +723,6 @@ export const navbar = [
     href: ROUTES.BROWSE_TASK,
     name: "Browse Tasks",
   },
-
-  {
-    name: "About Us",
-    href: "/about",
-  },
 ];
 
 export const profileMenu = [

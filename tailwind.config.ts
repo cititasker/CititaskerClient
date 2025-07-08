@@ -42,6 +42,7 @@ export default {
         "cs-dark-4": "var(--Cultured-Secondary-Dark-4)",
         "cs-dark-5": "var(--Cultured-Secondary-Dark-5)",
         F9F9F9: "var(--F9F9F9)",
+        "red-state-color-fill": "var(--bg-red-state-color-fill)",
         background: "var(--background)",
         foreground: "var(--foreground)",
         card: {

@@ -73,7 +73,7 @@ const SidebarMenuItem = ({
             <IArrowDown
               className={cn(
                 "transform transition-transform",
-                isOpen ? "rotate-180" : "rotate-0"
+                !isOpen ? "-rotate-180" : "rotate-0"
               )}
             />
           </button>

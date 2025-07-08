@@ -16,6 +16,8 @@ interface IProps {
   type?: "submit" | "button";
   disabled?: boolean;
   okVariant?: VariantProps<typeof buttonVariants>["variant"];
+  cancelVariant?: VariantProps<typeof buttonVariants>["variant"];
+  size?: "default" | "sm" | "lg" | "icon" | null | undefined;
 }
 const ActionsButtons = ({
   loading,
@@ -29,20 +31,23 @@ const ActionsButtons = ({
   cancelText = "Cancel",
   disabled = false,
   okVariant = "default",
+  cancelVariant = "outline",
+  size,
 }: IProps) => {
   return (
     <div
       className={cn(
-        "flex flex-col-reverse sm:flex-row gap-y-3 gap-x-4 sm:gap-x-8 items-center mt-auto w-full",
+        "flex flex-col-reverse sm:flex-row gap-y-3 gap-x-3 sm:gap-x-6 items-center mt-auto w-full",
         className
       )}
     >
       {handleCancel && (
         <FormButton
-          variant="ghost"
+          variant={cancelVariant}
           text={cancelText}
+          size={size}
           className={cn(
-            "flex-1 bg-light-grey !text-primary w-full border-[1.5px] border-primary",
+            "flex-1 w-full border-primary text-primary",
             cancelStyle
           )}
           onClick={handleCancel}
@@ -56,6 +61,7 @@ const ActionsButtons = ({
         onClick={handleSubmit}
         disabled={disabled || loading}
         variant={okVariant}
+        size={size}
       />
     </div>
   );

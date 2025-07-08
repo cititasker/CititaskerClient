@@ -1,10 +1,9 @@
 // components/form/form-textarea.tsx
 
 import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { useFormContext, Controller } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { cn } from "@/lib/utils";
-import FormError from "../reusables/FormError";
+import { FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 
 interface FormTextAreaProps {
   name: string;
@@ -26,29 +25,29 @@ export default function FormTextArea({
   const { control } = useFormContext();
 
   return (
-    <div className="space-y-1.5">
-      {label && (
-        <Label htmlFor={name}>
-          {label}
-          {required && <span className="text-red-500 ml-1">*</span>}
-        </Label>
+    <FormField
+      name={name}
+      control={control}
+      render={({ field }) => (
+        <FormItem>
+          <div className="space-y-1.5">
+            {label && (
+              <FormLabel htmlFor={name}>
+                {label}
+                {required && <span className="text-red-500 ml-1">*</span>}
+              </FormLabel>
+            )}
+            <Textarea
+              id={name}
+              placeholder={placeholder}
+              className={cn("min-h-[120px] rounded-[25px]", className)}
+              maxLength={maxLength}
+              {...field}
+            />
+          </div>
+          <FormMessage />
+        </FormItem>
       )}
-
-      <Controller
-        name={name}
-        control={control}
-        render={({ field }) => (
-          <Textarea
-            id={name}
-            placeholder={placeholder}
-            className={cn("min-h-[120px] rounded-[25px]", className)}
-            maxLength={maxLength}
-            {...field}
-          />
-        )}
-      />
-
-      <FormError name={name} />
-    </div>
+    />
   );
 }

@@ -51,6 +51,14 @@ export const API_ROUTES = {
   MAKE_OFFER: "/tasks/make-offer",
   UPDATE_OFFER: "/tasks/edit-offer",
   OFFER_REPLIES: "/tasks/offer-replies",
+  UPDATE_PROFILE_DETAILS: "/auth/update-account-details",
+  GET_PROFILE_DETAILS: "/auth/fetch-user-account-details",
+  GET_PORTFOLIO: "/auth/fetch-user-portfolio-details",
+  UPDATE_PORTFOLIO: "/auth/update-portfolio",
+  CREATE_FAQ: "/faqs/create",
+  GET_FAQ: "/faqs/user-faqs",
+  UPDATE_FAQ: "/faqs/update",
+  DELETE_FAQ: "/faqs/delete",
 };
 
 const isProd = process.env.NEXT_PUBLIC_NODE_ENV === "production";

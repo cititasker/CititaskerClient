@@ -25,9 +25,4 @@ export const tabs = [
     value: "security",
     render: () => <Security />,
   },
-  {
-    label: `FAQ`,
-    value: "faq",
-    render: () => <FAQ />,
-  },
 ];

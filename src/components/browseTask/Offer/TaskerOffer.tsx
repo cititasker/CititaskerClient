@@ -2,13 +2,15 @@
 
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useAppSelector } from "@/store/hook";
-import { formatCurrency, loggedInUser } from "@/utils";
+import { formatCurrency, initializeName, loggedInUser } from "@/utils";
 import Icons from "@/components/Icons";
 import FormButton from "@/components/forms/FormButton";
 import CommentThread from "./CommentThread";
 import { useQuery } from "@tanstack/react-query";
 import { API_ROUTES } from "@/constant";
 import { getOfferReplies } from "@/services/offers/offers.api";
+import Link from "next/link";
+import { Star } from "lucide-react";
 
 interface TaskerOfferProps {
   offer: IOffer;
@@ -26,7 +28,7 @@ const TaskerOffer: React.FC<TaskerOfferProps> = ({ offer, toggleModal }) => {
   );
 
   const { data } = useQuery({
-    queryKey: [API_ROUTES.OFFER_REPLIES],
+    queryKey: [API_ROUTES.OFFER_REPLIES, offer.id],
     queryFn: () => getOfferReplies(`${offer.id}`),
   });
 
@@ -39,9 +41,24 @@ const TaskerOffer: React.FC<TaskerOfferProps> = ({ offer, toggleModal }) => {
 
       <div className="flex-1 space-y-2">
         <div className="flex justify-between items-center gap-3">
-          <div className="flex items-center gap-1 text-xl font-medium text-muted-foreground">
-            {fullName}
-            <Icons.info />
+          <div className="space-y-0.5">
+            <Link
+              href={`/tasker/profile/${offer.tasker.id}`}
+              className="text-base  text-black-2 font-semibold inline-block hover:underline"
+            >
+              {initializeName({ full_name: fullName })}
+            </Link>
+            <div className="flex items-center gap-1.5">
+              <Star size={18} fill="#F2AF42" strokeWidth={0} />
+              <span className="text-black-2 text-sm font-bold">5.0</span>
+              <span className="text-dark-grey-2 text-sm font-normal">
+                (3259)
+              </span>
+            </div>
+            <p className="flex items-center gap-1.5">
+              <span className="text-[#000] text-sm font-bold">90%</span>
+              <span className="text-[#7C8698] text-sm">Completion rate</span>
+            </p>
           </div>
 
           {isPending && (

@@ -4,17 +4,18 @@ import * as React from "react";
 import {
   Accordion,
   AccordionItem,
-  AccordionTrigger,
+  AccordionTrigger as DefaultAccordionTrigger,
   AccordionContent,
 } from "@/components/ui/accordion";
 
 type AccordionBaseItem = {
   id: string;
-  renderTrigger: () => React.ReactNode;
+  renderTrigger?: () => React.ReactNode;
   renderContent: () => React.ReactNode;
-  className?: string;
   triggerClassName?: string;
   contentClassName?: string;
+  customTrigger?: React.ElementType; // Custom trigger for each item
+  className?: string;
 };
 
 interface SingleAccordionProps {
@@ -61,9 +62,15 @@ const CustomAccordion: React.FC<CustomAccordionProps> = (props) => {
           value={item.id}
           className={item.className ?? itemWrapperClassName}
         >
-          <AccordionTrigger className={item.triggerClassName}>
-            {item.renderTrigger()}
-          </AccordionTrigger>
+          {/* Use CustomTrigger if passed, otherwise fall back to DefaultAccordionTrigger */}
+          {item.customTrigger ? (
+            <item.customTrigger />
+          ) : (
+            <DefaultAccordionTrigger className={item.triggerClassName}>
+              {item?.renderTrigger?.()}
+            </DefaultAccordionTrigger>
+          )}
+
           <AccordionContent className={item.contentClassName}>
             {item.renderContent()}
           </AccordionContent>

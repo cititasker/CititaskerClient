@@ -66,7 +66,7 @@ const CertificatesSection = () => {
           onClick={() => appendCert({ institution: "", year: "" })}
           variant="nude"
           icon={<Plus />}
-          className="text-primary mt-7 px-0"
+          className="text-primary mt-7 px-0 text-sm font-medium"
         >
           Add Certificate
         </FormButton>

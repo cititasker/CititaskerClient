@@ -1,5 +1,6 @@
-import PersonalDetails from "@/app/(website)/tasker/profile/_components/personal-details/PersonalDetails";
-import Portfolio from "@/app/(website)/tasker/profile/_components/portfolio/Portfolio";
+import PersonalDetails from "@/app/(website)/_components/dashboard/personal-details/PersonalDetails";
+import Faq from "./Faq";
+import EditPorfolio from "@/app/(website)/_components/dashboard/portfolio/EditPorfolio";
 
 export const tabs = [
   {
@@ -10,6 +11,11 @@ export const tabs = [
   {
     label: "Porfolio",
     value: "portfolio",
-    render: () => <Portfolio />,
+    render: () => <EditPorfolio />,
+  },
+  {
+    label: "FAQ",
+    value: "faq",
+    render: () => <Faq />,
   },
 ];

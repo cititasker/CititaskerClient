@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import React from "react";
 
 type Props = {
-  value: number;
+  value: number | undefined;
   onChange?: (value: number) => void;
   max?: number; // total stars, defaults to 5
   readOnly?: boolean;
@@ -39,7 +39,7 @@ const Rating = ({
             className={cn(
               "transition-colors",
               isFilled
-                ? "fill-yellow-400 stroke-yellow-400"
+                ? "fill-yellow-state-color stroke-yellow-state-color"
                 : "fill-[#D5D5D5] stroke-[#D5D5D5]",
               !readOnly && "cursor-pointer hover:scale-110",
               readOnly && "cursor-default"

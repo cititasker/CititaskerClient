@@ -16,5 +16,6 @@ export default function CommentThread({ offer }: IProps) {
     }
     return undefined;
   }, [offer]) as ICommenThreadProps | undefined;
+
   return <ReplyOffer offer={comment} />;
 }

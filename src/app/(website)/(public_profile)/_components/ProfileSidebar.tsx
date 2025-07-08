@@ -1,21 +1,27 @@
+"use client";
 import { defaultProfile } from "@/constant/images";
-import { useAppSelector } from "@/store/hook";
 import { initializeName } from "@/utils";
 import Image from "next/image";
 import React from "react";
 import Badge1 from "@/../public/images/license1.jpg";
 import { IDistance, IShieldTick } from "@/constant/icons";
 import Rating from "@/components/reusables/Rating";
-
-const skills = ["Mould Accessment and", "Plumbing"];
+import { useGetUserProfile } from "@/services/user/user.hook";
+import { useParams } from "next/navigation";
+import { Badge } from "@/components/ui/badge";
 
 const ProfileSidebar = () => {
-  const { user } = useAppSelector((state) => state.user);
+  const params = useParams();
+  const id = params.id;
+
+  const { data } = useGetUserProfile({ id });
+  const user = data?.data;
+
   return (
-    <div className="paper max-w-[300px] h-fit">
+    <div className="paper md:max-w-[300px] h-fit">
       <div className="px-5 pb-5 pt-6 border-b-[0.8px] border-light-grey flex flex-col items-center mb-[30px]">
         <Image
-          src={user.profile_image ?? defaultProfile}
+          src={defaultProfile}
           alt="user profile"
           className="w-[100px] h-[100px] rounded-full mb-2 object-cover object-top"
           width={200}
@@ -23,8 +29,8 @@ const ProfileSidebar = () => {
         />
         <p className="capitalise text-xl text-black font-medium flex items-center gap-1">
           {initializeName({
-            first_name: user.first_name,
-            last_name: user.last_name,
+            first_name: user?.first_name,
+            last_name: user?.last_name,
           })}
           <IShieldTick />
         </p>
@@ -37,21 +43,25 @@ const ProfileSidebar = () => {
           </div>
           <div className="flex items-center gap-1 mb-6">
             <div className="flex items-center gap-1">
-              <Rating value={3} onChange={() => {}} />
-              <p className="text-sm text-black">3.0</p>
+              <Rating value={user?.average_rating} readOnly />
+              <p className="text-sm text-black">
+                {user?.average_rating && user.average_rating > 0
+                  ? user?.average_rating.toFixed(1)
+                  : null}
+              </p>
             </div>
-            <p className="text-sm text-black">(3259 reviews)</p>
+            <p className="text-sm text-black">(0 reviews)</p>
           </div>
           <div>
-            <p className="text-base text-black font-semibold mb-3">SKills</p>
+            <p className="text-base text-black font-semibold mb-3">Skills</p>
             <div className="flex flex-wrap gap-2">
-              {skills.map((el, i) => (
-                <div
+              {user?.skills.map((el, i) => (
+                <Badge
                   key={i}
-                  className="py-2.5 px-5 bg-light-grey text-black text-xs rounded-40"
+                  className="py-2 px-4 bg-light-grey text-black text-xs rounded-40"
                 >
                   {el}
-                </div>
+                </Badge>
               ))}
             </div>
           </div>

@@ -19,6 +19,8 @@ interface IProps {
   type?: "button" | "submit";
   showBtnActions?: boolean;
   okVariant?: VariantProps<typeof buttonVariants>["variant"];
+  cancelVariant?: VariantProps<typeof buttonVariants>["variant"];
+  containerClass?: string;
 }
 const ConfirmationModal = ({
   loading,
@@ -35,9 +37,15 @@ const ConfirmationModal = ({
   type = "button",
   showBtnActions = true,
   okVariant = "default",
+  cancelVariant = "default",
+  containerClass,
 }: IProps) => {
   return (
-    <CustomModal isOpen={open} onClose={onClose}>
+    <CustomModal
+      isOpen={open}
+      onClose={onClose}
+      contentClassName={containerClass}
+    >
       <>
         {title && <p className="text-black-2 font-[600] text-2xl">{title}</p>}
         {content ? (
@@ -56,6 +64,7 @@ const ConfirmationModal = ({
             handleSubmit={handleSubmit}
             loading={loading}
             okVariant={okVariant}
+            cancelVariant={cancelVariant}
           />
         )}
       </>

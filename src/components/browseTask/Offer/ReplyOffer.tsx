@@ -13,7 +13,7 @@ interface IProps {
 }
 
 const ReplyOffer = ({ offer, level = 0 }: IProps) => {
-  const [showComment, setShowComment] = useState(level === 0);
+  const [showComment, setShowComment] = useState(false);
 
   return (
     <div className="w-full space-y-4">

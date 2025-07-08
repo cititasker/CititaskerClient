@@ -2,6 +2,7 @@ import Image from "next/image";
 import { defaultProfile } from "@/constant/images";
 import { initializeName } from "@/utils";
 import { useAppSelector } from "@/store/hook";
+import Link from "next/link";
 
 const UserProfile = () => {
   const { user } = useAppSelector((state) => state.user);
@@ -15,12 +16,15 @@ const UserProfile = () => {
         height={200}
         className="w-[100px] h-[100px] rounded-full mb-2 object-cover object-top"
       />
-      <p className="capitalize text-xl text-black font-medium">
+      <Link
+        href={`/${user?.role}/profile/${user?.id}`}
+        className="capitalize text-xl text-black font-medium inline-block hover:underline cursor-pointer"
+      >
         {initializeName({
           first_name: user.first_name,
           last_name: user.last_name,
         })}
-      </p>
+      </Link>
     </div>
   );
 };

@@ -56,7 +56,7 @@ const Offer: React.FC<OfferProps> = ({ offers }) => {
     <>
       <div className="w-full">
         {offers.length > 0 ? (
-          offers.map((offer) => (
+          offers.map((offer, index) => (
             <TaskerOffer
               key={offer.id}
               offer={offer}
@@ -71,10 +71,12 @@ const Offer: React.FC<OfferProps> = ({ offers }) => {
       <ConfirmationModal
         open={modalOpen}
         onClose={handleToggleModal}
-        title="Cancel Offer"
-        content="Are you sure you want to cancel your offer?"
-        cancelText="Back"
-        okVariant="destructive"
+        title="Withdraw Offer"
+        content="Are you sure you want to withdraw your offer?"
+        cancelText="Keep my offer"
+        okVariant="outline"
+        okStyle="text-red-state-color border-red-state-color bg-red-state-color-fill"
+        okText="Withdraw"
         loading={isPending}
         handleSubmit={handleWithdraw}
       />

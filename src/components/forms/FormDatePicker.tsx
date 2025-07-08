@@ -62,7 +62,7 @@ export default function FormDatePicker({
                 <Button
                   variant="outline"
                   className={cn(
-                    "w-full justify-start text-left font-normal hover:bg-transparent shadow-none h-[50px]",
+                    "w-full border-input justify-start text-left font-normal hover:bg-transparent shadow-none h-[50px]",
                     !field.value && "text-muted-foreground",
                     triggerClass
                   )}

@@ -77,15 +77,18 @@ const Security = () => {
       <div className="w-full rounded-30 border-[0.8px] border-solid border-light-grey px-12 py-8 mb-8">
         <div className="flex justify-between items-center gap-3 mb-[60px]">
           <div className="max-w-[509px]">
-            <p className="mb-4 text-xl text-black font-semibold">Password</p>
+            <p className="mb-4 text-xl text-black font-semibold">
+              Deactivate account
+            </p>
             <p className="text-black">
-              You will always receive important notifications about any
-              payments, cancellations and your account.
+              You will not be able to post task or accept offers on the tasks
+              you have posted.
             </p>
           </div>
           <FormButton
             text="Deactivate"
-            className="bg-light-grey min-w-[190px] text-black"
+            variant="outline"
+            className="border-red-state-color text-red-state-color bg-red-state-color-fill min-w-[190px]"
           />
         </div>
         <div className="flex justify-between items-center gap-3">
@@ -94,13 +97,13 @@ const Security = () => {
               Delete
             </p>
             <p className="text-black">
-              You will always receive important notifications about any
-              payments, cancellations and your account.
+              All data assosiated with your account will be erased.
             </p>
           </div>
           <FormButton
             text="Delete"
-            className="bg-red-state-color min-w-[190px] text-white"
+            variant="outline"
+            className="border-red-state-color text-red-state-color bg-red-state-color-fill min-w-[190px]"
           />
         </div>
       </div>

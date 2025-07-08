@@ -18,6 +18,7 @@ import ISend2 from "@/assets/icons/send-2.svg";
 import ILink from "@/assets/icons/link.svg";
 import IEmojiCLip from "@/assets/icons/emoji-clip.svg";
 import IEmojiSmile from "@/assets/icons/emoji-smile.svg";
+import IAddCircle from "@/assets/icons/add-circle.svg";
 
 export {
   IChat,
@@ -38,6 +39,7 @@ export {
   ILink,
   IEmojiCLip,
   IEmojiSmile,
+  IAddCircle,
 
   // Big Icons
   ITickCircle,

@@ -2,11 +2,22 @@ import Image from "next/image";
 import React from "react";
 import FormButton from "../forms/FormButton";
 import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 
-function Empty({ text, btnText }: { text: string; btnText?: string }) {
+function Empty({
+  text,
+  btnText,
+  className,
+}: {
+  text: string;
+  btnText?: string;
+  className?: string;
+}) {
   const router = useRouter();
   return (
-    <div className="w-full h-full bg-white flex justify-center">
+    <div
+      className={cn("w-full h-full bg-white flex justify-center", className)}
+    >
       <div className="flex flex-col items-center max-w-[440px] gap-[14px] h-fit">
         <Image
           src="/images/empty.png"

@@ -1,23 +1,44 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import FormButton from "@/components/forms/FormButton";
 import Icons from "@/components/Icons";
-import { FormSchema } from "../schema";
 import Bio from "./Bio";
 import ReviewSection from "./Reviews";
 import { profileSummary } from "./mock";
 import Certifications from "./Certifications";
 import Skills from "./Skills";
+import { useGetUserProfile } from "@/services/user/user.hook";
 
 interface Props {
-  data: Pick<FormSchema, "bio" | "skills" | "certificates">;
+  id: any;
   onEdit?: () => void;
   isEdit?: boolean;
+  canShare?: boolean;
 }
 
-const PersonalDetailsPreview = ({ data, onEdit, isEdit }: Props) => {
-  const { bio, skills, certificates } = data;
+const PersonalDetailsPreview = ({
+  id,
+  onEdit,
+  isEdit,
+  canShare = true,
+}: Props) => {
+  const [bio, setBio] = useState("");
+  const [skills, setSkills] = useState<{ name: string }[]>([]);
+  const [certifications, setCertifications] = useState<
+    { institution: string; name: string; year: string }[]
+  >([]);
+
+  const { data } = useGetUserProfile({ id });
+
+  useEffect(() => {
+    const user = data?.data;
+    if (!user) return;
+
+    setBio(user.about_me || "");
+    setSkills(user.skills?.map((name: string) => ({ name })) || []);
+    setCertifications(user.certifications || []);
+  }, [data]);
 
   return (
     <div>
@@ -32,19 +53,21 @@ const PersonalDetailsPreview = ({ data, onEdit, isEdit }: Props) => {
           >
             Edit profile
           </FormButton>
-          <FormButton
-            variant="nude"
-            className="text-primary px-0 py-0"
-            onClick={() => console.log("Share")}
-            size="sm"
-            icon={<Icons.share />}
-          >
-            Share profile
-          </FormButton>
+          {canShare && (
+            <FormButton
+              variant="nude"
+              className="text-primary px-0 py-0"
+              onClick={() => console.log("Share")}
+              size="sm"
+              icon={<Icons.share />}
+            >
+              Share profile
+            </FormButton>
+          )}
         </div>
       )}
 
-      <div className="space-y-[50px]">
+      <div className="space-y-5 md:space-y-[50px]">
         <Bio bio={bio} />
         <Skills skills={skills} />
         <ReviewSection
@@ -52,7 +75,7 @@ const PersonalDetailsPreview = ({ data, onEdit, isEdit }: Props) => {
           profileSummary={profileSummary}
           maxPreview={3}
         />
-        <Certifications certificates={certificates} />
+        <Certifications certificates={certifications} />
       </div>
     </div>
   );

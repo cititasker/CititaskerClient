@@ -1,10 +1,9 @@
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
-import { Controller, useFormContext } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { useState } from "react";
-import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
-import FormError from "../reusables/FormError";
+import { FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 
 interface FormInputProps {
   name: string;
@@ -40,17 +39,12 @@ export default function FormInput({
   const errorId = `${name}-error`;
 
   return (
-    <div className={cn("w-full", className)}>
-      {label && (
-        <Label htmlFor={name} className="text-sm text-black mb-2">
-          {label}
-        </Label>
-      )}
-
-      <Controller
-        name={name}
-        control={control}
-        render={({ field }) => (
+    <FormField
+      name={name}
+      control={control}
+      render={({ field }) => (
+        <FormItem className={cn("w-full", className)}>
+          {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
           <div className="relative">
             <Input
               id={name}
@@ -99,9 +93,9 @@ export default function FormInput({
               </button>
             )}
           </div>
-        )}
-      />
-      <FormError name={name} />
-    </div>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
   );
 }
