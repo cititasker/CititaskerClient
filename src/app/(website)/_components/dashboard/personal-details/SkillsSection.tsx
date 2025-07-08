@@ -3,8 +3,8 @@ import FormButton from "@/components/forms/FormButton";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { FormSchema } from "../../_utils/schema";
 import FormError from "@/components/reusables/FormError";
+import { FormSchema } from "../schema";
 
 const SkillsSection = () => {
   const [text, setText] = useState("");

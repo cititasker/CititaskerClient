@@ -22,9 +22,11 @@ const BudgetDisplay: React.FC<BudgetDisplayProps> = ({
   canIncreaseOffer,
 }) => (
   <div className="rounded-[10px] p-[17px] bg-light-primary-1 text-center max-w-[217px] w-full">
-    <p className="text-dark-grey-2 text-sm mb-5">Estimated Task Budget</p>
-    <div className="space-y-3">
-      <h2 className="text-[2rem] font-semibold text-black-2">
+    <p className="text-dark-grey-2 text-xs sm:text-sm mb-1.5 sm:mb-5">
+      Estimated Task Budget
+    </p>
+    <div className="space-y-1.5 sm:space-y-3">
+      <h2 className="text-xl sm:text-[2rem] font-semibold text-black-2">
         {formatCurrency({ value: budget, noFraction: true })}
       </h2>
       {canIncreaseOffer && (
@@ -40,7 +42,7 @@ const BudgetDisplay: React.FC<BudgetDisplayProps> = ({
 
       <FormButton
         onClick={handleButtonClick}
-        className="text-base font-normal w-full"
+        className="text-sm sm:text-base font-normal w-full"
         disabled={isButtonDisabled}
         loading={loading}
         size="lg"

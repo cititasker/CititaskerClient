@@ -15,6 +15,8 @@ import { setTaskDetails, setUserTaskOffer } from "@/store/slices/task";
 import PosterInfo from "./PosterInfo";
 import { useFetchTaskById } from "@/services/tasks/tasks.hook";
 import { Card } from "@/components/ui/card";
+import CustomDropdown from "@/components/reusables/CustomDropdown";
+import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
 
 const TaskDetails = () => {
   const { id } = useParams() as { id: string };
@@ -67,7 +69,7 @@ const TaskDetails = () => {
 
   return (
     <Card className="hide-scrollbar relative">
-      <div className="px-12 h-[65px] flex justify-between items-center border-b sticky top-0 z-[20] bg-white">
+      <div className="pl-6 pr-1 sm:px-12 h-[65px] flex justify-between items-center border-b sticky top-0 z-[20] bg-white">
         <Link
           href="#"
           onClick={router.back}
@@ -75,21 +77,35 @@ const TaskDetails = () => {
         >
           <Icons.arrowLeft /> Back to Map
         </Link>
-        <div className="flex items-center gap-5">
+        <div className="sm:hidden">
+          <CustomDropdown>
+            {headerMenu.map(({ icon: Icon, name, action }) => (
+              <DropdownMenuItem
+                key={name}
+                onClick={action}
+                className="flex items-center gap-2 mb-2"
+              >
+                <Icon />
+                <p className="text-dark-grey-2 text-sm font-normal">{name}</p>
+              </DropdownMenuItem>
+            ))}
+          </CustomDropdown>
+        </div>
+        <div className="hidden sm:flex items-center gap-5">
           {headerMenu.map(({ icon: Icon, name, action }) => (
             <button
               key={name}
               onClick={action}
               className="flex items-center gap-2"
             >
-              <Icon fill="red" />
+              <Icon />
               <p className="text-dark-grey-2 text-sm font-normal">{name}</p>
             </button>
           ))}
         </div>
       </div>
 
-      <div className="px-[30px] pt-[28px] mb-10">
+      <div className="px-5 sm:px-[30px] pt-5 sm:pt-[28px] mb-10">
         <PosterInfo task={task} />
 
         <section className="mb-7">

@@ -10,6 +10,7 @@ interface IProps {
   text?: string;
   desc?: string;
   okText?: string;
+  cancelText?: string;
   children?: React.ReactNode;
   showIcon?: any;
 }
@@ -21,6 +22,7 @@ export default function DeleteConfirmationModal({
   text,
   desc,
   okText = "Delete",
+  cancelText = "Cancel",
   children,
   showIcon = false,
 }: IProps) {
@@ -35,6 +37,7 @@ export default function DeleteConfirmationModal({
       okVariant="outline"
       cancelVariant="default"
       cancelStyle=""
+      cancelText={cancelText}
       okStyle="text-red-state-color border-red-state-color bg-red-state-color-fill"
       okText={okText}
       loading={loading}
@@ -42,7 +45,7 @@ export default function DeleteConfirmationModal({
       containerClass="max-w-[496px]"
     >
       {children ?? (
-        <div className="w-fit flex flex-col items-center text-center mb-10 mx-auto">
+        <div className="w-fit flex flex-col items-center text-center mb-5 sm:mb-10 mx-auto">
           {showIcon ? (
             <div className="mb-5">
               <TriangleAlert
@@ -53,8 +56,8 @@ export default function DeleteConfirmationModal({
             </div>
           ) : null}
           <div>
-            <h1 className="text-2xl mb-4">{title}</h1>
-            <p>{belowText}</p>
+            <h1 className="text-2xl mb-2 sm:mb-4 font-medium">{title}</h1>
+            <p className="max-w-[330px] mx-auto sm:max-w-full">{belowText}</p>
           </div>
         </div>
       )}

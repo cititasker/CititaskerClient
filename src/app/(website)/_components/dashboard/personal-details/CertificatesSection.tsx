@@ -1,11 +1,10 @@
 import React from "react";
 import FormButton from "@/components/forms/FormButton";
-import Icons from "@/components/Icons";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { FormSchema } from "../../_utils/schema";
 import FormInput from "@/components/forms/FormInput";
 import { Plus, Trash2 } from "lucide-react";
 import FormDatePicker from "@/components/forms/FormDatePicker";
+import { FormSchema } from "../schema";
 
 const CertificatesSection = () => {
   const { control } = useFormContext<FormSchema>();

@@ -33,8 +33,8 @@ const TaskerOffer: React.FC<TaskerOfferProps> = ({ offer, toggleModal }) => {
   });
 
   return (
-    <div className="flex gap-4 mb-6 last:mb-0">
-      <Avatar className="h-[60px] w-[60px]">
+    <div className="flex gap-2.5 sm:gap-4 mb-6 last:mb-0">
+      <Avatar className="w-[30px] h-[30px] sm:h-[60px] sm:w-[60px]">
         <AvatarImage src={offer.tasker.profile_image} alt="Tasker profile" />
         <AvatarFallback>{offer.tasker.first_name?.[0]}</AvatarFallback>
       </Avatar>
@@ -62,7 +62,7 @@ const TaskerOffer: React.FC<TaskerOfferProps> = ({ offer, toggleModal }) => {
           </div>
 
           {isPending && (
-            <div className="flex items-center gap-4">
+            <div className="flex flex-col sm:flex-row items-center gap-y-2 gap-x-4">
               <span className="font-semibold text-primary">
                 {formatCurrency({
                   value: offer.offer_amount,

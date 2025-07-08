@@ -49,7 +49,7 @@ const ConfirmationModal = ({
       <>
         {title && <p className="text-black-2 font-[600] text-2xl">{title}</p>}
         {content ? (
-          <p className="my-[80px] text-center text-base">{content}</p>
+          <p className="my-5 text-center text-base">{content}</p>
         ) : (
           children
         )}
