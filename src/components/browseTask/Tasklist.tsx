@@ -48,7 +48,7 @@ export default function TaskList() {
   // const loadingMessage = isFetchingNextPage ? "Loading more tasks..." : null;
 
   return (
-    <div className="relative grid gap-4 pb-10">
+    <div className="relative pb-5">
       {isFetchingNextPage && (
         <div className="sticky top-0 z-10 bg-primary text-white text-sm h-9 w-9 flex items-center justify-center rounded-full text-center mx-auto mt-2 shadow">
           <LuLoaderCircle size={26} className="animate-spin" />
@@ -61,10 +61,12 @@ export default function TaskList() {
 
       {!isLoading && tasks.length === 0 && renderEmpty()}
 
-      {!isLoading &&
-        tasks.map((task) => (
-          <TaskCard key={task.id} item={task} path="/browse-task" />
-        ))}
+      <div className="grid gap-4">
+        {!isLoading &&
+          tasks.map((task) => (
+            <TaskCard key={task.id} item={task} path="/browse-task" />
+          ))}
+      </div>
 
       {/* Observer target for infinite scroll */}
       <div ref={observerRef} className="h-1" />

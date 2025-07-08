@@ -25,7 +25,7 @@ const schema = z.object({
 type SchemaType = z.infer<typeof schema>;
 
 interface CommentBoxProps {
-  offer_id: number | undefined;
+  offer_id?: number | undefined;
   parentId?: number | null;
   onSuccess?: () => void;
 }
@@ -43,7 +43,7 @@ const CommentBox = ({ offer_id }: CommentBoxProps) => {
     resolver: zodResolver(schema),
   });
 
-  const { handleSubmit, setValue, reset, watch } = methods;
+  const { handleSubmit, setValue, reset } = methods;
 
   const mutation = useMutation({
     mutationFn: replyOffer,

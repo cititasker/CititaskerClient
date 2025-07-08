@@ -17,6 +17,7 @@ import { useFetchTaskById } from "@/services/tasks/tasks.hook";
 import { Card } from "@/components/ui/card";
 import CustomDropdown from "@/components/reusables/CustomDropdown";
 import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
+import Questions from "../Questions";
 
 interface IProps {
   back: string;
@@ -62,6 +63,11 @@ const TaskDetails = ({ back }: IProps) => {
           value: "offers",
           render: () => <Offer offers={task.offers} />,
         },
+        {
+          label: `Questions (0)`,
+          value: "questions",
+          render: () => <Questions />,
+        },
       ]
     : [];
 
@@ -69,7 +75,7 @@ const TaskDetails = ({ back }: IProps) => {
 
   return (
     <Card className="hide-scrollbar relative">
-      <div className="pl-4 pr-1 sm:px-12 h-[65px] flex justify-between items-center border-b sticky top-0 z-[20] bg-white">
+      <div className="rounded-t-xl pl-4 pr-1 sm:px-12 h-[65px] flex justify-between items-center border-b sticky top-0 z-[20] bg-white">
         <Link
           href={back}
           className="flex items-center gap-2 text-base text-primary font-normal"
@@ -110,12 +116,16 @@ const TaskDetails = ({ back }: IProps) => {
         <PosterInfo task={task} />
 
         <section className="mb-6">
-          <h2 className="text-lg sm:text-xl font-semibold mb-4">Description</h2>
+          <h2 className="text-base sm:text-xl font-semibold mb-2 sm:mb-4">
+            Description
+          </h2>
           <p className="text-sm text-black-2">{task.description}</p>
         </section>
 
         <section className="mb-6">
-          <h2 className="text-lg sm:text-xl font-semibold mb-4">Pictures</h2>
+          <h2 className="text-base sm:text-xl font-semibold mb-2 sm:mb-4">
+            Pictures
+          </h2>
           {task.images?.length ? (
             <ImageGallery images={task.images} />
           ) : (
