@@ -1,20 +1,39 @@
 "use client";
 import React, { useState } from "react";
-import { categoryItems } from "../../../data";
 import { cn } from "@/utils";
+
+import {
+  IBalloons,
+  IBike,
+  IBriefcase,
+  IBroom,
+  ICutlery,
+  IMakeUpBrush,
+  IUser,
+} from "@/constant/icons";
+
+const categories = [
+  { icon: IBroom, label: "Cleaning" },
+  { icon: ICutlery, label: "Cooking & Catering" },
+  { icon: IBike, label: "Delivery" },
+  { icon: IBalloons, label: "Event" },
+  { icon: IUser, label: "Handyman" },
+  { icon: IBriefcase, label: "Installation & Assembling" },
+  { icon: IMakeUpBrush, label: "Fashion & Beauty" },
+];
 
 const TaskCategorySelector = () => {
   const [selected, setSelected] = useState("Cleaning");
 
   return (
-    <main className="px-4 md:px-16 md:pb-20">
+    <main className="container-w md:pb-20">
       <div>
-        <h3 className="text-[20px] md:text-[24px] font-semibold pb-3">
+        <h3 className="text-[20px] md:text-[24px] font-semibold mb-3">
           Get your to-dos done today
         </h3>
       </div>
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(126px,1fr))] gap-6">
-        {categoryItems.map((item) => {
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(126px,1fr))] gap-3 sm:gap-6">
+        {categories.map((item) => {
           const isActive = selected === item.label;
           const Icon = item.icon;
 
@@ -31,8 +50,8 @@ const TaskCategorySelector = () => {
             >
               <Icon
                 className={cn(
-                  "w-9 h-9 mb-2 transition-colors",
-                  isActive ? "text-white" : "text-black"
+                  "mb-2 transition-colors text-black-2 [&_path]:fill-black-2",
+                  isActive && "text-white [&_path]:fill-white"
                 )}
               />
               <p className="text-[16px] font-medium leading-tight">

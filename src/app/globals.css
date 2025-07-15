@@ -129,7 +129,7 @@ body {
     @apply rounded-30 bg-white shadow-sm w-full;
   }
   .container-w {
-    @apply px-4 max-w-[1350px] w-full mx-auto pt-10 pb-10;
+    @apply px-4 max-w-[1350px] w-full mx-auto pt-5 pb-5;
   }
 }
 

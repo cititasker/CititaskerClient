@@ -6,7 +6,7 @@ import { ROUTES } from "@/constant";
 
 const BecomeBanner = () => {
   return (
-    <div className="px-4 md:px-16 pt-[5.625rem] pb-16">
+    <div className="container-w lg:pt-[7rem] lg:pb-16">
       <div className="relative rounded-30 sm:rounded-[3.125rem] bg-primary w-full">
         {/* Background blobs */}
         <div className="absolute z-[0] left-0 right-0 top-0 bottom-0 rounded-30 sm:rounded-[3.125rem] overflow-hidden">

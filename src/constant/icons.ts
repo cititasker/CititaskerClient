@@ -21,6 +21,13 @@ import IEmojiSmile from "@/assets/icons/emoji-smile.svg";
 import IAddCircle from "@/assets/icons/add-circle.svg";
 import IPeople from "@/assets/icons/people.svg";
 import ISignPost from "@/assets/icons/signpost.svg";
+import IBroom from "@/assets/icons/broom.svg";
+import ICutlery from "@/assets/icons/cutlery.svg";
+import IBike from "@/assets/icons/bike.svg";
+import IBalloons from "@/assets/icons/balloons.svg";
+import IUser from "@/assets/icons/user.svg";
+import IBriefcase from "@/assets/icons/briefcase.svg";
+import IMakeUpBrush from "@/assets/icons/makeup-brush.svg";
 
 export {
   IChat,
@@ -44,6 +51,13 @@ export {
   IAddCircle,
   IPeople,
   ISignPost,
+  IBroom,
+  ICutlery,
+  IBike,
+  IBalloons,
+  IUser,
+  IBriefcase,
+  IMakeUpBrush,
 
   // Big Icons
   ITickCircle,

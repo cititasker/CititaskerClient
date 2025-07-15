@@ -53,16 +53,20 @@
 //   );
 // }
 
-
-
 "use client";
 
 import React, { useState } from "react";
 import FormButton from "../forms/FormButton";
 import { Input } from "@/components/ui/input";
+import { useAppSelector } from "@/store/hook";
+import { cn } from "@/lib/utils";
+import { useScreenBreakpoints } from "@/hooks/useScreenBreakpoints";
 
 export default function Hero() {
-  const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  const { user } = useAppSelector((state) => state.user);
+  const [todo, setTodo] = useState("");
+
+  const { isSmallScreen } = useScreenBreakpoints();
 
   const tags = [
     "Clean my house",
@@ -74,9 +78,9 @@ export default function Hero() {
   ];
 
   return (
-    <main className="w-full text-white pt-32 pb-10 relative overflow-hidden">
+    <main className="bg-black-2 p-top w-full text-white pb-10 relative overflow-hidden">
       {/* Background Shapes */}
-      <section className="bg-[#021637] relative z-10">
+      <section className="container-w w-full relative">
         {/* Shape 1 */}
         <div className="absolute top-10 -left-10 w-40 h-40 bg-blue-500/20 rounded-full blur-2xl z-0"></div>
         {/* Shape 2 */}
@@ -84,8 +88,8 @@ export default function Hero() {
         {/* Shape 3 */}
         <div className="absolute top-1/2 right-0 w-40 h-40 bg-teal-400/10 rounded-full blur-2xl z-0"></div>
 
-        <div className="relative z-10 px-4 md:px-16 mx-auto py-10 md:py-20">
-          <p className="text-sm mb-2">Welcome Judith!</p>
+        <div className="relative z-10 mx-auto py-10 md:py-20">
+          <p className="text-base mb-2">Welcome {user?.first_name}!</p>
           <h1 className="text-3xl sm:text-5xl font-bold mb-2">
             Post a task. Get it done.
           </h1>
@@ -94,33 +98,35 @@ export default function Hero() {
           </p>
 
           {/* Search bar */}
-          <div className="relative w-full mb-4">
+          <div className="relative w-full mb-4 sm:h-[70px]">
             <Input
               type="text"
+              value={todo}
+              onChange={(e) => setTodo(e.target.value)}
               placeholder="What task do you need done?"
-              className="w-full bg-white text-black px-4 py-4 pr-28 rounded-full"
+              className="w-full bg-white text-black px-4 py-4 pr-28 rounded-[20px] h-full"
             />
-            <FormButton className="absolute right-1 top-1 bottom-0 !h-10">
+            <FormButton
+              href={`/post-task?todo=${todo}`}
+              className="absolute sm:right-4 right-2 top-1/2 bottom-0 -translate-y-1/2"
+              size={isSmallScreen ? "lg" : "default"}
+            >
               Post task
             </FormButton>
           </div>
 
           {/* Suggested tags */}
-          <div className="flex flex-wrap justify-start gap-2 text-sm text-white/80">
+          <div className="flex flex-wrap justify-start gap-2 text-white/80">
             {tags.map((tag, idx) => {
-              const isSelected = selectedTag === tag;
+              const isSelected = todo === tag;
               return (
                 <button
                   key={idx}
-                  onClick={() =>
-                    setSelectedTag(isSelected ? null : tag)
-                  }
-                  className={`px-3 py-1 rounded-full border transition-all duration-200
-                    ${
-                      isSelected
-                        ? "bg-white text-[#021637] font-medium"
-                        : "bg-white/10 border-white/20 text-white/80"
-                    }`}
+                  onClick={() => setTodo(isSelected ? "" : tag)}
+                  className={cn(
+                    "px-5 py-2.5 sm:py-3 bg-transparent rounded-full border border-white transition-all duration-200",
+                    isSelected && "bg-white text-black-2"
+                  )}
                 >
                   {tag}
                 </button>

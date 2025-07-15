@@ -31,6 +31,7 @@ export default function StepOne() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const step = +(searchParams.get("step") || 1);
+  const todo = searchParams.get("todo");
 
   const [categoryId, setCategoryId] = useState<number | null>(
     task.category_id?.id || null
@@ -49,6 +50,12 @@ export default function StepOne() {
   });
 
   const { handleSubmit, setValue, watch } = methods;
+
+  useEffect(() => {
+    if (todo) {
+      setValue("name", todo);
+    }
+  }, [todo]);
 
   useEffect(() => {
     const category = watch("category_id");
