@@ -10,11 +10,13 @@ import { MdBookmarkBorder } from "react-icons/md";
 import StatusBadge from "@/components/reusables/StatusBadge";
 import { ROUTES } from "@/constant";
 import { PLACEHOLDER } from "@/constant/images";
+import { Badge } from "@/components/ui/badge";
 
 interface IProps {
   data: ITask;
 }
 const TaskCard = ({ data }: IProps) => {
+  console.log(44, data);
   return (
     <div className="inline-block overflow-hidden min-h-[8.5rem] min-w-[17.25rem] w-full">
       <div className="relative h-44 w-full rounded-20 overflow-hidden">
@@ -28,7 +30,9 @@ const TaskCard = ({ data }: IProps) => {
           />
         </Link>
 
-        <StatusBadge status="open" className="absolute top-3 left-3" />
+        <Badge className="absolute top-3 left-3 capitalize">
+          {data.status}
+        </Badge>
         <div className="cursor-pointer w-7 h-7 rounded-full flex items-center justify-center absolute top-3 right-3 bg-[rgba(2,22,55,0.25)]">
           <MdBookmarkBorder className="text-white text-lg" />
         </div>

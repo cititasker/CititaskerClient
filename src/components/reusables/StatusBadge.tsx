@@ -33,7 +33,7 @@ const statusStyles: Record<
   unverified: sharedStyles.assigned,
   cancelled: sharedStyles.cancelled,
   failed: sharedStyles.cancelled,
-  open: sharedStyles.cancelled,
+  open: sharedStyles.completed,
 };
 interface IProps {
   status:

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { ROLE } from "@/constant";
+import { ROLE, TASK_STATUS } from "@/constant";
 import { defaultProfile } from "@/constant/images";
 import {
   cn,
@@ -18,12 +18,6 @@ import Image from "next/image";
 interface PosterInfoProps {
   task: ITask;
 }
-
-const STATUS_COLORS: Record<string, string> = {
-  open: "bg-light-primary-2 text-black",
-  assigned: "bg-yellow-100 text-yellow-700",
-  completed: "bg-green-100 text-green-700",
-};
 
 const PosterAvatar = ({
   image,
@@ -104,14 +98,13 @@ const PosterInfo: React.FC<PosterInfoProps> = ({ task }) => {
       <div className="flex-1 space-y-5">
         {/* Status Chips */}
         <div className="flex gap-2">
-          {Object.keys(STATUS_COLORS).map((status) => (
+          {Object.keys(TASK_STATUS).map((status) => (
             <Badge
               key={status}
               variant="outline"
               className={cn(
-                "text-xs px-[14px] py-1.5 capitalize",
-                STATUS_COLORS[status],
-                task.status !== status && "bg-light-grey text-black-2"
+                "text-xs px-[14px] py-2 capitalize bg-light-grey text-black-2 border-none",
+                task.status == status && "bg-light-primary-2 text-black"
               )}
             >
               {status}

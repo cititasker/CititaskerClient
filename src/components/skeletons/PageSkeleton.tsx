@@ -6,7 +6,7 @@ import TaskCardSkeleton from "./TaskCardSkeleton";
 
 const PageSkeleton = () => {
   return (
-    <div className="container pt-[100px] w-full bg-light-grey">
+    <div className="container-w pt-[100px] w-full bg-light-grey">
       <div className="flex flex-col md:flex-row gap-2 h-[calc(100vh-100px)] overflow-hidden">
         {/* Sidebar Skeleton */}
         <div className="w-full md:w-1/4">

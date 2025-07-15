@@ -39,7 +39,7 @@ export default function DisputeFormPage() {
   };
 
   return (
-    <div className="container">
+    <div className="container-w">
       <Link
         href="/my-tasks"
         className="text-primary py-6 text-[16px] underline font-bold flex gap-2 items-center"

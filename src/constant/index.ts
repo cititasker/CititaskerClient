@@ -6,6 +6,12 @@ export enum ROLE {
   tasker = "tasker",
 }
 
+export enum TASK_STATUS {
+  open="open",
+  assigned="assigned",
+  completed="completed",
+};
+
 export const API_ROUTES = {
   AUTH: {
     SIGN_IN: "/auth/sign-in",
@@ -64,18 +70,22 @@ export const API_ROUTES = {
 const isProd = process.env.NEXT_PUBLIC_NODE_ENV === "production";
 
 export const ROUTES = {
+  HOME: "/",
   MY_TASKS: "/my-tasks",
   LOGIN: isProd ? "/waitlist" : "/login",
   SIGNUP: isProd ? "/waitlist" : "/signup",
   CREATE_ACCOUNT: "/create-account",
   FORGOT_PASSWORD: "/forgot-password",
   DASHBOARD: "/dashboard",
-  POSTER: isProd ? "/waitlist" : "/how-it-works/poster",
-  TASKER: isProd ? "/waitlist" : "/how-it-works/tasker",
+  POSTER: isProd ? "/waitlist" : "/discovery/poster",
+  TASKER: isProd ? "/waitlist" : "/discovery/tasker",
   WAITLIST: "/waitlist",
   POST_TASK: isProd ? "/waitlist" : "/post-task",
   BROWSE_TASK: "/browse-task",
   PUBLIC_PROFILE: "/profile",
+
+  HOW_IT_WORKS:"/how-it-works",
+  DISCOVERY:"/discovery",
 
   // Dashboard
   DASHBOARD_PAYMENT: "/dashboard/payment",

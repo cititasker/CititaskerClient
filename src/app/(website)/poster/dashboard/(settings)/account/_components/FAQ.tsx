@@ -143,9 +143,6 @@ const FAQ = () => {
               Add FAQ
             </button>
           </div>
-          <div className="max-w-[740px]">
-            {/* <CustomAccordion data={accordionData} /> */}
-          </div>
         </div>
       )}
     </div>

@@ -67,7 +67,7 @@ const BrowseCategoryCarousel = () => {
         {taskByCategories.map((el, i) => (
           <div key={i}>
             <div
-              className="w-[10.625rem] h-[10.625rem] mx-auto object-cover rounded-full overflow-hidden bg-cover bg-no-repeat"
+              className="w-[140px] h-[140px] sm:w-[10.625rem] sm:h-[10.625rem] mx-auto object-cover rounded-full overflow-hidden bg-cover bg-no-repeat"
               style={{ backgroundImage: `url(${el.img})` }}
             ></div>
             <div className="mt-3 mx-auto w-fit">

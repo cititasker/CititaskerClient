@@ -11,7 +11,7 @@ import TaskerStats from "@/components/TaskerStats";
 const Hero = () => {
   return (
     <div id="home" className="bg-dark-secondary relative overflow-hidden">
-      <div className="container pt-[8.875rem] pb-[5.25rem]">
+      <div className="container-w pt-[8.875rem] pb-[5.25rem]">
         <div className="flex flex-col xl:flex-row items-center gap-6 justify-between">
           <div className="flex-1 w-full h-fit mb-[60px] xl:mb-0 relative">
             <div className="w-full xl:max-w-[40.875rem]">

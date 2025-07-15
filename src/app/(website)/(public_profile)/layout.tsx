@@ -13,7 +13,7 @@ export default function PosterLayout({
 }>) {
   return (
     <div className=" p-top bg-light-grey md:h-dvh relative">
-      <div className="container h-full relative overflow-y-auto">
+      <div className="container-w h-full relative overflow-y-auto">
         <div className="w-full md:h-[calc(100%-14px)] flex flex-col md:flex-row gap-y-3 gap-x-5 md:mt-[14px]">
           <ProfileSidebar />
           <div className="paper h-full overflow-y-auto flex-1 rounded-b-none">

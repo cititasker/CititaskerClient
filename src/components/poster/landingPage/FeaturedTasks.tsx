@@ -6,7 +6,7 @@ import Link from "next/link";
 
 const FeaturedTasks = () => {
   return (
-    <div className="container">
+    <div className="container-w">
       <div className="flex justify-between items-center mb-7">
         <h2 className="text-2xl font-semibold leading-normal">
           Featured tasks

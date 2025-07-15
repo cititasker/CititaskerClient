@@ -1,23 +1,22 @@
-import CantFind from "@/components/posterDiscovery/CantFind";
-import BecomeBanner from "@/components/posterDiscovery/BecomeBanner";
-import Hero from "@/components/posterDiscovery/Hero";
+"use client";
+import TaskerBanner from "@/components/tasker/TaskerBanner";
 import React from "react";
-import TaskCategorySelector from "@/components/posterDiscovery/TaskCategorySelector";
-import PopularTasksCarousel from "@/components/posterDiscovery/PopularTaskCarousel";
-import { ROUTES } from "@/constant";
-export default function page() {
+import Hero from "./_components/Hero";
+import HowItWorks from "./_components/HowItWorks";
+import WhyCitiTasker from "./_components/WhyCitiTasker/WhyCitiTasker";
+import WeLoveTodos from "./_components/WeLoveTodos";
+import Faq from "../_components/Faq";
+import { accordionData } from "data";
+
+export default function Page() {
   return (
-    <div className="bg-gradient-to-b from-[#eefafe] to-[#eefafe]">
+    <div>
       <Hero />
-      <TaskCategorySelector />
-      <PopularTasksCarousel />
-      <BecomeBanner />
-      <CantFind
-      title="Can’t find what you need?"
-      description="You can count on CitiTasker to get you the help that you need."
-      buttonText="Post a task & get offers"
-      buttonLink={ROUTES.POST_TASK}
-    />
+      <HowItWorks />
+      <WhyCitiTasker />
+      <WeLoveTodos />
+      <TaskerBanner />
+      <Faq accordionData={accordionData} />
     </div>
   );
 }

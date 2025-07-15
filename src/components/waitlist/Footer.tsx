@@ -5,8 +5,8 @@ import { socials } from "../../../data";
 const Footer = () => {
   return (
     <div className="bg-dark-secondary text-white">
-      <div className="container">
-        <div className="py-[60px] flex justify-between items-center flex-col sm:flex-row gap-y-5">
+      <div className="container-w">
+        <div className="py-[60px] flex justify-between flex-col-reverse sm:flex-row gap-x-3 gap-y-5 items-center">
           <p className="font-semibold text-base text-center">
             © Copyright {new Date().getFullYear()}, All Right Reserved by
             citiTasker

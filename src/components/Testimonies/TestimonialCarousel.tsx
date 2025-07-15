@@ -37,7 +37,7 @@ const TestimonialCarousel = () => {
         autoPlaySpeed={10000}
         centerMode={false}
         className=""
-        containerClass="container-with-dots"
+        containerClass="container-w-with-dots"
         customTransition="all 8s linear"
         dotListClass=""
         draggable

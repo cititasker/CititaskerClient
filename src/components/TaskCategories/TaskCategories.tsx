@@ -121,25 +121,23 @@ const TaskCategories = () => {
   const [activeTab, setActiveTab] = useState<number>(1);
   const { data: rawCategories = [] } = useGetCategories();
 
-  console.log(78, rawCategories);
-
   return (
     <div className="bg-light-primary-1">
-      <div className="container pt-[4.375rem] pb-20">
+      <div className="container-w pt-[4.375rem] pb-20">
         <h2 className="header mb-[3.5rem] max-w-[56.25rem] mx-auto">
           See some of the top rated Taskers
         </h2>
-        <div className="w-full overflow-x-auto mb-5 md:mb-[3.875rem] hide-scrollbar">
-          <div className="flex items-center">
+        <div className="w-full overflow-x-auto mb-5 md:mb-[3.875rem] hide-scrollbar py-2">
+          <div className="flex items-center gap-2">
             {rawCategories.map((item) => (
               <FormButton
                 key={item.id}
                 onClick={() => setActiveTab(item.id)}
                 className={cn(
-                  "px-5 py-3 flex items-center rounded-40 text-base font-normal whitespace-nowrap capitalize",
+                  "px-5 py-3 flex shadow-sm items-center rounded-40 text-base font-normal whitespace-nowrap capitalize",
                   activeTab === item.id
                     ? "bg-primary text-white"
-                    : "bg-transparent text-black-2"
+                    : "bg-white text-black-2"
                 )}
               >
                 <span className="capitalize">{capitalize(item.name)}</span>

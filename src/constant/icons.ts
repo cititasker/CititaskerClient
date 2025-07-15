@@ -19,6 +19,8 @@ import ILink from "@/assets/icons/link.svg";
 import IEmojiCLip from "@/assets/icons/emoji-clip.svg";
 import IEmojiSmile from "@/assets/icons/emoji-smile.svg";
 import IAddCircle from "@/assets/icons/add-circle.svg";
+import IPeople from "@/assets/icons/people.svg";
+import ISignPost from "@/assets/icons/signpost.svg";
 
 export {
   IChat,
@@ -40,6 +42,8 @@ export {
   IEmojiCLip,
   IEmojiSmile,
   IAddCircle,
+  IPeople,
+  ISignPost,
 
   // Big Icons
   ITickCircle,

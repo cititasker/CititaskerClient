@@ -13,6 +13,7 @@ import UserActions from "./UserActions";
 import GuestActions from "./GuestActions";
 import MobileToggle from "./MobileToggle";
 import MobileNavbar from "./MobileNavbar";
+import { ROUTES } from "@/constant";
 
 interface Props {
   isAuth: boolean;
@@ -29,12 +30,14 @@ const MainNavbar = ({ isAuth }: Props) => {
     logoutUser();
   };
 
+  const homRoute = isAuth ? `${ROUTES.DISCOVERY}/${user.role}` : ROUTES.HOME;
+
   return (
     <div>
       <div className="fixed w-[95%] left-1/2 -translate-x-1/2 top-5 z-40">
         <div className="shadow-sm max-w-[87.5rem] mx-auto h-[60px] md:h-[4.688rem] flex items-center rounded-[3.125rem] px-5 w-full bg-white overflow-visible">
           <div className="w-full flex justify-between items-center">
-            <Link href="/" aria-label="Homepage">
+            <Link href={homRoute} aria-label="Homepage">
               <Image
                 src="/icons/logo_icon.svg"
                 alt="brand_logo"

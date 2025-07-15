@@ -7,7 +7,7 @@ import Link from "next/link";
 const MainFooter = () => {
   return (
     <div className="bg-dark-secondary">
-      <div className="container py-[5.375rem]">
+      <div className="container-w py-[5.375rem]">
         <div className="flex flex-col xl:flex-row gap-x-5 gap-y-[4.5rem] justify-between pb-[5.75rem] border-b border-primary mb-[3.625rem]">
           <div>
             <Image
@@ -159,7 +159,7 @@ const MainFooter = () => {
             </ul>
           </div>
         </div>
-        <div className="flex justify-between">
+        <div className="flex justify-between flex-col-reverse sm:flex-row gap-x-3 gap-y-5 items-center">
           <p className="font-semibold text-base text-center text-white">
             © Copyright {new Date().getFullYear()}, All Right Reserved by
             citiTasker

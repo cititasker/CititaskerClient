@@ -6,7 +6,7 @@ import { ROUTES } from "@/constant";
 
 const BecomeTaskerBanner = () => {
   return (
-    <div className="container pt-[5.625rem] pb-16 bg-white">
+    <div className="container-w pt-[5.625rem] pb-16 bg-white">
       <div className="relative rounded-30 sm:rounded-[3.125rem] bg-primary w-full">
         <div className="absolute z-[0] left-0  right-0 top-0 bottom-0 rounded-30 sm:rounded-[3.125rem] overflow-hidden">
           <span className="rounded-full absolute w-[6.875rem] h-[6.875rem] bg-[#FF7A03] -top-[55px] -left-[55px] md:-top-[30px] md:-left-[30px]"></span>

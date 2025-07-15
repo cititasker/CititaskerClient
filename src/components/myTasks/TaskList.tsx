@@ -26,7 +26,7 @@ const TaskList = () => {
   );
 
   const renderEmptyState = () => (
-    <div className="text-center text-primary px-4 py-10 bg-white rounded-lg">
+    <div className="text-center text-primary px-4 py-10 bg-white rounded-lg h-full">
       <p className="mb-4 text-base">
         {status === "all"
           ? "You haven’t posted any tasks yet."

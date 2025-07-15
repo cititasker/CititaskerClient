@@ -1,19 +1,21 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import { motion } from "framer-motion"; // Import from framer-motion
 import UnderlinedHeader from "../reusables/UnderlinedHeader";
 import Image from "next/image";
+import { useScreenBreakpoints } from "@/hooks/useScreenBreakpoints";
 
 const data = [
   {
     id: "1",
     title: "Pay safely",
-    text: "Pay easily, with peace of mind. We hold payments secure in CitiTasker pay escrow account until the task has been completed and you’re 100% satisfied. ",
+    text: "Pay easily, with peace of mind. We hold payments secure in CitiTasker pay escrow account until the task has been completed and you’re 100% satisfied.",
     image: "/images/wcu-1.svg",
   },
   {
     id: "2",
     title: "Top rated insurance",
-    text: "CitiTasker insurance covers the Taskers for their liability to the third parties for personal injury or property damage while performing most task activities. ",
+    text: "CitiTasker insurance covers the Taskers for their liability to the third parties for personal injury or property damage while performing most task activities.",
     image: "/images/wcu-2.svg",
   },
   {
@@ -31,15 +33,42 @@ const data = [
 ];
 
 const WhyChooseCitiTasker = () => {
-  const listItem = useRef<any>(null);
-  const [height, setHeight] = useState(172);
   const [activeIndex, setActiveIndex] = useState(0);
+  const listItemsRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const { isSmallScreen, isMediumScreen } = useScreenBreakpoints();
 
-  useEffect(() => {
-    if (listItem) {
-      setHeight(listItem.current.offsetHeight);
+  const getItemHeight = () => {
+    if (isSmallScreen) {
+      return 145; // Smaller height for small screens
+    } else if (isMediumScreen) {
+      return 172; // Standard height for medium screens
     }
+    return 172; // Default height
+  };
+
+  const itemHeight = getItemHeight();
+
+  // Detect which list item is in view
+  const handleScroll = () => {
+    listItemsRefs.current.forEach((el, index) => {
+      if (el) {
+        const rect = el.getBoundingClientRect();
+        // If the item is in the middle of the viewport (50% visibility)
+        if (rect.top >= 0 && rect.top <= window.innerHeight / 2) {
+          setActiveIndex(index);
+        }
+      }
+    });
+  };
+
+  // Scroll event listener
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
+
   return (
     <div className="bg-[#F5F5F5] relative overflow-hidden">
       <Image
@@ -50,35 +79,45 @@ const WhyChooseCitiTasker = () => {
         className="hidden md:block absolute bottom-0 right-0 w-[200px] h-auto pointer-events-none z-0"
       />
 
-      <div className="container bg-black md:bg-[#F5F5F5] relative z-10 pb-[3rem] md:pb-[5.75rem] pt-[2rem] md:pt-[4.375rem]">
+      <div className="container-w bg-black md:bg-[#F5F5F5] relative z-10 pb-[3rem] md:pb-[5.75rem] pt-[2rem] md:pt-[4.375rem]">
         <div className="w-fit font-bold mx-auto text-white md:text-black text-center text-[24px] md:text-[2.6rem] mb-3.5 md:mb-[3.625rem]">
           Why Choose{" "}
           <UnderlinedHeader
             text="CitiTasker?"
-            extraStyle="before:!translate-x-0  inline-block"
+            extraStyle="before:!translate-x-0 inline-block"
           />
         </div>
 
         <div className="w-full flex flex-col lg:flex-row gap-x-5 justify-between items-center">
-          <div className="overflow-hidden max-w-full lg:max-w-[32.875rem] w-full mb-[4.375rem] lg:mb-0  relative pl-12 sm:pl-20 before:content-[''] before:absolute before:left-0 before:top-0 before:w-[5px] before:h-full before:bg-dark-grey-2 before:rounded-20">
-            <div
-              className="w-[5px] bg-primary absolute top-0 left-0 rounded-20 transition-transform duration-300"
-              style={{
-                transform: `translateY(${height * activeIndex}px)`,
-                height: `${height}px`,
+          <div className="overflow-hidden max-w-full lg:max-w-[32.875rem] w-full mb-[4.375rem] lg:mb-0 relative pl-12 sm:pl-20 before:content-[''] before:absolute before:left-0 before:top-0 before:w-[5px] before:h-full before:bg-dark-grey-1 before:rounded-20">
+            {/* Animated indicator */}
+            <motion.div
+              className="w-[5px] bg-primary absolute top-0 left-0 rounded-20 h-[145px] md:h-[150px]"
+              animate={{
+                translateY: activeIndex * itemHeight, // Adjust for height as required
               }}
-            ></div>
+              transition={{
+                duration: 0.6, // Increased transition time for smoother movement
+                ease: "easeInOut", // Smooth easing
+              }}
+            ></motion.div>
+
             {data.map((el, i) => (
-              <div
-                ref={listItem}
+              <motion.div
+                // @ts-ignore
+                ref={(el) => (listItemsRefs.current[i] = el)} // Assign refs for each item
                 key={el.id}
                 className="flex items-center cursor-pointer"
-                onClick={() => setActiveIndex(i)}
+                initial={{ opacity: 0 }} // Initial opacity
+                animate={{ opacity: activeIndex === i ? 1 : 0.5 }} // Fade-in/fade-out effect
+                transition={{ opacity: { duration: 0.6 } }} // Fade transition with easing
               >
                 <div className="py-[1.5rem]">
                   <h2
                     className={`mb-2.5 sm:mb-4 text-[16px] md:text-base font-semibold ${
-                      activeIndex === i ? "text-primary" : "text-dark-grey-2"
+                      activeIndex === i
+                        ? "text-white md:text-primary"
+                        : "text-dark-grey-2"
                     }`}
                   >
                     {el.title}
@@ -86,28 +125,44 @@ const WhyChooseCitiTasker = () => {
                   <p
                     className={`text-[14px] leading-0 md:text-base font-normal ${
                       activeIndex === i
-                        ? "text-white sm:text-black"
+                        ? "text-white md:text-black"
                         : "text-dark-grey-2"
                     }`}
                   >
                     {el.text}
                   </p>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
+
           <div className="relative max-w-[34rem] w-full h-[22.625rem] sm:h-[37.5rem] rounded-[1.125rem] sm:rounded-30 overflow-hidden">
             {data.map((item, i) => (
-              <Image
+              <motion.div
                 key={item.id}
-                src={item.image}
-                alt=""
-                width={745}
-                height={800}
-                className={`absolute top-0 left-0 w-full h-[37.5rem] object-cover transition-opacity duration-500 ${
-                  activeIndex === i ? "opacity-100" : "opacity-0"
-                }`}
-              />
+                initial={{ opacity: 0, scale: 1 }} // Initial opacity and scale
+                animate={{
+                  opacity: activeIndex === i ? 1 : 0, // Only show active image
+                  scale: activeIndex === i ? 1.05 : 1, // Slight zoom on active image
+                  zIndex: activeIndex === i ? 10 : 0, // Ensure active image is on top
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                }} // Scale and opacity for transition
+                transition={{
+                  opacity: { duration: 0.8, ease: "easeInOut" }, // Smooth fade-in/out
+                  scale: { duration: 0.8, ease: "easeInOut" }, // Smooth zoom effect
+                  zIndex: { duration: 0 }, // Instant z-index change
+                }}
+              >
+                <Image
+                  src={item.image}
+                  alt={item.title}
+                  width={745}
+                  height={800}
+                  className="w-full h-[37.5rem] object-cover"
+                />
+              </motion.div>
             ))}
           </div>
         </div>

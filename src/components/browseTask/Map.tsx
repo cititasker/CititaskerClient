@@ -1,16 +1,32 @@
 "use client";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { icon } from "leaflet";
+import { icon, LatLngBounds } from "leaflet";
 import { defaultProfile } from "@/constant/images";
 import Image from "next/image";
 import { formatCurrency, formatDateAgo, initializeName } from "@/utils";
 import FormButton from "../forms/FormButton";
+import { useEffect, useState } from "react";
 
 interface IProps {
   tasks: ITask[];
 }
 export default function Map({ tasks }: IProps) {
+  const [mapBounds, setMapBounds] = useState<LatLngBounds | undefined>(
+    undefined
+  );
+
+  useEffect(() => {
+    if (tasks.length > 0) {
+      const bounds = tasks.map((task) => [
+        Number(task.location[0]),
+        Number(task.location[1]),
+      ]) as [number, number][];
+
+      setMapBounds(new LatLngBounds(bounds));
+    }
+  }, [tasks]);
+
   const redirectUrl = (id: any) => {
     const url = new URL(window.location.href);
     if (url.search) {
@@ -21,11 +37,14 @@ export default function Map({ tasks }: IProps) {
 
   return (
     <MapContainer
-      center={[9.082, 8.6753]}
-      zoom={6}
+      center={[6.5244, 3.3792]}
+      zoom={10}
+      zoomSnap={0.5}
+      zoomDelta={0.5}
       scrollWheelZoom={true}
       fadeAnimation
-      bounds={[[6.5244, 3.3792]]}
+      // bounds={[[6.5244, 3.3792]]}
+      bounds={mapBounds}
       boundsOptions={{ animate: true }}
       className="w-full h-full z-[99]"
     >

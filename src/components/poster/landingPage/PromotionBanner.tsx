@@ -4,7 +4,8 @@ import React from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import Tasker1 from "@/../public/images/plumbing.svg?url";
-import Tasker2 from "@/../public/images/makeup_artist.svg?url";
+// import Tasker2 from "@/../public/images/makeup_artist.svg?url";
+import Tasker2 from "@/../public/images/wcu-4.svg?url";
 import Curl from "@/../public/icons/curl.svg?url";
 import Star from "@/../public/icons/star.svg?url";
 import CustomArrow from "./CustomArrow";
@@ -33,13 +34,13 @@ const PromotionBanner = () => {
   ];
 
   return (
-    <div className="relative w-full max-w-[79.375rem] h-[25.5rem] mx-auto">
+    <div className="relative w-full min-h-[25.5rem] mx-auto">
       <Carousel
         arrows
         customLeftArrow={<CustomArrow />}
         customRightArrow={<CustomArrow dir="right" />}
         autoPlay
-        autoPlaySpeed={5000}
+        autoPlaySpeed={10000}
         draggable
         infinite
         keyBoardControl
@@ -55,7 +56,7 @@ const PromotionBanner = () => {
         {slides.map((el, i) => (
           <div
             key={i}
-            className="w-full h-[25.5rem] bg-dark-secondary rounded-40 px-5 md:px-20 lg:px-15 py-5"
+            className="w-full rounded-2xl sm:rounded-40 h-[25.5rem] bg-dark-secondary px-4 md:px-20 lg:px-15 py-4 overflow-hidden"
           >
             <div className="relative flex flex-col-reverse lg:flex-row justify-center sm:justify-between items-center h-full gap-6 lg:gap-0">
               {/* Text Section */}
@@ -69,11 +70,11 @@ const PromotionBanner = () => {
               </div>
 
               {/* Image */}
-              <div className="image_clip overflow-hidden max-w-[300px] sm:max-w-[350px] lg:max-w-[400px] w-full h-[40%] sm:h-[75%] lg:h-[85%]">
+              <div className="image_clip overflow-hidden max-w-[300px] sm:max-w-[350px] lg:max-w-[400px] w-full h-[50%] sm:h-[75%] lg:h-[85%]">
                 <Image
                   src={el.img}
                   alt=""
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover object-top"
                 />
               </div>
 

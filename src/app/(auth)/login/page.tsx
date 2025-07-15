@@ -37,8 +37,6 @@ export default function Page() {
     setLoading(true);
     const res = await loginWithCredentials(values);
 
-    console.log(11, res);
-
     if (res?.success) {
       showSnackbar(res.message, "success");
       const updatedSession = await getSession();

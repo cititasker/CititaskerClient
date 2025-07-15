@@ -166,6 +166,10 @@ export const taskCategories = [
 
 export const company = [
   {
+    name: "About",
+    href: "/about",
+  },
+  {
     name: "Career",
     href: "#",
   },

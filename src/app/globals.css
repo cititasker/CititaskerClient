@@ -42,9 +42,6 @@ body {
   display: none;
 }
 @layer utilities {
-  .container {
-    @apply px-4 max-w-[1350px] w-full mx-auto;
-  }
   .card_bg {
     background: url("/images/card.png") no-repeat;
     background-size: cover;
@@ -130,6 +127,9 @@ body {
   }
   .paper {
     @apply rounded-30 bg-white shadow-sm w-full;
+  }
+  .container-w {
+    @apply px-4 max-w-[1350px] w-full mx-auto pt-10 pb-10;
   }
 }
 

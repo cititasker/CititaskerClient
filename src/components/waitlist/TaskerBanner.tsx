@@ -10,7 +10,7 @@ const TaskerBanner = () => {
 
   return (
     <>
-      <div className="container py-[3.25rem] sm:py-[116px]">
+      <div className="container-w py-[3.25rem] sm:py-[116px]">
         <div className="flex items-stretch justify-between gap-x-[22px] gap-y-[80px] flex-col xl:flex-row">
           <div className="transition-all duration-300 p-5 sm:py-[62px] sm:px-[73px] bg-dark-secondary xl:bg-secondary rounded-[1.25rem] sm:rounded-[1.875rem] flex-1">
             <div className="mb-5 sm:mb-[3.25rem]">

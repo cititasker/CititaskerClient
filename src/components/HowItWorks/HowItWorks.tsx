@@ -22,13 +22,14 @@ const data = [
 
 const HowItWorks = () => {
   return (
-    <div className="container bg-white py-[5.125rem]" id="how_it_works">
+    <div className="container-w bg-white py-[5.125rem]" id="how_it_works">
       <div className="mb-[3.375rem] sm:mb-[3.75rem] max-w-[45.625rem] mx-auto">
         <h1 className="header mb-[0.688rem] sm:mb-5">
           How does CitiTasker work?
         </h1>
         <p className="text-[14px] md:text-[18px] font-normal text-center">
-         CitiTasker connects you with verified Taskers to get your tasks done effortlessly. Here's how it works:
+          CitiTasker connects you with verified Taskers to get your tasks done
+          effortlessly. Here's how it works:
         </p>
       </div>
       <div className="max-w-[74rem] mx-auto gap-x-5 flex justify-between items-center flex-col xl:flex-row">

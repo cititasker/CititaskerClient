@@ -1,6 +1,5 @@
 import {
   getAllTasks,
-  getSingleTask,
   getUserTaskById,
   getUserTasks,
   requestPayment,

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ROUTES } from "@/constant";
+import { ROLE, ROUTES } from "@/constant";
 import CategoryDropdown from "../CategoryDropdown";
 import { NavItem } from "./nav";
 import HowItWorksDropdown from "./HowItWorksDropdown";
@@ -17,6 +17,14 @@ interface Props {
 export default function DesktopNav({ isAuth, path, user }: Props) {
   const isPoster = user?.role === "poster";
 
+  const homRoute = isAuth ? `${ROUTES.DISCOVERY}/${isPoster}` : ROUTES.HOME;
+
+  const getRoute = (nav: NavItem) => {
+    if (nav.name == "Home") {
+      return homRoute;
+    } else return nav.href;
+  };
+
   return (
     <ul className="hidden lg:flex items-center gap-4">
       {navbar.map((nav: NavItem, index) => {
@@ -27,7 +35,7 @@ export default function DesktopNav({ isAuth, path, user }: Props) {
         ) : (
           <li key={index}>
             <Link
-              href={nav.href}
+              href={getRoute(nav)}
               className={cn(
                 "text-base font-normal px-3 py-2 hover:text-primary",
                 {
