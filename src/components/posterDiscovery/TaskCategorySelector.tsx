@@ -32,7 +32,7 @@ const TaskCategorySelector = () => {
           Get your to-dos done today
         </h3>
       </div>
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(126px,1fr))] gap-3 sm:gap-6">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(100px,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(126px,1fr))] gap-3 sm:gap-6">
         {categories.map((item) => {
           const isActive = selected === item.label;
           const Icon = item.icon;
@@ -42,7 +42,7 @@ const TaskCategorySelector = () => {
               key={item.label}
               onClick={() => setSelected(item.label)}
               className={cn(
-                "h-[126px] px-3 rounded-2xl flex flex-col items-center justify-center text-center shadow-sm border transition-colors duration-200",
+                "p-2.5 min-h-[100px] sm:h-[126px] px-3 rounded-2xl flex flex-col items-center justify-center text-center shadow-sm border transition-colors duration-200",
                 isActive
                   ? "bg-primary text-white"
                   : "bg-white text-black border-gray-200"
@@ -50,11 +50,11 @@ const TaskCategorySelector = () => {
             >
               <Icon
                 className={cn(
-                  "mb-2 transition-colors text-black-2 [&_path]:fill-black-2",
+                  "mb-2 transition-colors text-black-2 [&_path]:fill-black-2 scale-75 sm:scale-100",
                   isActive && "text-white [&_path]:fill-white"
                 )}
               />
-              <p className="text-[16px] font-medium leading-tight">
+              <p className="text-sm sm:text-[16px] font-medium leading-tight">
                 {item.label}
               </p>
             </button>
