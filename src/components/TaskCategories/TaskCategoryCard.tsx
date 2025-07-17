@@ -37,14 +37,14 @@ const TaskCategoryCard = ({
           }`}
         >
           <div
-            className={`w-fit flex items-center text-[10px] sm:text-xs lg:text-sm ${
+            className={`w-fit flex items-center text-xs lg:text-sm ${
               rtl && "flex-row-reverse"
             }`}
           >
-            <FaStar className="text-[10px] lg:text-sm text-[#f2af41] mr-1" />
+            <FaStar className="text-xs lg:text-sm text-[#f2af41] mr-1" />
             {`${data.ratings} (${data.taskCompleted})`}
           </div>
-          <button className="bg-primary px-1.5 xl:px-2.5 py-0.5 xl:py-1 rounded-30 text-white text-[10px] sm:text-xs lg:text-sm whitespace-nowrap">
+          <button className="bg-primary px-1.5 xl:px-2.5 py-0.5 xl:py-1 rounded-30 text-white text-xs sm:text-xs lg:text-sm whitespace-nowrap">
             {data.charges}
           </button>
         </div>

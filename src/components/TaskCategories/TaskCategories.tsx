@@ -124,17 +124,18 @@ const TaskCategories = () => {
   return (
     <div className="bg-light-primary-1">
       <div className="container-w sm:pt-[4.375rem] sm:pb-20">
-        <h2 className="header mb-[14px] sm:mb-[2rem] max-w-[56.25rem] mx-auto">
+        <h2 className="header mb-[14px] sm:mb-2xl max-w-[56.25rem] mx-auto">
           See some of the top rated Taskers
         </h2>
-        <div className="w-full overflow-x-auto mb-5 md:mb-[3.875rem] hide-scrollbar py-2">
+        <div className="w-full overflow-x-auto mb-5 md:mb-[2.5rem] hide-scrollbar py-2">
           <div className="flex items-center gap-2">
             {rawCategories.map((item) => (
               <FormButton
                 key={item.id}
                 onClick={() => setActiveTab(item.id)}
+                size="lg"
                 className={cn(
-                  "px-5 py-3 flex shadow-sm items-center rounded-40 text-base font-normal whitespace-nowrap capitalize",
+                  "flex shadow-sm items-center rounded-40 text-sm sm:text-base font-normal whitespace-nowrap capitalize",
                   activeTab === item.id
                     ? "bg-primary text-white"
                     : "bg-white text-black-2"
