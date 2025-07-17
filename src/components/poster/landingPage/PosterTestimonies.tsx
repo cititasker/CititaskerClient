@@ -13,7 +13,7 @@ const PosterTestimonies: React.FC<PosterTestimoniesProps> = ({
     <div className="container-w md:pt-[4.875rem] sm:pb-[3rem] md:pb-[7.5rem]">
       {showHeading && (
         <h2 className="header max-w-[35.875rem] mx-auto text-center mb-[3.375rem]">
-          Meet our top posters & their testimonies{" "}
+          Meet our top posters & their testimonies
         </h2>
       )}
       <div className="flex flex-col md:flex-row justify-between gap-3 min-h-[25rem]">

@@ -43,7 +43,7 @@ const SlidingImageCarousel = () => {
       {/* <div className="h-full w-full -rotate-[8deg] sm:-rotate-[10deg] bg-light-primary-2 rounded-[0.875rem] sm:rounded-[1.625rem]" /> */}
 
       {/* Image Stack */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[90%] max-w-[507px] mx-auto h-full rounded-[0.875rem] sm:rounded-[1.625rem] ">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[70%] sm:w-[90%] max-w-[507px] mx-auto h-full rounded-[0.875rem] sm:rounded-[1.625rem] ">
         {imagesData.map((img, index) => {
           const isActive = index === currentIndex;
           const zIndex = isActive ? 20 : index;
@@ -58,7 +58,7 @@ const SlidingImageCarousel = () => {
                     initial={{
                       x: 70,
                       opacity: 0,
-                      rotate: 10,
+                      rotate: 15,
                     }}
                     animate={{
                       x: 0,
@@ -68,7 +68,7 @@ const SlidingImageCarousel = () => {
                     exit={{
                       x: -70,
                       opacity: 0,
-                      rotate: -10,
+                      rotate: -15,
                     }}
                     transition={{
                       type: "spring",
@@ -92,7 +92,14 @@ const SlidingImageCarousel = () => {
               {!isActive && (
                 <div
                   key={`static-${index}`}
-                  className={`-rotate-[10deg] opacity-50 absolute top-0 left-0 w-full h-full z-[${zIndex}] transition-transform duration-300`}
+                  className={`absolute top-0 left-0 w-full h-full z-[${zIndex}] transition-transform duration-300`}
+                  style={{
+                    transform: `rotate(${
+                      index % 2 === 0 ? "-12deg" : "12deg"
+                    }) translateX(${
+                      index % 2 === 0 ? "-50px" : "50px"
+                    }) scaleX(0.8)`,
+                  }}
                 >
                   <Image
                     src={img}
