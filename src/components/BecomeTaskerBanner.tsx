@@ -6,7 +6,7 @@ import { ROUTES } from "@/constant";
 
 const BecomeTaskerBanner = () => {
   return (
-    <div className="container-w pt-[5.625rem] pb-16 bg-white">
+    <div className="container-w sm:pt-[5.625rem] sm:pb-16 bg-white">
       <div className="relative rounded-30 sm:rounded-[3.125rem] bg-primary w-full">
         <div className="absolute z-[0] left-0  right-0 top-0 bottom-0 rounded-30 sm:rounded-[3.125rem] overflow-hidden">
           <span className="rounded-full absolute w-[6.875rem] h-[6.875rem] bg-[#FF7A03] -top-[55px] -left-[55px] md:-top-[30px] md:-left-[30px]"></span>
@@ -15,7 +15,7 @@ const BecomeTaskerBanner = () => {
           <span className="rounded-full absolute w-[3.125rem] h-[3.125rem] bg-[#038EFF] -bottom-[35px] left-[20%] hidden sm:block"></span>
           <span className="rounded-full absolute w-[18.75rem] h-[18.75rem] bg-[#F2AF42] -bottom-[130px] right-[25%] hidden sm:block"></span>
         </div>
-        <div className="relative z-[1] px-5 py-[42px] md:px-12 lg:px-24 md:py-[4.875rem] flex flex-col h-full max-w-full lg:max-w-[44.375rem] w-full">
+        <div className="relative z-[1] px-5 py-5 sm:py-[42px] md:px-12 lg:px-24 md:py-[4.875rem] flex flex-col h-full max-w-full lg:max-w-[44.375rem] w-full">
           <div className="mb-6 sm:mb-[3.75rem]">
             <h2 className="text-white font-bold text-[18px] sm:text-[2.5rem] mb-2 sm:mb-5">
               Become a Tasker for free

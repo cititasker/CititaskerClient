@@ -5,7 +5,7 @@ import { FaStar } from "react-icons/fa6";
 
 const TestimonialCard = () => {
   return (
-    <div className="p-4 sm:px-5 sm:py-[2.5rem] rounded-md sm:rounded-[1.25rem] bg-[#FDF0F0]">
+    <div className="p-4 sm:px-5 sm:py-[2.5rem] rounded-lg sm:rounded-[1.25rem] bg-[#FDF0F0]">
       <div className="flex flex-col">
         <p className="text-[14px] sm:text-base font-medium font-lato text-dark-secondary leading-normal">
           I needed help with moving furniture on short notice, and CitiTasker

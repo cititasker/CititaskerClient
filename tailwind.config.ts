@@ -9,6 +9,9 @@ export default {
   ],
   theme: {
     extend: {
+      screens:{
+        xs:"470px"
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":

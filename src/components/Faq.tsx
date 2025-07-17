@@ -15,7 +15,7 @@ const Faq = () => {
             <h2 className="text-slate-900 text-[40px] font-bold mb-10 hidden lg:block">
               Common Questions, Clear Answers
             </h2>
-            <div className="lg:max-w-[402px] w-full relative bg-sky-200 rounded-[20px] py-7 px-10">
+            <div className="lg:max-w-[402px] w-full relative bg-sky-200 rounded-[20px] sm:py-7 sm:px-10 p-5">
               <div className="justify-center items-start inline-flex relative h-[50px] w-full">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <Image

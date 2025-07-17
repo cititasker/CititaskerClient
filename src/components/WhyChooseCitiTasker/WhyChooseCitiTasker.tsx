@@ -36,6 +36,8 @@ const WhyChooseCitiTasker = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const listItemsRefs = useRef<(HTMLDivElement | null)[]>([]);
   const { isSmallScreen, isMediumScreen } = useScreenBreakpoints();
+  const [itemHeights, setItemHeights] = useState<number[]>([]);
+  const [offsets, setOffsets] = useState<number[]>([]);
 
   const getItemHeight = () => {
     if (isSmallScreen) {
@@ -69,6 +71,26 @@ const WhyChooseCitiTasker = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const updateHeights = () => {
+      const heights = listItemsRefs.current.map((el) => el?.offsetHeight || 0);
+      setItemHeights(heights);
+
+      const newOffsets = heights.reduce<number[]>((acc, height, i) => {
+        const prev = acc[i - 1] || 0;
+        acc[i] = prev + height;
+        return acc;
+      }, []);
+      setOffsets(newOffsets);
+    };
+
+    updateHeights();
+    window.addEventListener("resize", updateHeights);
+    return () => window.removeEventListener("resize", updateHeights);
+  }, []);
+
+  const offsetTop = activeIndex === 0 ? 0 : offsets[activeIndex - 1] || 0;
+
   return (
     <div className="bg-[#F5F5F5] relative overflow-hidden">
       <Image
@@ -89,12 +111,15 @@ const WhyChooseCitiTasker = () => {
         </div>
 
         <div className="w-full flex flex-col lg:flex-row gap-x-5 justify-between items-center">
-          <div className="overflow-hidden max-w-full lg:max-w-[32.875rem] w-full mb-[4.375rem] lg:mb-0 relative pl-12 sm:pl-20 before:content-[''] before:absolute before:left-0 before:top-0 before:w-[5px] before:h-full before:bg-dark-grey-1 before:rounded-20">
+          <div className="overflow-hidden max-w-full lg:max-w-[32.875rem] w-full mb-[4.375rem] lg:mb-0 relative pl-8 sm::pl-12 md:pl-20 before:content-[''] before:absolute before:left-0 before:top-0 before:w-[5px] before:h-full before:bg-dark-grey-1 before:rounded-20">
             {/* Animated indicator */}
             <motion.div
-              className="w-[5px] bg-primary absolute top-0 left-0 rounded-20 h-[145px] md:h-[150px]"
+              className="w-[5px] bg-primary absolute top-0 left-0 rounded-20"
+              style={{
+                height: itemHeights[activeIndex] ?? 0,
+              }}
               animate={{
-                translateY: activeIndex * itemHeight, // Adjust for height as required
+                translateY: offsetTop,
               }}
               transition={{
                 duration: 0.6, // Increased transition time for smoother movement
