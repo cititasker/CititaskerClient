@@ -43,7 +43,7 @@ const SlidingImageCarousel = () => {
       {/* <div className="h-full w-full -rotate-[8deg] sm:-rotate-[10deg] bg-light-primary-2 rounded-[0.875rem] sm:rounded-[1.625rem]" /> */}
 
       {/* Image Stack */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[70%] sm:w-[90%] max-w-[507px] mx-auto h-full rounded-[0.875rem] sm:rounded-[1.625rem] ">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[85%] sm:w-[90%] max-w-[507px] mx-auto h-full rounded-[0.875rem] sm:rounded-[1.625rem] ">
         {imagesData.map((img, index) => {
           const isActive = index === currentIndex;
           const zIndex = isActive ? 20 : index;
