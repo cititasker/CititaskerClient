@@ -25,7 +25,7 @@ const LandingPageHero = () => {
             <FormButton
               text="Become a Tasker"
               className="flex-1 bg-primary md:hidden"
-              href={ROUTES.POST_TASK}
+              href={ROUTES.SIGNUP}
             />
           </div>
         </div>

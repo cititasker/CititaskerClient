@@ -20,7 +20,7 @@ const BecomeTaskerBanner = () => {
             <h2 className="text-white font-bold text-[18px] sm:text-[2.5rem] mb-2 sm:mb-5">
               Become a Tasker for free
             </h2>
-            <p className="text-white text-[14px] sm:text-base font-normal">
+            <p className="text-white text-base font-normal">
               Turn your skills into income with CitiTasker! Join a trusted
               community where you can choose tasks that match your expertise,
               work on your terms, and earn up to ₦500,000 a month. Signing up is
@@ -31,7 +31,7 @@ const BecomeTaskerBanner = () => {
           <FormButton
             href={ROUTES.TASKER}
             text="Earn on CitiTasker"
-            className="mt-auto text-xs !bg-white !text-primary"
+            className="mt-auto bg-white text-primary"
           />
         </div>
         <Image

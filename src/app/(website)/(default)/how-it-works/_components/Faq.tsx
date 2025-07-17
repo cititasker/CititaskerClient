@@ -36,7 +36,7 @@ const Faq = ({ accordionData }: IProps) => {
                 <h3 className="text-slate-900 text-2xl font-semibold mb-2">
                   Still have any question?
                 </h3>
-                <div className="max-w-80 w-full text-justify text-slate-900 text-sm font-normal ">
+                <div className="max-w-80 w-full text-justify text-slate-900 text-base font-normal ">
                   We're here to help! If you have any more questions or need
                   further assistance, don’t hesitate to reach out. Our support
                   team is ready to provide the information you need and ensure

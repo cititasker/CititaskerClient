@@ -33,7 +33,7 @@ const Faq = () => {
                 <h3 className="text-slate-900 text-2xl font-semibold mb-2">
                   Still have any question?
                 </h3>
-                <div className="max-w-80 w-full text-justify text-slate-900 text-sm font-normal ">
+                <div className="max-w-80 w-full text-justify text-slate-900 font-normal ">
                   We're here to help! If you have any more questions or need
                   further assistance, don’t hesitate to reach out. Our support
                   team is ready to provide the information you need and ensure
@@ -41,10 +41,7 @@ const Faq = () => {
                   Feel free to contact us anytime!
                 </div>
               </div>
-              <FormButton
-                text="Contact Us"
-                className="!bg-white !text-dark-secondary !px-4 !py-3"
-              />
+              <FormButton text="Contact Us" className="bg-white text-primary" />
             </div>
           </div>
           <div className="flex-1">

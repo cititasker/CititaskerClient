@@ -41,7 +41,7 @@ const TaskCategoryCard = ({
               rtl && "flex-row-reverse"
             }`}
           >
-            <FaStar className="text-xs lg:text-sm text-[#f2af41] mr-1" />
+            <FaStar className="text-xs lg:text-sm text-[#f2af41] flex items-center gap-1" />
             {`${data.ratings} (${data.taskCompleted})`}
           </div>
           <button className="bg-primary px-1.5 xl:px-2.5 py-0.5 xl:py-1 rounded-30 text-white text-xs sm:text-xs lg:text-sm whitespace-nowrap">

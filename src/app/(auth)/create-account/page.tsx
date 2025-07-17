@@ -58,14 +58,14 @@ const CreateAccountPage = () => {
                 <RadioGroup
                   onValueChange={field.onChange}
                   value={field.value}
-                  className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-5"
+                  className="grid grid-cols-[repeat(auto-fill,minmax(140px,1fr))] gap-5"
                 >
                   {roleOptions.map(({ id, label }) => (
                     <Label
                       key={id}
                       htmlFor={id}
                       className={cn(
-                        "p-4 h-[200px] rounded-[20px] bg-white flex items-center justify-center text-center relative cursor-pointer shadow-sm border transition-colors",
+                        "p-4 h-[140px] sm:h-[200px] rounded-[20px] bg-white flex items-center justify-center text-center relative cursor-pointer shadow-sm border transition-colors",
                         field.value === id
                           ? "border-primary"
                           : "border-transparent"
