@@ -17,7 +17,7 @@ interface Props {
 export default function DesktopNav({ isAuth, path, user }: Props) {
   const isPoster = user?.role === "poster";
 
-  const homRoute = isAuth ? `${ROUTES.DISCOVERY}/${isPoster}` : ROUTES.HOME;
+  const homRoute = isAuth ? `${ROUTES.DISCOVERY}/${user.role}` : ROUTES.HOME;
 
   const getRoute = (nav: NavItem) => {
     if (nav.name == "Home") {

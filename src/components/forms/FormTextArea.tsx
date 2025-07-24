@@ -40,7 +40,10 @@ export default function FormTextArea({
             <Textarea
               id={name}
               placeholder={placeholder}
-              className={cn("min-h-[120px] rounded-[25px]", className)}
+              className={cn(
+                "min-h-[120px] rounded sm:rounded-lg md:rounded-xl",
+                className
+              )}
               maxLength={maxLength}
               {...field}
             />

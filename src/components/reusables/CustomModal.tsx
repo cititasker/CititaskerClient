@@ -12,10 +12,7 @@ import SuccessConfetti from "./SuccessConfetti";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { cn } from "@/lib/utils";
 
-interface CustomModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  children: ReactNode;
+interface CustomModalProps extends IModal {
   className?: string; // container wrapper styling
   contentClassName?: string; // dialog content styling
   hideClose?: boolean;
@@ -59,7 +56,7 @@ const CustomModal: FC<CustomModalProps> = ({
             <DialogDescription />
           </VisuallyHidden>
         </DialogHeader>
-        <div className={cn("overflow-x-hidden w-full", className)}>
+        <div className={cn("overflow-x-hidden w-full h-full", className)}>
           {children}
         </div>
       </DialogContent>

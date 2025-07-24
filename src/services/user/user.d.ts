@@ -17,15 +17,32 @@ interface UserProfileRes {
   data: UserProfileData;
 }
 
-interface UserPorfolioRes {
+interface Portfolio {
+  key:string;
+  url:string
+}
+
+type UserPorfolioRes = {
   data: {
     id: number;
-    portfolio: string[];
+    portfolio: Portfolio[];
   };
 }
 
 interface UserFaq {
   answer: string;
-  id: number;
+  id: number | string;
   question: string;
 }
+type UserFaqResponse = {data: UserFaq[]};
+
+interface TaskerReview {
+  id: number;
+  rating: number;
+  comment: string;
+  tasker: string;
+  created_at: string;
+  reviewer: string;
+}
+
+type GetReviewsResponse = { data: TaskerReview[] };

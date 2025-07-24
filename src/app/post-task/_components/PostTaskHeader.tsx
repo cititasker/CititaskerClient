@@ -2,13 +2,6 @@
 import { useSearchParams } from "next/navigation";
 import React from "react";
 
-const header: any = {
-  1: "What task do you want to get done?",
-  2: "What’s the location of this task?",
-  3: "When do you want to get this task done?",
-  4: "What is your budget for this task?",
-};
-
 const bar: any = {
   1: 10,
   2: 30,
@@ -19,6 +12,17 @@ const bar: any = {
 const PostTaskHeader = () => {
   const searchParams = useSearchParams();
   const step = Number(searchParams.get("step")) || 1;
+  const action = searchParams.get("action");
+
+  const header: any = {
+    1: "What task do you want to get done?",
+    2:
+      action == "reschedule"
+        ? "Reschedule your task"
+        : "What’s the location of this task?",
+    3: "When do you want to get this task done?",
+    4: "What is your budget for this task?",
+  };
 
   return (
     <div className="flex gap-6 flex-col mb-6">

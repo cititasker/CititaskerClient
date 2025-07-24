@@ -54,6 +54,9 @@ const Summary = () => {
       queryClient.invalidateQueries({
         queryKey: [API_ROUTES.GET_USER_TASK, id],
       });
+      queryClient.invalidateQueries({
+        queryKey: [API_ROUTES.GET_TASK_BY_ID, id],
+      });
       await persistor.purge();
       router.push(`/${session?.user.role}/${ROUTES.MY_TASKS}/${id}`);
     },

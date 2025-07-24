@@ -28,6 +28,7 @@ import IBalloons from "@/assets/icons/balloons.svg";
 import IUser from "@/assets/icons/user.svg";
 import IBriefcase from "@/assets/icons/briefcase.svg";
 import IMakeUpBrush from "@/assets/icons/makeup-brush.svg";
+import IDragVertical from "@/assets/icons/drag-vertical.svg";
 
 export {
   IChat,
@@ -58,6 +59,7 @@ export {
   IUser,
   IBriefcase,
   IMakeUpBrush,
+  IDragVertical,
 
   // Big Icons
   ITickCircle,

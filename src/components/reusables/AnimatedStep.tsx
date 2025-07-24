@@ -6,7 +6,8 @@ interface AnimatedStepProps {
   currentStep: number; // Current step number
   direction?: "forward" | "backward"; // Direction of animation (default is "forward")
   animationVariants?: Variants; // Optional custom animation variants
-  renderStepContent: () => React.ReactNode; // Function that returns the content of the current step
+  renderStepContent?: () => React.ReactNode; // Function that returns the content of the current step
+  children?: React.ReactNode;
 }
 
 const AnimatedStep: React.FC<AnimatedStepProps> = ({
@@ -14,6 +15,7 @@ const AnimatedStep: React.FC<AnimatedStepProps> = ({
   direction = "forward",
   animationVariants = {},
   renderStepContent,
+  children,
 }) => {
   // Default animation variants
   const defaultAnimationVariants: Variants = {
@@ -40,7 +42,7 @@ const AnimatedStep: React.FC<AnimatedStepProps> = ({
         variants={finalAnimationVariants}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
       >
-        {renderStepContent()}
+        {children ?? renderStepContent?.()}
       </motion.div>
     </AnimatePresence>
   );

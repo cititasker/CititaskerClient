@@ -34,7 +34,6 @@ export const API_ROUTES = {
   USER_TASKS: "/tasks/user",
   UPLOAD_PROFILE: "auth/upload-profile-image",
   UPDATE_PROFILE: "auth/update-profile",
-  // GET_TASK_BY_ID: (id: string) => `/tasks/${id}`,
 
   // UPDATE_TASK: (id: string) => `/tasks/${id}`,
   DELETE_TASK: (id: string) => `/tasks/${id}`,
@@ -61,10 +60,13 @@ export const API_ROUTES = {
   GET_PROFILE_DETAILS: "/auth/fetch-user-account-details",
   GET_PORTFOLIO: "/auth/fetch-user-portfolio-details",
   UPDATE_PORTFOLIO: "/auth/update-portfolio",
+  DELETE_PORTFOLIO: "/auth/remove-portfolio-image",
   CREATE_FAQ: "/faqs/create",
   GET_FAQ: "/faqs/user-faqs",
   UPDATE_FAQ: "/faqs/update",
   DELETE_FAQ: "/faqs/delete",
+  GET_REVIEWS: "/tasks/reviews",
+  POST_REVIEW: "/tasks/review",
 };
 
 const isProd = process.env.NEXT_PUBLIC_NODE_ENV === "production";

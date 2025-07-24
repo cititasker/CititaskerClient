@@ -35,7 +35,11 @@ const PostTaskFormActions: React.FC<PostTaskFormActionsProps> = ({
 
   // Compute next button label based on step
   const nextLabel =
-    step < 4 ? "Next" : step === 4 ? "Preview" : `${okText ?? "Submit"}`;
+    step < 4
+      ? okText ?? "Next"
+      : step === 4
+      ? okText ?? "Preview"
+      : `${okText ?? "Submit"}`;
 
   return (
     <div
@@ -59,10 +63,9 @@ const PostTaskFormActions: React.FC<PostTaskFormActionsProps> = ({
         type={type}
         className="flex-1 w-full"
         onClick={onClick}
-        disabled={loading}
-      >
-        {loading ? "Loading..." : nextLabel}
-      </FormButton>
+        loading={loading}
+        text={nextLabel}
+      />
     </div>
   );
 };

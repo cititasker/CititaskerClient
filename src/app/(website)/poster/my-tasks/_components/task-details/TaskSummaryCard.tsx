@@ -7,11 +7,9 @@ import { formatCurrency, formatDate } from "@/utils";
 import Icons from "@/components/Icons";
 import FormButton from "@/components/forms/FormButton";
 import MoreOptionsMenu from "./MoreOptionsMenu";
-import { Button } from "@/components/ui/button";
 
 interface TaskSummaryCardProps {
   task: ITask;
-  onMoreOptionSelect: (option: { text: string; name: string }) => void;
   onEditDate?: () => void;
   onEditPrice?: () => void;
   onPrimaryAction: () => void;
@@ -20,13 +18,22 @@ interface TaskSummaryCardProps {
 
 export default function TaskSummaryCard({
   task,
-  onMoreOptionSelect,
   onEditDate,
   onEditPrice,
   onPrimaryAction,
   buttonText,
 }: TaskSummaryCardProps) {
   const router = useRouter();
+
+  const onMoreOptionSelect = (option: { text: string; name: string }) => {
+    console.log("Selected:", option);
+    switch (option.name) {
+      case "reschedule": {
+        router.push(`/post-task/${task.id}?step=2&action=reschedule`);
+        break;
+      }
+    }
+  };
 
   return (
     <Card className="mb-6 rounded-[30px]">

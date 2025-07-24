@@ -7,13 +7,18 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { postTaskSchema } from "@/schema/task";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { setTaskData } from "@/store/slices/task";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { TimeFrameSelector } from "./TimeFrameSelector";
 import { TimeOfDaySelector } from "./TimeOfDaySelector";
 import FormDatePicker from "@/components/forms/FormDatePicker";
 import FormCheckbox from "@/components/forms/FormCheckbox";
 import PostTaskFormActions from "./PostTaskFormActions";
 import moment from "moment";
+import { useUpdateTask } from "@/services/tasks/tasks.hook";
+import { useSnackbar } from "@/providers/SnackbarProvider";
+import { useQueryClient } from "@tanstack/react-query";
+import { API_ROUTES, ROUTES } from "@/constant";
+import { errorHandler } from "@/utils";
 
 const schema = postTaskSchema
   .pick({
@@ -40,6 +45,28 @@ const StepThree = () => {
   const { push } = useRouter();
   const searchParams = useSearchParams();
   const step = parseInt(searchParams.get("step") || "1");
+  const params = useParams();
+  const id = params?.id;
+  const action = searchParams.get("action");
+  const { showSnackbar } = useSnackbar();
+  const queryClient = useQueryClient();
+  const { role } = useAppSelector((state) => state.user);
+  const router = useRouter();
+
+  const isReschedule = action == "reschedule";
+
+  const updateMutation = useUpdateTask({
+    onSuccess: async (data) => {
+      showSnackbar(data.message, "success");
+      queryClient.invalidateQueries({
+        queryKey: [API_ROUTES.GET_USER_TASK, id],
+      });
+      router.push(`/${role}/${ROUTES.MY_TASKS}/${id}`);
+    },
+    onError: (error) => {
+      showSnackbar(errorHandler(error), "error");
+    },
+  });
 
   const methods = useForm<SchemaType>({
     defaultValues: {
@@ -63,8 +90,17 @@ const StepThree = () => {
   const onSubmit: SubmitHandler<SchemaType> = (values) => {
     dispatch(setTaskData(values));
     const currentUrl = new URL(window.location.href);
-    currentUrl.searchParams.set("step", `${step + 1}`);
-    push(`${currentUrl}`);
+    if (isReschedule) {
+      currentUrl.searchParams.set("step", "4");
+      push(`${currentUrl}`);
+      // const { showTimeOfDay: _, ...rest } = values;
+      // const payload = { ...task, ...rest, task_id: id };
+      // console.log(10, payload);
+      // updateMutation.mutate(payload);
+    } else {
+      currentUrl.searchParams.set("step", `${step + 1}`);
+      push(`${currentUrl}`);
+    }
   };
 
   return (
@@ -86,8 +122,10 @@ const StepThree = () => {
           />
           <TimeOfDaySelector />
         </div>
-
-        <PostTaskFormActions />
+        <PostTaskFormActions
+          okText={isReschedule ? "Submit" : "Next"}
+          loading={updateMutation.isPending}
+        />
       </form>
     </FormProvider>
   );

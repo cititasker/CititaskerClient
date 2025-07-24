@@ -6,13 +6,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import ActionsButtons from "@/components/reusables/ActionButtons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSnackbar } from "@/providers/SnackbarProvider";
-import { updateFaq } from "@/services/user/users.api";
+import { createFaq, updateFaq } from "@/services/user/users.api";
 import { API_ROUTES } from "@/constant";
 import { useAppSelector } from "@/store/hook";
 
 interface IProps {
   faq: UserFaq;
   handleCancel: () => void;
+  isNew?: boolean;
 }
 
 const schema = z.object({
@@ -21,13 +22,32 @@ const schema = z.object({
 });
 type schemaType = z.infer<typeof schema>;
 
-export default function EditSingleFaq({ faq, handleCancel }: IProps) {
+export default function EditSingleFaq({
+  faq,
+  handleCancel,
+  isNew = false,
+}: IProps) {
   const queryClient = useQueryClient();
   const { user } = useAppSelector((state) => state.user);
   const { showSnackbar } = useSnackbar();
+
   const methods = useForm<schemaType>({
     defaultValues: { question: "", answer: "" },
     resolver: zodResolver(schema),
+  });
+
+  const createMutation = useMutation({
+    mutationFn: createFaq,
+    onSuccess(data) {
+      showSnackbar(data.message, "success");
+      queryClient.invalidateQueries({
+        queryKey: [API_ROUTES.GET_FAQ, user.id],
+      });
+      handleCancel();
+    },
+    onError(error) {
+      showSnackbar(error.message, "error");
+    },
   });
 
   const updateMutation = useMutation({
@@ -50,7 +70,12 @@ export default function EditSingleFaq({ faq, handleCancel }: IProps) {
   }, [faq]);
 
   const onSubmit = (values: schemaType) => {
-    updateMutation.mutate({ id: faq.id, data: values });
+    console.log(values);
+    if (isNew) {
+      createMutation.mutate({ faqs: [values] });
+    } else {
+      updateMutation.mutate({ id: faq.id, data: values });
+    }
   };
 
   return (
@@ -64,7 +89,7 @@ export default function EditSingleFaq({ faq, handleCancel }: IProps) {
           type="submit"
           className="mt-[10px] max-w-[250px] sm:gap-x-2 ml-auto"
           size="lg"
-          loading={updateMutation.isPending}
+          loading={createMutation.isPending || updateMutation.isPending}
         />
       </form>
     </FormProvider>

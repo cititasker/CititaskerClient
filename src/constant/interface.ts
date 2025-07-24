@@ -4,3 +4,10 @@ export interface UseModalReturn {
     closeModal: () => void;
     toggleModal: () => void;
   }
+
+  export interface UseToggleReturn {
+    isOpen: boolean;
+    handleOpen: () => void;
+    handleClose: () => void;
+    toggle: () => void;
+  }

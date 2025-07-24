@@ -132,7 +132,11 @@ export default function Offer() {
       render: () => <AllOffers task={task} toggleModal={toggleAcceptModal} />,
     },
     { label: "Questions (0)", value: "questions", render: () => <Questions /> },
-    { label: "Reviews", value: "reviews", render: () => <Reviews /> },
+    {
+      label: "Reviews",
+      value: "reviews",
+      render: () => <Reviews task={task} />,
+    },
   ];
 
   return (
@@ -149,9 +153,6 @@ export default function Offer() {
               />
               <TaskSummaryCard
                 task={task}
-                onMoreOptionSelect={(option) =>
-                  console.log("Selected:", option)
-                }
                 onEditDate={() => router.push(`/post-task/${task.id}?step=3`)}
                 onEditPrice={() => router.push(`/post-task/${task.id}?step=4`)}
                 onPrimaryAction={handlePrimaryAction}

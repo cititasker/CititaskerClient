@@ -11,11 +11,13 @@ interface IProps {
   children: React.ReactNode;
   trigger?: React.ReactNode;
   contentClassName?: string;
+  align?: "start" | "center" | "end" | undefined;
 }
 export default function CustomDropdown({
   children,
   trigger,
   contentClassName,
+  align = "start",
 }: IProps) {
   return (
     <DropdownMenu>
@@ -25,7 +27,7 @@ export default function CustomDropdown({
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        align="start"
+        align={align}
         className={cn(
           "w-fit px-4 py-2 rounded-lg border shadow-[0px_4px_24px_-4px_rgba(16,24,40,0.08)]",
           contentClassName

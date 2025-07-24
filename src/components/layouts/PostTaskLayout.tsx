@@ -2,12 +2,11 @@
 import React, { useEffect } from "react";
 import BackTo from "../BackTo";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
-import { getUserTaskByIdQuery } from "@/queries/task";
 import { useAppDispatch } from "@/store/hook";
 import { setTaskData } from "@/store/slices/task";
 import { IState, State } from "country-state-city";
 import PostTaskHeader from "@/app/post-task/_components/PostTaskHeader";
+import { useFetchTaskById } from "@/services/tasks/tasks.hook";
 
 const PostTaskLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -26,7 +25,7 @@ const PostTaskLayout: React.FC<{ children: React.ReactNode }> = ({
     }
   }, []);
 
-  const { data } = useQuery(getUserTaskByIdQuery(id));
+  const { data } = useFetchTaskById({ id });
   const task: ITask = data?.data;
 
   useEffect(() => {

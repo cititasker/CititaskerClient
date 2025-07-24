@@ -57,7 +57,7 @@ export function getUserProfileDetails(id: any) {
     });
 }
 
-export function getUserPorfolio(id: any) {
+export const getUserPorfolio=(id: any):Promise<UserPorfolioRes> => {
   return api
     .get(`${API_ROUTES.GET_PORTFOLIO}/${id}`)
     .then((data) => {
@@ -71,6 +71,17 @@ export function getUserPorfolio(id: any) {
 export function updateUserPorfolio(data: any) {
   return api
     .post(`${API_ROUTES.UPDATE_PORTFOLIO}`, data)
+    .then((data) => {
+      return data.data;
+    })
+    .catch((error: AxiosError) => {
+      throw error.response?.data;
+    });
+}
+
+export function deleteUserPorfolio(id: any) {
+  return api
+    .post(`${API_ROUTES.DELETE_PORTFOLIO}/${id}`)
     .then((data) => {
       return data.data;
     })
@@ -122,3 +133,39 @@ export function deleteFaq(id: any) {
       throw error.response?.data;
     });
 }
+
+export const getReviews = (id: number | string): Promise<GetReviewsResponse> => {
+  return api
+    .get(`${API_ROUTES.GET_REVIEWS}?task_id=${id}`)
+    .then((data) => {
+      return data.data.data;
+    })
+    .catch((error: AxiosError) => {
+      throw error.response?.data;
+    });
+}
+
+export const postReview = (data:any): Promise<GetReviewsResponse> => {
+  return api
+    .post(`${API_ROUTES.POST_REVIEW}`, data)
+    .then((data) => {
+      return data.data;
+    })
+    .catch((error: AxiosError) => {
+      throw error.response?.data;
+    });
+}
+
+export const reorderFaqs = (data:any): Promise<GetReviewsResponse> => {
+  return api
+    .post(`${API_ROUTES.POST_REVIEW}`, data)
+    .then((data) => {
+      return data.data;
+    })
+    .catch((error: AxiosError) => {
+      throw error.response?.data;
+    });
+}
+
+
+

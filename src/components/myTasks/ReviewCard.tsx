@@ -1,8 +1,11 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import Rating from "../reusables/Rating";
+import { formatDateAgo } from "@/utils";
+import { DropdownMenuItem } from "../ui/dropdown-menu";
+import CustomDropdown from "../reusables/CustomDropdown";
 
 export interface ReviewCardProps {
   label: string;
@@ -10,7 +13,7 @@ export interface ReviewCardProps {
   rating: number;
   date: string;
   comment: string;
-  avatar?: string;
+  avatar?: string | StaticImageData;
   onEdit?: () => void;
 }
 
@@ -24,50 +27,43 @@ const ReviewCard = ({
   onEdit,
 }: ReviewCardProps) => {
   return (
-    <main className="bg-white pt-6">
-      <div className="relative border border-gray-200 rounded-[20px] space-y-3 p-4">
+    <main className="bg-white">
+      <div>
         {/* Label */}
-        {label && <h3 className="text-sm font-bold text-gray-800">{label}</h3>}
+        {label && <h3 className="font-bold text-[#000] mb-1">{label}</h3>}
 
         {/* Avatar, Name, Date */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 mb-1">
           <Image
             src={avatar}
             alt="avatar"
-            width={40}
-            height={40}
-            className="rounded-full object-cover"
+            width={42}
+            height={42}
+            className="rounded-full object-cover shrink-0 w-[42px] h-[42px]"
           />
           <div>
-            <p className="font-medium text-sm">{name}</p>
-            <p className="text-xs text-gray-500">{date}</p>
+            <p className="font-medium text-black-2">{name}</p>
+            <p className="text-sm text-dark-grey-2">{formatDateAgo(date)}</p>
           </div>
         </div>
 
-        {/* Rating */}
-        <Rating value={rating} readOnly />
+        <Rating
+          value={rating}
+          readOnly
+          starClassName="fill-yellow-state-color stroke-yellow-state-color"
+          className="gap-2"
+        />
 
-        {/* Comment box with edit icon */}
-        <div className="relative mt-2">
-          <div className="bg-[#F3F5F6] border border-gray-300 border-l-0 rounded-tr-[20px] rounded-br-[20px] rounded-bl-[20px] p-3 text-sm text-gray-700 relative">
-            {comment}
+        <div className="w-full flex items-start gap-1 mt-2.5 bg-light-grey rounded-20 rounded-tl-none p-5 relative">
+          <p className="text-sm text-black-2 flex-1">{comment}</p>
 
-            {/* Edit button inside the comment box */}
-            {onEdit && (
-              <button
-                onClick={onEdit}
-                className="absolute top-4 right-2 text-gray-500 hover:text-black"
-              >
-                <Image
-                  src="/icons/edit.svg"
-                  alt="edit"
-                  width={4}
-                  height={4}
-                  className="object-contain"
-                />
-              </button>
-            )}
-          </div>
+          {/* Edit button inside the comment box */}
+          {onEdit && (
+            <CustomDropdown align="center" contentClassName="p-0">
+              <DropdownMenuItem className="px-4 py-2">Edit</DropdownMenuItem>
+              <DropdownMenuItem className="px-4 py-2">Delete</DropdownMenuItem>
+            </CustomDropdown>
+          )}
         </div>
       </div>
     </main>
