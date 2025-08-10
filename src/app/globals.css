@@ -108,7 +108,7 @@ body {
 
 @layer components {
   .ProseMirror {
-    @apply min-h-[96px] outline-none whitespace-pre-wrap py-0;
+    @apply outline-none whitespace-pre-wrap py-0;
   }
   .label {
     @apply text-sm text-dark-secondary font-normal;
@@ -120,7 +120,7 @@ body {
     @apply font-normal leading-normal text-base text-center text-light-grey;
   }
   .form__error {
-    @apply text-xs text-red-500 font-medium mt-1.5;
+    @apply text-xs text-destructive font-medium mt-1.5;
   }
   .p-top {
     @apply pt-[90px] sm:pt-[100px];

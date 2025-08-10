@@ -1,15 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
-import { queryClient } from "@/providers/ServerProvider";
-import { useSnackbar } from "@/providers/SnackbarProvider";
-
-import Paystack from "@/utils/paystackSetup";
-import { errorHandler } from "@/utils";
 
 import HeaderNavigation from "../_components/task-details/HeaderNavigation";
 import TaskStatusCard from "../_components/task-details/TaskStatusCard";
@@ -22,15 +16,13 @@ import Reviews from "@/components/myTasks/Reviews";
 import AcceptOfferModal from "../_components/task-details/AcceptOfferModal";
 import PaymentSuccessModal from "../_components/task-details/PaymentSuccessModal";
 import CustomTab from "@/components/reusables/CustomTab";
-import {
-  useCreateIntent,
-  useFetchUserTaskById,
-} from "@/services/tasks/tasks.hook";
-import { API_ROUTES } from "@/constant";
 import PaySurChargeModal from "../_components/surcharge/PaySurChargeModal";
-import useModal from "@/hooks/useModal";
+
+import { useFetchUserTaskById } from "@/services/tasks/tasks.hook";
+import { useOfferTaskLogic } from "../_components/hooks/useOfferTaskLogic";
+import { useEffect } from "react";
 import { useAppDispatch } from "@/store/hook";
-import { purgeStateData } from "@/store/slices/task";
+import { setTaskDetails } from "@/store/slices/task";
 
 const schema = z.object({
   agreed: z.boolean().refine((v) => v, {
@@ -41,89 +33,37 @@ const schema = z.object({
 type SchemaType = z.infer<typeof schema>;
 
 export default function Offer() {
-  const params = useParams();
-  const id = params?.id as string;
+  const { id } = useParams();
   const router = useRouter();
-  const { showSnackbar } = useSnackbar();
-
-  const [showAcceptModal, setShowAcceptModal] = useState(false);
-  const [selectedOffer, setSelectedOffer] = useState<IOffer | null>(null);
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const surchargeModal = useModal();
   const dispatch = useAppDispatch();
 
-  const { data } = useFetchUserTaskById({ id });
-  const task = data.data;
-  const status = task?.status;
+  const { data } = useFetchUserTaskById({ id: id as string });
+  const task = data?.data;
 
-  const acceptedOffer = useMemo(() => {
-    return task.offers.find((offer) => offer.status == "accepted");
-  }, [task.offers]);
+  useEffect(() => {
+    if (task) {
+      dispatch(setTaskDetails(task));
+    }
+  }, [task, dispatch]);
+
+  const {
+    showAcceptModal,
+    toggleAcceptModal,
+    showSuccessModal,
+    toggleSuccessModal,
+    onSubmit,
+    handlePrimaryAction,
+    closeSurcharge,
+    acceptedOffer,
+    surchargeModal,
+    paymentMutation,
+    selectedOffer,
+  } = useOfferTaskLogic(task);
 
   const methods = useForm<SchemaType>({
     resolver: zodResolver(schema),
     defaultValues: { agreed: false },
   });
-
-  const paymentMutation = useCreateIntent({
-    onSuccess: (data) => {
-      setShowAcceptModal(false);
-      const { amount, hash_id } = data.data;
-      Paystack.startPayment({
-        email: task.poster.email,
-        amount: amount * 100,
-        reference: hash_id,
-        handleSuccess,
-      });
-    },
-    onError: (error) => {
-      showSnackbar(errorHandler(error), "error");
-    },
-  });
-
-  function toggleAcceptModal(offer?: IOffer) {
-    setSelectedOffer((prev) => (prev ? null : offer || null));
-    setShowAcceptModal((prev) => !prev);
-  }
-
-  function toggleSuccessModal() {
-    setShowSuccessModal((prev) => !prev);
-  }
-
-  function handleSuccess() {
-    queryClient.invalidateQueries({
-      queryKey: [API_ROUTES.GET_USER_TASK, id],
-    });
-    toggleSuccessModal();
-  }
-
-  async function onSubmit() {
-    if (!selectedOffer) return;
-    await paymentMutation.mutateAsync({
-      offer_id: selectedOffer.id,
-      task_id: task.id,
-    });
-  }
-
-  function handlePrimaryAction() {
-    if (status === "open") {
-      router.push(`/post-task/${id}`);
-    } else if (status == "assigned") {
-      surchargeModal.openModal();
-    }
-  }
-
-  const closeSurcharge = () => {
-    dispatch(purgeStateData({ path: "offer" }));
-    surchargeModal.closeModal();
-  };
-
-  const buttonText =
-    status === "open"
-      ? "Edit Task"
-      : status === "assigned"
-      ? "Pay Surcharge"
-      : null;
 
   const tabs = [
     {
@@ -144,19 +84,25 @@ export default function Offer() {
       <div className="p-top bg-light-grey min-h-dvh">
         <div className="max-w-[1300px] mx-auto px-5">
           <HeaderNavigation />
-          <div className="flex flex-col md:flex-row gap-x-8 w-full">
-            <div className="w-full md:w-2/5">
+          <div className="flex flex-col md:flex-row gap-4 lg:gap-x-6 w-full">
+            <div className="w-full md:w-2/5 flex flex-col gap-y-4 lg:gap-6">
               <TaskStatusCard
                 date={task.date}
                 offerCount={task.offer_count}
-                status={status}
+                status={task.status}
               />
               <TaskSummaryCard
                 task={task}
                 onEditDate={() => router.push(`/post-task/${task.id}?step=3`)}
                 onEditPrice={() => router.push(`/post-task/${task.id}?step=4`)}
                 onPrimaryAction={handlePrimaryAction}
-                buttonText={buttonText}
+                buttonText={
+                  task.status === "open"
+                    ? "Edit Task"
+                    : task.status === "assigned"
+                    ? "Pay Surcharge"
+                    : null
+                }
               />
             </div>
             <div className="w-full md:w-3/5">
@@ -170,23 +116,19 @@ export default function Offer() {
           </div>
         </div>
 
-        {/* Accept Offer Modal */}
+        {/* Modals */}
         <AcceptOfferModal
           open={showAcceptModal}
-          onClose={() => toggleAcceptModal()}
+          onClose={toggleAcceptModal}
           onSubmit={onSubmit}
           loading={paymentMutation.isPending}
           selectedOffer={selectedOffer}
         />
-
-        {/* Payment Success Modal */}
         <PaymentSuccessModal
           isOpen={showSuccessModal}
           onClose={toggleSuccessModal}
           selectedOffer={selectedOffer}
         />
-
-        {/* Pay surcharge modal */}
         <PaySurChargeModal
           isOpen={surchargeModal.isOpen}
           onClose={closeSurcharge}

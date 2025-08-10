@@ -25,7 +25,7 @@ function AllOffers({ task, toggleModal }: IProps) {
     : task.offers;
 
   return (
-    <div className="paper rounded-none p-8 h-full overflow-y-auto">
+    <div className="paper rounded-none p-4 sm:p-8 h-full overflow-y-auto">
       {visibleOffers.map((offer) => (
         <UserOffer
           key={offer.id}

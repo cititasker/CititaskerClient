@@ -28,6 +28,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
+  trustHost: true,
+  secret: process.env.AUTH_SECRET,
   session: {
     strategy: "jwt",
     maxAge: 60 * 60 * 24 * 7, // 7 days session lifetime

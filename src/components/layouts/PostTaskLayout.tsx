@@ -25,8 +25,10 @@ const PostTaskLayout: React.FC<{ children: React.ReactNode }> = ({
     }
   }, []);
 
-  const { data } = useFetchTaskById({ id });
-  const task: ITask = data?.data;
+  console.log(99, id);
+
+  const { data, isLoading } = useFetchTaskById({ id });
+  const task: ITask | undefined = data?.data;
 
   useEffect(() => {
     if (task) {
@@ -56,6 +58,8 @@ const PostTaskLayout: React.FC<{ children: React.ReactNode }> = ({
       dispatch(setTaskData(payload));
     }
   }, [task]);
+
+  if (isLoading) return <p>Loading...</p>;
 
   return (
     <div className="relative">

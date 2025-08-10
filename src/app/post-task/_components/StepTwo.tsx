@@ -47,9 +47,6 @@ const StepTwo = () => {
   const location = watch("location");
   const address = watch("address");
 
-  console.log(1, location);
-  console.log(2, address);
-
   useEffect(() => {
     if (
       Array.isArray(location) &&

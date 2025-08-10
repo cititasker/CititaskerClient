@@ -16,27 +16,12 @@ import OfferBreakdownRow from "@/components/reusables/OfferBreakdownRow";
 import { formatCurrency } from "@/utils";
 import { connectionFee } from "@/constant";
 
-const schema = surchargeSchema
-  .pick({
-    task_id: true,
-    offer_id: true,
-    offer_amount: true,
-    default_offer_amount: true,
-  })
-  .superRefine(({ offer_amount, default_offer_amount }, ctx) => {
-    const numericAmount = Number(offer_amount);
-    if (numericAmount <= default_offer_amount) {
-      ctx.addIssue({
-        path: ["offer_amount"],
-        code: z.ZodIssueCode.custom,
-        message: `Amount must be greater than the original offer (${formatCurrency(
-          {
-            value: default_offer_amount,
-          }
-        )})`,
-      });
-    }
-  });
+const schema = surchargeSchema.pick({
+  task_id: true,
+  offer_id: true,
+  offer_amount: true,
+});
+
 type SchemaType = z.infer<typeof schema>;
 
 interface Props {
@@ -57,7 +42,6 @@ const StepOne = ({ nextStep, acceptedOffer, edit = false }: Props) => {
       task_id,
       offer_id: offer?.offer_id ? Number(offer.offer_id) : undefined,
       offer_amount: `${offer?.offer_amount}`,
-      default_offer_amount: 0,
     },
   });
 
@@ -70,15 +54,14 @@ const StepOne = ({ nextStep, acceptedOffer, edit = false }: Props) => {
       const { offer_amount, id } = acceptedOffer;
       form.reset({
         offer_amount: `${offer_amount}`,
-        default_offer_amount: offer_amount,
         offer_id: id,
         task_id,
       });
     }
   }, [acceptedOffer]);
 
-  const handleSubmit = ({ default_offer_amount: _, ...rest }: SchemaType) => {
-    dispatch(setOfferData({ ...offer, ...rest }));
+  const handleSubmit = (values: SchemaType) => {
+    dispatch(setOfferData({ ...offer, ...values }));
     nextStep();
   };
 
@@ -86,11 +69,11 @@ const StepOne = ({ nextStep, acceptedOffer, edit = false }: Props) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="flex flex-col min-h-[450px]"
+        className="flex flex-col"
       >
-        <h2 className="text-xl sm:text-2xl font-bold text-black mb-6">
+        {/* <h2 className="text-xl sm:text-2xl font-bold text-black mb-6">
           Pay surcharge
-        </h2>
+        </h2> */}
 
         <div>
           <p className="text-center text-muted-foreground text-base mb-2">
@@ -125,7 +108,7 @@ const StepOne = ({ nextStep, acceptedOffer, edit = false }: Props) => {
               value={formatCurrency({ value: offerAmount })}
             />
             <OfferBreakdownRow
-              label={`Service fee (${connectionFee}%)`}
+              label="Service fee"
               value={formatCurrency({ value: fee })}
               isNegative
               icon={<IInfoCircle />}

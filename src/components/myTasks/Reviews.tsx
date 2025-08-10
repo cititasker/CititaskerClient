@@ -14,60 +14,41 @@ import { useSnackbar } from "@/providers/SnackbarProvider";
 import { useGetReviews } from "@/services/user/user.hook";
 import { useAppSelector } from "@/store/hook";
 import { defaultProfile } from "@/constant/images";
+import { useScreenBreakpoints } from "@/hooks/useScreenBreakpoints";
 
 interface IProps {
   task: ITask;
 }
 
-interface IRatings {
-  rating: number;
-  comment: string;
-  name: string;
-  date: string;
-}
-
 const Reviews = ({ task }: IProps) => {
   const { user } = useAppSelector((state) => state.user);
-  const [hasTaskerReviewed, setHasTaskerReviewed] = useState(false);
-
   const [posterReview, setPosterReview] = useState<TaskerReview | null>(null);
-  const [taskerReview, setTaskerReview] = useState<IRatings | null>(null);
-
   const [rating, setRating] = useState(0);
-  const posterModalOpen = useModal();
+
+  const posterModal = useModal();
   const success = useToggle();
   const { showSnackbar } = useSnackbar();
 
-  const postReviewMutation = useMutation({
-    mutationFn: postReview,
-    onSuccess: () => {
-      success.handleOpen();
-    },
-    onError(error) {
-      console.log(7, error);
-      showSnackbar(error.message, "error");
-    },
-  });
+  const { isSmallScreen } = useScreenBreakpoints();
 
   const { data: reviews } = useGetReviews({ id: task.id });
   const reviewList = reviews?.data || [];
 
   useEffect(() => {
-    if (reviewList.length) {
-      setPosterReview(reviewList[0]);
-    }
+    if (reviewList.length) setPosterReview(reviewList[0]);
   }, [reviewList]);
 
-  console.log(46, reviewList);
-
-  const isAssigned = true;
-
-  console.log(45, task);
-
-  const tasker = task.tasker.profile;
+  const isAssigned = task?.status === "assigned";
+  const tasker = task.tasker?.profile;
   const taskerName = initializeName({
-    first_name: tasker.first_name,
-    last_name: tasker.last_name,
+    first_name: tasker?.first_name,
+    last_name: tasker?.last_name,
+  });
+
+  const postReviewMutation = useMutation({
+    mutationFn: postReview,
+    onSuccess: () => success.handleOpen(),
+    onError: (error) => showSnackbar(error.message, "error"),
   });
 
   const onSubmit = (data: any) => {
@@ -75,22 +56,22 @@ const Reviews = ({ task }: IProps) => {
   };
 
   const handleRatingClose = () => {
-    posterModalOpen.closeModal();
+    posterModal.closeModal();
     success.handleClose();
     setRating(0);
   };
 
-  if (!isAssigned) {
+  if (!isAssigned || !tasker) {
     return (
       <Empty text="No review has been made yet. You will be notified when you get a review." />
     );
   }
 
   return (
-    <div className="space-y-12 px-10 bg-white pb-28 pt-6">
+    <div className="space-y-10 sm:space-y-12 px-5 sm:px-6 md:px-10 bg-white pb-28 pt-6">
       {/* My Review Section */}
       {!posterReview ? (
-        <div onClick={posterModalOpen.openModal} className="cursor-pointer">
+        <div onClick={posterModal.openModal} className="cursor-pointer">
           <p className="font-bold">My review</p>
           <p className="text-[#000]">
             How would you rate your experience with{" "}
@@ -99,11 +80,9 @@ const Reviews = ({ task }: IProps) => {
           <div className="flex justify-center mt-6">
             <Rating
               value={rating}
-              size={30}
+              size={isSmallScreen ? 25 : 30}
               className="gap-6"
-              onChange={(v: number) => {
-                setRating(v);
-              }}
+              onChange={setRating}
             />
           </div>
         </div>
@@ -111,23 +90,26 @@ const Reviews = ({ task }: IProps) => {
         <div className="relative border rounded-20 space-y-10 p-5">
           <ReviewCard
             label="My Review"
-            name={posterReview?.reviewer}
-            date={posterReview?.created_at}
-            rating={posterReview?.rating}
-            comment={posterReview?.comment}
+            name={posterReview.reviewer}
+            date={posterReview.created_at}
+            rating={posterReview.rating}
+            comment={posterReview.comment}
             avatar={user.profile_image ?? defaultProfile}
-            onEdit={() => {}}
+            onEdit={() => {
+              setRating(posterReview.rating);
+              posterModal.openModal();
+            }}
           />
         </div>
       )}
 
       {/* Tasker's Review Section */}
-      {!hasTaskerReviewed && (
-        <div onClick={() => {}} className="cursor-pointer">
+      {!reviewList[1] && (
+        <div className="cursor-pointer">
           <p className="font-bold mb-3">Tasker’s review</p>
-          <div className="flex flex-col items-center justify-center rounded-20 py-12 bg-[#F3F5F6]">
-            <Rating value={taskerReview?.rating || 0} readOnly size={30} />
-            <p className="text-sm text-black mt-[22px] text-center">
+          <div className="flex flex-col items-center justify-center rounded-20 py-10 sm:py-12 bg-[#F3F5F6]">
+            <Rating value={0} readOnly size={isSmallScreen ? 25 : 30} />
+            <p className="text-sm text-black mt-4 sm:mt-[22px] text-center">
               No reviews yet.
             </p>
           </div>
@@ -135,7 +117,7 @@ const Reviews = ({ task }: IProps) => {
       )}
 
       <RatingModal
-        isOpen={posterModalOpen.isOpen}
+        isOpen={posterModal.isOpen}
         onClose={handleRatingClose}
         name={taskerName}
         rating={rating}

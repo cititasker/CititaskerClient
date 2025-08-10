@@ -5,10 +5,10 @@ import Link from "next/link";
 
 import FormCheckbox from "@/components/forms/FormCheckbox";
 import FormButton from "@/components/forms/FormButton";
-import Icons from "@/components/Icons";
 import { formatCurrency, initializeName } from "@/utils";
 import { defaultProfile } from "@/constant/images";
 import { useAppSelector } from "@/store/hook";
+import { IInfoPrimary } from "@/constant/icons";
 
 interface Offer {
   offer_amount: string | number | undefined;
@@ -38,7 +38,7 @@ export default function ReviewPayment({
   return (
     <div>
       {/* Header */}
-      <div className="flex gap-5 items-center mb-8">
+      <div className="flex gap-5 items-center mb-4 sm:mb-6">
         <Image
           src={selectedOffer?.tasker.profile_image || defaultProfile}
           alt="Tasker profile"
@@ -55,7 +55,7 @@ export default function ReviewPayment({
       </div>
 
       {/* Summary */}
-      <div className="mb-10">
+      <div className="mb-5 sm:mb-8">
         <h3 className="text-xl font-semibold text-dark-grey-2 mb-6">Summary</h3>
 
         <div className="flex justify-between pb-4 mb-4 border-b border-light-grey">
@@ -75,7 +75,7 @@ export default function ReviewPayment({
 
       {/* Cancellation Policy */}
       <div className="flex gap-3 mb-4">
-        <Icons.info width={32} height={32} />
+        <IInfoPrimary className="shrink-0 mt-1" />
         <div>
           <p className="text-black-2 font-semibold text-base mb-1">
             Cancellation Policy
@@ -98,8 +98,8 @@ export default function ReviewPayment({
             I accept the{" "}
             <Link href="#" className="text-primary">
               Terms & Conditions
-            </Link>
-            including
+            </Link>{" "}
+            including{" "}
             <Link href="#" className="text-primary">
               Insurance
             </Link>

@@ -71,18 +71,20 @@ const CommentBox = ({ offer_id }: CommentBoxProps) => {
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={onSubmit} className="flex gap-4 mt-4" noValidate>
-        <Image
-          src={user.profile_image ?? defaultProfile}
-          alt="User avatar"
-          width={48}
-          height={48}
-          className="rounded-full object-cover shrink-0 h-[48px] w-[48px] object-top"
-        />
+      <form onSubmit={onSubmit} className="flex w-full " noValidate>
+        <div className="w-full flex gap-3 sm:gap-4">
+          <Image
+            src={user.profile_image ?? defaultProfile}
+            alt="User avatar"
+            width={48}
+            height={48}
+            className="rounded-full object-cover shrink-0 h-6 w-6 sm:h-[48px] sm:w-[48px] object-top"
+          />
 
-        <div className="flex flex-col flex-1 relative">
-          <RichEditor onContentUpdate={onEditorContentUpdate} />
-          <FormError name="content" />
+          <div className="flex-1 min-w-0 relative max-w-full">
+            <RichEditor onContentUpdate={onEditorContentUpdate} />
+            <FormError name="content" />
+          </div>
         </div>
       </form>
     </FormProvider>

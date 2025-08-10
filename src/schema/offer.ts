@@ -17,6 +17,7 @@ export const baseSchema = z.object({
   }),
   description: z
     .string()
+    .min(15, "Must contain at least 15 character(s)")
     .refine((value) => value.length <= maxLengthChar, {
       message: `Maximum length of ${maxLengthChar} characters exceeded`,
     })

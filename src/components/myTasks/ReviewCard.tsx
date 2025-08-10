@@ -29,10 +29,8 @@ const ReviewCard = ({
   return (
     <main className="bg-white">
       <div>
-        {/* Label */}
         {label && <h3 className="font-bold text-[#000] mb-1">{label}</h3>}
 
-        {/* Avatar, Name, Date */}
         <div className="flex items-center gap-3 mb-1">
           <Image
             src={avatar}
@@ -47,20 +45,15 @@ const ReviewCard = ({
           </div>
         </div>
 
-        <Rating
-          value={rating}
-          readOnly
-          starClassName="fill-yellow-state-color stroke-yellow-state-color"
-          className="gap-2"
-        />
+        <Rating value={rating} readOnly className="gap-2" />
 
         <div className="w-full flex items-start gap-1 mt-2.5 bg-light-grey rounded-20 rounded-tl-none p-5 relative">
           <p className="text-sm text-black-2 flex-1">{comment}</p>
-
-          {/* Edit button inside the comment box */}
           {onEdit && (
             <CustomDropdown align="center" contentClassName="p-0">
-              <DropdownMenuItem className="px-4 py-2">Edit</DropdownMenuItem>
+              <DropdownMenuItem onClick={onEdit} className="px-4 py-2">
+                Edit
+              </DropdownMenuItem>
               <DropdownMenuItem className="px-4 py-2">Delete</DropdownMenuItem>
             </CustomDropdown>
           )}

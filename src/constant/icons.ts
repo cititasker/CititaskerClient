@@ -29,6 +29,11 @@ import IUser from "@/assets/icons/user.svg";
 import IBriefcase from "@/assets/icons/briefcase.svg";
 import IMakeUpBrush from "@/assets/icons/makeup-brush.svg";
 import IDragVertical from "@/assets/icons/drag-vertical.svg";
+import IUploadRemove from "@/assets/icons/upload-remove.svg";
+import IAdd from "@/assets/icons/add.svg";
+import ICalendar from "@/assets/icons/calendar.svg";
+import IDatabase from "@/assets/icons/database.svg";
+import IInfoPrimary from "@/assets/icons/info-primary.svg";
 
 export {
   IChat,
@@ -60,6 +65,11 @@ export {
   IBriefcase,
   IMakeUpBrush,
   IDragVertical,
+  IUploadRemove,
+  IAdd,
+  ICalendar,
+  IDatabase,
+  IInfoPrimary,
 
   // Big Icons
   ITickCircle,

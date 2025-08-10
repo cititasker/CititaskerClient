@@ -60,3 +60,29 @@ export const postTaskSchema = z.object({
 });
 
 export type postTaskSchemaType = z.infer<typeof postTaskSchema>;
+
+export const rescheduleTaskSchema = z
+  .object({
+    dateTime: z.object({
+      date: z.string(),
+      time: z.string(),
+    }),
+  })
+  .superRefine(({ dateTime }, ctx) => {
+    const { date, time } = dateTime;
+    if (!date) {
+      ctx.addIssue({
+        path: ["dateTime"],
+        code: z.ZodIssueCode.custom,
+        message: "Date is required",
+      });
+    }
+    if (date && !time) {
+      ctx.addIssue({
+        path: ["dateTime"],
+        code: z.ZodIssueCode.custom,
+        message: "Time is required",
+      });
+    }
+  });
+export type rescheduleTaskSchemaType = z.infer<typeof rescheduleTaskSchema>;

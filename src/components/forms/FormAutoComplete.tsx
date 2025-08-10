@@ -71,12 +71,11 @@ export function FormAutoComplete<TOption, TFieldValues extends FieldValues>({
                 <Button
                   type="button"
                   variant="outline"
-                  size="default"
                   role="combobox"
                   aria-expanded={open}
                   disabled={disabled}
                   className={cn(
-                    "h-[50px] border-input w-full justify-between font-normal hover:bg-transparent shadow-none rounded-[40px]",
+                    "border-input w-full justify-between font-normal hover:bg-transparent shadow-none rounded-[40px]",
                     !field.value && "text-muted-foreground"
                   )}
                 >

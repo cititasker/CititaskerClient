@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import React, { useState } from "react";
 
 type Props = {
-  value: number | undefined;
+  value?: number;
   onChange?: (value: number) => void;
   max?: number;
   readOnly?: boolean;
@@ -13,7 +13,7 @@ type Props = {
   className?: string;
   starClassName?: string;
   enableHoverPreview?: boolean;
-  labels?: string[]; // NEW: custom labels
+  labels?: string[];
   showlabel?: boolean;
   starOuterClassName?: string;
 };
@@ -36,18 +36,15 @@ const Rating = ({
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const handleClick = (index: number) => {
-    if (readOnly || !onChange) return;
-    onChange(index + 1);
+    if (!readOnly && onChange) onChange(index + 1);
   };
 
   const handleMouseEnter = (index: number) => {
-    if (readOnly || !enableHoverPreview) return;
-    setHoveredIndex(index);
+    if (!readOnly && enableHoverPreview) setHoveredIndex(index);
   };
 
   const handleMouseLeave = () => {
-    if (readOnly || !enableHoverPreview) return;
-    setHoveredIndex(null);
+    if (!readOnly && enableHoverPreview) setHoveredIndex(null);
   };
 
   return (
@@ -86,7 +83,9 @@ const Rating = ({
                   ? "fill-yellow-state-color stroke-yellow-state-color"
                   : "fill-transparent stroke-black",
                 !readOnly && "cursor-pointer hover:scale-110",
-                readOnly && "cursor-default fill-[#D5D5D5] stroke-[#D5D5D5]",
+                readOnly &&
+                  !isFilled &&
+                  "cursor-default fill-[#D5D5D5] stroke-[#D5D5D5]",
                 starClassName
               )}
             />

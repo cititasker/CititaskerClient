@@ -43,14 +43,10 @@ export const useFetchTaskById = ({
   id,
   ...options
 }: UseFetchUserTaskByIdOptions) => {
-  return useSuspenseQuery<
-    TaskApiResponse,
-    Error,
-    TaskApiResponse,
-    [string, string]
-  >({
+  return useQuery<TaskApiResponse, Error, TaskApiResponse, [string, string]>({
     queryKey: [API_ROUTES.GET_TASK_BY_ID, id],
     queryFn: () => getUserTaskById(id),
+    enabled: !!id,
     ...options,
   });
 };
@@ -103,6 +99,15 @@ export const useCreateTask = (
 export const useUpdateTask = (opt?: UseMutationOptions<any, Error, any>) => {
   return useMutation<any, Error, any>({
     mutationFn: updateTask,
+    ...opt,
+  });
+};
+
+export const usPostTask = (
+  opt?: UseMutationOptions<CreateTask, Error, { id: string; body: any }>
+) => {
+  return useMutation<CreateTask, Error, { id: any; body: any }>({
+    mutationFn: ({ id, body }) => (!id ? createTask(body) : updateTask(body)),
     ...opt,
   });
 };

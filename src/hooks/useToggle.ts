@@ -10,6 +10,7 @@ export default function useToggle(v?: boolean): UseToggleReturn {
 
   return {
     isOpen,
+    setIsOpen,
     handleOpen,
     handleClose,
     toggle,

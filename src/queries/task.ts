@@ -1,12 +1,6 @@
-import {
-  getAllTasks,
-  getUserTaskById,
-  getUserTasks,
-  requestPayment,
-} from "@/services/task";
+import { getAllTasks, getUserTasks, requestPayment } from "@/services/task";
 import { queryOptions, useMutation } from "@tanstack/react-query";
 import { USER_TASKS } from "./queryKeys";
-import { API_ROUTES } from "@/constant";
 
 export const getAllTasksQuery = () => {
   return queryOptions({

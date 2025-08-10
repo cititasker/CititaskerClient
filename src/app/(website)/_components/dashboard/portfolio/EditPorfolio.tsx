@@ -191,7 +191,7 @@ const EditPorfolio = () => {
                       deletePortfolio.openModal();
                     }}
                   >
-                    <Trash2 size={18} className="text-red-500" />
+                    <Trash2 size={18} className="text-destructive" />
                   </div>
                 </div>
               </div>

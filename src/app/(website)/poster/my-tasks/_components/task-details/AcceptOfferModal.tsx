@@ -33,12 +33,7 @@ export default function AcceptOfferModal({
   }, [selectedOffer]);
 
   return (
-    <CustomModal
-      isOpen={open}
-      onClose={onClose}
-      hideClose
-      contentClassName="max-w-[576px] px-6 py-8 sm:px-10 sm:py-12"
-    >
+    <CustomModal isOpen={open} onClose={onClose} hideClose contentClassName="">
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <ReviewPayment loading={loading} selectedOffer={preview} />

@@ -22,7 +22,7 @@ export default function Page() {
   const step = current ? +current : 1;
 
   const steps = [StepOne, StepTwo, StepThree, StepFour, Summary];
-  const StepComponent = steps[step];
+  const StepComponent = steps[step - 1];
 
   return (
     <AnimatePresence mode="wait">

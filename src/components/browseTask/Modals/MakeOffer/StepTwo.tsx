@@ -72,14 +72,11 @@ export default function StepTwo({ nextStep, prevStep, isEdit }: StepTwoProps) {
       <Form {...methods}>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col space-y-6 min-h-[450px]"
+          className="h-full flex flex-col space-y-6"
         >
           <div className="flex-1">
             <div className="mb-6">
-              <h2 className="text-2xl font-semibold text-black-2">
-                {isEdit ? "Update Offer" : "Make Offer"}
-              </h2>
-              <p className="text-base font-semibold text-black-2 mt-8">
+              <p className="text-base font-semibold text-black-2">
                 Why are you the best person for this task?
               </p>
               <p className="text-sm text-black-2">
@@ -91,7 +88,7 @@ export default function StepTwo({ nextStep, prevStep, isEdit }: StepTwoProps) {
               <FormTextArea
                 name="description"
                 placeholder="Write here...."
-                className="mt-3 h-[140px] mb-0 px-5 rounded-[10px] bg-light-grey"
+                className="mt-3 h-[120px] mb-0 px-5 rounded-[10px] bg-light-grey"
                 maxLength={maxLengthChar}
               />
               {!errors.description && (

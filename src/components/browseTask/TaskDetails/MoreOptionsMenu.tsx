@@ -1,3 +1,6 @@
+"use client";
+
+import { useState, JSX } from "react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -6,28 +9,47 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import CustomModal from "@/components/reusables/CustomModal";
-import useModal from "@/hooks/useModal";
 import AnimatedStep from "@/components/reusables/AnimatedStep";
-import { useState } from "react";
 import Reschedule from "./Reschedule";
+import RescheduleSuccess from "./Reschedule/RescheduleSuccess";
+import useModal from "@/hooks/useModal";
+import { useAppSelector } from "@/store/hook";
 
-const options = [
-  { label: "Cancel task", name: "task" },
-  { label: "Reschedule task", name: "reschedule" },
-  { label: "Post similar task", name: "post-similar" },
-];
+interface IProps {
+  options: { value: string; label: string }[];
+}
 
-const MoreOptionsMenu: React.FC = () => {
-  const reschedule = useModal();
-  const [currentStep, setCurrentStep] = useState(1);
+const MoreOptionsMenu = ({ options }: IProps) => {
+  const { taskDetails } = useAppSelector((state) => state.task);
+  const { user } = useAppSelector((state) => state.user);
+  const canReschedule = taskDetails.tasker?.id === user.id;
 
-  const handleAction = (action: string) => {
-    switch (action) {
-      case "reschedule": {
-        reschedule.openModal();
-      }
+  const rescheduleModal = useModal();
+  const [step, setStep] = useState(1);
+
+  const handleOptionClick = (action: string) => {
+    if (action === "reschedule") {
+      rescheduleModal.openModal();
     }
   };
+
+  const resetModal = () => {
+    rescheduleModal.closeModal();
+    setStep(1);
+  };
+
+  const stepContent: Record<number, JSX.Element> = {
+    1: <Reschedule onClose={resetModal} next={() => setStep(2)} />,
+    2: <RescheduleSuccess />,
+  };
+
+  const modalTitle = step === 1 ? "Reschedule Time and Date" : undefined;
+  const modalDescription =
+    step === 1
+      ? "Let the Poster know when you will be doing the task."
+      : undefined;
+
+  if (!canReschedule) return null;
 
   return (
     <>
@@ -41,27 +63,27 @@ const MoreOptionsMenu: React.FC = () => {
             More Options
           </Button>
         </DropdownMenuTrigger>
+
         <DropdownMenuContent className="p-0 w-[var(--radix-dropdown-menu-trigger-width)] bg-white border border-light-grey">
-          {options.map((opt) => (
+          {options.map(({ value, label }) => (
             <DropdownMenuItem
+              key={value}
+              onClick={() => handleOptionClick(value)}
               className="focus-visible:bg-transparent px-5 py-3 border-b border-table-stroke last:border-none"
-              key={opt.name}
-              onClick={() => handleAction(opt.name)}
             >
-              {opt.label}
+              {label}
             </DropdownMenuItem>
           ))}
         </DropdownMenuContent>
       </DropdownMenu>
+
       <CustomModal
-        isOpen={reschedule.isOpen}
-        onClose={reschedule.closeModal}
-        aria-labelledby="make-offer-modal-title"
-        aria-describedby="make-offer-modal-description"
+        isOpen={rescheduleModal.isOpen}
+        onClose={resetModal}
+        title={modalTitle}
+        description={modalDescription}
       >
-        <AnimatedStep currentStep={currentStep}>
-          {currentStep == 1 && <Reschedule onClose={reschedule.closeModal} />}
-        </AnimatedStep>
+        <AnimatedStep currentStep={step}>{stepContent[step]}</AnimatedStep>
       </CustomModal>
     </>
   );

@@ -465,10 +465,6 @@ export const QuestionTabItems = [
 
 export const navbar = [
   {
-    href: "/",
-    name: "Home",
-  },
-  {
     href: "#",
     name: "Categories",
     children: [

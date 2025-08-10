@@ -84,18 +84,10 @@ export default function StepTwo({ nextStep, prevStep }: StepTwoProps) {
       <Form {...methods}>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col min-h-[450px]"
+          className="flex flex-col min-h-[350px]"
         >
-          <div className="mb-5">
-            <h2 className="text-xl sm:text-2xl font-semibold text-black-2 mb-2">
-              Reason for increasing price
-            </h2>
-            <p className="text-base text-black-2">
-              Let the Poster know why you are increasing price
-            </p>
-          </div>
           <div className="flex-1">
-            <div className="space-y-6">
+            <div className="space-y-4">
               <FormSelect
                 name="reason"
                 options={options}

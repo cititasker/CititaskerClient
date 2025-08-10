@@ -1,16 +1,13 @@
 "use client";
 import React, { useMemo, useState } from "react";
-import { useRequestPayment } from "@/queries/task";
 import VerificationModal from "../Modals/VerifyModal/Verify";
 import MakeOfferModal from "../Modals/MakeOffer";
 import useModal from "@/hooks/useModal";
-import { useQueryClient } from "@tanstack/react-query";
-import { useSnackbar } from "@/providers/SnackbarProvider";
 import { useAppSelector } from "@/store/hook";
 import BudgetDisplay from "./BudgetDisplay";
 import MoreOptionsMenu from "./MoreOptionsMenu";
-import { API_ROUTES } from "@/constant";
 import IncreasePriceModal from "../Modals/IncreasePrice";
+import CompleteTaskModal from "../Modals/CompleteTaskModal";
 
 interface TaskBudgetProps {
   task: ITask;
@@ -19,18 +16,20 @@ interface TaskBudgetProps {
 const TaskBudget: React.FC<TaskBudgetProps> = ({ task }) => {
   const [verifyModalOpen, setVerifyModalOpen] = useState(false);
   const increaseBudget = useModal();
+  const completeTask = useModal();
 
   const { isOpen: offerModalOpen, openModal, closeModal } = useModal();
-  const queryClient = useQueryClient();
-  const { showSnackbar } = useSnackbar();
+
   const { isAuth, user } = useAppSelector((state) => state.user);
 
-  const requestPaymentMutation = useRequestPayment();
+  console.log(899, task);
 
   const status = task.status;
   const isOpen = status === "open";
   const isAssigned = status === "assigned";
-  const isRequested = task.payment_requested === "true";
+  const isTaskAssignedToYou =
+    isAssigned && task.tasker && task.tasker.id == user.id;
+  const hasCompletedTask = task.payment_requested && isTaskAssignedToYou;
 
   const hasMadeOffer = useMemo(
     () => task.offers.some((el) => el.tasker.id === user?.id),
@@ -44,39 +43,26 @@ const TaskBudget: React.FC<TaskBudgetProps> = ({ task }) => {
 
   const canMakeOffer = isOpen && !hasMadeOffer;
   const canUpdateOffer = isOpen && hasMadeOffer;
-  const canRequestPayment = isAssigned && hasMadeOffer && !isRequested;
+  const canCompleteTask = isAssigned && hasMadeOffer && !hasCompletedTask;
 
   const buttonText = useMemo(() => {
     if (canMakeOffer) return "Make Offer";
     if (canUpdateOffer) return "Update Offer";
-    if (canRequestPayment) return "Request Payment";
-    if (isRequested) return "Payment Requested";
+    if (canCompleteTask) return "Complete Task";
+    if (hasCompletedTask) return "Payment Requested";
     return "Assigned";
-  }, [canMakeOffer, canUpdateOffer, canRequestPayment, isRequested]);
+  }, [canMakeOffer, canUpdateOffer, canCompleteTask, hasCompletedTask]);
 
   const isButtonDisabled =
-    isRequested || !(canMakeOffer || canUpdateOffer || canRequestPayment);
+    hasCompletedTask || !(canMakeOffer || canUpdateOffer || canCompleteTask);
 
   const handleButtonClick = () => {
     if (hasCompletedKyc) {
       setVerifyModalOpen(true);
     } else if (canMakeOffer || canUpdateOffer) {
       openModal();
-    } else if (canRequestPayment) {
-      requestPaymentMutation.mutate(
-        { task_id: task.id },
-        {
-          onSuccess: (data) => {
-            showSnackbar(data.message, "success");
-            queryClient.invalidateQueries({
-              queryKey: [API_ROUTES.GET_TASK_BY_ID, task.id],
-            });
-          },
-          onError: (error) => {
-            showSnackbar(error.message, "error");
-          },
-        }
-      );
+    } else if (canCompleteTask) {
+      completeTask.openModal();
     }
   };
 
@@ -91,6 +77,14 @@ const TaskBudget: React.FC<TaskBudgetProps> = ({ task }) => {
     };
   }, [user.kyc_stage]);
 
+  const moreOptions = useMemo(() => {
+    return [
+      isTaskAssignedToYou &&
+        !hasCompletedTask && { value: "reschedule", label: "Reschedule task" },
+      hasCompletedTask && { value: "add-to-alert", label: "Add task to alert" },
+    ].filter((el) => !!el);
+  }, []);
+
   return (
     <>
       <div>
@@ -100,13 +94,11 @@ const TaskBudget: React.FC<TaskBudgetProps> = ({ task }) => {
           onIncrease={increaseBudget.openModal}
           handleButtonClick={handleButtonClick}
           isButtonDisabled={isButtonDisabled}
-          loading={requestPaymentMutation.isPending}
-          canIncreaseOffer={canRequestPayment}
+          canIncreaseOffer={canCompleteTask}
         />
-
         {isAuth && (
           <div className="mt-1">
-            <MoreOptionsMenu />
+            <MoreOptionsMenu options={moreOptions} />
           </div>
         )}
       </div>
@@ -126,6 +118,10 @@ const TaskBudget: React.FC<TaskBudgetProps> = ({ task }) => {
       <IncreasePriceModal
         open={increaseBudget.isOpen}
         handleClose={increaseBudget.closeModal}
+      />
+      <CompleteTaskModal
+        isOpen={completeTask.isOpen}
+        onClose={completeTask.closeModal}
       />
     </>
   );

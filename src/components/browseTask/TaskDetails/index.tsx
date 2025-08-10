@@ -3,7 +3,6 @@
 import React, { useEffect, useMemo } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-
 import Icons from "@/components/Icons";
 import ShareTaskModal from "../Modals/ShareTaskModal";
 import ImageGallery from "../Modals/ImageGalleryModal/ImageGallery";
@@ -28,7 +27,7 @@ const TaskDetails = ({ back }: IProps) => {
   const { user } = useAppSelector((state) => state.user);
 
   const { data } = useFetchTaskById({ id });
-  const task: ITask = data?.data;
+  const task = data?.data as ITask;
 
   const {
     isOpen: shareModalOpen,
@@ -112,7 +111,7 @@ const TaskDetails = ({ back }: IProps) => {
         </div>
       </div>
 
-      <div className="px-5 sm:px-[30px] pt-5 sm:pt-[28px] mb-10">
+      <div className="px-5 sm:px-[30px] pt-5 sm:pt-[28px] mb-10 w-full">
         <PosterInfo task={task} />
 
         <section className="mb-6">
@@ -132,7 +131,6 @@ const TaskDetails = ({ back }: IProps) => {
             <p>No images available for this task.</p>
           )}
         </section>
-
         <CustomTab items={tabs} listClassName="mb-7" />
       </div>
 

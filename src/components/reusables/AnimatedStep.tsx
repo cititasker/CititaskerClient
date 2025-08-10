@@ -41,6 +41,7 @@ const AnimatedStep: React.FC<AnimatedStepProps> = ({
         exit={direction === "forward" ? "exitToLeft" : "exitToRight"}
         variants={finalAnimationVariants}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        className="h-full min-h-[350px]"
       >
         {children ?? renderStepContent?.()}
       </motion.div>

@@ -4,6 +4,7 @@ import { UseFormReturn } from "react-hook-form";
 import { formatCurrency } from "@/utils";
 import ActionsButtons from "@/components/reusables/ActionButtons";
 import FormCheckbox from "@/components/forms/FormCheckbox";
+import AcceptTermsCheckboxLabel from "@/components/reusables/AcceptTermsCheckboxLabel";
 
 interface Props {
   form: UseFormReturn<{ accepted: boolean }>;
@@ -26,9 +27,8 @@ export default function StepThreeForm({
 }: Props) {
   return (
     <Form {...form}>
-      <form onSubmit={onSubmit} className="flex flex-col min-h-[450px]">
+      <form onSubmit={onSubmit} className="flex flex-col h-full">
         <div className="space-y-8 mb-5">
-          <h2 className="text-2xl font-semibold text-black-2">Preview Offer</h2>
           <div>
             <p className="text-center text-dark-grey-2">Your Offer</p>
 
@@ -41,7 +41,7 @@ export default function StepThreeForm({
 
           <div className="space-y-6 mt-10">
             <div className="flex justify-between">
-              <p className="text-base text-black-2">10% Connection Fee</p>
+              <p className="text-base text-black-2">Connection Fee</p>
               <p className="text-base text-black-2">
                 - {formatCurrency({ value: feeInfo.fee })}
               </p>
@@ -62,10 +62,7 @@ export default function StepThreeForm({
             </div>
           </div>
 
-          <FormCheckbox
-            name="accepted"
-            label=" I accept the Terms & Conditions including Insurance."
-          />
+          <FormCheckbox name="accepted" label={<AcceptTermsCheckboxLabel />} />
         </div>
 
         <ActionsButtons

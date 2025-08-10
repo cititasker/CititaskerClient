@@ -91,7 +91,7 @@ const StepThree = () => {
     dispatch(setTaskData(values));
     const currentUrl = new URL(window.location.href);
     if (isReschedule) {
-      currentUrl.searchParams.set("step", "4");
+      currentUrl.searchParams.set("step", "5");
       push(`${currentUrl}`);
       // const { showTimeOfDay: _, ...rest } = values;
       // const payload = { ...task, ...rest, task_id: id };

@@ -56,7 +56,6 @@ const MakeOfferModal: React.FC<MakeOfferModalProps> = ({
         return (
           <StepOne
             nextStep={nextStep}
-            title={edit ? "Update Offer" : "Make Offer"}
             budgetLabel={`${edit ? "Update" : "Enter"} your offer amount`}
             firstRowLabel="Total offer"
             increasePrice={edit}
@@ -71,7 +70,7 @@ const MakeOfferModal: React.FC<MakeOfferModalProps> = ({
           <StepThree nextStep={nextStep} prevStep={prevStep} isEdit={edit} />
         );
       case 4:
-        return <StepFour isEdit={edit} />;
+        return <StepFour />;
       default:
         return null;
     }
@@ -85,6 +84,14 @@ const MakeOfferModal: React.FC<MakeOfferModalProps> = ({
     handleClose();
   };
 
+  const modalTitle = [1, 2].includes(currentStep)
+    ? edit
+      ? "Update offer"
+      : "Make offer"
+    : currentStep == 3
+    ? "Preview offer"
+    : undefined;
+
   return (
     <CustomModal
       isOpen={open}
@@ -92,6 +99,7 @@ const MakeOfferModal: React.FC<MakeOfferModalProps> = ({
       aria-labelledby="make-offer-modal-title"
       aria-describedby="make-offer-modal-description"
       confetti={showConfetti}
+      title={modalTitle}
     >
       <AnimatedStep
         direction={direction}

@@ -59,14 +59,10 @@ export default function RatingModal({
   };
 
   return (
-    <CustomModal
-      isOpen={isOpen}
-      onClose={handleClose}
-      contentClassName="max-w-[500px]"
-    >
+    <CustomModal isOpen={isOpen} onClose={handleClose}>
       {!success ? (
         <FormProvider {...methods}>
-          <form className="md:mt-10" onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="text-center">
               <h2 className="text-xl sm:text-2xl mb-2 sm:mb-4 text-black-2 font-semibold">
                 Hi {`${user.first_name} ${user.last_name}`} 👋
@@ -79,7 +75,7 @@ export default function RatingModal({
               name="rating"
               control={control}
               render={({ field }) => (
-                <div className="my-4 sm:my-6 md:my-10">
+                <div className="my-4 sm:my-6 md:my-8">
                   <Rating
                     value={field.value}
                     onChange={field.onChange}
@@ -95,12 +91,7 @@ export default function RatingModal({
               placeholder="Add additional comment here (Optional)"
               className="px-4"
             />
-            <FormButton
-              type="submit"
-              size="lg"
-              className="w-full mt-4"
-              loading={loading}
-            >
+            <FormButton type="submit" className="w-full mt-4" loading={loading}>
               Submit
             </FormButton>
           </form>

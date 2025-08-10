@@ -1,13 +1,17 @@
-export interface UseModalReturn {
-    isOpen: boolean;
-    openModal: () => void;
-    closeModal: () => void;
-    toggleModal: () => void;
-  }
+import { Dispatch, SetStateAction } from "react";
 
-  export interface UseToggleReturn {
-    isOpen: boolean;
-    handleOpen: () => void;
-    handleClose: () => void;
-    toggle: () => void;
-  }
+export interface UseModalReturn {
+  isOpen: boolean;
+  openModal: () => void;
+  closeModal: () => void;
+  toggleModal: () => void;
+  setIsOpen: Dispatch<SetStateAction<boolean>> | any;
+}
+
+export interface UseToggleReturn {
+  isOpen: boolean;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
+  handleOpen: () => void;
+  handleClose: () => void;
+  toggle: () => void;
+}

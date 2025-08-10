@@ -170,7 +170,7 @@ export default function FAQList({
     }
   };
 
-  if (faqs.length < 1) return <Empty text="Please add your FAQ" />;
+  if (faqs.length < 1) return <Empty text="No FAQ" />;
 
   return (
     <div>

@@ -1,9 +1,13 @@
-// components/form/form-textarea.tsx
-
 import { Textarea } from "@/components/ui/textarea";
 import { useFormContext } from "react-hook-form";
 import { cn } from "@/lib/utils";
-import { FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
 
 interface FormTextAreaProps {
   name: string;
@@ -28,25 +32,29 @@ export default function FormTextArea({
     <FormField
       name={name}
       control={control}
-      render={({ field }) => (
+      render={({ field, fieldState }) => (
         <FormItem>
           <div className="space-y-1.5">
             {label && (
               <FormLabel htmlFor={name}>
                 {label}
-                {required && <span className="text-red-500 ml-1">*</span>}
+                {required && <span className="text-destructive ml-1">*</span>}
               </FormLabel>
             )}
-            <Textarea
-              id={name}
-              placeholder={placeholder}
-              className={cn(
-                "min-h-[120px] rounded sm:rounded-lg md:rounded-xl",
-                className
-              )}
-              maxLength={maxLength}
-              {...field}
-            />
+            <FormControl>
+              <Textarea
+                id={name}
+                placeholder={placeholder}
+                aria-invalid={!!fieldState.error}
+                className={cn(
+                  "min-h-[120px] rounded sm:rounded-lg md:rounded-xl",
+                  fieldState.error && "border-destructive",
+                  className
+                )}
+                maxLength={maxLength}
+                {...field}
+              />
+            </FormControl>
           </div>
           <FormMessage />
         </FormItem>

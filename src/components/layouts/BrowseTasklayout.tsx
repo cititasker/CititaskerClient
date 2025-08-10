@@ -13,7 +13,7 @@ const BrowseTasklayout = ({ children }: { children: React.ReactNode }) => {
           <div className="w-full hidden md:inline-block sm:max-w-[300px] lg:basis-1/3 h-full overflow-y-auto pt-3 hide-scrollbar">
             <Tasklist />
           </div>
-          <div className="h-full flex-1 overflow-y-auto md:pt-3">
+          <div className="h-full flex-1 overflow-y-auto md:pt-3 max-w-full no-scrollbar">
             {children}
           </div>
         </main>

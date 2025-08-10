@@ -1,57 +1,92 @@
-import { Input } from "@/components/ui/input";
+import FormButton from "@/components/forms/FormButton";
+import FormInput from "@/components/forms/FormInput";
+import CustomModal from "@/components/reusables/CustomModal";
+import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { z } from "zod";
 
 interface LinkModalProps {
-  url: string;
-  setUrl: (url: string) => void;
-  text: string;
-  setText: (text: string) => void;
-  onInsert: () => void;
+  open: boolean;
   onCancel: () => void;
+  editor: any;
 }
 
-const LinkModal = ({
-  url,
-  setUrl,
-  text,
-  setText,
-  onInsert,
-  onCancel,
-}: LinkModalProps) => {
+const LinkModal = ({ open, onCancel, editor }: LinkModalProps) => {
+  const methods = useForm({
+    defaultValues: {
+      linkUrl: "",
+      linkText: "",
+    },
+    resolver: zodResolver(
+      z.object({
+        linkUrl: z.string().url("Please enter a valid URL").optional(),
+        linkText: z.string().optional(),
+      })
+    ),
+  });
+
+  const onInsert = (values: any) => {
+    const { linkUrl, linkText } = values;
+    if (!editor || !linkUrl.trim()) return;
+
+    const url = linkUrl.trim();
+    const text = linkText.trim() || url;
+
+    editor
+      .chain()
+      .focus()
+      .insertContent({
+        type: "text",
+        text,
+        marks: [
+          {
+            type: "link",
+            attrs: {
+              href: url,
+              target: "_blank",
+              rel: "noopener noreferrer",
+            },
+          },
+        ],
+      })
+      .run();
+    onCancel();
+    methods.reset();
+  };
   return (
-    <div className="absolute bottom-[60px] left-0 z-50 bg-white border rounded-md p-4 shadow-md w-[300px]">
-      <Input
-        type="text"
-        placeholder="example.com"
-        className="flex-1 rounded-none h-[40px] border border-dark-grey-1 placeholder:text-black/40 mb-2"
-        value={url}
-        onChange={(e) => setUrl(e.target.value)}
-        autoFocus
-      />
-      <Input
-        type="text"
-        placeholder="Display text (optional)"
-        className="flex-1 border border-dark-grey-1 rounded-none h-[40px] placeholder:text-black/40"
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-      />
-      <div className="flex justify-end gap-2 mt-2">
-        <button
-          type="button"
-          onClick={onCancel}
-          className="text-sm text-gray-500"
+    <CustomModal
+      isOpen={open}
+      onClose={onCancel}
+      className="absolute bottom-[60px] left-0 z-50 bg-white border rounded-md p-4 shadow-md w-[300px]"
+    >
+      <FormProvider {...methods}>
+        <form
+          onSubmit={methods.handleSubmit(onInsert)}
+          className="flex flex-col gap-4"
         >
-          Cancel
-        </button>
-        <button
-          type="button"
-          onClick={onInsert}
-          className="text-sm text-blue-600 font-medium"
-        >
-          Insert
-        </button>
-      </div>
-    </div>
+          <FormInput name="linkUrl" label="Link" placeholder="example.com" />
+          <FormInput
+            name="linkText"
+            label="Text"
+            placeholder="Display text (optional)"
+          />
+          <div className="flex justify-end gap-2 mt-2">
+            <FormButton
+              type="button"
+              onClick={onCancel}
+              size="lg"
+              variant="outline"
+            >
+              Cancel
+            </FormButton>
+            <FormButton type="submit" size="lg" variant="default">
+              Insert
+            </FormButton>
+          </div>
+        </form>
+      </FormProvider>
+    </CustomModal>
   );
 };
 

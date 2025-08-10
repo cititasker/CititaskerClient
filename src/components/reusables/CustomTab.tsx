@@ -55,7 +55,7 @@ const CustomTab: React.FC<CustomTabProps> = ({
     >
       <TabsList
         className={cn(
-          "bg-transparent p-0 gap-4 border-b border-border rounded-none shadow-none",
+          "bg-transparent p-0 gap-4 border-b border-border rounded-none shadow-none w-full max-w-full",
           listClassName
         )}
       >
@@ -74,11 +74,7 @@ const CustomTab: React.FC<CustomTabProps> = ({
       </TabsList>
 
       {tabItems.map(({ id, render }) => (
-        <TabsContent
-          key={id}
-          value={id}
-          className={cn("overflow-y-auto no-scrollbar", contentClassName)}
-        >
+        <TabsContent key={id} value={id} className={contentClassName}>
           {render()}
         </TabsContent>
       ))}

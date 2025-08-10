@@ -38,7 +38,7 @@ export default function TaskStatusCard({
   const { title, content } = renderTaskStatus();
 
   return (
-    <Card className="bg-black rounded-[30px] text-white mb-6">
+    <Card className="bg-black text-white">
       <CardContent className="px-[26px] py-[34px]">
         <span className="bg-[#FB9596] px-4 py-2 rounded-[40px] inline-block mb-6 text-base">
           New Offer!

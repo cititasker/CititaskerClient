@@ -21,14 +21,14 @@ export default function MoreOptionsMenu({ moreOptions, onSelect }: Props) {
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
-          className="rounded-[25px] font-normal border-none text-base bg-light-grey px-[15px] flex-1 justify-between"
+          className="rounded-[25px] font-normal border-none text-base bg-light-grey px-[15px] justify-between"
         >
           More Options
           <Icons.dropdown />
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent className="w-full min-w-[200px]">
+      <DropdownMenuContent className="min-w-[var(--radix-dropdown-menu-trigger-width)]">
         {moreOptions.map((option, idx) => (
           <DropdownMenuItem
             key={idx}

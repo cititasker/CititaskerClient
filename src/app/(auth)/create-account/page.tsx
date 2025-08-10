@@ -82,7 +82,7 @@ const CreateAccountPage = () => {
                     </Label>
                   ))}
                 </RadioGroup>
-                <FormMessage className="text-red-500 mt-2 text-sm" />
+                <FormMessage className="text-destructive mt-2 text-sm" />
               </FormItem>
             )}
           />

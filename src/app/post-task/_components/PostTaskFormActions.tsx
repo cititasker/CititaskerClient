@@ -11,6 +11,7 @@ interface PostTaskFormActionsProps {
   onClick?: () => void;
   className?: string;
   okText?: string;
+  backwardStep?: string;
 }
 
 const PostTaskFormActions: React.FC<PostTaskFormActionsProps> = ({
@@ -19,6 +20,7 @@ const PostTaskFormActions: React.FC<PostTaskFormActionsProps> = ({
   onClick,
   className,
   okText,
+  backwardStep,
 }) => {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -29,7 +31,7 @@ const PostTaskFormActions: React.FC<PostTaskFormActionsProps> = ({
   const handleBack = () => {
     if (step <= 1) return;
     const url = new URL(window.location.href);
-    url.searchParams.set("step", String(step - 1));
+    url.searchParams.set("step", backwardStep ?? String(step - 1));
     router.push(url.toString());
   };
 
@@ -51,7 +53,7 @@ const PostTaskFormActions: React.FC<PostTaskFormActionsProps> = ({
       {step > 1 && (
         <FormButton
           variant="outline"
-          className="flex-1 w-full"
+          className="flex-1 w-full text-primary"
           onClick={handleBack}
           disabled={loading}
         >
