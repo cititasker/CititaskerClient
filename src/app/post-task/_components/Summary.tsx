@@ -3,7 +3,7 @@
 import React, { useMemo } from "react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 
 import { useAppSelector } from "@/store/hook";
 import {
@@ -18,7 +18,7 @@ import { API_ROUTES, ROUTES } from "@/constant";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 
 import { Label } from "@/components/ui/label";
-import { useCreateTask, useUpdateTask } from "@/services/tasks/tasks.hook";
+import { usPostTask } from "@/services/tasks/tasks.hook";
 import PostTaskFormActions from "./PostTaskFormActions";
 
 const TIME_FRAMES = {
@@ -46,21 +46,11 @@ const Summary = () => {
   const router = useRouter();
   const { id } = useParams() as { id?: string };
   const { showSnackbar } = useSnackbar();
+  const searchParams = useSearchParams();
+  const action = searchParams.get("action");
+  const isReschedule = action == "reschedule";
 
-  const mutation = useCreateTask();
-  const updateMutation = useUpdateTask({
-    onSuccess: async (data) => {
-      showSnackbar(data.message, "success");
-      queryClient.invalidateQueries({
-        queryKey: [API_ROUTES.GET_USER_TASK, id],
-      });
-      await persistor.purge();
-      router.push(`/${session?.user.role}/${ROUTES.MY_TASKS}/${id}`);
-    },
-    onError: (error) => {
-      showSnackbar(errorHandler(error), "error");
-    },
-  });
+  const taskMutation = usPostTask();
 
   const timeFrameText = useMemo(() => {
     if (!task.showTimeOfDay || !task.time) return null;
@@ -87,25 +77,41 @@ const Summary = () => {
         formData.append(key, String(value));
     });
 
-    images?.forEach((el: any, i: any) => {
-      if (el.new) {
-        const file = base64ToFile(el.src, i) as any;
-        formData.append("images[]", file);
-      }
-    });
+    // images?.forEach((el: any, i: any) => {
+    //   if (el.new) {
+    //     const file = base64ToFile(el.src, i) as any;
+    //     formData.append("images[]", file);
+    //   }
+    // });
 
     formData.append("category_id", String(category_id?.id ?? ""));
     formData.append("sub_category_id", String(sub_category_id?.id ?? ""));
     formData.append("state", String(state?.name ?? ""));
+    if (id) formData.append("task_id", id);
 
     location?.forEach((loc: string) => formData.append("location[]", loc));
 
-    if (id) {
-      formData.append("task_id", id);
-      updateMutation.mutate(formData);
-    } else {
-      mutation.mutate(formData);
-    }
+    taskMutation.mutate(
+      { id, body: formData },
+      {
+        onSuccess: async (data) => {
+          showSnackbar(data.message, "success");
+          queryClient.invalidateQueries({
+            queryKey: [API_ROUTES.GET_USER_TASK, id],
+          });
+          queryClient.invalidateQueries({
+            queryKey: [API_ROUTES.GET_TASK_BY_ID, id],
+          });
+          await persistor.purge();
+          const baseUrl = `/${session?.user.role}/${ROUTES.MY_TASKS}`;
+          const url = id ? `${baseUrl}/${id}` : baseUrl;
+          router.push(url);
+        },
+        onError: (error) => {
+          showSnackbar(errorHandler(error), "error");
+        },
+      }
+    );
   };
 
   return (
@@ -154,9 +160,10 @@ const Summary = () => {
 
       <PostTaskFormActions
         type="submit"
-        loading={mutation.isPending || updateMutation.isPending}
+        loading={taskMutation.isPending}
         className="mt-6 self-end"
         okText={id ? "Update Task" : "Create Task"}
+        backwardStep={isReschedule ? "3" : undefined}
       />
     </form>
   );

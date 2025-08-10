@@ -27,7 +27,7 @@ export default function PaymentSuccessModal({
       isOpen={isOpen}
       onClose={onClose}
       confetti={isOpen}
-      contentClassName="max-w-[576px] px-6 py-10 sm:px-10 sm:py-12 rounded-3xl"
+      // contentClassName="max-w-[576px] px-6 py-10 sm:px-10 sm:py-12 rounded-3xl"
     >
       <div className="flex flex-col items-center text-center">
         <Image

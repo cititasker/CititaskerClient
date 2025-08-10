@@ -3,7 +3,6 @@
 import React, { useEffect, useMemo } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-
 import Icons from "@/components/Icons";
 import ShareTaskModal from "../Modals/ShareTaskModal";
 import ImageGallery from "../Modals/ImageGalleryModal/ImageGallery";
@@ -28,7 +27,7 @@ const TaskDetails = ({ back }: IProps) => {
   const { user } = useAppSelector((state) => state.user);
 
   const { data } = useFetchTaskById({ id });
-  const task: ITask = data?.data;
+  const task = data?.data as ITask;
 
   const {
     isOpen: shareModalOpen,
@@ -74,7 +73,7 @@ const TaskDetails = ({ back }: IProps) => {
   if (!task) return null;
 
   return (
-    <Card className="hide-scrollbar relative">
+    <Card className="no-scrollbar relative">
       <div className="rounded-t-xl pl-4 pr-1 sm:px-12 h-[65px] flex justify-between items-center border-b sticky top-0 z-[20] bg-white">
         <Link
           href={back}
@@ -112,7 +111,7 @@ const TaskDetails = ({ back }: IProps) => {
         </div>
       </div>
 
-      <div className="px-5 sm:px-[30px] pt-5 sm:pt-[28px] mb-10">
+      <div className="px-5 sm:px-[30px] pt-5 sm:pt-[28px] mb-10 w-full">
         <PosterInfo task={task} />
 
         <section className="mb-6">
@@ -132,7 +131,6 @@ const TaskDetails = ({ back }: IProps) => {
             <p>No images available for this task.</p>
           )}
         </section>
-
         <CustomTab items={tabs} listClassName="mb-7" />
       </div>
 

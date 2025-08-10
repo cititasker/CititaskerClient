@@ -8,12 +8,17 @@ import EditImageModal from "./EditImageModal";
 import Icons from "@/components/Icons";
 import { useAppSelector } from "@/store/hook";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateUserPorfolio } from "@/services/user/users.api";
+import {
+  deleteUserPorfolio,
+  updateUserPorfolio,
+} from "@/services/user/users.api";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import FormButton from "@/components/forms/FormButton";
 import { Trash2, Upload } from "lucide-react";
 import { API_ROUTES } from "@/constant";
 import { useGetPorfolio } from "@/services/user/user.hook";
+import DeleteConfirmationModal from "@/components/reusables/Modals/DeleteConfirmationModal";
+import useModal from "@/hooks/useModal";
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB in bytes
 
@@ -22,6 +27,7 @@ const schema = z.object({
     .array(
       z.object({
         src: z.string().min(1, "Image source is required"),
+        key: z.string().optional(),
         file: z
           .instanceof(File)
           .refine((file) => file.size <= MAX_FILE_SIZE, {
@@ -37,6 +43,12 @@ type schemaType = z.infer<typeof schema>;
 const EditPorfolio = () => {
   const { showSnackbar } = useSnackbar();
   const { user } = useAppSelector((state) => state.user);
+  const [toDeleteImage, setToDeleteImage] = useState<any>(null);
+  const [openCropModal, setOpenCropModal] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<any>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const queryClient = useQueryClient();
+  const deletePortfolio = useModal();
 
   const { data } = useGetPorfolio({ id: user.id });
 
@@ -47,6 +59,21 @@ const EditPorfolio = () => {
     onSuccess(data) {
       console.log(data);
       showSnackbar(data.message, "success");
+      queryClient.invalidateQueries({
+        queryKey: [API_ROUTES.GET_PORTFOLIO, user.id],
+      });
+    },
+    onError(error) {
+      showSnackbar(error?.message || "Something went wrong", "error");
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: deleteUserPorfolio,
+    onSuccess(data) {
+      console.log(data);
+      showSnackbar(data.message, "success");
+      deletePortfolio.closeModal();
       queryClient.invalidateQueries({
         queryKey: [API_ROUTES.GET_PORTFOLIO, user.id],
       });
@@ -68,16 +95,12 @@ const EditPorfolio = () => {
     if (portfolio) {
       setValue(
         "portfolio",
-        portfolio.map((src) => ({ src }))
+        portfolio.map((src) => ({ src: src.url, key: src.key }))
       );
     }
   }, [portfolio]);
 
   const images = watch("portfolio") ?? [];
-  const [openCropModal, setOpenCropModal] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<any>(null);
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const queryClient = useQueryClient();
 
   const handleUpload = async (e: any) => {
     const files = e.target.files;
@@ -110,8 +133,17 @@ const EditPorfolio = () => {
     const portfolio = [...prev];
     portfolio.splice(index, 1);
     setValue("portfolio", portfolio);
+    deletePortfolio.closeModal();
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
+    }
+  };
+
+  const handleDelete = () => {
+    if (toDeleteImage.key) {
+      deleteMutation.mutate(toDeleteImage.key);
+    } else {
+      handleRemove(toDeleteImage.index);
     }
   };
 
@@ -154,9 +186,12 @@ const EditPorfolio = () => {
                 <div className="absolute w-full h-full top-0 left-0 bg-[#000]/20 hidden group-hover:block">
                   <div
                     className="absolute bottom-5 right-5 cursor-pointer flex items-center bg-red-100 w-7 h-7 rounded-full justify-center"
-                    onClick={() => handleRemove(i)}
+                    onClick={() => {
+                      setToDeleteImage({ ...img, index: i });
+                      deletePortfolio.openModal();
+                    }}
                   >
-                    <Trash2 size={18} className="text-red-500" />
+                    <Trash2 size={18} className="text-destructive" />
                   </div>
                 </div>
               </div>
@@ -188,6 +223,18 @@ const EditPorfolio = () => {
         onClose={closeEditModal}
         selectedImage={selectedImage}
         handleSaveImage={handleSaveImage}
+      />
+      <DeleteConfirmationModal
+        isOpen={deletePortfolio.isOpen}
+        onClose={deletePortfolio.closeModal}
+        desc={
+          !toDeleteImage?.key
+            ? "You want to remove the selected item?"
+            : undefined
+        }
+        okText={!toDeleteImage?.key ? "Remove" : "Delete"}
+        loading={deleteMutation.isPending}
+        handleSubmit={handleDelete}
       />
     </FormProvider>
   );

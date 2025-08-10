@@ -3,7 +3,6 @@ import { z } from "zod";
 export const surchargeSchema = z.object({
   task_id: z.number(),
   offer_id: z.number(),
-  default_offer_amount: z.number(),
   offer_amount: z
     .string()
     .min(1, { message: "Offer amount is required" })

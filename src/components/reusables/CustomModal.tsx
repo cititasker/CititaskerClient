@@ -7,20 +7,21 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { FC, ReactNode } from "react";
+import { FC } from "react";
 import SuccessConfetti from "./SuccessConfetti";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { cn } from "@/lib/utils";
 
-interface CustomModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  children: ReactNode;
+interface CustomModalProps extends IModal {
   className?: string; // container wrapper styling
   contentClassName?: string; // dialog content styling
   hideClose?: boolean;
   confetti?: boolean;
   disableAutoFocus?: boolean;
+  title?: string;
+  description?: string;
+  titleClassName?: string;
+  descriptionClassName?: string;
   [key: string]: any;
 }
 
@@ -33,6 +34,10 @@ const CustomModal: FC<CustomModalProps> = ({
   hideClose = false,
   confetti = false,
   disableAutoFocus = true,
+  title,
+  description,
+  titleClassName,
+  descriptionClassName,
   ...rest
 }) => {
   return (
@@ -42,7 +47,7 @@ const CustomModal: FC<CustomModalProps> = ({
         aria-labelledby={undefined}
         aria-describedby={undefined}
         className={cn(
-          "block fixed top-1/2 left-1/2 max-w-[576px] w-[90vw] max-h-[90vh] overflow-x-hidden overflow-y-auto no-scrollbar -translate-x-1/2 -translate-y-1/2 rounded-[20px] sm:rounded-[30px] bg-white p-5 sm:px-8 sm:py-6 focus:outline-none",
+          "max-w-lg w-[90vw] bg-white p-5 sm:px-8 sm:py-6 focus:outline-none",
           contentClassName
         )}
         hideClose={hideClose}
@@ -52,6 +57,27 @@ const CustomModal: FC<CustomModalProps> = ({
         {...rest}
       >
         <DialogHeader>
+          {title || description ? (
+            <div className="mb-4">
+              {title && (
+                <DialogTitle
+                  className={cn(
+                    "font-semibold text-2xl text-black-2",
+                    titleClassName
+                  )}
+                >
+                  {title}
+                </DialogTitle>
+              )}
+              {description && (
+                <DialogDescription
+                  className={cn("mt-1.5", descriptionClassName)}
+                >
+                  {description}
+                </DialogDescription>
+              )}
+            </div>
+          ) : null}
           <VisuallyHidden asChild>
             <DialogTitle />
           </VisuallyHidden>
@@ -59,9 +85,7 @@ const CustomModal: FC<CustomModalProps> = ({
             <DialogDescription />
           </VisuallyHidden>
         </DialogHeader>
-        <div className={cn("overflow-x-hidden w-full", className)}>
-          {children}
-        </div>
+        {children}
       </DialogContent>
     </Dialog>
   );

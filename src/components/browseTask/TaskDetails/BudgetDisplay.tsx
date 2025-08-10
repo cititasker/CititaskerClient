@@ -6,7 +6,7 @@ interface BudgetDisplayProps {
   budget: number;
   onIncrease: () => void;
   buttonText: string;
-  loading: boolean;
+  loading?: boolean;
   handleButtonClick: () => void;
   isButtonDisabled: boolean;
   canIncreaseOffer: boolean;
@@ -22,7 +22,7 @@ const BudgetDisplay: React.FC<BudgetDisplayProps> = ({
   canIncreaseOffer,
 }) => (
   <div className="rounded-[10px] p-[17px] bg-light-primary-1 text-center max-w-[217px] w-full">
-    <p className="text-dark-grey-2 text-xs sm:text-sm mb-1.5 sm:mb-5">
+    <p className="text-dark-grey-2 text-xs sm:text-sm mb-1.5 sm:mb-4">
       Estimated Task Budget
     </p>
     <div className="space-y-2 sm:space-y-3">

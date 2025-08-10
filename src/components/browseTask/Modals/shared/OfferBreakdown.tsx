@@ -22,7 +22,7 @@ export const OfferBreakdown = ({ firstRowLabel }: Props) => {
         value={formatCurrency({ value: offerAmount })}
       />
       <OfferBreakdownRow
-        label={`Service fee (${connectionFee}%)`}
+        label="Service fee"
         value={formatCurrency({ value: fee })}
         isNegative
         icon={<IInfoCircle />}

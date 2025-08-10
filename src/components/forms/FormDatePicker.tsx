@@ -24,6 +24,7 @@ interface FormDatePickerProps {
   minDate?: Date;
   maxDate?: Date;
   triggerClass?: string;
+  placeholder?: string;
 }
 
 export default function FormDatePicker({
@@ -34,6 +35,7 @@ export default function FormDatePicker({
   minDate,
   maxDate,
   triggerClass,
+  placeholder = "Pick a date",
 }: FormDatePickerProps) {
   const { control } = useFormContext();
 
@@ -62,7 +64,7 @@ export default function FormDatePicker({
                 <Button
                   variant="outline"
                   className={cn(
-                    "w-full border-input justify-start text-left font-normal hover:bg-transparent shadow-none h-[50px]",
+                    "w-full border-input justify-start text-left font-normal hover:bg-transparent shadow-none",
                     !field.value && "text-muted-foreground",
                     triggerClass
                   )}
@@ -70,10 +72,14 @@ export default function FormDatePicker({
                   <CalendarIcon className="mr-2 h-4 w-4" />
                   {field.value
                     ? moment(field.value, "DD-MM-YYYY").format("DD/MM/YYYY")
-                    : "Pick a date"}
+                    : placeholder}
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
+              <PopoverContent
+                className="w-auto p-0 overflow-hidden"
+                align="start"
+                sideOffset={0}
+              >
                 <Calendar
                   mode="single"
                   captionLayout="dropdown"

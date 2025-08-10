@@ -41,7 +41,7 @@ const SelectState = ({
       label={label}
       options={states}
       getOptionLabel={(opt) => opt.name}
-      isOptionEqualToValue={(a, b) => a.id === b.id}
+      isOptionEqualToValue={(a, b) => a?.id === b?.id}
       placeholder="Select a state"
     />
   );

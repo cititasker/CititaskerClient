@@ -1,4 +1,3 @@
-// components/RichEditor.tsx
 "use client";
 
 import React, { useState } from "react";
@@ -14,6 +13,15 @@ import { IEmojiCLip, IEmojiSmile, ILink, ISend2 } from "@/constant/icons";
 import EmojiPicker from "./EmojiPicker";
 import { FileAttachment } from "./FileAttachment";
 import { Loader } from "lucide-react";
+import CustomDropdown from "@/components/reusables/CustomDropdown";
+import { useScreenBreakpoints } from "@/hooks/useScreenBreakpoints";
+import FilePreviewList from "./attachment-preview/FilePreviewList";
+import useModal from "@/hooks/useModal";
+import { useForm } from "react-hook-form";
+import { link } from "fs";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { cn } from "@/lib/utils";
 
 interface RichEditorProps {
   onContentUpdate: (html: string) => void;
@@ -21,10 +29,9 @@ interface RichEditorProps {
 }
 
 const RichEditor = ({ onContentUpdate, isLoading }: RichEditorProps) => {
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const [showLinkModal, setShowLinkModal] = useState(false);
-  const [linkUrl, setLinkUrl] = useState("");
-  const [linkText, setLinkText] = useState("");
+  const [attachments, setAttachments] = useState<File[]>([]);
+  const linkModal = useModal();
+  const { isSmallScreen } = useScreenBreakpoints();
 
   const editor = useEditor({
     extensions: [
@@ -46,123 +53,79 @@ const RichEditor = ({ onContentUpdate, isLoading }: RichEditorProps) => {
 
   const insertEmoji = (emoji: any) => {
     editor?.chain().focus().insertContent(emoji.native).run();
-    setShowEmojiPicker(false);
   };
 
   const insertAttachment = () => {
     const input = document.createElement("input");
     input.type = "file";
-    input.accept = "*/*"; // allow any file type
+    input.accept = "*/*";
 
     input.onchange = () => {
       const file = input.files?.[0];
       if (!file) return;
 
-      const reader = new FileReader();
-      reader.onload = () => {
-        const url = reader.result as string;
-
-        editor
-          ?.chain()
-          .focus()
-          .setFileAttachment({
-            src: url,
-            filename: file.name,
-            mime: file.type,
-          })
-          .run();
-      };
-
-      reader.readAsDataURL(file);
+      setAttachments((prev) => [...prev, file]);
     };
 
     input.click();
   };
 
-  const insertLink = () => {
-    if (!editor || !linkUrl.trim()) return;
-
-    const url = linkUrl.trim();
-    const text = linkText.trim() || url;
-
-    editor
-      .chain()
-      .focus()
-      .insertContent({
-        type: "text",
-        text,
-        marks: [
-          {
-            type: "link",
-            attrs: {
-              href: url,
-              target: "_blank",
-              rel: "noopener noreferrer",
-            },
-          },
-        ],
-      })
-      .run();
-
-    setShowLinkModal(false);
-    setLinkUrl("");
-    setLinkText("");
-  };
-
   return (
-    <>
-      <div className="rounded-[10px] bg-light-primary-1 border border-primary p-2 min-h-[120px] text-sm prose max-w-none">
-        <EditorContent editor={editor} className="ProseMirror" />
-      </div>
+    <div className="max-w-full">
+      <div className="rounded-[10px] bg-light-primary-1 border border-primary p-2 text-sm">
+        <EditorContent editor={editor} className="ProseMirror prose" />
 
-      {showEmojiPicker && <EmojiPicker onSelect={insertEmoji} />}
-
-      {showLinkModal && (
-        <LinkModal
-          url={linkUrl}
-          setUrl={setLinkUrl}
-          text={linkText}
-          setText={setLinkText}
-          onInsert={insertLink}
-          onCancel={() => setShowLinkModal(false)}
+        <FilePreviewList
+          attachments={attachments}
+          onRemove={(index) =>
+            setAttachments((prev) => prev.filter((_, i) => i !== index))
+          }
         />
-      )}
 
-      <div className="flex justify-between items-center mt-2">
-        <div className="flex gap-x-5">
-          <IconTooltipButton
-            icon={<IEmojiSmile />}
-            label="Insert emoji"
-            onClick={() => {
-              setShowEmojiPicker((prev) => !prev);
-              setShowLinkModal(false);
-            }}
-          />
-          <IconTooltipButton
-            icon={<IEmojiCLip />}
-            label="Attach file"
-            onClick={insertAttachment}
-          />
-          <IconTooltipButton
-            icon={<ILink />}
-            label="Insert link"
-            onClick={() => {
-              setShowLinkModal(true);
-              setShowEmojiPicker(false);
-            }}
-          />
-        </div>
-        <button type="submit" aria-label="Send reply">
-          {isLoading ? (
-            <span className="flex items-center gap-2 text-sm">
-              <Loader size={16} className="animate-spin" /> Sending
-            </span>
-          ) : (
-            <ISend2 />
+        <div
+          className={cn(
+            "flex justify-between items-center",
+            !attachments.length && "mt-3"
           )}
-        </button>
+        >
+          <div className="flex gap-x-5">
+            <CustomDropdown
+              trigger={<IEmojiSmile />}
+              side={isSmallScreen ? undefined : "left"}
+              contentClassName="p-0"
+            >
+              <EmojiPicker onSelect={insertEmoji} />
+            </CustomDropdown>
+
+            <IconTooltipButton
+              icon={<IEmojiCLip />}
+              label="Attach file"
+              onClick={insertAttachment}
+            />
+            <IconTooltipButton
+              icon={<ILink />}
+              label="Insert link"
+              onClick={linkModal.openModal}
+            />
+          </div>
+          <button type="submit" aria-label="Send reply">
+            {isLoading ? (
+              <span className="flex items-center gap-2 text-sm">
+                <Loader size={16} className="animate-spin" /> Sending
+              </span>
+            ) : (
+              <ISend2 className="scale-90" />
+            )}
+          </button>
+        </div>
       </div>
-    </>
+
+      <LinkModal
+        open={linkModal.isOpen}
+        onCancel={linkModal.closeModal}
+        editor={editor}
+      />
+    </div>
   );
 };
 

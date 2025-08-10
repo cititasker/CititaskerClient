@@ -12,7 +12,7 @@ const StatusChip: React.FC<StatusChipProps> = ({ status, isActive }) => {
   return (
     <span
       className={cn(
-        "inline-flex h-[22px] items-center rounded-full border px-3 text-[10px] font-medium capitalize transition-colors",
+        "inline-flex h-[22px] items-center rounded-full border px-2 text-[10px] font-medium capitalize transition-colors",
         isActive
           ? "bg-primary text-white border-primary"
           : "bg-[hsl(var(--light-primary-1))] text-primary border-primary"

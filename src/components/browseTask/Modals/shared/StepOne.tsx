@@ -23,7 +23,7 @@ type SchemaType = z.infer<typeof schema>;
 
 interface Props {
   nextStep: () => void;
-  title: string;
+  title?: string;
   budgetLabel: string;
   firstRowLabel?: string;
   increasePrice?: boolean;
@@ -36,12 +36,12 @@ const StepOne = ({
   firstRowLabel = "Total offer",
   increasePrice = false,
 }: Props) => {
-  const params = useParams();
-  const task_id = Number(params.id);
+  const { id } = useParams();
+  const task_id = Number(id);
   const dispatch = useAppDispatch();
-  const { taskersOffer, offer } = useAppSelector((state) => state.task);
-
-  console.log(899, taskersOffer);
+  const { taskersOffer, offer, taskDetails } = useAppSelector(
+    (state) => state.task
+  );
 
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
@@ -53,15 +53,17 @@ const StepOne = ({
   });
 
   useEffect(() => {
-    if (taskersOffer) {
-      const { id, offer_amount } = taskersOffer;
-      form.reset({
-        task_id,
-        offer_id: id,
-        offer_amount: `${offer_amount}`,
-      });
-    }
-  }, [taskersOffer]);
+    const id = taskersOffer?.id;
+    const amount = increasePrice
+      ? taskersOffer?.offer_amount
+      : taskDetails.budget;
+
+    form.reset({
+      task_id,
+      offer_id: id,
+      offer_amount: `${amount}`,
+    });
+  }, [taskersOffer, taskDetails]);
 
   const handleSubmit = (data: any) => {
     dispatch(setOfferData({ ...offer, ...data }));
@@ -72,12 +74,8 @@ const StepOne = ({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="flex flex-col min-h-[450px]"
+        className="flex flex-col h-full"
       >
-        <h2 className="text-xl sm:text-2xl font-bold text-black mb-6">
-          {title}
-        </h2>
-
         <div>
           <p className="text-center text-muted-foreground text-base mb-2">
             {budgetLabel}

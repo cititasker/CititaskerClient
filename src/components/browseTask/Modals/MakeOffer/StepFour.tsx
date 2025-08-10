@@ -6,13 +6,13 @@ import { initializeName } from "@/utils";
 import { ROUTES } from "@/constant";
 import Success from "@/components/reusables/Success";
 
-export default function StepFour({ isEdit }: { isEdit: boolean }) {
+export default function StepFour() {
   const {
     taskDetails: { poster_profile },
   } = useAppSelector((state) => state.task);
 
   return (
-    <div className="flex flex-col space-y-6 min-h-[450px]">
+    <div className="flex flex-col space-y-6 h-full">
       <Success
         title="Congratulations! 🎉"
         desc={`We’ve sent your offer to ${initializeName({
@@ -27,8 +27,8 @@ export default function StepFour({ isEdit }: { isEdit: boolean }) {
 
 const Action = () => (
   <Link href={ROUTES.BROWSE_TASK} className="mt-auto">
-    <div className="flex gap-5 mt-[80px]">
-      <button className=" mt-[58px] border text-white bg-[#236F8E] w-full text-center h-[51px] font-normal text-[16px] rounded-40">
+    <div className="flex gap-5">
+      <button className="border text-white bg-[#236F8E] w-full text-center h-[51px] font-normal text-[16px] rounded-40">
         Browse More Task
       </button>
     </div>

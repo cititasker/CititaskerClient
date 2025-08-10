@@ -14,6 +14,8 @@ import { errorHandler } from "@/utils";
 import { API_ROUTES } from "@/constant";
 import Empty from "@/components/myTasks/Empty";
 import DeleteConfirmationModal from "@/components/reusables/Modals/DeleteConfirmationModal";
+import { ConfirmModal } from "@/components/reusables/Modals/ConfirmModal";
+import useModal from "@/hooks/useModal";
 
 interface OfferProps {
   offers: IOffer[];
@@ -26,10 +28,12 @@ const Offer: React.FC<OfferProps> = ({ offers }) => {
 
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedOfferId, setSelectedOfferId] = useState<string | null>(null);
+  const withdrawModal = useModal();
 
   const handleToggleModal = (offerId?: string) => {
     setSelectedOfferId(offerId ?? null);
-    setModalOpen((prev) => !prev);
+    withdrawModal.openModal();
+    // setModalOpen((prev) => !prev);
   };
 
   const { mutate, isPending } = useMutation({
@@ -69,26 +73,25 @@ const Offer: React.FC<OfferProps> = ({ offers }) => {
         )}
       </div>
 
-      <DeleteConfirmationModal
+      <ConfirmModal
+        variant="destructive"
+        open={withdrawModal.isOpen}
+        onClose={withdrawModal.setIsOpen}
+        title="Withdraw Offer"
+        description="Are you sure you want to withdraw your offer?"
+        loading={isPending}
+        onConfirm={handleWithdraw}
+        confirmText="Withdraw"
+        cancelText="Keep my offer"
+      ></ConfirmModal>
+
+      {/* <DeleteConfirmationModal
         isOpen={modalOpen}
         onClose={handleToggleModal}
         text="Withdraw Offer"
         desc="Are you sure you want to withdraw your offer?"
         okText="Withdraw"
         cancelText="Keep my offer"
-        loading={isPending}
-        handleSubmit={handleWithdraw}
-      />
-
-      {/* <ConfirmationModal
-        open={modalOpen}
-        onClose={handleToggleModal}
-        title="Withdraw Offer"
-        content="Are you sure you want to withdraw your offer?"
-        cancelText="Keep my offer"
-        okVariant="outline"
-        okStyle="text-red-state-color border-red-state-color bg-red-state-color-fill"
-        okText="Withdraw"
         loading={isPending}
         handleSubmit={handleWithdraw}
       /> */}

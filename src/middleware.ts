@@ -13,7 +13,7 @@ export default auth(async (req) => {
   const currentRoute = req.nextUrl.pathname;
   const user = req.auth?.user;
 
-  if (req.auth && authRoutes.includes(currentRoute)) {
+  if (req.auth && user && authRoutes.includes(currentRoute)) {
     const userRole = user.role;
     let redirectTo = `${userRole}/${ROUTES.DASHBOARD}`;
     const absoluteURL = new URL(redirectTo, req.url);

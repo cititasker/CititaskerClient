@@ -9,8 +9,8 @@ export default {
   ],
   theme: {
     extend: {
-      screens:{
-        xs:"470px"
+      screens: {
+        xs: "470px",
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
@@ -45,6 +45,7 @@ export default {
         "cs-dark-4": "var(--Cultured-Secondary-Dark-4)",
         "cs-dark-5": "var(--Cultured-Secondary-Dark-5)",
         F9F9F9: "var(--F9F9F9)",
+        "table-stroke": "#F3F5F6",
         "red-state-color-fill": "var(--bg-red-state-color-fill)",
         background: "var(--background)",
         foreground: "var(--foreground)",
@@ -83,9 +84,12 @@ export default {
         "20": "20px",
         "30": "30px",
         "40": "40px",
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        xl: "calc(var(--radius) + 8px)",
+        lg: "calc(var(--radius) + 4px)",
+        md: "calc(var(--radius) + 2px)",
+        DEFAULT: "var(--radius)",
+        sm: "calc(var(--radius) - 2px)",
+        xs: "calc(var(--radius) - 4px)",
       },
       lineHeight: {
         normal: "1.2",

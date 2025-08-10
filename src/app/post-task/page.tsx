@@ -23,10 +23,8 @@ const steps = [StepOne, StepTwo, StepThree, StepFour, Summary];
 
 export default function PostTaskPage() {
   const searchParams = useSearchParams();
-  const stepIndex = Math.max(
-    0,
-    Math.min(steps.length - 1, +(searchParams.get("step") || 1) - 1)
-  );
+  const current = searchParams.get("step");
+  const stepIndex = current ? +current : 1;
   const [direction, setDirection] = useState<Direction>("forward");
   const prevStepRef = useRef(stepIndex);
 
@@ -39,7 +37,7 @@ export default function PostTaskPage() {
     prevStepRef.current = stepIndex;
   }, [stepIndex]);
 
-  const StepComponent = steps[stepIndex];
+  const StepComponent = steps[stepIndex - 1];
 
   return (
     <AnimatePresence mode="wait">
@@ -47,7 +45,7 @@ export default function PostTaskPage() {
         key={stepIndex}
         initial={direction === "forward" ? "enterFromLeft" : "enterFromRight"}
         animate="center"
-        exit={direction === "forward" ? "exitToLeft" : "exitToRight"} // flipped exit directions here
+        exit={direction === "forward" ? "exitToLeft" : "exitToRight"}
         variants={animationVariants}
         transition={{
           type: "spring",

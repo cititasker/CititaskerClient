@@ -218,8 +218,14 @@ export const updateQueryParams = (
   return params.toString();
 };
 
-export const calculateFees = (amount: number) => {
-  const fee = (connectionFee / 100) * amount;
+export const calculateFees = (amount: number, percentage = connectionFee) => {
+  const fee = (percentage / 100) * amount;
   const receive = amount - fee;
   return { fee, receive };
+};
+
+export const normalizeUrl = (url: string): string => {
+  if (/^https:\/\//i.test(url)) return url; // already https
+  if (/^http:\/\//i.test(url)) return url.replace(/^http:\/\//i, "https://"); // convert http to https
+  return `https://${url}`; // no protocol, prepend https
 };

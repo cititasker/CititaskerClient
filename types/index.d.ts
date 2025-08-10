@@ -2,6 +2,12 @@ interface IChildren {
   children: React.ReactNode;
 }
 
+interface IModal {
+  isOpen: boolean;
+  onClose: () => void;
+  children?: React.ReactNode;
+}
+
 interface IResponse {
   meta: {
     current_page: number;
@@ -135,7 +141,7 @@ interface ITask {
   offers: IOffer[];
   status: string;
   address: string;
-  payment_requested: string;
+  payment_requested: boolean;
 }
 
 interface ITaskCategory {

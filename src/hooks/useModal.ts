@@ -13,5 +13,6 @@ export default function useModal(v?: boolean): UseModalReturn {
     openModal,
     closeModal,
     toggleModal,
+    setIsOpen,
   };
 }

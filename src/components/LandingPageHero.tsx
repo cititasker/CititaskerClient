@@ -1,9 +1,14 @@
 "use client";
 import React from "react";
 import FormButton from "./forms/FormButton";
-import { ROUTES } from "@/constant";
+import { ROLE, ROUTES } from "@/constant";
+import { useAppSelector } from "@/store/hook";
 
 const LandingPageHero = () => {
+  const {
+    user: { role },
+    isAuth,
+  } = useAppSelector((state) => state.user);
   return (
     <div className="relative w-full min-h-[70dvh] md:min-h-[31.25rem] md:max-h-full">
       <div className="absolute top-0 left-0  w-full h-full bg-dark-secondary md:bg-[rgb(2,22,55)]/40 z-10 flex items-center">
@@ -17,16 +22,36 @@ const LandingPageHero = () => {
             </p>
           </div>
           <div className="pb-0 md:pb-20 flex items-center flex-wrap gap-4 w-fit mx-auto sm:ml-0">
-            <FormButton
-              text="Post a task for free"
-              className="flex-1 bg-secondary md:bg-primary"
-              href={ROUTES.POST_TASK}
-            />
-            <FormButton
-              text="Become a Tasker"
-              className="flex-1 bg-primary md:hidden"
-              href={ROUTES.SIGNUP}
-            />
+            {isAuth ? (
+              <>
+                {role == ROLE.poster ? (
+                  <FormButton
+                    text="Post a task for free"
+                    className="flex-1 bg-secondary shadow-md"
+                    href={ROUTES.POST_TASK}
+                  />
+                ) : (
+                  <FormButton
+                    text="Become a Tasker"
+                    className="flex-1 bg-secondary shadow-md"
+                    href={ROUTES.SIGNUP}
+                  />
+                )}
+              </>
+            ) : (
+              <>
+                <FormButton
+                  text="Post a task for free"
+                  className="flex-1 bg-secondary md:bg-primary shadow-md"
+                  href={ROUTES.POST_TASK}
+                />
+                <FormButton
+                  text="Become a Tasker"
+                  className="flex-1 bg-secondary shadow-md"
+                  href={ROUTES.SIGNUP}
+                />
+              </>
+            )}
           </div>
         </div>
       </div>

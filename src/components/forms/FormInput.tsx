@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
 import { FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import { X } from "lucide-react";
 
 interface FormInputProps {
   name: string;
@@ -56,8 +57,8 @@ export default function FormInput({
               aria-invalid={!!error}
               aria-describedby={error ? errorId : undefined}
               className={cn(
-                "pl-5 pr-10 w-full",
-                error && "border-red-500",
+                "pr-7 w-full",
+                error && "border-destructive",
                 inputClassName
               )}
               autoComplete="on"
@@ -70,10 +71,10 @@ export default function FormInput({
                   field.onChange("");
                   if (onClear) onClear();
                 }}
-                className="absolute right-5 top-1/2 -translate-y-1/2 text-muted-foreground focus:outline-none"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground focus:outline-none"
                 aria-label="Clear input"
               >
-                ✕
+                <X size={14} />
               </button>
             )}
 

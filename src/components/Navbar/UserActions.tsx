@@ -40,7 +40,9 @@ const UserActions = ({ user, onLogout }: Props) => {
   return (
     <div className="flex items-center gap-8">
       {(!user || user.role === ROLE.poster) && (
-        <FormButton href={ROUTES.POST_TASK}>Post a Task</FormButton>
+        <FormButton size="lg" href={ROUTES.POST_TASK}>
+          Post a Task
+        </FormButton>
       )}
 
       <div className="flex gap-5 items-center">

@@ -76,7 +76,7 @@ body {
     --chart-3: hsl(197 37% 24%);
     --chart-4: hsl(43 74% 66%);
     --chart-5: hsl(27 87% 67%);
-    --radius: hsl(0.5rem);
+    --radius: 0.5rem;
   }
   .dark {
     --background: hsl(0 0% 3.9%);
@@ -108,7 +108,7 @@ body {
 
 @layer components {
   .ProseMirror {
-    @apply min-h-[96px] outline-none whitespace-pre-wrap py-0;
+    @apply outline-none whitespace-pre-wrap py-0;
   }
   .label {
     @apply text-sm text-dark-secondary font-normal;
@@ -120,7 +120,7 @@ body {
     @apply font-normal leading-normal text-base text-center text-light-grey;
   }
   .form__error {
-    @apply text-xs text-red-500 font-medium mt-1.5;
+    @apply text-xs text-destructive font-medium mt-1.5;
   }
   .p-top {
     @apply pt-[90px] sm:pt-[100px];

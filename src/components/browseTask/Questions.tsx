@@ -3,7 +3,7 @@ import CommentBox from "./Offer/CommentBox";
 
 export default function Questions() {
   return (
-    <div>
+    <div className="w-full max-w-full">
       <CommentBox />
     </div>
   );

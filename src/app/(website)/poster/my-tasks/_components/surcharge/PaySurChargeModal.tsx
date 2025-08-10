@@ -27,9 +27,12 @@ export default function PaySurChargeModal({
         return <StepTwo nextStep={nextStep} acceptedOffer={acceptedOffer} />;
       case 3:
         return (
-          <div className="min-h-[450px] flex items-center justify-center">
-            <Success title="Success!" desc="Your payment was successful" />
-          </div>
+          <Success
+            title="Success!"
+            desc="Your payment was successful"
+            className="justify-center"
+            contentClassName="mt-0"
+          />
         );
       default:
         return <div>Default Step Content</div>;
@@ -37,7 +40,11 @@ export default function PaySurChargeModal({
   };
 
   return (
-    <CustomModal isOpen={isOpen} onClose={onClose}>
+    <CustomModal
+      isOpen={isOpen}
+      onClose={onClose}
+      title={currentStep == 1 ? "Pay surcharge" : undefined}
+    >
       <AnimatedStep
         direction={direction}
         currentStep={currentStep}

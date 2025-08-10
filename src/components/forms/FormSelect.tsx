@@ -7,9 +7,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
 import { cn } from "@/utils";
-import { Controller, useFormContext } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
+import { FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 
 interface IProps {
   options: { id: string | number; name: string }[];
@@ -40,43 +40,48 @@ const FormSelect = ({
   const error = errors[name]?.message;
 
   return (
-    <div className="w-full space-y-1">
-      {label && !inputLabel && (
-        <Label className={cn("block text-sm font-medium", labelStyle)}>
-          {label} {required && <span className="text-red-500">*</span>}
-        </Label>
-      )}
+    <FormField
+      name={name}
+      control={control}
+      render={({ field, fieldState }) => (
+        <FormItem>
+          <div className="w-full space-y-1">
+            {label && !inputLabel && (
+              <FormLabel
+                className={cn("block text-sm font-medium", labelStyle)}
+              >
+                {label}{" "}
+                {required && <span className="text-destructive">*</span>}
+              </FormLabel>
+            )}
 
-      <Controller
-        name={name}
-        control={control}
-        render={({ field }) => (
-          <Select
-            onValueChange={field.onChange}
-            defaultValue={field.value}
-            {...props}
-          >
-            <SelectTrigger
-              className={cn(
-                "rounded-[40px] h-[3.125rem] px-6",
-                error && "border-red-500"
-              )}
+            <Select
+              onValueChange={field.onChange}
+              defaultValue={field.value}
+              aria-invalid={!!fieldState.error}
+              {...props}
             >
-              <SelectValue placeholder={placeholder} />
-            </SelectTrigger>
-            <SelectContent>
-              {options?.map((option) => (
-                <SelectItem key={option.id} value={String(option.id)}>
-                  {option.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        )}
-      />
-
-      {error && <p className="text-xs text-red-500 mt-1">{String(error)}</p>}
-    </div>
+              <SelectTrigger
+                className={cn(
+                  "rounded-[40px] h-[3.125rem] px-6",
+                  error && "border-red-500"
+                )}
+              >
+                <SelectValue placeholder={placeholder} />
+              </SelectTrigger>
+              <SelectContent>
+                {options?.map((option) => (
+                  <SelectItem key={option.id} value={String(option.id)}>
+                    {option.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <FormMessage />
+          </div>
+        </FormItem>
+      )}
+    />
   );
 };
 

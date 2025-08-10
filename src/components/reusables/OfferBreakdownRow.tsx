@@ -13,7 +13,7 @@ const OfferBreakdownRow = ({
   isNegative?: boolean;
   icon?: React.ReactNode;
 }) => (
-  <div className="flex justify-between pb-5 mb-5 border-b-[0.6px] border-light-grey last:border-b-0">
+  <div className="flex justify-between pb-4 mb-4 border-b-[0.6px] border-light-grey last:border-b-0">
     <div className="flex items-center gap-1">
       <div>
         <p

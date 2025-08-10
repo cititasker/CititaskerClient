@@ -1,12 +1,13 @@
 import { Form } from "@/components/ui/form";
-import { useForm, UseFormReturn } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { calculateFees, formatCurrency } from "@/utils";
 import ActionsButtons from "@/components/reusables/ActionButtons";
 import FormCheckbox from "@/components/forms/FormCheckbox";
-import Link from "next/link";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAppSelector } from "@/store/hook";
 import { baseSchema } from "@/schema/offer";
+import AcceptTermsCheckboxLabel from "@/components/reusables/AcceptTermsCheckboxLabel";
 
 interface Props {
   prevStep: () => void;
@@ -35,10 +36,9 @@ export default function StepThree({ prevStep, nextStep }: Props) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col min-h-[450px]"
+        className="flex flex-col min-h-[350px]"
       >
-        <div className="space-y-8 mb-5">
-          <h2 className="text-2xl font-semibold text-black-2">Preview price</h2>
+        <div className="mb-5">
           <div>
             <p className="text-center text-dark-grey-2">Price increase</p>
 
@@ -49,8 +49,8 @@ export default function StepThree({ prevStep, nextStep }: Props) {
             </div>
           </div>
 
-          <div className="mt-10">
-            <div className="flex justify-between border-b border-light-grey pb-5 mb-5">
+          <div className="mt-8">
+            <div className="flex justify-between border-b border-light-grey pb-4 mb-4">
               <p className="text-base text-black-2">Service fee</p>
               <p className="text-base text-black-2">
                 - {formatCurrency({ value: feeInfo.fee })}
@@ -66,7 +66,7 @@ export default function StepThree({ prevStep, nextStep }: Props) {
             </div>
             <FormCheckbox
               name="accepted"
-              label={<Label />}
+              label={<AcceptTermsCheckboxLabel />}
               className="mt-10 sm:mt-[80px]"
             />
           </div>
@@ -84,19 +84,3 @@ export default function StepThree({ prevStep, nextStep }: Props) {
     </Form>
   );
 }
-
-const Label = () => {
-  return (
-    <p className="text-sm text-black-2">
-      I accept the{" "}
-      <Link href="#" className="text-primary">
-        Terms & Conditions
-      </Link>{" "}
-      including{" "}
-      <Link href="#" className="text-primary">
-        Insurance
-      </Link>
-      .
-    </p>
-  );
-};

@@ -120,7 +120,7 @@ const EditImageModal = ({
             />
           </div>
           {errors.portfolio?.message && (
-            <p className="text-sm text-red-500 text-center mt-2">
+            <p className="text-sm text-destructive text-center mt-2">
               {(errors.portfolio as any)?.message}
             </p>
           )}

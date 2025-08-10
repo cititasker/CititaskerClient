@@ -39,7 +39,7 @@ const ProfileSidebar = () => {
         <div className="p-5 pb-5 sm:pb-8 border-b border-light-grey">
           <div className="flex items-center gap-1 mb-4">
             <IDistance className="shrink-0" />
-            <p className="text-sm text-black">Bodore Ajah, Lagos</p>
+            <p className="text-sm text-black">{user?.location}</p>
           </div>
           <div className="flex items-center gap-1 mb-6">
             <div className="flex items-center gap-1">
@@ -54,16 +54,20 @@ const ProfileSidebar = () => {
           </div>
           <div>
             <p className="text-base text-black font-semibold mb-3">Skills</p>
-            <div className="flex flex-wrap gap-2">
-              {user?.skills.map((el, i) => (
-                <Badge
-                  key={i}
-                  className="py-2 px-4 bg-light-grey text-black text-xs rounded-40"
-                >
-                  {el}
-                </Badge>
-              ))}
-            </div>
+            {user?.skills.length ? (
+              <div className="flex flex-wrap gap-2">
+                {user?.skills.map((el, i) => (
+                  <Badge
+                    key={i}
+                    className="py-2 px-4 bg-light-grey text-black text-xs rounded-40"
+                  >
+                    {el}
+                  </Badge>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-black-2">No skills added</p>
+            )}
           </div>
         </div>
         <div className="p-5">

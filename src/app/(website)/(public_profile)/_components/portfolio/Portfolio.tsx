@@ -7,14 +7,14 @@ interface IProps {
   id: any;
 }
 export default function Portfolio({ id }: IProps) {
-  const [images, setImages] = useState<{ src: string }[]>([]);
+  const [images, setImages] = useState<{ src: string; key: string }[]>([]);
   const { data } = useGetPorfolio({ id });
 
   const portfolio = data?.data?.portfolio || [];
 
   useEffect(() => {
     if (portfolio.length) {
-      setImages(portfolio.map((src) => ({ src })));
+      setImages(portfolio.map((src) => ({ src: src.url, key: src.key })));
     }
   }, [portfolio]);
 
