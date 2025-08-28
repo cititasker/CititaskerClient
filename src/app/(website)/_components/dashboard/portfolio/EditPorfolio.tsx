@@ -17,8 +17,8 @@ import FormButton from "@/components/forms/FormButton";
 import { Trash2, Upload } from "lucide-react";
 import { API_ROUTES } from "@/constant";
 import { useGetPorfolio } from "@/services/user/user.hook";
-import DeleteConfirmationModal from "@/components/reusables/Modals/DeleteConfirmationModal";
 import useModal from "@/hooks/useModal";
+import PulseLoader from "@/components/reusables/loaders/PulseLoader";
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB in bytes
 
@@ -50,7 +50,7 @@ const EditPorfolio = () => {
   const queryClient = useQueryClient();
   const deletePortfolio = useModal();
 
-  const { data } = useGetPorfolio({ id: user.id });
+  const { data, isPending, isLoading } = useGetPorfolio({ id: user.id });
 
   const portfolio = data?.data?.portfolio;
 
@@ -156,6 +156,8 @@ const EditPorfolio = () => {
     return images.some((img) => img.file);
   }, [images]);
 
+  if (isLoading || isPending) return <PulseLoader />;
+
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onsubmit)}>
@@ -224,7 +226,7 @@ const EditPorfolio = () => {
         selectedImage={selectedImage}
         handleSaveImage={handleSaveImage}
       />
-      <DeleteConfirmationModal
+      {/* <DeleteConfirmationModal
         isOpen={deletePortfolio.isOpen}
         onClose={deletePortfolio.closeModal}
         desc={
@@ -235,7 +237,7 @@ const EditPorfolio = () => {
         okText={!toDeleteImage?.key ? "Remove" : "Delete"}
         loading={deleteMutation.isPending}
         handleSubmit={handleDelete}
-      />
+      /> */}
     </FormProvider>
   );
 };

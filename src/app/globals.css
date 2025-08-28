@@ -32,6 +32,11 @@
   --F9F9F9: hsl(0 0% 97.8%); /* #F9F9F9 */
 }
 
+html,
+body {
+  height: 100%;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -123,13 +128,13 @@ body {
     @apply text-xs text-destructive font-medium mt-1.5;
   }
   .p-top {
-    @apply pt-[90px] sm:pt-[100px];
+    @apply pt-[90px] md:pt-[100px];
   }
   .paper {
     @apply rounded-30 bg-white shadow-sm w-full;
   }
   .container-w {
-    @apply px-4 max-w-[1350px] w-full mx-auto pt-8 pb-8;
+    @apply px-4 max-w-[1440px] w-full mx-auto pt-8 pb-8;
   }
 }
 

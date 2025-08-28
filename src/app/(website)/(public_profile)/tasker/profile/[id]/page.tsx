@@ -32,7 +32,7 @@ export default function page() {
       className=""
       triggerClassName="py-5 px-[30px] font-normal"
       listClassName="mb-5 sm:mb-[30px] sticky top-0 bg-white z-10"
-      contentClassName="px-5 sm:px-[30px]"
+      contentClassName="px-5 sm:px-[30px] pb-5 sm:pb-[30px]"
     />
   );
 }

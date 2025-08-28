@@ -14,7 +14,7 @@ const Loader = dynamic(() => import("@/components/reusables/Loading"), {
 
 function ErrorFallback({ error }: { error: any }) {
   return (
-    <div className="bg-red-100 p-4 rounded-md">
+    <div className="bg-red-100 p-4 rounded-md max-w-sm w-full">
       <h2 className="text-red-700 font-bold">Something went wrong</h2>
       <p>{error?.response?.data?.message || error.message}</p>
     </div>

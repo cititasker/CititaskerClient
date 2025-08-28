@@ -46,7 +46,7 @@ export default function Faq() {
   };
 
   return (
-    <div>
+    <>
       {!isOpen && (
         <div className="w-fit ml-auto mb-4">
           {rearrange.isOpen ? (
@@ -85,17 +85,15 @@ export default function Faq() {
         </div>
       )}
 
-      <div>
-        {isOpen ? (
-          <EditFAQ handleCancel={closeModal} />
-        ) : (
-          <FAQList
-            id={user.id}
-            rearrange={rearrange.isOpen}
-            onFaqsReorderChange={setReorderedFaqs}
-          />
-        )}
-      </div>
-    </div>
+      {isOpen ? (
+        <EditFAQ handleCancel={closeModal} />
+      ) : (
+        <FAQList
+          id={user.id}
+          rearrange={rearrange.isOpen}
+          onFaqsReorderChange={setReorderedFaqs}
+        />
+      )}
+    </>
   );
 }

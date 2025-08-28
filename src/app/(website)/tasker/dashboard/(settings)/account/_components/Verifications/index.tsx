@@ -133,7 +133,7 @@ const Verifications = () => {
   };
 
   return (
-    <div className="relative pt-7">
+    <div className="relative w-full">
       <div className="mb-8">
         <h3 className="text-xl font-bold mb-1">Verify Account</h3>
         <p className="text-cs-dark-4">
@@ -147,7 +147,9 @@ const Verifications = () => {
           className="mb-3 cursor-pointer h-[60px] flex items-center gap-[14px] py-3 px-[14px] max-w-[400px] w-full rounded-md bg-F9F9F9"
         >
           <Icons.profileTick />
-          <span className="font-semibold">Identity verification</span>
+          <span className="text-sm sm:text-base font-semibold">
+            Identity verification
+          </span>
           <StatusBadge
             status={user.kyc_stage?.id_verification ? "verified" : "unverified"}
             showDot
@@ -158,7 +160,9 @@ const Verifications = () => {
           className="cursor-pointer h-[60px] flex items-center gap-[14px] py-3 px-[14px] max-w-[400px] w-full rounded-md bg-F9F9F9"
         >
           <Icons.cardPos />
-          <span className="font-semibold">Payment method verification</span>
+          <span className="text-sm sm:text-base font-semibold">
+            Payment method verification
+          </span>
           <StatusBadge
             status={user.kyc_stage?.bank ? "verified" : "unverified"}
             showDot

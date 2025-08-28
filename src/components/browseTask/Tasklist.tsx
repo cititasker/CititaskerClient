@@ -57,7 +57,7 @@ export default function TaskList() {
         //   {loadingMessage}
         // </div>
       )}
-      {isLoading && renderSkeletons()}
+      {isLoading && <div className="grid gap-4">{renderSkeletons()}</div>}
 
       {!isLoading && tasks.length === 0 && renderEmpty()}
 

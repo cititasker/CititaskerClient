@@ -36,8 +36,6 @@ export const GooglePlacesAutocomplete = ({
   const { control, setValue } = useFormContext();
   const { input, setInput, options } = useGooglePlacesAutocomplete();
 
-  const listRef = useRef<HTMLDivElement>(null);
-
   const fetchPlaceDetails = (placeId: string) => {
     if (typeof window !== "undefined" && window.google?.maps?.places) {
       const service = new window.google.maps.places.PlacesService(

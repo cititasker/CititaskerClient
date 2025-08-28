@@ -47,9 +47,7 @@ const FormSelect = ({
         <FormItem>
           <div className="w-full space-y-1">
             {label && !inputLabel && (
-              <FormLabel
-                className={cn("block text-sm font-medium", labelStyle)}
-              >
+              <FormLabel className={labelStyle}>
                 {label}{" "}
                 {required && <span className="text-destructive">*</span>}
               </FormLabel>

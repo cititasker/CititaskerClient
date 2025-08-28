@@ -57,7 +57,7 @@ export default function FormInput({
               aria-invalid={!!error}
               aria-describedby={error ? errorId : undefined}
               className={cn(
-                "pr-7 w-full",
+                "pr-8 w-full",
                 error && "border-destructive",
                 inputClassName
               )}
@@ -71,7 +71,7 @@ export default function FormInput({
                   field.onChange("");
                   if (onClear) onClear();
                 }}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground focus:outline-none"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground focus:outline-none"
                 aria-label="Clear input"
               >
                 <X size={14} />
@@ -82,7 +82,7 @@ export default function FormInput({
               <button
                 type="button"
                 onClick={() => setShowPassword((s) => !s)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground focus:outline-none"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground focus:outline-none"
                 tabIndex={-1}
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >

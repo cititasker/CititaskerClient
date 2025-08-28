@@ -3,7 +3,7 @@
 import React from "react";
 import moment from "moment";
 import { CalendarIcon } from "lucide-react";
-import { Controller, useFormContext } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 
 import {
   Popover,
@@ -12,9 +12,8 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { Label } from "@/components/ui/label";
-import FormError from "../reusables/FormError";
 import { cn } from "@/lib/utils";
+import { FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 
 interface FormDatePickerProps {
   name: string;
@@ -40,31 +39,27 @@ export default function FormDatePicker({
   const { control } = useFormContext();
 
   return (
-    <div className={cn("space-y-2 w-full", className)}>
-      {label && (
-        <Label
-          htmlFor={name}
-          className={cn("block text-sm font-medium", labelClassName)}
-        >
-          {label}
-        </Label>
-      )}
+    <FormField
+      name={name}
+      control={control}
+      render={({ field }) => {
+        const selectedDate = field.value
+          ? moment(field.value, "DD-MM-YYYY").toDate()
+          : null;
 
-      <Controller
-        name={name}
-        control={control}
-        render={({ field }) => {
-          const selectedDate = field.value
-            ? moment(field.value, "DD-MM-YYYY").toDate()
-            : null;
-
-          return (
+        return (
+          <FormItem className={cn("w-full", className)}>
+            {label && (
+              <FormLabel htmlFor={name} className={labelClassName}>
+                {label}
+              </FormLabel>
+            )}
             <Popover>
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
                   className={cn(
-                    "w-full border-input justify-start text-left font-normal hover:bg-transparent shadow-none",
+                    "w-full border-input justify-start text-left font-normal hover:bg-transparent shadow-none bg-transparent",
                     !field.value && "text-muted-foreground",
                     triggerClass
                   )}
@@ -101,11 +96,10 @@ export default function FormDatePicker({
                 />
               </PopoverContent>
             </Popover>
-          );
-        }}
-      />
-
-      <FormError name={name} />
-    </div>
+            <FormMessage />
+          </FormItem>
+        );
+      }}
+    />
   );
 }

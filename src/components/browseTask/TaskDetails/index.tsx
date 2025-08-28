@@ -74,7 +74,7 @@ const TaskDetails = ({ back }: IProps) => {
 
   return (
     <Card className="no-scrollbar relative">
-      <div className="rounded-t-xl pl-4 pr-1 sm:px-12 h-[65px] flex justify-between items-center border-b sticky top-0 z-[20] bg-white">
+      <div className="rounded-t-xl pl-4 pr-1 sm:px-8 h-[65px] flex justify-between items-center border-b sticky top-0 z-[20] bg-white">
         <Link
           href={back}
           className="flex items-center gap-2 text-base text-primary font-normal"

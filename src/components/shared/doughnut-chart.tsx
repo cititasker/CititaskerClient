@@ -1,10 +1,9 @@
 "use client";
 
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import React from "react";
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
-import { Select } from "../reusables/Select";
 
 const data = [
   { id: 1, value: 5, label: "Pending Payment" },
@@ -21,18 +20,6 @@ const LEGENDS = [
 export const DoughnutChart: React.FC = () => {
   return (
     <Card className="max-w-[288px] p-0 w-full rounded-2xl border flex flex-col overflow-hidden shadow-none px-[14px] pt-[18px]">
-      <CardHeader className="flex justify-end p-0">
-        <Select
-          containerClassName="w-fit self-end"
-          size="md"
-          value="weekly"
-          options={[
-            { label: "This week", value: "weekly" },
-            { label: "This year", value: "yearly" },
-          ]}
-        />
-      </CardHeader>
-
       <CardContent className="flex flex-col gap-6 px-0">
         <div className="relative min-h-[250px]">
           <ResponsiveContainer width="100%">

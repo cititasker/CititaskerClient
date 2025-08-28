@@ -9,6 +9,7 @@ import { profileSummary } from "./mock";
 import Certifications from "./Certifications";
 import Skills from "./Skills";
 import { useGetUserProfile } from "@/services/user/user.hook";
+import PulseLoader from "@/components/reusables/loaders/PulseLoader";
 
 interface Props {
   id: any;
@@ -24,7 +25,7 @@ const Profile = ({ id, onEdit, isEdit, canShare = true }: Props) => {
     { institution: string; name: string; year: string }[]
   >([]);
 
-  const { data } = useGetUserProfile({ id });
+  const { data, isPending, isLoading } = useGetUserProfile({ id });
 
   useEffect(() => {
     const user = data?.data;
@@ -34,6 +35,8 @@ const Profile = ({ id, onEdit, isEdit, canShare = true }: Props) => {
     setSkills(user.skills?.map((name: string) => ({ name })) || []);
     setCertifications(user.certifications || []);
   }, [data]);
+
+  if (isLoading || isPending) return <PulseLoader />;
 
   return (
     <div>

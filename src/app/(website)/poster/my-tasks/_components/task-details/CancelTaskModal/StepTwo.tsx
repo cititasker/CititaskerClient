@@ -7,12 +7,16 @@ import { useMemo } from "react";
 export default function StepTwo() {
   const { taskDetails } = useAppSelector((state) => state.task);
 
-  const acceptedOffer = useMemo(
-    () => taskDetails?.offers?.find((offer) => offer.status === "accepted"),
-    [taskDetails?.offers]
-  );
+  console.log(66, taskDetails);
 
-  const { fee, receive } = calculateFees(acceptedOffer?.offer_amount ?? 0);
+  const amountPaid = useMemo(() => {
+    const offers = taskDetails?.offers ?? [];
+    const accepted = offers.find((offer) => offer.status === "accepted");
+
+    return accepted?.offer_amount ?? taskDetails?.budget ?? 0;
+  }, [taskDetails]);
+
+  const { fee, receive } = calculateFees(amountPaid);
 
   // Helper for rendering formatted currency
   const renderCurrency = (value: number) =>
@@ -21,12 +25,11 @@ export default function StepTwo() {
   return (
     <div className="space-y-8 mb-5">
       {/* Cancellation Fee Section */}
-      {/* <h2 className="text-2xl font-semibold text-black-2">Cancellation fee</h2> */}
       <div className="text-center">
         <p className="text-dark-grey-2">Amount held in CitiPay</p>
         <div className="mt-2 mx-auto bg-light-blue rounded-2xl px-8 py-5 w-fit">
           <p className="text-[32px] text-black-2 font-semibold">
-            {renderCurrency(acceptedOffer?.offer_amount ?? 0)}
+            {renderCurrency(amountPaid)}
           </p>
         </div>
         <p className="text-sm text-muted-foreground mt-4 max-w-[420px] mx-auto">

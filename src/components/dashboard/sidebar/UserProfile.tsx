@@ -8,7 +8,7 @@ const UserProfile = () => {
   const { user } = useAppSelector((state) => state.user);
 
   return (
-    <div className="px-5 pb-8 pt-6 border-b border-light-grey flex flex-col items-center">
+    <div className="hidden md:flex px-5 pb-8 pt-6 border-b border-light-grey flex-col items-center">
       <Image
         src={user.profile_image ?? defaultProfile}
         alt="user profile"

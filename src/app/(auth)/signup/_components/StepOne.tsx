@@ -35,8 +35,9 @@ const StepOne = ({ onNext }: { onNext: () => void }) => {
       showSnackbar(data?.message, "success");
       onNext();
     },
-    onError: (error: any) =>
-      showSnackbar(error?.message || "Registration failed", "error"),
+    onError: (error: any) => {
+      showSnackbar(error?.message || "Registration failed", "error");
+    },
   });
 
   const onSubmit: SubmitHandler<loginSchemaType> = (data) => {

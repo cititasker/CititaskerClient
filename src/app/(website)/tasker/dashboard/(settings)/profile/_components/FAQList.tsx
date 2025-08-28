@@ -10,7 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { GripHorizontal, GripVertical, MoreVertical } from "lucide-react";
+import { GripVertical, MoreVertical } from "lucide-react";
 import React, { Fragment, useEffect, useState } from "react";
 import EditSingleFaq from "./EditSingleFaq";
 import { useGetFaq } from "@/services/user/user.hook";
@@ -32,12 +32,11 @@ import {
 import {
   arrayMove,
   SortableContext,
-  sortableKeyboardCoordinates,
-  useSortable,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
 import SortableItem from "./SortableItem";
+import Spinner from "@/components/reusables/Spinner";
+import PulseLoader from "@/components/reusables/loaders/PulseLoader";
 
 const MoreAction = ({
   onEdit,
@@ -83,7 +82,7 @@ export default function FAQList({
 
   const [index, setIndex] = useState<number | null>(null); // Manage which FAQ is being edited
   const [faqs, setFaqs] = useState<UserFaq[]>([]);
-  const { data } = useGetFaq({ id });
+  const { data, isLoading, isPending } = useGetFaq({ id });
   const { showSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
   const deleteFaqModal = useModal();
@@ -170,11 +169,13 @@ export default function FAQList({
     }
   };
 
-  if (faqs.length < 1) return <Empty text="No FAQ" />;
-
   return (
     <div>
-      {rearrange ? (
+      {isLoading || isPending ? (
+        <PulseLoader />
+      ) : faqs.length < 1 ? (
+        <Empty text="No FAQ" />
+      ) : rearrange ? (
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}

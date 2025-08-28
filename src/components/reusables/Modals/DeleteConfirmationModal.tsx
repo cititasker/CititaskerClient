@@ -1,6 +1,5 @@
 import React from "react";
-import ConfirmationModal from "./ConfirmationModal";
-import { TriangleAlert } from "lucide-react";
+import { ConfirmModal } from "./ConfirmModal";
 
 interface IProps {
   isOpen: boolean;
@@ -23,44 +22,26 @@ export default function DeleteConfirmationModal({
   desc,
   okText = "Delete",
   cancelText = "Cancel",
-  children,
+  children = undefined,
   showIcon = false,
 }: IProps) {
   const title = text || "Are you sure?";
-  const belowText =
+  const description =
     desc ||
     "You want to delete the selected item? Note: This action is irreversible and will permanently delete the selection";
   return (
-    <ConfirmationModal
+    <ConfirmModal
       open={isOpen}
       onClose={onClose}
-      okVariant="outline"
-      cancelVariant="default"
-      cancelStyle=""
+      variant="destructive"
+      title={title}
+      description={description}
       cancelText={cancelText}
-      okStyle="text-red-state-color border-red-state-color bg-red-state-color-fill"
-      okText={okText}
+      confirmText={okText}
       loading={loading}
-      handleSubmit={handleSubmit}
-      containerClass="max-w-[496px]"
+      onConfirm={handleSubmit}
     >
-      {children ?? (
-        <div className="w-fit flex flex-col items-center text-center mb-5 sm:mb-10 mx-auto">
-          {showIcon ? (
-            <div className="mb-5">
-              <TriangleAlert
-                strokeWidth={1}
-                size={70}
-                className="text-destructive"
-              />
-            </div>
-          ) : null}
-          <div>
-            <h1 className="text-2xl mb-2 sm:mb-4 font-medium">{title}</h1>
-            <p className="max-w-[330px] mx-auto sm:max-w-full">{belowText}</p>
-          </div>
-        </div>
-      )}
-    </ConfirmationModal>
+      {children}
+    </ConfirmModal>
   );
 }
