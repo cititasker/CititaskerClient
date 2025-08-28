@@ -95,7 +95,7 @@ const UserActions = ({ user, onLogout }: Props) => {
               </div>
             </div>
 
-            <FormButton size="default" className="w-full mb-3 rounded-full">
+            <FormButton size="lg" className="w-full mb-3 rounded-full">
               Switch to {user.role === ROLE.tasker ? "Poster" : "Tasker"}
             </FormButton>
 

@@ -9,13 +9,13 @@ export default function Page() {
   const activeTab = searchParams.get("tab");
 
   return (
-    <div className="relative">
+    <div className="relative bg-white h-full overflow-auto no-scrollbar">
       <CustomTab
         items={tabs}
         defaultId={activeTab ?? undefined}
         triggerClassName="py-5 px-[30px] font-normal"
         listClassName="mb-[30px] sticky top-0 bg-white z-10"
-        contentClassName="px-[50px]"
+        contentClassName="px-5 sm:px-[30px] lg:px-[50px]"
       />
     </div>
   );

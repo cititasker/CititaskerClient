@@ -18,7 +18,7 @@ const DashboardSidebar = ({ role }: IProps) => {
   };
 
   return (
-    <Card className="max-w-[300px] w-full h-fit overflow-hidden sticky top-0 rounded-[30px] pb-10">
+    <Card className="hidden sm:block max-w-[300px] w-fit md:w-full h-fit overflow-hidden sticky top-0">
       <UserProfile />
       <div>
         {menuData.map((item, index) => (

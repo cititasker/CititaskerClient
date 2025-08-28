@@ -3,8 +3,13 @@
 import CustomAccordion from "@/components/reusables/CustomAccordion";
 import CategoryFilter from "./CategoryFilter";
 import { Card } from "@/components/ui/card";
+import PriceFilter from "./PriceFilter";
+import DistanceFilter from "./DistanceFilter";
 
-const FilterList = () => {
+interface IProps {
+  searchTerm?: string;
+}
+const FilterList = ({ searchTerm }: IProps) => {
   const items = [
     {
       id: "category",
@@ -14,30 +19,22 @@ const FilterList = () => {
     {
       id: "location",
       renderTrigger: () => <span>Location</span>,
-      renderContent: () => (
-        <p className="text-sm text-muted-foreground">
-          Location filter content here.
-        </p>
-      ),
+      renderContent: () => <DistanceFilter />,
     },
     {
       id: "price",
       renderTrigger: () => <span>Price</span>,
-      renderContent: () => (
-        <p className="text-sm text-muted-foreground">
-          Price filter content here.
-        </p>
-      ),
+      renderContent: () => <PriceFilter />,
     },
   ];
 
   return (
-    <Card className="rounded-[20px]">
+    <Card className="md:rounded-[20px] shadow-none md:shadow-sm">
       <CustomAccordion
         items={items}
         type="multiple"
         defaultValue={["category"]}
-        itemWrapperClassName="px-5 border-b-[0.8px] border-light-grey"
+        itemWrapperClassName="md:px-5 border-b-[0.8px] border-light-grey"
       />
     </Card>
   );

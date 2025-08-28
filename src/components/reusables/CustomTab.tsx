@@ -1,4 +1,7 @@
+"use client";
+
 import React from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 
@@ -15,6 +18,7 @@ interface CustomTabProps {
   listClassName?: string;
   triggerClassName?: string;
   contentClassName?: string;
+  queryKey?: string;
 }
 
 const CustomTab: React.FC<CustomTabProps> = ({
@@ -24,7 +28,11 @@ const CustomTab: React.FC<CustomTabProps> = ({
   listClassName,
   triggerClassName,
   contentClassName,
+  queryKey = "tab",
 }) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const tabItems = React.useMemo(
     () =>
       items.map((item) => ({
@@ -34,24 +42,26 @@ const CustomTab: React.FC<CustomTabProps> = ({
     [items]
   );
 
-  const [selectedTab, setSelectedTab] = React.useState(
-    defaultId ?? tabItems[0]?.id
-  );
+  const rawSelected = searchParams.get(queryKey);
+  const selectedFromQuery = rawSelected ?? undefined;
+  const fallbackId = defaultId ?? tabItems[0]?.id;
+  const selectedTab = tabItems.some(({ id }) => id === selectedFromQuery)
+    ? selectedFromQuery
+    : fallbackId;
 
-  React.useEffect(() => {
-    if (tabItems.length && !tabItems.find((tab) => tab.id === selectedTab)) {
-      setSelectedTab(tabItems[0]?.id);
-    }
-  }, [tabItems, selectedTab]);
+  const handleTabChange = (val: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set(queryKey, val);
+    router.replace(`?${params.toString()}`);
+  };
 
   if (!tabItems.length) return null;
 
   return (
     <Tabs
       value={selectedTab}
-      onValueChange={(val) => setSelectedTab(val)}
+      onValueChange={handleTabChange}
       className={cn("pb-10", className)}
-      defaultValue={defaultId}
     >
       <TabsList
         className={cn(
@@ -74,7 +84,11 @@ const CustomTab: React.FC<CustomTabProps> = ({
       </TabsList>
 
       {tabItems.map(({ id, render }) => (
-        <TabsContent key={id} value={id} className={contentClassName}>
+        <TabsContent
+          key={id}
+          value={id}
+          className={cn("relative", contentClassName)}
+        >
           {render()}
         </TabsContent>
       ))}

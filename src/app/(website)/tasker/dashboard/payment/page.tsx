@@ -6,12 +6,14 @@ import { tabs } from "./_components/data";
 
 export default function Page() {
   return (
-    <CustomTab
-      items={tabs}
-      className=""
-      triggerClassName="py-5 px-[30px] font-normal"
-      listClassName="mb-[30px] sticky top-0 bg-white z-10"
-      contentClassName="px-[30px]"
-    />
+    <div className="bg-white h-full overflow-auto no-scrollbar">
+      <CustomTab
+        items={tabs}
+        className=""
+        triggerClassName="py-5 px-[30px] font-normal"
+        listClassName="mb-[30px] sticky top-0 bg-white z-10"
+        contentClassName="px-[30px]"
+      />
+    </div>
   );
 }

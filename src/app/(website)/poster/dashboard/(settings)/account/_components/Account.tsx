@@ -103,7 +103,7 @@ export default function Account() {
             alt="user profile"
             width={200}
             height={200}
-            className="object-cover w-full h-full rounded-full object-top"
+            className="object-cover w-full h-full rounded-full"
           />
           <div
             className={`absolute inset-0 flex items-center justify-center bg-black/30 transition-opacity ${

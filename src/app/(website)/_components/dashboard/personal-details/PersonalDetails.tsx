@@ -14,12 +14,13 @@ import { API_ROUTES, ROLE } from "@/constant";
 import { FormSchema, schema } from "../schema";
 import Profile from "@/app/(website)/(public_profile)/_components/profile";
 import { useGetUserProfile } from "@/services/user/user.hook";
+import PulseLoader from "@/components/reusables/loaders/PulseLoader";
 
 const PersonalDetails = () => {
   const [edit, setEdit] = useState(false);
   const { user } = useAppSelector((state) => state.user);
   const queryClient = useQueryClient();
-  const { data } = useGetUserProfile({ id: user.id });
+  const { data, isLoading, isPending } = useGetUserProfile({ id: user.id });
 
   const methods = useForm<FormSchema>({
     resolver: zodResolver(schema),
@@ -83,6 +84,8 @@ const PersonalDetails = () => {
       />
     );
   }
+
+  if (isLoading || isPending) return <PulseLoader />;
 
   return (
     <FormProvider {...methods}>

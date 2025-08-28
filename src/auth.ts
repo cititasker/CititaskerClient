@@ -32,7 +32,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   secret: process.env.AUTH_SECRET,
   session: {
     strategy: "jwt",
-    maxAge: 60 * 60 * 24 * 7, // 7 days session lifetime
+    maxAge: 60 * 1 * 24 * 7, // 7 days session lifetime
   },
   jwt: {
     maxAge: 60 * 60 * 24 * 7, // 7 days token lifetime

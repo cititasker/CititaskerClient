@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import TaskerOffer from "./TaskerOffer";
-import ConfirmationModal from "@/components/reusables/Modals/ConfirmationModal";
 import { withdrawOffer } from "@/services/offer";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import { queryClient } from "@/providers/ServerProvider";
@@ -13,7 +12,6 @@ import { setUserTaskOffer } from "@/store/slices/task";
 import { errorHandler } from "@/utils";
 import { API_ROUTES } from "@/constant";
 import Empty from "@/components/myTasks/Empty";
-import DeleteConfirmationModal from "@/components/reusables/Modals/DeleteConfirmationModal";
 import { ConfirmModal } from "@/components/reusables/Modals/ConfirmModal";
 import useModal from "@/hooks/useModal";
 
@@ -26,14 +24,12 @@ const Offer: React.FC<OfferProps> = ({ offers }) => {
   const dispatch = useAppDispatch();
   const { showSnackbar } = useSnackbar();
 
-  const [modalOpen, setModalOpen] = useState(false);
   const [selectedOfferId, setSelectedOfferId] = useState<string | null>(null);
   const withdrawModal = useModal();
 
   const handleToggleModal = (offerId?: string) => {
     setSelectedOfferId(offerId ?? null);
     withdrawModal.openModal();
-    // setModalOpen((prev) => !prev);
   };
 
   const { mutate, isPending } = useMutation({
@@ -83,18 +79,7 @@ const Offer: React.FC<OfferProps> = ({ offers }) => {
         onConfirm={handleWithdraw}
         confirmText="Withdraw"
         cancelText="Keep my offer"
-      ></ConfirmModal>
-
-      {/* <DeleteConfirmationModal
-        isOpen={modalOpen}
-        onClose={handleToggleModal}
-        text="Withdraw Offer"
-        desc="Are you sure you want to withdraw your offer?"
-        okText="Withdraw"
-        cancelText="Keep my offer"
-        loading={isPending}
-        handleSubmit={handleWithdraw}
-      /> */}
+      />
     </>
   );
 };

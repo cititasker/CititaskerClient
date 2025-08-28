@@ -34,6 +34,8 @@ import IAdd from "@/assets/icons/add.svg";
 import ICalendar from "@/assets/icons/calendar.svg";
 import IDatabase from "@/assets/icons/database.svg";
 import IInfoPrimary from "@/assets/icons/info-primary.svg";
+import IFilterLines from "@/assets/icons/filter-lines.svg";
+import ISearch from "@/assets/icons/search-normal.svg";
 
 export {
   IChat,
@@ -70,6 +72,8 @@ export {
   ICalendar,
   IDatabase,
   IInfoPrimary,
+  IFilterLines,
+  ISearch,
 
   // Big Icons
   ITickCircle,

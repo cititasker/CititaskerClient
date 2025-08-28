@@ -48,11 +48,11 @@ const Notification = () => {
       {sections.map(({ title, desc, name }, i) => (
         <div
           key={i}
-          className="w-full rounded-2xl border border-muted px-8 py-6"
+          className="w-full rounded-2xl border border-muted px-4 md:px-8 py-6"
         >
           <p className="text-black font-semibold mb-2">{title}</p>
           <p className="text-black font-normal">{desc}</p>
-          <div className="mt-8 flex items-center gap-8">
+          <div className="mt-5 sm:mt-8 flex items-center gap-8">
             <FormSwitch
               label="Email"
               value={email}
