@@ -1,7 +1,7 @@
 "use client";
 
 import CustomAccordion from "@/components/reusables/CustomAccordion";
-import CategoryFilter from "./CategoryFilter";
+import CategoryFilter from "./CategoryFilter/CategoryFilter";
 import { Card } from "@/components/ui/card";
 import PriceFilter from "./PriceFilter";
 import DistanceFilter from "./DistanceFilter";

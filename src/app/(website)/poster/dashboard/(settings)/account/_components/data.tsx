@@ -1,8 +1,6 @@
-import Account from "../_components/Account";
-import Notification from "../_components/Notification";
-import Security from "../_components/Security";
-import FAQ from "./FAQ";
-import Verifications from "./Verifications";
+import Security from "@/app/(website)/_components/dashboard/Security";
+import Notification from "@/app/(website)/_components/dashboard/Notification";
+import Account from "@/app/(website)/_components/dashboard/Account";
 
 export const tabs = [
   {
@@ -19,15 +17,5 @@ export const tabs = [
     label: `Security`,
     value: "security",
     render: () => <Security />,
-  },
-  {
-    label: `Verifications`,
-    value: "verifications",
-    render: () => <Verifications />,
-  },
-  {
-    label: `FAQ`,
-    value: "faq",
-    render: () => <FAQ />,
   },
 ];

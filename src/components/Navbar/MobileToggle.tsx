@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { Menu } from "lucide-react";
 import { MdClose } from "react-icons/md";
 
 const MobileToggle = ({
@@ -17,11 +17,7 @@ const MobileToggle = ({
       />
     );
   return (
-    <Image
-      src="/icons/hamburger.svg"
-      alt="hamburger-icon"
-      width={20}
-      height={40}
+    <Menu
       className="md:hidden cursor-pointer w-auto h-auto"
       onClick={onClick}
     />

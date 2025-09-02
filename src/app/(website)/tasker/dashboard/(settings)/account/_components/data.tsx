@@ -1,7 +1,7 @@
 import Account from "@/app/(website)/_components/dashboard/Account";
-import Notification from "../_components/Notification";
-import Security from "../_components/Security";
 import Verifications from "./Verifications";
+import Security from "@/app/(website)/_components/dashboard/Security";
+import Notification from "@/app/(website)/_components/dashboard/Notification";
 
 export const tabs = [
   {

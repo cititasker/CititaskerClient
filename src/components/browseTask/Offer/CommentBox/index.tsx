@@ -10,16 +10,20 @@ import { z } from "zod";
 import { FormProvider, useForm } from "react-hook-form";
 import { defaultProfile } from "@/constant/images";
 import { API_ROUTES } from "@/constant";
-import { Loader } from "lucide-react";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import FormError from "@/components/reusables/FormError";
-
 import RichEditor from "./RichEditor";
-import { ISend2 } from "@/constant/icons";
 
 const schema = z.object({
   content: z.string().min(1, "Please write your reply"),
   offer_id: z.number().nullable(),
+  attachments: z
+    .array(
+      z.instanceof(File).refine((file) => file.size <= 5_000_000, {
+        message: "File size must not be more than 5MB",
+      })
+    )
+    .optional(),
 });
 
 type SchemaType = z.infer<typeof schema>;
@@ -39,11 +43,12 @@ const CommentBox = ({ offer_id }: CommentBoxProps) => {
     defaultValues: {
       content: "",
       offer_id: offer_id,
+      attachments: [],
     },
     resolver: zodResolver(schema),
   });
 
-  const { handleSubmit, setValue, reset } = methods;
+  const { handleSubmit, setValue, reset, watch } = methods;
 
   const mutation = useMutation({
     mutationFn: replyOffer,
@@ -65,8 +70,14 @@ const CommentBox = ({ offer_id }: CommentBoxProps) => {
     setValue("content", html);
   };
 
-  const onSubmit = handleSubmit((values) => {
-    mutation.mutate(values);
+  const onSubmit = handleSubmit((values: SchemaType) => {
+    console.log(11, values);
+    const { attachments, content, offer_id } = values;
+    const formData = new FormData();
+    formData.append("offer_id", `${offer_id}`);
+    formData.append("content", `${content}`);
+    attachments?.forEach((file) => formData.append("images[]", file));
+    mutation.mutate(formData);
   });
 
   return (
@@ -82,7 +93,12 @@ const CommentBox = ({ offer_id }: CommentBoxProps) => {
           />
 
           <div className="flex-1 min-w-0 relative max-w-full">
-            <RichEditor onContentUpdate={onEditorContentUpdate} />
+            <RichEditor
+              onContentUpdate={onEditorContentUpdate}
+              isLoading={mutation.isPending}
+              setAttachments={(files) => setValue("attachments", files)}
+              attachments={watch("attachments") ?? []}
+            />
             <FormError name="content" />
           </div>
         </div>

@@ -19,9 +19,9 @@ const LEGENDS = [
 
 export const DoughnutChart: React.FC = () => {
   return (
-    <Card className="max-w-[288px] p-0 w-full rounded-2xl border flex flex-col overflow-hidden shadow-none px-[14px] pt-[18px]">
+    <Card className="md:max-w-[288px] p-0 w-full rounded-2xl border flex flex-col overflow-hidden shadow-none px-[14px] pt-[18px]">
       <CardContent className="flex flex-col gap-6 px-0">
-        <div className="relative min-h-[250px]">
+        <div className="relative h-[250px]">
           <ResponsiveContainer width="100%">
             <PieChart>
               <Pie

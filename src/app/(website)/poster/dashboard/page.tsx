@@ -67,7 +67,7 @@ export default function Page() {
 
           <DashboardCard title="Overdue Task" value={2} percentage={12.34} />
         </div>
-        <div className="flex gap-5 mb-10">
+        <div className="flex flex-col md:flex-row gap-5 mb-10">
           <div className="max-w-[650px] w-full rounded-2xl border p-8">
             {/* <DoughnutChart /> */}
           </div>

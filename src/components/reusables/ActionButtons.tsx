@@ -34,7 +34,7 @@ const ActionsButtons = ({
   disabled = false,
   okVariant = "default",
   cancelVariant = "outline",
-  size,
+  size = "default",
 }: IProps) => {
   return (
     <div
@@ -48,14 +48,14 @@ const ActionsButtons = ({
           variant={cancelVariant}
           text={cancelText}
           size={size}
-          className={cn("flex-1 w-full", cancelStyle)}
+          className={cn("w-full", cancelStyle)}
           onClick={handleCancel}
         />
       )}
       <FormButton
         text={okText}
         type={type}
-        className={cn("flex-1 w-full", okStyle)}
+        className={cn("w-full", okStyle)}
         loading={loading}
         onClick={handleSubmit}
         disabled={disabled || loading}

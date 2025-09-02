@@ -61,7 +61,7 @@ const UserActions = ({ user, onLogout }: Props) => {
                 height={60}
                 src={user.profile_image || defaultProfile}
                 alt="user_profile"
-                className="w-[1.875rem] h-[1.875rem] rounded-full object-cover object-top"
+                className="w-[1.875rem] h-[1.875rem] rounded-full object-cover"
               />
               <span className="text-[17px] text-dark-secondary font-medium">
                 {loggedInUser(user.first_name, user.last_name)}

@@ -16,6 +16,7 @@ const schema = z.object({
   location: z.any(),
   distance: z.number(),
   address: z.string(),
+  userLocation: z.object({ lat: z.any(), lng: z.any() }),
 });
 
 type RangeForm = z.infer<typeof schema>;
@@ -32,6 +33,10 @@ export default function DistanceFilter() {
       location: [],
       distance: 0,
       address: "",
+      userLocation: {
+        lat: null,
+        lng: null,
+      },
     },
   });
 
@@ -70,6 +75,46 @@ export default function DistanceFilter() {
       setValue("distance", parseFloat(distance));
     }
   }, []);
+
+  let watchId: number | null = null;
+
+  useEffect(() => {
+    getLocation();
+    return () => {
+      stopTrackingLocation();
+    };
+  }, []);
+
+  function getLocation() {
+    if ("geolocation" in navigator) {
+      watchId = navigator.geolocation.watchPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          console.log(
+            `New location: Latitude: ${latitude}, Longitude: ${longitude}`
+          );
+
+          setValue("userLocation", { lat: latitude, lng: longitude });
+        },
+        (error) => {
+          console.error("Error getting location:", error.message);
+        },
+        {
+          enableHighAccuracy: true, // Request high accuracy (useful for mobile)
+          maximumAge: 300000, // Cache the location for 5 minutes
+          timeout: 10000, // Timeout after 10 seconds if no location
+        }
+      );
+    } else {
+      console.log("Geolocation is not supported by this browser.");
+    }
+  }
+
+  function stopTrackingLocation() {
+    if (watchId !== null) {
+      navigator.geolocation.clearWatch(watchId);
+    }
+  }
 
   const onSubmit = (data: RangeForm) => {
     console.log("Submitted:", data);

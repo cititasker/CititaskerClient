@@ -16,6 +16,10 @@ interface IProps {
   description?: string;
   descriptionClassName?: string;
   children: React.ReactNode;
+  side?: "top" | "right" | "bottom" | "left";
+  className?: string;
+  showCloseIcon?: boolean;
+  closeIcon?: any;
 }
 export default function CustomSheet({
   open,
@@ -25,10 +29,19 @@ export default function CustomSheet({
   children,
   titleClassName,
   descriptionClassName,
+  className,
+  side = "right",
+  showCloseIcon = true,
+  closeIcon = undefined,
 }: IProps) {
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent>
+      <SheetContent
+        side={side}
+        className={className}
+        showCloseIcon={showCloseIcon}
+        closeIcon={closeIcon}
+      >
         <SheetHeader>
           <SheetTitle className={titleClassName}>{title}</SheetTitle>
           {description && (

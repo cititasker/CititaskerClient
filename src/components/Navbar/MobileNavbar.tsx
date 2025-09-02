@@ -4,11 +4,11 @@ import { navbar } from "../../../data";
 import FormButton from "../forms/FormButton";
 import MobileAccordionNav from "./MobileAccordionNav";
 import { ROUTES } from "@/constant";
-import { cn } from "@/lib/utils";
+import CustomSheet from "../reusables/CustomSheet";
 
 interface IProps {
   showMobileNav: boolean;
-  toggleMobileNav: () => void;
+  toggleMobileNav: any;
 }
 
 export default function MobileNavbar({
@@ -16,13 +16,12 @@ export default function MobileNavbar({
   toggleMobileNav,
 }: IProps) {
   return (
-    <div
-      className={cn(
-        "xl:hidden fixed inset-0 z-30 overflow-y-auto px-5 p-top bg-white transition-transform duration-500 ease-in-out",
-        showMobileNav ? "translate-y-0" : "-translate-y-full"
-      )}
-      role="dialog"
-      aria-modal="true"
+    <CustomSheet
+      title={""}
+      open={showMobileNav}
+      onOpenChange={toggleMobileNav}
+      side="right"
+      showCloseIcon={false}
     >
       <ul className=" flex flex-col gap-6 max-w-md mx-auto">
         <MobileAccordionNav navbar={navbar} toggleMobileNav={toggleMobileNav} />
@@ -55,6 +54,6 @@ export default function MobileNavbar({
           </FormButton>
         </li>
       </ul>
-    </div>
+    </CustomSheet>
   );
 }

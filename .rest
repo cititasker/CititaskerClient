@@ -1,4 +1,4 @@
-GET https://cititasker.africa/api/v1/tasks/single
+GET https://staging-api.cititasker.com/api/v1/tasks/single
 Content-Type: application/json
 Accept: application/json
 
@@ -7,16 +7,36 @@ Accept: application/json
 }
 
 ###
-GET https://cititasker.africa/api/v1/auth/google
+GET https://staging-api.cititasker.com/api/v1/auth/google
 Content-Type: application/json
 Accept: application/json
 
 ###
-POST https://staging-api.cititasker.africa/api/v1/auth/login
+POST https://staging-api.cititasker.com/api/v1/auth/login
 Content-Type: application/json
 Accept: application/json
 
 {
-    "email":"juliet_poster@gmail.com",
+    "email":"juliet_tasker@gmail.com",
     "password": "123456"
 }
+
+###
+POST https://staging-api.cititasker.com/api/v1/tasks/reply-offer
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3N0YWdpbmctYXBpLmNpdGl0YXNrZXIuY29tL2FwaS92MS9hdXRoL2xvZ2luIiwiaWF0IjoxNzU2NTk1MTU3LCJleHAiOjE3NTcxOTk5NTcsIm5iZiI6MTc1NjU5NTE1NywianRpIjoiSVI4NjdaY1M0NkVMNkplSCIsInN1YiI6IjE2IiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.N2YDtX3dYdMpqMXxkM_mhurfwlYIVk2HcFZMZsafz_8
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="content"
+
+This is a reply 2
+--boundary
+Content-Disposition: form-data; name="offer_id"
+
+56
+--boundary
+Content-Disposition: form-data; name="images[]"; filename="section_1_main.png"
+Content-Type: image/png
+
+@/Users/taiwojoseph/Downloads/section_1_main.png
+--boundary--

@@ -37,7 +37,7 @@ export function withdrawOffer(data: any) {
 
 export function replyOffer(data: any) {
   return api
-    .post(`tasks/reply-offer`, null, { params: data })
+    .post(`tasks/reply-offer`, data)
     .then((data) => {
       return data.data;
     })

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
 import { useSuspenseQuery } from "@tanstack/react-query";
@@ -65,9 +65,7 @@ export default function Page() {
         title="Filter"
         titleClassName="text-left"
       >
-        <div>
-          <FilterList />
-        </div>
+        <FilterList />
       </CustomSheet>
     </>
   );

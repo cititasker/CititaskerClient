@@ -1,5 +1,5 @@
 import FormButton from "@/components/forms/FormButton";
-import FormInput from "@/components/forms/FormInput";
+import { FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Minus } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -7,12 +7,13 @@ import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { NumericFormat } from "react-number-format";
 import { z } from "zod";
 
 const schema = z
   .object({
     min: z.number().min(0, "Min must be ≥ 0"),
-    max: z.number().max(100000000, "Max must be ≤ 100"),
+    max: z.number().max(10000000, "Max must be ≤ 100"),
   })
   .refine((data) => data.max >= data.min, {
     message: "Max must be greater than or equal to Min",
@@ -29,7 +30,7 @@ export default function PriceFilter() {
     resolver: zodResolver(schema),
     defaultValues: {
       min: 0,
-      max: 80,
+      max: 10000000,
     },
   });
 
@@ -84,7 +85,7 @@ export default function PriceFilter() {
           <Slider
             range
             min={0}
-            max={100000000}
+            max={10000000}
             step={1000}
             value={[min, max]}
             onChange={handleSliderChange}
@@ -110,14 +111,46 @@ export default function PriceFilter() {
             <label htmlFor="min" className="text-sm font-medium">
               Min
             </label>
-            <FormInput name="min" inputClassName="rounded-sm h-10" />
+            <FormField
+              control={method.control}
+              name="min"
+              render={({ field }) => (
+                <FormItem>
+                  <NumericFormat
+                    value={field.value}
+                    onValueChange={({ value }) => field.onChange(Number(value))}
+                    thousandSeparator
+                    prefix="₦ "
+                    allowNegative={false}
+                    className="text-base outline-none rounded-sm w-full border px-4 py-2"
+                  />
+                  <FormMessage className="text-center mt-2" />
+                </FormItem>
+              )}
+            />
           </div>
           <Minus />
           <div className="flex flex-col">
-            <label htmlFor="min" className="text-sm font-medium">
+            <label htmlFor="max" className="text-sm font-medium">
               Max
             </label>
-            <FormInput name="max" inputClassName="rounded-sm h-10" />
+            <FormField
+              control={method.control}
+              name="max"
+              render={({ field }) => (
+                <FormItem>
+                  <NumericFormat
+                    value={field.value}
+                    onValueChange={({ value }) => field.onChange(Number(value))}
+                    thousandSeparator
+                    prefix="₦ "
+                    allowNegative={false}
+                    className="text-base outline-none rounded-sm w-full border px-4 py-2"
+                  />
+                  <FormMessage className="text-center mt-2" />
+                </FormItem>
+              )}
+            />
           </div>
         </div>
         <div className="flex gap-3 ml-auto w-fit">

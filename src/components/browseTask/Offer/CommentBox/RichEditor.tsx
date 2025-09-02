@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
@@ -17,19 +17,21 @@ import CustomDropdown from "@/components/reusables/CustomDropdown";
 import { useScreenBreakpoints } from "@/hooks/useScreenBreakpoints";
 import FilePreviewList from "./attachment-preview/FilePreviewList";
 import useModal from "@/hooks/useModal";
-import { useForm } from "react-hook-form";
-import { link } from "fs";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { cn } from "@/lib/utils";
 
 interface RichEditorProps {
   onContentUpdate: (html: string) => void;
   isLoading?: boolean;
+  attachments: File[];
+  setAttachments: (files: File[]) => void;
 }
 
-const RichEditor = ({ onContentUpdate, isLoading }: RichEditorProps) => {
-  const [attachments, setAttachments] = useState<File[]>([]);
+const RichEditor = ({
+  onContentUpdate,
+  isLoading,
+  setAttachments,
+  attachments,
+}: RichEditorProps) => {
   const linkModal = useModal();
   const { isSmallScreen } = useScreenBreakpoints();
 
@@ -64,7 +66,7 @@ const RichEditor = ({ onContentUpdate, isLoading }: RichEditorProps) => {
       const file = input.files?.[0];
       if (!file) return;
 
-      setAttachments((prev) => [...prev, file]);
+      setAttachments([...attachments, file]);
     };
 
     input.click();
@@ -78,10 +80,9 @@ const RichEditor = ({ onContentUpdate, isLoading }: RichEditorProps) => {
         <FilePreviewList
           attachments={attachments}
           onRemove={(index) =>
-            setAttachments((prev) => prev.filter((_, i) => i !== index))
+            setAttachments(attachments.filter((_, i) => i !== index))
           }
         />
-
         <div
           className={cn(
             "flex justify-between items-center",

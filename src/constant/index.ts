@@ -7,10 +7,10 @@ export enum ROLE {
 }
 
 export enum TASK_STATUS {
-  open="open",
-  assigned="assigned",
-  completed="completed",
-};
+  open = "open",
+  assigned = "assigned",
+  completed = "completed",
+}
 
 export const API_ROUTES = {
   AUTH: {
@@ -86,10 +86,12 @@ export const ROUTES = {
   BROWSE_TASK: "/browse-task",
   PUBLIC_PROFILE: "/profile",
 
-  HOW_IT_WORKS:"/how-it-works",
-  DISCOVERY:"/discovery",
+  HOW_IT_WORKS: "/how-it-works",
+  DISCOVERY: "/discovery",
 
   // Dashboard
+  // DASHBOARD: (role:string) => `/${role}/dashboard`,
+  DASHBOARD_TASKER: "/tasker/dashboard",
   DASHBOARD_PAYMENT: "/dashboard/payment",
   DASHBOARD_ACCOUNT: "/dashboard/account",
   DASHBOARD_MESSAGE: "/dashboard/message",

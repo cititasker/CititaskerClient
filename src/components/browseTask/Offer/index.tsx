@@ -72,7 +72,7 @@ const Offer: React.FC<OfferProps> = ({ offers }) => {
       <ConfirmModal
         variant="destructive"
         open={withdrawModal.isOpen}
-        onClose={withdrawModal.setIsOpen}
+        onClose={withdrawModal.closeModal}
         title="Withdraw Offer"
         description="Are you sure you want to withdraw your offer?"
         loading={isPending}

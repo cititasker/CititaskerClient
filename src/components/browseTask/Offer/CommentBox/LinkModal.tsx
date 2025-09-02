@@ -26,7 +26,7 @@ const LinkModal = ({ open, onCancel, editor }: LinkModalProps) => {
     ),
   });
 
-  const onInsert = (values: any) => {
+  const onInsert = methods.handleSubmit((values: any) => {
     const { linkUrl, linkText } = values;
     if (!editor || !linkUrl.trim()) return;
 
@@ -53,7 +53,7 @@ const LinkModal = ({ open, onCancel, editor }: LinkModalProps) => {
       .run();
     onCancel();
     methods.reset();
-  };
+  });
   return (
     <CustomModal
       isOpen={open}
@@ -61,10 +61,7 @@ const LinkModal = ({ open, onCancel, editor }: LinkModalProps) => {
       className="absolute bottom-[60px] left-0 z-50 bg-white border rounded-md p-4 shadow-md w-[300px]"
     >
       <FormProvider {...methods}>
-        <form
-          onSubmit={methods.handleSubmit(onInsert)}
-          className="flex flex-col gap-4"
-        >
+        <form className="flex flex-col gap-4">
           <FormInput name="linkUrl" label="Link" placeholder="example.com" />
           <FormInput
             name="linkText"
@@ -80,7 +77,12 @@ const LinkModal = ({ open, onCancel, editor }: LinkModalProps) => {
             >
               Cancel
             </FormButton>
-            <FormButton type="submit" size="lg" variant="default">
+            <FormButton
+              type="button"
+              size="lg"
+              variant="default"
+              onClick={onInsert}
+            >
               Insert
             </FormButton>
           </div>

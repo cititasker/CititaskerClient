@@ -46,7 +46,7 @@ export default function Map({ tasks }: IProps) {
       // bounds={[[6.5244, 3.3792]]}
       bounds={mapBounds}
       boundsOptions={{ animate: true }}
-      className="w-full h-full z-[99]"
+      className="w-full h-full z-20"
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

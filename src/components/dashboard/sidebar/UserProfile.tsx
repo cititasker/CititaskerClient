@@ -3,12 +3,21 @@ import { defaultProfile } from "@/constant/images";
 import { initializeName } from "@/utils";
 import { useAppSelector } from "@/store/hook";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
-const UserProfile = () => {
+interface IProps {
+  className?: string;
+}
+const UserProfile = ({ className }: IProps) => {
   const { user } = useAppSelector((state) => state.user);
 
   return (
-    <div className="hidden md:flex px-5 pb-8 pt-6 border-b border-light-grey flex-col items-center">
+    <div
+      className={cn(
+        "hidden md:flex px-5 pb-8 pt-6 border-b border-light-grey flex-col items-center",
+        className
+      )}
+    >
       <Image
         src={user.profile_image ?? defaultProfile}
         alt="user profile"

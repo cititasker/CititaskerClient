@@ -10,7 +10,6 @@ import { API_ROUTES } from "@/constant";
 import { getOfferReplies } from "@/services/offers/offers.api";
 import Link from "next/link";
 import { Star } from "lucide-react";
-import { useGetUserProfile } from "@/services/user/user.hook";
 
 interface TaskerOfferProps {
   offer: IOffer;
@@ -26,12 +25,6 @@ const TaskerOffer: React.FC<TaskerOfferProps> = ({ offer, toggleModal }) => {
     offer.tasker.first_name,
     offer.tasker.last_name
   );
-
-  const { data: tasker } = useGetUserProfile({ id: offer.tasker.id });
-  const takserDetail = tasker?.data;
-
-  console.log(1, takserDetail);
-  console.log(2, offer.tasker);
 
   const { data } = useQuery({
     queryKey: [API_ROUTES.OFFER_REPLIES, offer.id],

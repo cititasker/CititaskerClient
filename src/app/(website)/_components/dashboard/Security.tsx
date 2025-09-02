@@ -53,7 +53,7 @@ const Security = () => {
 
   return (
     <div className="space-y-6 md:space-y-8">
-      <Card className="w-full shadow-sm lg:border-[0.8px] border-solid border-light-grey lg:px-8 pb-5 lg:py-8">
+      <Card className="w-full shadow-none lg:shadow-sm lg:border-[0.8px] border-solid border-light-grey lg:px-8 pb-5 lg:py-8">
         <p className="mb-6 text-xl text-black font-semibold">Change password</p>
         {!showPassword.isOpen ? (
           <FormButton onClick={showPassword.handleOpen}>
@@ -90,7 +90,7 @@ const Security = () => {
           </FormProvider>
         )}
       </Card>
-      <Card className="w-full shadow-sm rounded-30 lg:border-[0.8px] border-solid border-light-grey lg:px-8 pb-5 lg:py-8">
+      <Card className="w-full shadow-none lg:shadow-sm rounded-30 lg:border-[0.8px] border-solid border-light-grey lg:px-8 pb-5 lg:py-8">
         <div className="flex justify-between gap-3 mb-6 md:mb-10 lg:mb-[60px]">
           <div className="max-w-[509px]">
             <p className="mb-2 sm:mb-4 text-lg sm:text-xl text-black font-semibold">

@@ -7,7 +7,11 @@ const authRoutes: string[] = [
   ROUTES.SIGNUP,
   ROUTES.FORGOT_PASSWORD,
 ];
-const protectedRoutes = [ROUTES.DASHBOARD]; // Routes that require authentication
+const protectedRoutes = [
+  ROUTES.DASHBOARD,
+  // ROUTES.DASHBOARD_POSTER,
+  // ROUTES.DASHBOARD_TASKER,
+]; // Routes that require authentication
 
 export default auth(async (req) => {
   const currentRoute = req.nextUrl.pathname;
@@ -31,7 +35,7 @@ export default auth(async (req) => {
 
 export const config = {
   matcher: [
-    "/dashboard/:path*",
+    "/poster/dashboard/:path*",
     "/poster/my-tasks/:path*",
     "/tasker/my-tasks/:path*",
     "/profile",

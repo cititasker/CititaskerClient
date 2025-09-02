@@ -18,7 +18,7 @@ function Empty({
     <div
       className={cn("w-full h-full bg-white flex justify-center", className)}
     >
-      <div className="flex flex-col items-center max-w-[440px] gap-[14px] h-fit">
+      <div className="flex flex-col items-center max-w-[440px] gap-[14px] h-fit p-5">
         <Image
           src="/images/empty.png"
           alt="empty icon"
