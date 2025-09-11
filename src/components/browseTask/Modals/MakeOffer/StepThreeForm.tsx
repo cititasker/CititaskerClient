@@ -68,7 +68,7 @@ export default function StepThreeForm({
         <ActionsButtons
           type="submit"
           cancelText="Back"
-          okText={isUpdating ? "Update Offer" : "Send Offer"}
+          okText={isUpdating ? "Update offer" : "Send offer"}
           className="mt-auto sm:gap-x-5"
           handleCancel={prevStep}
           loading={isSubmitting}

@@ -1,91 +1,147 @@
 "use client";
 import React, { useRef } from "react";
+import Image from "next/image";
+import { motion } from "framer-motion";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { taskByCategories } from "../../../../../data";
 import CustomArrow from "../CustomArrow";
-import { cn } from "@/utils";
 
-const responsive = {
-  superLargeDesktop: {
-    // the naming can be any, depends on you.
-    breakpoint: { max: 4000, min: 3000 },
-    items: 5,
-  },
-  desktop: {
-    breakpoint: { max: 3000, min: 1400 },
-    items: 5,
-  },
-  tablet: {
-    breakpoint: { max: 1204, min: 600 },
-    items: 3,
-  },
-  mobile: {
-    breakpoint: { max: 500, min: 0 },
-    items: 2,
-  },
+// Types
+interface CarouselRef {
+  next: () => void;
+  previous: () => void;
+}
+
+interface CategoryItem {
+  img: string;
+  name: string;
+  id?: number;
+}
+
+// Constants
+const RESPONSIVE_CONFIG = {
+  desktop: { breakpoint: { max: 4000, min: 1024 }, items: 5 },
+  tablet: { breakpoint: { max: 1024, min: 640 }, items: 3 },
+  mobile: { breakpoint: { max: 640, min: 0 }, items: 2 },
 };
 
-const BrowseCategoryCarousel = () => {
-  const ref = useRef<any>(null);
+const CAROUSEL_CONFIG = {
+  swipeable: true,
+  responsive: RESPONSIVE_CONFIG,
+  ssr: true,
+  arrows: false,
+  autoPlay: true,
+  autoPlaySpeed: 6000,
+  infinite: true,
+  draggable: true,
+  keyBoardControl: true,
+  pauseOnHover: true,
+  customTransition: "transform 400ms ease-in-out",
+  containerClass: "max-w-5xl mx-auto relative",
+};
+
+const BrowseCategoryCarousel: React.FC = () => {
+  const carouselRef = useRef<CarouselRef | any>(null);
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1, delayChildren: 0.2 },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20, scale: 0.9 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: { duration: 0.5, ease: "easeOut" },
+    },
+  };
 
   return (
-    <div className={cn("relative")}>
+    <div className="relative">
+      {/* Left Arrow */}
       <CustomArrow
-        onClick={() => ref.current.previous()}
-        extraClass={`top-0 bottom-0 my-auto`}
+        direction="left"
+        onClick={() => carouselRef.current?.previous()}
+        className="top-1/2 -translate-y-1/2"
       />
-      <Carousel
-        ref={ref}
-        swipeable={true}
-        responsive={responsive}
-        ssr={true} // means to render carousel on server-side.
-        additionalTransfrom={0}
-        arrows={false}
-        autoPlay
-        autoPlaySpeed={5000}
-        centerMode={false}
-        className=""
-        containerClass=" max-w-[1100px] mx-auto"
-        customTransition="all 0.25s linear"
-        transitionDuration={2500}
-        dotListClass=""
-        draggable
-        focusOnSelect={false}
-        infinite
-        itemClass=""
-        keyBoardControl
-        minimumTouchDrag={80}
-        pauseOnHover
-        renderArrowsWhenDisabled={false}
-        renderButtonGroupOutside={false}
-        renderDotsOutside={false}
-        rewind={false}
-        rewindWithAnimation={false}
-        // shouldResetAutoplay
+
+      {/* Carousel */}
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={containerVariants}
       >
-        {taskByCategories.map((el, i) => (
-          <div key={i}>
-            <div
-              className="w-[140px] h-[140px] sm:w-[10.625rem] sm:h-[10.625rem] mx-auto object-cover rounded-full overflow-hidden bg-cover bg-no-repeat"
-              style={{ backgroundImage: `url(${el.img})` }}
-            ></div>
-            <div className="mt-3 mx-auto w-fit">
-              <p className="font-semibold text-base text-white text-center mb-1">
-                {el.name}
-              </p>
-              <p className="font-normal text-sm text-white text-center">
-                (1823 Taskers)
-              </p>
-            </div>
-          </div>
-        ))}
-      </Carousel>
+        <Carousel ref={carouselRef} {...CAROUSEL_CONFIG}>
+          {taskByCategories.map((category: CategoryItem, index: number) => (
+            <motion.div
+              key={category.id || index}
+              className="px-3"
+              variants={itemVariants}
+              whileHover={{ scale: 1.05 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
+              <div className="group cursor-pointer">
+                {/* Category Image */}
+                <div className="relative w-32 h-32 md:w-40 md:h-40 mx-auto mb-4 rounded-full overflow-hidden shadow-2xl group-hover:shadow-glow-primary transition-all duration-300">
+                  <Image
+                    src={category.img}
+                    alt={category.name}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                    sizes="(max-width: 640px) 128px, 160px"
+                  />
+
+                  {/* Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                  {/* Hover Ring */}
+                  <div className="absolute inset-0 rounded-full border-2 border-white/0 group-hover:border-white/50 transition-all duration-300" />
+                </div>
+
+                {/* Category Info */}
+                <div className="text-center space-y-1">
+                  <h3 className="text-base md:text-lg font-semibold text-white group-hover:text-white/90 transition-colors duration-300">
+                    {category.name}
+                  </h3>
+                  <p className="text-sm text-white/80 font-medium">
+                    (1,823 Taskers)
+                  </p>
+                </div>
+
+                {/* Glow Effect */}
+                <div className="absolute inset-0 bg-gradient-to-t from-accent-purple/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full pointer-events-none" />
+              </div>
+            </motion.div>
+          ))}
+        </Carousel>
+      </motion.div>
+
+      {/* Right Arrow */}
       <CustomArrow
-        dir="right"
-        onClick={() => ref.current.next()}
-        extraClass={`top-0 bottom-0 my-auto`}
+        direction="right"
+        onClick={() => carouselRef.current?.next()}
+        className="top-1/2 -translate-y-1/2"
       />
+
+      {/* Progress Indicator */}
+      <div className="flex justify-center mt-8 space-x-2">
+        {Array.from({ length: Math.ceil(taskByCategories.length / 5) }).map(
+          (_, index) => (
+            <div
+              key={index}
+              className="w-2 h-2 rounded-full bg-white/30 animate-pulse"
+              style={{ animationDelay: `${index * 0.1}s` }}
+            />
+          )
+        )}
+      </div>
     </div>
   );
 };

@@ -1,53 +1,180 @@
 "use client";
 import Image from "next/image";
 import React from "react";
+import { motion } from "framer-motion";
 
 interface PosterTestimoniesProps {
   showHeading?: boolean;
 }
 
+const STYLES = {
+  container: "max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-20",
+  header:
+    "text-3xl md:text-4xl lg:text-5xl font-bold text-text-primary text-center max-w-2xl mx-auto mb-16",
+  grid: "grid lg:grid-cols-3 gap-6 min-h-[400px]",
+  testimonialCard:
+    "lg:col-span-2 relative rounded-3xl overflow-hidden shadow-2xl group cursor-pointer",
+  statsCard:
+    "bg-gradient-secondary rounded-3xl p-6 md:p-8 flex flex-col justify-between shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1",
+  testimonialImage:
+    "w-full h-full object-cover transition-transform duration-700 group-hover:scale-105",
+  testimonialOverlay:
+    "absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent",
+  testimonialContent:
+    "absolute bottom-6 left-6 right-6 glass-effect rounded-2xl p-6 md:p-8",
+  quote:
+    "text-white text-lg md:text-xl lg:text-2xl xl:text-3xl leading-relaxed font-medium mb-4",
+  author: "text-white/80 text-sm md:text-base font-medium",
+  statsLabel:
+    "text-white/90 text-sm md:text-base uppercase tracking-wider font-medium mb-4",
+  statsNumber:
+    "text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-white font-bold mb-4 leading-none",
+  statsDescription:
+    "text-white/90 text-base md:text-lg lg:text-xl leading-relaxed",
+} as const;
+
 const PosterTestimonies: React.FC<PosterTestimoniesProps> = ({
   showHeading = true,
 }) => {
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.3, delayChildren: 0.2 },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: "easeOut" },
+    },
+  };
+
+  const testimonialVariants = {
+    hidden: { opacity: 0, scale: 0.95 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: { duration: 0.8, ease: "easeOut" },
+    },
+  };
+
   return (
-    <div className="container-w md:pt-[4.875rem] sm:pb-[3rem] md:pb-[7.5rem]">
+    <section className={STYLES.container}>
+      {/* Header */}
       {showHeading && (
-        <h2 className="header max-w-[35.875rem] mx-auto text-center mb-[3.375rem]">
-          Meet our top posters & their testimonies
-        </h2>
+        <motion.h2
+          className={STYLES.header}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          Meet our top posters &{" "}
+          <span className="text-gradient-primary">their testimonies</span>
+        </motion.h2>
       )}
-      <div className="flex flex-col md:flex-row justify-between gap-3 min-h-[25rem]">
-        <div className="relative max-w-[50.375rem] w-full h-[15rem] sm:h-[20rem] md:h-[25rem] rounded-20 sm:rounded-40 overflow-hidden">
+
+      <motion.div
+        className={STYLES.grid}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={containerVariants}
+      >
+        {/* Testimonial Card */}
+        <motion.div
+          className={STYLES.testimonialCard}
+          variants={testimonialVariants}
+          whileHover={{ scale: 1.02 }}
+          transition={{ type: "spring", stiffness: 300 }}
+        >
           <Image
             src="/images/poster_testimony.png"
-            alt=""
+            alt="Happy CitiTasker customer testimonial"
             width={900}
             height={400}
-            className="w-full h-full object-cover"
+            className={STYLES.testimonialImage}
+            priority={true}
           />
-          <div className="rounded-20 sm:rounded-40 absolute w-[calc(100%-32px)] bottom-4 left-1/2 -translate-x-1/2 border border-white bg-[rgba(202,215,220,0.50)] backdrop-blur-[10px] p-5 sm:p-7">
-            <p className="text-white max-w-[41.25rem] text-2xl sm:text-3xl md:text-5xl sm:leading-[52px] -tracking-[1.44px]">
-              “CitiTasker has really helped me with domestic tasks at home.”
-            </p>
+
+          {/* Overlay */}
+          <div className={STYLES.testimonialOverlay} />
+
+          {/* Content */}
+          <div className={STYLES.testimonialContent}>
+            <motion.p
+              className={STYLES.quote}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5, duration: 0.6 }}
+            >
+              "CitiTasker has really helped me with domestic tasks at home. The
+              service is reliable and professional."
+            </motion.p>
+            <motion.p
+              className={STYLES.author}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7, duration: 0.6 }}
+            >
+              - Verified CitiTasker Customer
+            </motion.p>
           </div>
-        </div>
-        <div className="md:max-w-[26.5rem] w-full bg-red-light-1 rounded-20 sm:rounded-[2rem] p-5 sm:px-6 sm:py-10">
-          <div className="flex flex-col h-full">
-            <p className="text-xl uppercase text-white font-normal">
-              Facts & numbers
-            </p>
-            <div className="mt-auto w-full">
-              <h1 className="text-[2rem] sm:text-[4rem] md:text-[6rem] text-white font-normal mb-1 sm:mb-2">
-                85%
-              </h1>
-              <p className="text-base sm:text-2xl md:text-[2.25rem] text-white sm:-tracking-[0.64px]">
-                of our customers recommend us to other people.
-              </p>
+
+          {/* Glow effect on hover */}
+          <div className="absolute inset-0 bg-gradient-primary opacity-0 group-hover:opacity-20 transition-opacity duration-300 rounded-3xl" />
+        </motion.div>
+
+        {/* Stats Card */}
+        <motion.div
+          className={STYLES.statsCard}
+          variants={cardVariants}
+          whileHover={{ scale: 1.05, rotate: 1 }}
+          transition={{ type: "spring", stiffness: 300 }}
+        >
+          {/* Background Pattern */}
+          <div className='absolute inset-0 bg-[url(&apos;data:image/svg+xml,%3Csvg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.1"%3E%3Cpath d="M20 20c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10 10-4.5 10-10zm10 0c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10 10-4.5 10-10z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E&apos;)] opacity-30'></div>
+
+          <div className="relative z-10 h-full flex flex-col">
+            <motion.p
+              className={STYLES.statsLabel}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.5 }}
+            >
+              Facts & Numbers
+            </motion.p>
+
+            <div className="mt-auto">
+              <motion.h3
+                className={STYLES.statsNumber}
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.4, duration: 0.6, type: "spring" }}
+              >
+                92%
+              </motion.h3>
+              <motion.p
+                className={STYLES.statsDescription}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6, duration: 0.6 }}
+              >
+                of our customers recommend CitiTasker to friends and family.
+              </motion.p>
             </div>
+
+            {/* Floating elements for visual interest */}
+            <div className="absolute top-4 right-4 w-8 h-8 bg-white/20 rounded-full animate-pulse" />
+            <div className="absolute bottom-4 left-4 w-6 h-6 bg-white/10 rounded-full animate-pulse delay-1000" />
           </div>
-        </div>
-      </div>
-    </div>
+        </motion.div>
+      </motion.div>
+    </section>
   );
 };
 

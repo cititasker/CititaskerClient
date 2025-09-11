@@ -46,10 +46,10 @@ const TaskBudget: React.FC<TaskBudgetProps> = ({ task }) => {
   const canCompleteTask = isAssigned && hasMadeOffer && !hasCompletedTask;
 
   const buttonText = useMemo(() => {
-    if (canMakeOffer) return "Make Offer";
-    if (canUpdateOffer) return "Update Offer";
-    if (canCompleteTask) return "Complete Task";
-    if (hasCompletedTask) return "Payment Requested";
+    if (canMakeOffer) return "Make offer";
+    if (canUpdateOffer) return "Update offer";
+    if (canCompleteTask) return "Complete task";
+    if (hasCompletedTask) return "Payment requested";
     return "Assigned";
   }, [canMakeOffer, canUpdateOffer, canCompleteTask, hasCompletedTask]);
 

@@ -48,7 +48,7 @@ const ActionsButtons = ({
           variant={cancelVariant}
           text={cancelText}
           size={size}
-          className={cn("w-full", cancelStyle)}
+          className={cn("w-full btn-animate-press", cancelStyle)}
           onClick={handleCancel}
         />
       )}

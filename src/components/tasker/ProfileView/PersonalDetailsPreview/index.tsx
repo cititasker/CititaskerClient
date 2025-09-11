@@ -3,11 +3,11 @@
 import React, { useEffect, useState } from "react";
 import FormButton from "@/components/forms/FormButton";
 import Icons from "@/components/Icons";
-import Bio from "./Bio";
+import Bio from "../../../shared/dashboard/profile/public-view/Bio";
 import ReviewSection from "./Reviews";
 import { profileSummary } from "./mock";
-import Certifications from "./Certifications";
-import Skills from "./Skills";
+import Certifications from "../../../shared/dashboard/profile/public-view/Certifications";
+import Skills from "../../../shared/dashboard/profile/public-view/Skills";
 import { useGetUserProfile } from "@/services/user/user.hook";
 
 interface Props {

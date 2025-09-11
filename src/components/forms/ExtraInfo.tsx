@@ -5,7 +5,7 @@ import Icons from "@/components/Icons";
 import { HTMLAttributes } from "react";
 
 interface ExtraInfoProps extends HTMLAttributes<HTMLDivElement> {
-  children: string;
+  children: string | React.ReactNode;
 }
 
 const ExtraInfo = ({ className, children, ...props }: ExtraInfoProps) => {
@@ -19,9 +19,9 @@ const ExtraInfo = ({ className, children, ...props }: ExtraInfoProps) => {
     >
       <div className="flex gap-5">
         <Icons.info className="w-[25px] h-[25px] flex-shrink-0 text-primary" />
-        <p className="text-black-2 text-sm sm:text-base font-normal">
+        <div className="text-black-2 text-sm sm:text-base font-normal">
           {children}
-        </p>
+        </div>
       </div>
     </div>
   );

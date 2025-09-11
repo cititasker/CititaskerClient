@@ -1,198 +1,262 @@
 "use client";
-import React, { useEffect, useState, useRef } from "react";
-import { motion } from "framer-motion"; // Import from framer-motion
+import React, { useRef, useState, useCallback } from "react";
+import { motion, useInView } from "framer-motion";
 import UnderlinedHeader from "../reusables/UnderlinedHeader";
 import Image from "next/image";
-import { useScreenBreakpoints } from "@/hooks/useScreenBreakpoints";
 
-const data = [
+// Data and constants
+const FEATURES = [
   {
-    id: "1",
+    id: 1,
     title: "Pay safely",
-    text: "Pay easily, with peace of mind. We hold payments secure in CitiTasker pay escrow account until the task has been completed and you’re 100% satisfied.",
+    description:
+      "Pay easily with peace of mind. We hold payments secure in CitiTasker escrow until task completion and your 100% satisfaction.",
     image: "/images/wcu-1.svg",
+    gradient: "from-emerald-500 to-teal-600",
   },
   {
-    id: "2",
+    id: 2,
     title: "Top rated insurance",
-    text: "CitiTasker insurance covers the Taskers for their liability to the third parties for personal injury or property damage while performing most task activities.",
+    description:
+      "CitiTasker insurance covers Taskers' liability to third parties for personal injury or property damage during task activities.",
     image: "/images/wcu-2.svg",
+    gradient: "from-blue-500 to-cyan-600",
   },
   {
-    id: "3",
+    id: 3,
     title: "24/7 Support",
-    text: "Our Help Centre and dedicated CitiTasker Support specialist are on hand 24/7 to help you navigate our tools and get the most out of our website.",
+    description:
+      "Our Help Centre and dedicated support specialists are available around the clock to help you navigate and maximize our platform.",
     image: "/images/wcu-3.svg",
+    gradient: "from-purple-500 to-pink-600",
   },
   {
-    id: "4",
+    id: 4,
     title: "Verified Taskers",
-    text: "Every Tasker on our platform goes through a thorough verification process which includes background checks, and skill validation amongst others, to ensure they are skilled, reliable, and trustworthy.",
+    description:
+      "Every Tasker undergoes thorough verification including background checks and skill validation to ensure reliability and trustworthiness.",
     image: "/images/wcu-4.svg",
+    gradient: "from-orange-500 to-red-600",
   },
-];
+] as const;
 
-const WhyChooseCitiTasker = () => {
+const STYLES = {
+  container:
+    "relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 overflow-hidden",
+  backgroundPattern:
+    'absolute inset-0 bg-[url(\'data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23e2e8f0" fill-opacity="0.3"%3E%3Ccircle cx="30" cy="30" r="1.5"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\')] opacity-40',
+  content: "relative z-10 container-w mx-auto px-4 md:px-8 py-16 md:py-24",
+  header: "text-center mb-16",
+  title: "text-3xl md:text-4xl lg:text-5xl font-bold text-slate-800 mb-4",
+  grid: "grid lg:grid-cols-2 gap-12 lg:gap-16 items-center",
+  featuresList: "space-y-6",
+  featureItem: "group cursor-pointer transition-all duration-500 ease-out",
+  featureContent:
+    "flex items-start gap-4 p-6 rounded-2xl transition-all duration-300",
+  featureIcon:
+    "flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-lg",
+  featureText: "flex-1 min-w-0",
+  featureTitle: "text-lg font-semibold mb-2 transition-colors duration-300",
+  featureDesc: "text-sm leading-relaxed transition-colors duration-300",
+  imageContainer:
+    "relative h-96 lg:h-[500px] rounded-3xl overflow-hidden shadow-2xl",
+  imageWrapper: "absolute inset-0 transition-all duration-700 ease-in-out",
+} as const;
+
+const WhyChooseCitiTasker: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const listItemsRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const { isSmallScreen, isMediumScreen } = useScreenBreakpoints();
-  const [itemHeights, setItemHeights] = useState<number[]>([]);
-  const [offsets, setOffsets] = useState<number[]>([]);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { once: true, amount: 0.3 });
 
-  const getItemHeight = () => {
-    if (isSmallScreen) {
-      return 145; // Smaller height for small screens
-    } else if (isMediumScreen) {
-      return 172; // Standard height for medium screens
-    }
-    return 172; // Default height
-  };
-
-  const itemHeight = getItemHeight();
-
-  // Detect which list item is in view
-  const handleScroll = () => {
-    listItemsRefs.current.forEach((el, index) => {
-      if (el) {
-        const rect = el.getBoundingClientRect();
-        // If the item is in the middle of the viewport (50% visibility)
-        if (rect.top >= 0 && rect.top <= window.innerHeight / 2) {
+  // Intersection Observer setup for cleaner scroll detection
+  const observerCallback = useCallback(
+    (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && entry.intersectionRatio > 0.6) {
+          const index = parseInt(
+            entry.target.getAttribute("data-index") || "0"
+          );
           setActiveIndex(index);
         }
-      }
-    });
+      });
+    },
+    []
+  );
+
+  const itemRef = useCallback(
+    (element: HTMLDivElement | null, index: number) => {
+      if (!element) return;
+
+      const observer = new IntersectionObserver(observerCallback, {
+        threshold: [0.6],
+        rootMargin: "-20% 0px -20% 0px",
+      });
+
+      element.setAttribute("data-index", index.toString());
+      observer.observe(element);
+
+      return () => observer.disconnect();
+    },
+    [observerCallback]
+  );
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1, delayChildren: 0.2 },
+    },
   };
 
-  // Scroll event listener
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+  const itemVariants = {
+    hidden: { opacity: 0, x: -20 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: { duration: 0.6, ease: "easeOut" },
+    },
+  };
 
-  useEffect(() => {
-    const updateHeights = () => {
-      const heights = listItemsRefs.current.map((el) => el?.offsetHeight || 0);
-      setItemHeights(heights);
-
-      const newOffsets = heights.reduce<number[]>((acc, height, i) => {
-        const prev = acc[i - 1] || 0;
-        acc[i] = prev + height;
-        return acc;
-      }, []);
-      setOffsets(newOffsets);
-    };
-
-    updateHeights();
-    window.addEventListener("resize", updateHeights);
-    return () => window.removeEventListener("resize", updateHeights);
-  }, []);
-
-  const offsetTop = activeIndex === 0 ? 0 : offsets[activeIndex - 1] || 0;
+  const imageVariants = {
+    hidden: { opacity: 0, scale: 0.95 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: { duration: 0.8, ease: "easeOut" },
+    },
+  };
 
   return (
-    <div className="bg-[#F5F5F5] relative overflow-hidden">
+    <section className={STYLES.container} ref={containerRef}>
+      {/* Background Pattern */}
+      <div className={STYLES.backgroundPattern} />
+
+      {/* Decorative Background Image */}
       <Image
         src="/images/bg-pics.svg"
-        alt="background shape"
-        width={484}
-        height={484}
-        className="hidden md:block absolute bottom-0 right-0 w-[200px] h-auto pointer-events-none z-0"
+        alt=""
+        width={400}
+        height={400}
+        className="absolute bottom-0 right-0 w-64 h-auto opacity-20 pointer-events-none"
+        priority={false}
       />
 
-      <div className="container-w bg-black md:bg-[#F5F5F5] relative z-10 pb-[3rem] md:pb-[5.75rem] pt-[2rem] md:pt-[4.375rem]">
-        <div className="w-fit font-bold mx-auto text-white md:text-black text-center text-[24px] md:text-[2.6rem] mb-3.5 md:mb-[3.625rem]">
-          Why Choose{" "}
-          <UnderlinedHeader
-            text="CitiTasker?"
-            extraStyle="before:!translate-x-0 inline-block"
-          />
-        </div>
+      <div className={STYLES.content}>
+        {/* Header */}
+        <motion.div
+          className={STYLES.header}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+          variants={containerVariants}
+        >
+          <motion.h2 className={STYLES.title} variants={itemVariants}>
+            Why Choose{" "}
+            <UnderlinedHeader
+              text="CitiTasker?"
+              extraStyle="before:!translate-x-0 inline-block text-transparent bg-gradient-to-r from-primary to-secondary bg-clip-text"
+            />
+          </motion.h2>
+        </motion.div>
 
-        <div className="w-full flex flex-col lg:flex-row gap-x-5 justify-between items-center">
-          <div className="overflow-hidden max-w-full lg:max-w-[32.875rem] w-full mb-[4.375rem] lg:mb-0 relative pl-8 sm::pl-12 md:pl-20 before:content-[''] before:absolute before:left-0 before:top-0 before:w-[5px] before:h-full before:bg-dark-grey-1 before:rounded-20">
-            {/* Animated indicator */}
-            <motion.div
-              className="w-[5px] bg-primary absolute top-0 left-0 rounded-20"
-              style={{
-                height: itemHeights[activeIndex] ?? 0,
-              }}
-              animate={{
-                translateY: offsetTop,
-              }}
-              transition={{
-                duration: 0.6, // Increased transition time for smoother movement
-                ease: "easeInOut", // Smooth easing
-              }}
-            ></motion.div>
+        {/* Main Content Grid */}
+        <div className={STYLES.grid}>
+          {/* Features List */}
+          <motion.div
+            className={STYLES.featuresList}
+            initial="hidden"
+            animate={isInView ? "visible" : "hidden"}
+            variants={containerVariants}
+          >
+            {FEATURES.map((feature, index) => {
+              const isActive = activeIndex === index;
 
-            {data.map((el, i) => (
-              <motion.div
-                // @ts-ignore
-                ref={(el) => (listItemsRefs.current[i] = el)} // Assign refs for each item
-                key={el.id}
-                className="flex items-center cursor-pointer"
-                initial={{ opacity: 0 }} // Initial opacity
-                animate={{ opacity: activeIndex === i ? 1 : 0.5 }} // Fade-in/fade-out effect
-                transition={{ opacity: { duration: 0.6 } }} // Fade transition with easing
-              >
-                <div className="py-[1.5rem]">
-                  <h2
-                    className={`mb-2.5 sm:mb-4 text-[16px] md:text-base font-semibold ${
-                      activeIndex === i
-                        ? "text-white md:text-primary"
-                        : "text-dark-grey-2"
+              return (
+                <motion.div
+                  key={feature.id}
+                  ref={(el) => itemRef(el, index)}
+                  className={STYLES.featureItem}
+                  variants={itemVariants}
+                  onClick={() => setActiveIndex(index)}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <div
+                    className={`${STYLES.featureContent} ${
+                      isActive
+                        ? "bg-white shadow-xl border-l-4 border-blue-500"
+                        : "bg-white/60 hover:bg-white/80 shadow-md hover:shadow-lg"
                     }`}
                   >
-                    {el.title}
-                  </h2>
-                  <p
-                    className={`text-[14px] leading-0 md:text-base font-normal ${
-                      activeIndex === i
-                        ? "text-white md:text-black"
-                        : "text-dark-grey-2"
-                    }`}
-                  >
-                    {el.text}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+                    <div
+                      className={`${STYLES.featureIcon} bg-gradient-to-r ${
+                        feature.gradient
+                      } ${isActive ? "ring-4 ring-blue-100" : ""}`}
+                    >
+                      {index + 1}
+                    </div>
+                    <div className={STYLES.featureText}>
+                      <h3
+                        className={`${STYLES.featureTitle} ${
+                          isActive
+                            ? "text-blue-600"
+                            : "text-slate-700 group-hover:text-slate-900"
+                        }`}
+                      >
+                        {feature.title}
+                      </h3>
+                      <p
+                        className={`${STYLES.featureDesc} ${
+                          isActive ? "text-slate-600" : "text-slate-500"
+                        }`}
+                      >
+                        {feature.description}
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </motion.div>
 
-          <div className="relative max-w-[34rem] w-full h-[22.625rem] sm:h-[37.5rem] rounded-[1.125rem] sm:rounded-30 overflow-hidden">
-            {data.map((item, i) => (
+          {/* Image Display */}
+          <motion.div
+            className={STYLES.imageContainer}
+            initial="hidden"
+            animate={isInView ? "visible" : "hidden"}
+            variants={imageVariants}
+          >
+            {FEATURES.map((feature, index) => (
               <motion.div
-                key={item.id}
-                initial={{ opacity: 0, scale: 1 }} // Initial opacity and scale
+                key={feature.id}
+                className={STYLES.imageWrapper}
                 animate={{
-                  opacity: activeIndex === i ? 1 : 0, // Only show active image
-                  scale: activeIndex === i ? 1.05 : 1, // Slight zoom on active image
-                  zIndex: activeIndex === i ? 10 : 0, // Ensure active image is on top
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                }} // Scale and opacity for transition
+                  opacity: activeIndex === index ? 1 : 0,
+                  scale: activeIndex === index ? 1 : 0.95,
+                  zIndex: activeIndex === index ? 10 : 1,
+                }}
                 transition={{
-                  opacity: { duration: 0.8, ease: "easeInOut" }, // Smooth fade-in/out
-                  scale: { duration: 0.8, ease: "easeInOut" }, // Smooth zoom effect
-                  zIndex: { duration: 0 }, // Instant z-index change
+                  duration: 0.6,
+                  ease: "easeInOut",
                 }}
               >
                 <Image
-                  src={item.image}
-                  alt={item.title}
-                  width={745}
-                  height={800}
-                  className="w-full h-[37.5rem] object-cover"
+                  src={feature.image}
+                  alt={feature.title}
+                  fill
+                  className="object-cover"
+                  priority={index === 0}
+                />
+
+                {/* Gradient Overlay for better visual appeal */}
+                <div
+                  className={`absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent`}
                 />
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

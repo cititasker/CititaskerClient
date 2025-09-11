@@ -1,78 +1,91 @@
 "use client";
-
-import { useEffect, useRef } from "react";
-import TaskCard from "../TaskCard";
-import TaskCardSkeleton from "../skeletons/TaskCardSkeleton";
-import { useGetAllTasks } from "@/services/tasks/tasks.hook";
-import { LuLoaderCircle } from "react-icons/lu";
-import FormButton from "../forms/FormButton";
+import React from "react";
+import TaskCard from "../shared/task/TaskCard";
+import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
+import { TaskListSkeleton } from "@/components/skeletons/TaskListSkeleton";
+import {
+  EmptyTasksState,
+  EnhancedEmptyTasksState,
+} from "@/components/shared/task/EnhancedEmptyTasksState";
+import { LoadingIndicator } from "@/components/shared/task/LoadingIndicator";
+import { useTasksQuery } from "./hooks/useTasksQuery";
+import TaskCardList from "../shared/task/TaskList";
 import { ROUTES } from "@/constant";
 
 export default function TaskList() {
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
-    useGetAllTasks();
+  const { tasks, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+    useTasksQuery();
 
-  const observerRef = useRef<HTMLDivElement | null>(null);
-  const tasks = data?.pages.flatMap((page) => page.data?.data || []) || [];
+  const observerRef = useInfiniteScroll({
+    hasNextPage: hasNextPage || false,
+    isFetching: isFetchingNextPage,
+    onLoadMore: fetchNextPage,
+  });
 
-  useEffect(() => {
-    const el = observerRef.current;
-    if (!el || !hasNextPage) return;
+  // Loading state
+  if (isLoading) {
+    return <TaskListSkeleton />;
+  }
 
-    const observer = new IntersectionObserver(
-      ([entry]) => entry.isIntersecting && fetchNextPage(),
-      { rootMargin: "200px" }
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [hasNextPage, fetchNextPage]);
-
-  const renderSkeletons = () =>
-    Array.from({ length: 4 }).map((_, i) => <TaskCardSkeleton key={i} />);
-
-  const renderEmpty = () => (
-    <div className="text-center text-primary px-4 py-10 bg-white rounded-lg">
-      <p className="text-base mb-4">
-        No tasks found. Be the first to post one!
-      </p>
-      <FormButton
-        text="Post a task"
-        size="lg"
-        className="min-w-40 text-sm font-medium mx-auto"
-        href={ROUTES.POST_TASK}
-      />
-    </div>
-  );
-
-  // const loadingMessage = isFetchingNextPage ? "Loading more tasks..." : null;
+  // Empty state
+  if (tasks.length === 0) {
+    return <EnhancedEmptyTasksState variant="default" />;
+  }
 
   return (
     <div className="relative pb-5">
-      {isFetchingNextPage && (
-        <div className="sticky top-0 z-10 bg-primary text-white text-sm h-9 w-9 flex items-center justify-center rounded-full text-center mx-auto mt-2 shadow">
-          <LuLoaderCircle size={26} className="animate-spin" />
-        </div>
-        // <div className="sticky top-0 z-10 bg-primary text-white text-sm py-2 px-4 rounded-lg text-center w-fit mx-auto mt-2 shadow">
-        //   {loadingMessage}
-        // </div>
-      )}
-      {isLoading && <div className="grid gap-4">{renderSkeletons()}</div>}
+      {/* Loading indicator for infinite scroll */}
+      {isFetchingNextPage && <LoadingIndicator />}
 
-      {!isLoading && tasks.length === 0 && renderEmpty()}
+      <TaskCardList tasks={tasks} path={ROUTES.BROWSE_TASK} />
 
-      <div className="grid gap-4">
-        {!isLoading &&
-          tasks.map((task) => (
-            <TaskCard key={task.id} item={task} path="/browse-task" />
-          ))}
-      </div>
-
-      {/* Observer target for infinite scroll */}
+      {/* Intersection observer target */}
       <div ref={observerRef} className="h-1" />
 
-      {/* Skeleton for fetching more */}
-      {isFetchingNextPage && renderSkeletons()}
+      {/* Loading skeletons for next page */}
+      {isFetchingNextPage && <TaskListSkeleton />}
+    </div>
+  );
+}
+
+// Alternative version that receives tasks as props (if using central data fetching)
+interface TaskListProps {
+  tasks: ITask[];
+  loading?: boolean;
+  onLoadMore?: () => void;
+  hasMore?: boolean;
+  loadingMore?: boolean;
+}
+
+export function TaskListWithProps({
+  tasks,
+  loading = false,
+  onLoadMore,
+  hasMore = false,
+  loadingMore = false,
+}: TaskListProps) {
+  const observerRef = useInfiniteScroll({
+    hasNextPage: hasMore,
+    isFetching: loadingMore,
+    onLoadMore: onLoadMore || (() => {}),
+  });
+
+  if (loading) {
+    return <TaskListSkeleton />;
+  }
+
+  if (tasks.length === 0) {
+    return <EmptyTasksState />;
+  }
+
+  return (
+    <div className="relative pb-5">
+      {loadingMore && <LoadingIndicator />}
+
+      <TaskCardList tasks={tasks} path={ROUTES.BROWSE_TASK} />
+
+      {onLoadMore && <div ref={observerRef} className="h-1" />}
+      {loadingMore && <TaskListSkeleton />}
     </div>
   );
 }

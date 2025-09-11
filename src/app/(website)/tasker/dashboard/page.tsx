@@ -1,84 +1,153 @@
 "use client";
 import { DashboardCard } from "@/components/dashboard/DashboardCard";
-import { CustomTable } from "@/components/reusables/CustomTable";
+import { CustomTable } from "@/components/reusables/table/CustomTable";
 import { useAppSelector } from "@/store/hook";
 import { columns, RecentTask } from "./_components/column";
 import { DoughnutChart } from "@/components/shared/doughnut-chart";
-import { Card } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useState } from "react";
+import { DashboardHeader } from "@/components/reusables/table/components/HeaderSection";
+import { useTableState } from "@/components/reusables/table/hooks/useTableState";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import Search from "@/components/reusables/table/components/Search";
+import { Button } from "@/components/ui/button";
+import { RefreshCw } from "lucide-react";
+import FilterDrawer from "@/components/reusables/table/components/FilterDrawer";
+import { DataTable } from "@/components/reusables/table/components/DataTable";
+import Filter from "./_components/Filter";
 
-const selectOptions = [
-  { value: "week", label: "This week" },
-  { value: "month", label: "This month" },
-  { value: "year", label: "This year" },
+const DASHBOARD_STATS = [
+  {
+    title: "Completed Tasks",
+    value: 18,
+    percentage: 90.78,
+    trend: "up" as const,
+  },
+  {
+    title: "Pending Tasks",
+    value: 5,
+    percentage: 45.12,
+    trend: "down" as const,
+  },
+  {
+    title: "Overdue Tasks",
+    value: 2,
+    percentage: 12.34,
+    trend: "up" as const,
+  },
 ];
 
 export default function Page() {
   const { user } = useAppSelector((state) => state.user);
   const [timeframe, setTimeframe] = useState("week");
 
-  const data: RecentTask[] = [
+  // Table state management
+  const {
+    tableState,
+    setSearch,
+    setColumnFilters,
+    resetAll,
+    hasActiveFilters,
+  } = useTableState(10);
+
+  // Mock data
+  const mockRecentTasks: RecentTask[] = [
     {
       sn: "#3066",
-      poster: "Alice",
-      location: "Idimu",
+      poster: "Alice Johnson",
+      location: "Idimu, Lagos",
       date: "12-08-2025",
       status: "pending",
+    },
+    {
+      sn: "#3065",
+      poster: "Bob Smith",
+      location: "Victoria Island",
+      date: "11-08-2025",
+      status: "completed",
     },
   ];
 
   return (
-    <Card className="relative p-5 sm:px-[42px] pt-[42px] pb-10">
-      <div className="mb-10 flex gap-3 justify-between">
-        <div>
-          <h1 className="text-xl font-semibold text-black mb-1">
-            Good evening {user.first_name ?? "Guest"},
-          </h1>
-          <p className="text-base font-normal text-dark-grey-2">
-            Manage all your tasks here on your dashboard.
+    <div className="space-y-8">
+      <DashboardHeader
+        userName={user.first_name ?? ""}
+        timeValue={timeframe}
+        onTimeChange={setTimeframe}
+      />
+
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {DASHBOARD_STATS.map((stat) => (
+          <DashboardCard
+            key={stat.title}
+            title={stat.title}
+            value={stat.value}
+            percentage={stat.percentage}
+            trend={stat.trend}
+          />
+        ))}
+      </div>
+
+      {/* Charts Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <Card className="lg:col-span-2">
+          <CardHeader>
+            <CardTitle>Activity Overview</CardTitle>
+          </CardHeader>
+          <CardContent className="h-80">
+            <div className="flex items-center justify-center h-full bg-background-secondary/50 rounded-lg">
+              <p className="text-text-muted">Activity Chart Coming Soon</p>
+            </div>
+          </CardContent>
+        </Card>
+
+        <DoughnutChart />
+      </div>
+
+      <div className="space-y-6">
+        <div className="space-y-1">
+          <h2 className="text-2xl font-bold tracking-tight">Recent Activity</h2>
+          <p className="text-muted-foreground">
+            View and manage your recent task activities
           </p>
         </div>
-        <Select value={timeframe} onValueChange={setTimeframe}>
-          <SelectTrigger className="w-[100px] h-8 text-xs !mt-0">
-            <SelectValue placeholder="This week" />
-          </SelectTrigger>
-          <SelectContent>
-            {selectOptions.map(({ label, value }) => (
-              <SelectItem key={value} value={value}>
-                {label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-      <div>
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(270px,1fr))] gap-5 mb-10">
-          <DashboardCard title="Completed Task" value={18} percentage={90.78} />
 
-          <DashboardCard title="Pending Task" value={5} percentage={45.12} />
-
-          <DashboardCard title="Overdue Task" value={2} percentage={12.34} />
-        </div>
-        <div className="flex gap-5 mb-10">
-          <div className="max-w-[650px] w-full rounded-2xl border p-8">
-            {/* <DoughnutChart /> */}
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex-1 max-w-md">
+            <Search
+              value={tableState.search}
+              onChange={setSearch}
+              placeholder="Search activities..."
+              size="default"
+            />
           </div>
-          <DoughnutChart />
+
+          <div className="flex items-center gap-3">
+            {hasActiveFilters && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={resetAll}
+                className="text-muted-foreground hover:text-foreground"
+              >
+                <RefreshCw className="w-4 h-4 mr-1" />
+                Clear Filters ({tableState.columnFilters.length})
+              </Button>
+            )}
+
+            <FilterDrawer
+              filters={tableState.columnFilters}
+              onFiltersChange={setColumnFilters}
+              title="Filter Activities"
+              description="Filter your activities using the options below"
+              triggerText="Filter"
+            >
+              <Filter setColumnFilters={setColumnFilters} resetAll={resetAll} />
+            </FilterDrawer>
+          </div>
         </div>
-        <CustomTable
-          title="Recent Activity"
-          columns={columns}
-          data={data}
-          headerClass="bg-primary text-white"
-        />
+        <DataTable data={mockRecentTasks} columns={columns} pageSize={20} />
       </div>
-    </Card>
+    </div>
   );
 }

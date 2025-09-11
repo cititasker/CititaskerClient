@@ -1,5 +1,4 @@
 import Empty from "@/components/myTasks/Empty";
-import PulseLoader from "@/components/reusables/loaders/PulseLoader";
 import { useGetPorfolio } from "@/services/user/user.hook";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
@@ -9,7 +8,7 @@ interface IProps {
 }
 export default function Portfolio({ id }: IProps) {
   const [images, setImages] = useState<{ src: string; key: string }[]>([]);
-  const { data, isPending, isLoading } = useGetPorfolio({ id });
+  const { data } = useGetPorfolio({ id });
 
   const portfolio = data?.data?.portfolio || [];
 
@@ -18,8 +17,6 @@ export default function Portfolio({ id }: IProps) {
       setImages(portfolio.map((src) => ({ src: src.url, key: src.key })));
     }
   }, [portfolio]);
-
-  if (isPending || isLoading) return <PulseLoader />;
 
   if (images.length == 0) return <Empty text="No portfolio has been added" />;
   return (

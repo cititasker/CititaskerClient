@@ -1,6 +1,6 @@
 import React from "react";
 import { IDataPayment, paymentColumns } from "./columns";
-import { CustomTable } from "@/components/reusables/CustomTable";
+import { CustomTable } from "@/components/reusables/table/CustomTable";
 
 const PaymentTab = () => {
   const rows: IDataPayment[] = [

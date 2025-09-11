@@ -25,7 +25,7 @@ export function joinTaskerApi(data: any) {
 
 export function getCategories(): Promise<ITaskCategory[]> {
   return api
-    .get(`utility/categories`)
+    .get(`${API_ROUTES.UTILITY.CATEGORIES}`)
     .then((data) => {
       return data.data.data;
     })
@@ -44,19 +44,23 @@ export function getSubCategories(id: any): Promise<ITaskCategory[]> {
     });
 }
 
-export const reverseGeocode = async (
-  latitude: any,
-  longitude: any
-): Promise<string | undefined> => {
-  const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`;
+export async function reverseGeocode(
+  lat: number,
+  lng: number
+): Promise<string | null> {
   try {
-    const response = await fetch(url);
-    const data = await response.json();
-    return data.display_name;
+    const response = await fetch(`/api/reverse-geocode?lat=${lat}&lng=${lng}`);
+
+    if (response.ok) {
+      const data = await response.json();
+      return data.address;
+    }
   } catch (error) {
-    console.error("Error in reverse geocoding:", error);
+    console.warn("Server-side reverse geocoding failed:", error);
   }
-};
+
+  return `Location (${lat.toFixed(4)}, ${lng.toFixed(4)})`;
+}
 
 export function getBanks(): Promise<any> {
   return api

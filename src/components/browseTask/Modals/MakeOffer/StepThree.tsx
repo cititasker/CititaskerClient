@@ -2,12 +2,10 @@
 
 import { useRouter, useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useAppDispatch, useAppSelector } from "@/store/hook";
+import { useAppSelector } from "@/store/hook";
 import { queryClient } from "@/providers/ServerProvider";
-import { purgeStateData } from "@/store/slices/task";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import { baseSchema, offerSchemaType } from "@/schema/offer";
 import StepThreeForm from "./StepThreeForm";
@@ -15,6 +13,7 @@ import { calculateFees } from "@/utils";
 import { API_ROUTES, ROUTES } from "@/constant";
 import { useMakeOrUpdateOffer } from "@/services/offers/offers.hook";
 import { z } from "zod";
+import { usePurgeData } from "@/utils/dataPurge";
 
 const schema = baseSchema.pick({ accepted: true });
 type SchemaType = z.infer<typeof schema>;
@@ -33,8 +32,8 @@ export default function StepThree({
   const { id } = useParams();
   const { data: session } = useSession();
   const router = useRouter();
-  const dispatch = useAppDispatch();
   const { showSnackbar } = useSnackbar();
+  const { purgeOffer } = usePurgeData();
 
   const { offer, taskersOffer } = useAppSelector((state) => state.task);
 
@@ -45,11 +44,14 @@ export default function StepThree({
 
   const mutation = useMakeOrUpdateOffer({
     isUpdating: isEdit,
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({
         queryKey: [API_ROUTES.GET_TASK_BY_ID, id],
       });
-      dispatch(purgeStateData({ path: "offer" }));
+      queryClient.invalidateQueries({
+        queryKey: [API_ROUTES.TASKS],
+      });
+      await purgeOffer();
       nextStep();
     },
     onError: (error) => {

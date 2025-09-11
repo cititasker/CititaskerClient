@@ -7,13 +7,13 @@ import { cn } from "@/lib/utils";
 
 interface TabItem {
   label: string;
-  id?: string;
+  value: string;
   render: () => React.ReactNode;
 }
 
 interface CustomTabProps {
   items: TabItem[];
-  defaultId?: string;
+  defaultValue?: string;
   className?: string;
   listClassName?: string;
   triggerClassName?: string;
@@ -21,60 +21,50 @@ interface CustomTabProps {
   queryKey?: string;
 }
 
-const CustomTab: React.FC<CustomTabProps> = ({
+export default function CustomTab({
   items,
-  defaultId,
+  defaultValue,
   className,
   listClassName,
   triggerClassName,
   contentClassName,
   queryKey = "tab",
-}) => {
+}: CustomTabProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const tabItems = React.useMemo(
-    () =>
-      items.map((item) => ({
-        ...item,
-        id: item.id ?? item.label.toLowerCase().replace(/\s+/g, "-"),
-      })),
-    [items]
-  );
+  const selectedTab =
+    searchParams.get(queryKey) ?? defaultValue ?? items[0]?.value;
 
-  const rawSelected = searchParams.get(queryKey);
-  const selectedFromQuery = rawSelected ?? undefined;
-  const fallbackId = defaultId ?? tabItems[0]?.id;
-  const selectedTab = tabItems.some(({ id }) => id === selectedFromQuery)
-    ? selectedFromQuery
-    : fallbackId;
-
-  const handleTabChange = (val: string) => {
+  const handleTabChange = (value: string) => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set(queryKey, val);
+    params.set(queryKey, value);
     router.replace(`?${params.toString()}`);
   };
 
-  if (!tabItems.length) return null;
+  if (!items.length) return null;
 
   return (
     <Tabs
       value={selectedTab}
       onValueChange={handleTabChange}
-      className={cn("pb-10", className)}
+      className={cn("w-full h-[calc(100%-45px)]", className)}
     >
       <TabsList
         className={cn(
-          "bg-transparent p-0 gap-4 border-b border-border rounded-none shadow-none w-full max-w-full",
+          "grid w-full rounded-xl p-1 bg-background-tertiary",
+          `grid-cols-${items.length}`,
           listClassName
         )}
       >
-        {tabItems.map(({ label, id }) => (
+        {items.map(({ label, value }) => (
           <TabsTrigger
-            key={id}
-            value={id}
+            key={value}
+            value={value}
             className={cn(
-              "py-2 px-4 text-sm sm:text-base font-semibold text-muted-foreground border-b-2 border-transparent data-[state=active]:text-primary data-[state=active]:border-primary rounded-none",
+              "data-[state=active]:bg-background data-[state=active]:text-primary",
+              "data-[state=active]:shadow-sm transition-all duration-200",
+              "text-text-muted hover:text-text-primary font-medium",
               triggerClassName
             )}
           >
@@ -83,17 +73,18 @@ const CustomTab: React.FC<CustomTabProps> = ({
         ))}
       </TabsList>
 
-      {tabItems.map(({ id, render }) => (
+      {items.map(({ value, render }) => (
         <TabsContent
-          key={id}
-          value={id}
-          className={cn("relative", contentClassName)}
+          key={value}
+          value={value}
+          className={cn(
+            "focus:outline-none bg-white h-full rounded-xl py-5 md:py-8 overflow-y-auto no-scrollbar",
+            contentClassName
+          )}
         >
           {render()}
         </TabsContent>
       ))}
     </Tabs>
   );
-};
-
-export default CustomTab;
+}

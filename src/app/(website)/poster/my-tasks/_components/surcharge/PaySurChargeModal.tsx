@@ -46,7 +46,6 @@ export default function PaySurChargeModal({
       title={currentStep == 1 ? "Pay surcharge" : undefined}
     >
       <AnimatedStep
-        direction={direction}
         currentStep={currentStep}
         renderStepContent={renderStepContent}
       />

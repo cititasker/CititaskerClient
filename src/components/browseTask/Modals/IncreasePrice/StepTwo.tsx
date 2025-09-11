@@ -94,20 +94,12 @@ export default function StepTwo({ nextStep, prevStep }: StepTwoProps) {
                 placeholder="Please select a reason"
               />
               {reason == "5" && (
-                <div>
-                  <FormTextArea
-                    name="description"
-                    label="Explain the reason"
-                    placeholder="Write here...."
-                    className="h-[104px] mb-0 p-5 rounded-[10px] bg-light-grey"
-                    maxLength={maxLengthChar}
-                  />
-                  {!errors.description && (
-                    <p className="text-xs text-muted-foreground mt-1">
-                      {remainingChars} characters remaining
-                    </p>
-                  )}
-                </div>
+                <FormTextArea
+                  name="description"
+                  label="Explain the reason"
+                  placeholder="Write here...."
+                  maxLength={maxLengthChar}
+                />
               )}
             </div>
           </div>

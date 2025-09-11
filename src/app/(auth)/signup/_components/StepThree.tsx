@@ -1,21 +1,21 @@
 "use client";
-
 import React from "react";
-import { useForm, FormProvider, SubmitHandler } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-
 import { verifyPhoneSchema, verifyPhoneSchemaType } from "@/schema/auth";
 import { sendPhoneVerificationToken } from "@/services/auth";
 import { useSnackbar } from "@/providers/SnackbarProvider";
-
 import FormInput from "@/components/forms/FormInput";
-import FormButton from "@/components/forms/FormButton";
-import Image from "next/image";
-import StepWrapper from "./StepWrapper";
-import { Logo } from "@/constant/icons";
+import AuthCard from "../../components/AuthCard";
+import StepIndicator from "../../components/StepIndicator";
+import AuthForm from "../../components/AuthForm";
 
-const StepThree = ({ onNext }: { onNext: () => void }) => {
+interface Props {
+  onNext?: () => void;
+}
+
+const StepThree = ({ onNext }: Props) => {
   const { showSnackbar } = useSnackbar();
 
   const methods = useForm<verifyPhoneSchemaType>({
@@ -26,49 +26,51 @@ const StepThree = ({ onNext }: { onNext: () => void }) => {
   const mutation = useMutation({
     mutationFn: sendPhoneVerificationToken,
     onSuccess: (data) => {
-      showSnackbar(data?.message, "success");
       localStorage.setItem("phone_number", methods.getValues("phone_number"));
-      onNext();
+      showSnackbar(data?.message, "success");
+      onNext?.();
     },
     onError: (error: any) =>
       showSnackbar(error?.message || "Failed to verify phone", "error"),
   });
 
-  const onSubmit: SubmitHandler<verifyPhoneSchemaType> = (data) => {
-    mutation.mutate(data);
-  };
-
   return (
-    <StepWrapper>
+    <AuthCard>
+      <StepIndicator currentStep={3} totalSteps={5} />
+
       <FormProvider {...methods}>
-        <form
-          onSubmit={methods.handleSubmit(onSubmit)}
-          className="max-w-[342px] mx-auto"
-        >
-          <div className="mb-7 flex items-center w-fit mx-auto">
-            <h2 className="text-center text-xl font-semibold mr-2">
-              Sign Up on
-            </h2>
-            <Logo />
-          </div>
+        <form onSubmit={methods.handleSubmit((data) => mutation.mutate(data))}>
+          <AuthForm
+            title="Phone Verification"
+            showGoogleAuth={false}
+            submitButton={{
+              text: "Send Code",
+              loading: mutation.isPending,
+              type: "submit",
+            }}
+            bottomLink={{
+              text: "Need help?",
+              linkText: "Contact Support",
+              href: "/support",
+            }}
+          >
+            <div className="mb-4">
+              <p className="text-center text-text-secondary mb-8">
+                We'll send a verification code to your phone number for
+                security.
+              </p>
+            </div>
 
-          <FormInput
-            label="Phone Number"
-            name="phone_number"
-            type="text"
-            placeholder="Enter your phone number"
-            className="mb-[65px]"
-          />
-
-          <FormButton
-            text="Verify"
-            type="submit"
-            className="w-full"
-            loading={mutation.isPending}
-          />
+            <FormInput
+              label="Phone Number"
+              name="phone_number"
+              type="tel"
+              placeholder="Enter your phone number"
+            />
+          </AuthForm>
         </form>
       </FormProvider>
-    </StepWrapper>
+    </AuthCard>
   );
 };
 

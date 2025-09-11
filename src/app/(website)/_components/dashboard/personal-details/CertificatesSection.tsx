@@ -43,8 +43,6 @@ const CertificatesSection = () => {
                   <FormDatePicker
                     name={`certificates[${index}].year`}
                     label="Year:"
-                    labelClassName="font-normal"
-                    triggerClass="rounded-md bg-light-grey"
                   />
                 </div>
                 <FormButton

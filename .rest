@@ -40,3 +40,10 @@ Content-Type: image/png
 
 @/Users/taiwojoseph/Downloads/section_1_main.png
 --boundary--
+
+
+
+###
+GET https://staging-api.cititasker.com/api/v1/utility/categories
+Content-Type: application/json
+Accept: application/json

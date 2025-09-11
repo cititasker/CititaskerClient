@@ -3,146 +3,108 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { IArrowDown } from "@/constant/icons";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-
-interface MenuItem {
-  name: string;
-  href?: string;
-  icon: any;
-  children?: MenuItem[];
-}
+import { MenuItem } from "./data/menuConfig";
 
 interface SidebarMenuItemProps {
   item: MenuItem;
-  level?: number;
-  openMenus: Record<string, boolean>;
-  toggleMenu: (key: string) => void;
   role: string;
-  className?: string;
+  level?: number;
+  isExpanded?: boolean;
+  onToggleExpanded?: () => void;
+  onNavigate?: () => void;
 }
 
 const SidebarMenuItem = ({
   item,
-  level = 0,
-  openMenus,
-  toggleMenu,
   role,
+  level = 0,
+  isExpanded = false,
+  onToggleExpanded,
+  onNavigate,
 }: SidebarMenuItemProps) => {
   const pathname = usePathname();
-  const key = `${role}-${item.href || item.name}`;
-  const isOpen = openMenus[key];
-  const fullPath = `/${role}${item.href ?? ""}`;
-  const isActive = pathname === fullPath;
-
+  const fullPath = item.href ? `/${role}${item.href}` : null;
+  const isActive = fullPath && pathname === fullPath;
   const hasChildren = Boolean(item.children?.length);
-  const padding =
-    level === 0
-      ? "px-5 md:pl-[30px] lg:pl-[50px] md:pr-5"
-      : "px-5 md:px-[70px]";
 
-  const baseStyles = cn(
-    "flex items-center justify-center md:justify-start cursor-pointer gap-3 h-12 md:h-[56px] w-full rounded-none border-r-2 text-base font-normal transition-colors",
-    padding,
-    isActive
-      ? "bg-light-primary-1 border-primary text-primary"
-      : "border-transparent text-balck-2 hover:bg-current/40"
+  const baseClasses = cn(
+    "w-full justify-start transition-all duration-200 group relative",
+    level === 0 ? "h-12 px-3" : "h-10 px-6 text-sm",
+    isActive && "bg-primary text-primary-foreground shadow-sm",
+    !isActive && "hover:bg-accent hover:text-accent-foreground"
   );
 
   const Icon = item.icon;
 
+  // Parent with children
   if (hasChildren) {
     return (
-      <>
-        <Collapsible
-          open={isOpen}
-          onOpenChange={() => toggleMenu(key)}
-          className="w-full hidden md:block"
+      <div className="space-y-1">
+        <Button
+          variant="ghost"
+          className={baseClasses}
+          onClick={onToggleExpanded}
         >
-          <CollapsibleTrigger asChild>
-            <button
-              className={baseStyles}
-              aria-expanded={isOpen}
-              aria-controls={`${key}-children`}
-            >
-              <div className="flex flex-1 items-center gap-3">
-                <Icon />
-                <span className="hidden md:inline-block">{item.name}</span>
-              </div>
-              <IArrowDown
-                className={cn(
-                  "transform transition-transform hidden md:inline-block",
-                  !isOpen ? "-rotate-180" : "rotate-0"
-                )}
-              />
-            </button>
-          </CollapsibleTrigger>
-          <CollapsibleContent id={`${key}-children`} className="">
-            {item.children?.map((child, idx) => (
+          <Icon className="mr-3 h-5 w-5 flex-shrink-0" />
+          <span className="flex-1 text-left font-medium">{item.name}</span>
+          {item.badge && (
+            <Badge variant="secondary" className="mr-2 h-5 px-1.5 text-xs">
+              {item.badge}
+            </Badge>
+          )}
+          <ChevronRight
+            className={cn(
+              "h-4 w-4 transition-transform duration-200",
+              isExpanded && "rotate-90"
+            )}
+          />
+        </Button>
+
+        <div
+          className={cn(
+            "overflow-hidden transition-all duration-300 ease-in-out",
+            isExpanded ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+          )}
+        >
+          <div className="space-y-1">
+            {item.children?.map((child) => (
               <SidebarMenuItem
-                key={`${key}-child-${idx}`}
+                key={child.name}
                 item={child}
-                level={level + 1}
-                openMenus={openMenus}
-                toggleMenu={toggleMenu}
                 role={role}
+                level={level + 1}
+                onNavigate={onNavigate}
               />
             ))}
-          </CollapsibleContent>
-        </Collapsible>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild className="md:hidden">
-            <button
-              className={baseStyles}
-              aria-expanded={isOpen}
-              aria-controls={`${key}-children`}
-            >
-              <div className="flex flex-1 items-center gap-3">
-                <Icon />
-                <span className="hidden md:inline-block">{item.name}</span>
-              </div>
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            align="center"
-            side="right"
-            sideOffset={10}
-            className="w-48"
-          >
-            <div className="px-4 py-2">
-              <p className="text-xs font-medium text-nav-icon">{item.name}</p>
-            </div>
-            {item.children?.map((child, idx) => (
-              <Link
-                key={`${key}-child-${idx}`}
-                href={`/${role}${child.href ?? "#"}`}
-                className={`flex items-center gap-2 px-4 py-2 h-fit w-full `}
-              >
-                {/* <Icon /> */}
-                <span className="text-sm">{child.name}</span>
-              </Link>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </>
+          </div>
+        </div>
+      </div>
     );
   }
 
-  return (
-    <Link href={`/${role}${item.href ?? "#"}`} className={baseStyles}>
-      <Icon />
-      <span className="hidden md:inline-block">{item.name}</span>
+  // Single item
+  const MenuButton = (
+    <Button variant="ghost" className={baseClasses}>
+      <Icon className="mr-3 h-5 w-5 flex-shrink-0" />
+      <span className="flex-1 text-left font-medium">{item.name}</span>
+      {item.badge && (
+        <Badge variant="secondary" className="h-5 px-1.5 text-xs">
+          {item.badge}
+        </Badge>
+      )}
+    </Button>
+  );
+
+  return fullPath ? (
+    <Link href={fullPath} onClick={onNavigate}>
+      {MenuButton}
     </Link>
+  ) : (
+    <div className="opacity-50 cursor-not-allowed">{MenuButton}</div>
   );
 };
 

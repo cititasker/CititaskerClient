@@ -1,58 +1,3 @@
-// "use client";
-// import React from "react";
-// import FormButton from "../forms/FormButton";
-// import { Input } from "@/components/ui/input";
-
-// export default function Hero() {
-//   return (
-//     <main className="w-full text-white pt-32 pb-10">
-//       <section className="bg-[#021637]">
-//         <div className="px-4 md:px-16 mx-auto py-10 md:py-20">
-//           <p className="text-sm mb-2">Welcome Judith!</p>
-//           <h1 className="text-3xl sm:text-5xl font-bold mb-2">
-//             Post a task. Get it done.
-//           </h1>
-//           <p className="text-base sm:text-lg text-gray-300 mb-3">
-//             Connect with verified taskers in your city.
-//           </p>
-
-//           {/* Search bar */}
-
-//           <div className="relative w-full mb-4">
-//             <Input
-//               type="text"
-//               placeholder="What task do you need done?"
-//               className="w-full bg-white text-black px-4 py-4 pr-28 rounded-full"
-//             />
-//             <FormButton className="absolute right-1 top-1 bottom-0 !h-10">
-//               Post task
-//             </FormButton>
-//           </div>
-
-//           {/* Suggested tags */}
-//           <div className="flex flex-wrap justify-start gap-2 text-sm text-white/80">
-//             {[
-//               "Clean my house",
-//               "Fix my door",
-//               "Catering for birthday party",
-//               "Deliver something for me",
-//               "Mount my TV",
-//               "Paint my room",
-//             ].map((tag, idx) => (
-//               <span
-//                 key={idx}
-//                 className="bg-white/10 border border-white/20 px-3 py-1 rounded-full"
-//               >
-//                 {tag}
-//               </span>
-//             ))}
-//           </div>
-//         </div>
-//       </section>
-//     </main>
-//   );
-// }
-
 "use client";
 
 import React, { useState } from "react";
@@ -90,7 +35,7 @@ export default function Hero() {
 
         <div className="relative z-10 mx-auto py-10 md:py-20">
           <p className="text-base mb-2">Welcome {user?.first_name}!</p>
-          <h1 className="text-3xl sm:text-5xl font-bold mb-2">
+          <h1 className="text-3xl sm:text-5xl font-bold mb-2 text-white">
             Post a task. Get it done.
           </h1>
           <p className="text-base sm:text-lg text-gray-300 mb-3">
@@ -108,7 +53,7 @@ export default function Hero() {
             />
             <FormButton
               href={`/post-task?todo=${todo}`}
-              className="absolute sm:right-4 right-2 top-1/2 bottom-0 -translate-y-1/2"
+              className="absolute sm:right-4 right-2 top-1/2 bottom-0 !-translate-y-1/2"
               size={isSmallScreen ? "lg" : "default"}
             >
               Post task

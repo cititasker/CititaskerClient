@@ -57,7 +57,7 @@ export function getUserProfileDetails(id: any) {
     });
 }
 
-export const getUserPorfolio=(id: any):Promise<UserPorfolioRes> => {
+export const getUserPorfolio = (id: any): Promise<UserPorfolioRes> => {
   return api
     .get(`${API_ROUTES.GET_PORTFOLIO}/${id}`)
     .then((data) => {
@@ -66,7 +66,7 @@ export const getUserPorfolio=(id: any):Promise<UserPorfolioRes> => {
     .catch((error: AxiosError) => {
       throw error.response?.data;
     });
-}
+};
 
 export function updateUserPorfolio(data: any) {
   return api
@@ -81,7 +81,7 @@ export function updateUserPorfolio(data: any) {
 
 export function deleteUserPorfolio(id: any) {
   return api
-    .post(`${API_ROUTES.DELETE_PORTFOLIO}/${id}`)
+    .delete(`${API_ROUTES.UPDATE_PORTFOLIO}/${id}`)
     .then((data) => {
       return data.data;
     })
@@ -134,7 +134,9 @@ export function deleteFaq(id: any) {
     });
 }
 
-export const getReviews = (id: number | string): Promise<GetReviewsResponse> => {
+export const getReviews = (
+  id: number | string
+): Promise<GetReviewsResponse> => {
   return api
     .get(`${API_ROUTES.GET_REVIEWS}?task_id=${id}`)
     .then((data) => {
@@ -143,9 +145,9 @@ export const getReviews = (id: number | string): Promise<GetReviewsResponse> => 
     .catch((error: AxiosError) => {
       throw error.response?.data;
     });
-}
+};
 
-export const postReview = (data:any): Promise<GetReviewsResponse> => {
+export const postReview = (data: any): Promise<GetReviewsResponse> => {
   return api
     .post(`${API_ROUTES.POST_REVIEW}`, data)
     .then((data) => {
@@ -154,9 +156,9 @@ export const postReview = (data:any): Promise<GetReviewsResponse> => {
     .catch((error: AxiosError) => {
       throw error.response?.data;
     });
-}
+};
 
-export const reorderFaqs = (data:any): Promise<GetReviewsResponse> => {
+export const reorderFaqs = (data: any): Promise<GetReviewsResponse> => {
   return api
     .post(`${API_ROUTES.POST_REVIEW}`, data)
     .then((data) => {
@@ -165,7 +167,4 @@ export const reorderFaqs = (data:any): Promise<GetReviewsResponse> => {
     .catch((error: AxiosError) => {
       throw error.response?.data;
     });
-}
-
-
-
+};

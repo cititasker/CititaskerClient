@@ -1,7 +1,7 @@
 import { getUserTasks } from "@/actions";
 import { queryClient } from "@/providers/ServerProvider";
 import { USER_TASKS } from "@/queries/queryKeys";
-import MapWrapper from "@/components/browseTask/MapWrapper";
+import MapWrapper from "@/components/myTasks";
 
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
 

@@ -6,14 +6,13 @@ import { useCreateIntent } from "@/services/tasks/tasks.hook";
 import Paystack from "@/utils/paystackSetup";
 import { errorHandler } from "@/utils";
 import { API_ROUTES } from "@/constant";
-import { useAppDispatch } from "@/store/hook";
-import { purgeStateData } from "@/store/slices/task";
 import useModal from "@/hooks/useModal";
+import { usePurgeData } from "@/utils/dataPurge";
 
 export const useOfferTaskLogic = (task: ITask) => {
   const router = useRouter();
   const { showSnackbar } = useSnackbar();
-  const dispatch = useAppDispatch();
+  const { purgeOffer } = usePurgeData();
 
   const [showAcceptModal, setShowAcceptModal] = useState(false);
   const [selectedOffer, setSelectedOffer] = useState<IOffer | null>(null);
@@ -71,8 +70,8 @@ export const useOfferTaskLogic = (task: ITask) => {
     }
   };
 
-  const closeSurcharge = () => {
-    dispatch(purgeStateData({ path: "offer" }));
+  const closeSurcharge = async () => {
+    await purgeOffer();
     surchargeModal.closeModal();
   };
 

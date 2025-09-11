@@ -6,7 +6,7 @@ const BrowseTasklayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="h-dvh pt-[90px] bg-[#F3F5F6]">
       <div className="container-w py-0 flex flex-row gap-3 relative overflow-y-auto">
-        <aside className="basis-1/4 w-fit sticky top-5 md:pt-3 hidden xl:inline-block">
+        <aside className="basis-1/4 w-fit sticky top-5 md:pt-3 hidden xl:inline-block overflow-auto h-[calc(100dvh-90px)] no-scrollbar">
           <FilterList />
         </aside>
         <main className="flex gap-[14px] w-full xl:w-3/4 h-[calc(100dvh-90px)]">

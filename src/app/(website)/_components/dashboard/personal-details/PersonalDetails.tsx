@@ -12,9 +12,9 @@ import { updateProfileDetails } from "@/services/user/users.api";
 import { useAppSelector } from "@/store/hook";
 import { API_ROUTES, ROLE } from "@/constant";
 import { FormSchema, schema } from "../schema";
-import Profile from "@/app/(website)/(public_profile)/_components/profile";
 import { useGetUserProfile } from "@/services/user/user.hook";
 import PulseLoader from "@/components/reusables/loaders/PulseLoader";
+import PublicProfile from "@/components/shared/dashboard/profile/public-view/PublicProfile";
 
 const PersonalDetails = () => {
   const [edit, setEdit] = useState(false);
@@ -76,8 +76,8 @@ const PersonalDetails = () => {
 
   if (!edit) {
     return (
-      <Profile
-        id={user.id}
+      <PublicProfile
+        id={user?.id || ""}
         onEdit={() => setEdit(true)}
         isEdit={true}
         canShare={false}

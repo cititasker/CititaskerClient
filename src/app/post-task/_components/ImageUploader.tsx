@@ -1,10 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { useFormContext, Controller } from "react-hook-form";
-import { IAdd, IUploadRemove } from "@/constant/icons";
+import { useFormContext } from "react-hook-form";
 import { convertToBase64 } from "@/utils";
 import { cn } from "@/lib/utils";
+import { Plus, X, Upload, Image as ImageIcon } from "lucide-react";
+import { useState } from "react";
 import {
   FormControl,
   FormDescription,
@@ -13,6 +14,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+
+interface ImageData {
+  src: string;
+  name: string;
+  new: boolean;
+}
 
 interface ImageUploaderProps {
   name: string;
@@ -25,45 +32,82 @@ interface ImageUploaderProps {
 
 export default function ImageUploader({
   name,
-  label,
-  description,
-  multiple = false,
-  limit,
+  label = "Add Photos",
+  description = "Upload images to help describe your task better",
+  multiple = true,
+  limit = 5,
   className,
 }: ImageUploaderProps) {
-  const { control, getValues, setValue } = useFormContext();
-  const maxFiles = multiple ? limit || Infinity : 1;
+  const { control, setValue, watch } = useFormContext();
+  const [dragActive, setDragActive] = useState(false);
+  const maxFiles = multiple ? limit : 1;
 
-  const handleUpload = async (
-    e: React.ChangeEvent<HTMLInputElement>,
-    currentImages: any[],
-    onChange: (val: any[]) => void
-  ) => {
-    const files = Array.from(e.target.files || []);
-    const allowed = maxFiles - currentImages.length;
-    const selected = files.slice(0, allowed);
+  // Watch the current value
+  const currentImages = watch(name) || [];
 
-    const newImages = await Promise.all(
-      selected.map(async (file) => ({
-        src: await convertToBase64(file),
-        file,
-        new: true,
-      }))
-    );
-    // const result = [...newImages, ...currentImages].slice(-maxFiles);
+  const handleFiles = async (files: File[]) => {
+    const safeCurrentImages = currentImages || [];
+    const remainingSlots = maxFiles - safeCurrentImages.length;
+    const filesToProcess = files.slice(0, remainingSlots);
 
-    onChange([...newImages, ...currentImages].slice(0, maxFiles));
-    e.target.value = ""; // reset input
+    try {
+      const newImages: ImageData[] = await Promise.all(
+        filesToProcess.map(async (file) => ({
+          src: (await convertToBase64(file)) as string,
+          name: file.name,
+          new: true,
+        }))
+      );
+
+      const updatedImages = [...safeCurrentImages, ...newImages];
+      setValue(name, updatedImages, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    } catch (error) {
+      console.error("Error processing images:", error);
+    }
   };
 
-  const handleRemove = (
-    index: number,
-    currentImages: any[],
-    onChange: (val: any[]) => void
-  ) => {
-    const updated = [...currentImages];
-    updated.splice(index, 1);
-    onChange(updated);
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    await handleFiles(files);
+    e.target.value = "";
+  };
+
+  const handleDrop = async (e: React.DragEvent) => {
+    e.preventDefault();
+    setDragActive(false);
+
+    const files = Array.from(e.dataTransfer.files).filter((file) =>
+      file.type.startsWith("image/")
+    );
+    await handleFiles(files);
+  };
+
+  const handleRemove = (index: number) => {
+    console.log("handleRemove called with index:", index);
+    console.log("Current images before remove:", currentImages);
+
+    if (!currentImages || !Array.isArray(currentImages)) {
+      console.error("Current images is not an array:", currentImages);
+      return;
+    }
+
+    if (index < 0 || index >= currentImages.length) {
+      console.error(
+        "Invalid index:",
+        index,
+        "Array length:",
+        currentImages.length
+      );
+      return;
+    }
+
+    const updated = currentImages.filter((_, i) => i !== index);
+    console.log("Updated images after remove:", updated);
+
+    setValue(name, updated, { shouldValidate: true, shouldDirty: true });
   };
 
   return (
@@ -71,45 +115,122 @@ export default function ImageUploader({
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem className={cn("space-y-2", className)}>
-          {label && <FormLabel>{label}</FormLabel>}
-          {description && <FormDescription>{description}</FormDescription>}
+        <FormItem className={cn("space-y-3", className)}>
+          <FormLabel className="text-base font-medium text-text-primary">
+            {label}
+          </FormLabel>
+
+          {description && (
+            <FormDescription className="text-sm text-text-muted">
+              {description}
+            </FormDescription>
+          )}
+
           <FormControl>
-            <div className="grid grid-cols-[repeat(auto-fill,minmax(100px,1fr))] items-center gap-4">
-              {field.value?.length < maxFiles && (
-                <div className="relative h-[120px] border border-dashed border-gray-300 rounded-md flex items-center justify-center">
+            <div className="space-y-4">
+              {/* Upload Area */}
+              {(!currentImages || currentImages.length < maxFiles) && (
+                <div
+                  className={cn(
+                    "relative border-2 border-dashed rounded-2xl p-6 transition-all duration-200",
+                    "hover:bg-background-secondary hover:border-border-medium cursor-pointer",
+                    dragActive
+                      ? "border-primary bg-primary-50"
+                      : "border-border-light bg-background"
+                  )}
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    setDragActive(true);
+                  }}
+                  onDragLeave={() => setDragActive(false)}
+                  onDrop={handleDrop}
+                >
                   <input
                     type="file"
                     accept="image/*"
                     multiple={multiple}
-                    onChange={(e) =>
-                      handleUpload(e, field.value || [], field.onChange)
-                    }
-                    className="absolute inset-0 opacity-0 cursor-pointer"
+                    onChange={handleUpload}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                   />
-                  <IAdd />
+
+                  <div className="flex flex-col items-center justify-center text-center space-y-3">
+                    <div
+                      className={cn(
+                        "p-3 rounded-full transition-colors",
+                        dragActive
+                          ? "bg-primary text-white"
+                          : "bg-background-secondary text-text-muted"
+                      )}
+                    >
+                      <Upload className="w-6 h-6" />
+                    </div>
+
+                    <div>
+                      <p className="text-sm font-medium text-text-primary">
+                        {dragActive ? "Drop images here" : "Upload Images"}
+                      </p>
+                      <p className="text-xs text-text-muted mt-1">
+                        Drag and drop or click to browse • Max {maxFiles} images
+                      </p>
+                    </div>
+                  </div>
                 </div>
               )}
 
-              {field.value?.map((img: any, i: number) => (
-                <div key={i} className="relative h-[120px]">
-                  <Image
-                    src={img.src}
-                    alt={`uploaded-${i}`}
-                    fill
-                    className="object-cover rounded-md border border-dark-grey-1"
-                  />
-                  <button
-                    type="button"
-                    className="absolute top-0.5 right-0.5"
-                    onClick={() => handleRemove(i, field.value, field.onChange)}
-                  >
-                    <IUploadRemove />
-                  </button>
+              {/* Image Grid */}
+              {currentImages && currentImages.length > 0 && (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                  {currentImages.map((img: ImageData, index: number) => (
+                    <div
+                      key={`image-${index}-${img.name}`}
+                      className="group relative aspect-square rounded-xl overflow-hidden border border-border-light bg-background-secondary"
+                    >
+                      <Image
+                        src={img.src}
+                        alt={img.name || `Image ${index + 1}`}
+                        fill
+                        className="object-cover transition-transform duration-200 group-hover:scale-105"
+                      />
+
+                      {/* Remove button */}
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          console.log(
+                            "Remove button clicked for index:",
+                            index
+                          );
+                          handleRemove(index);
+                        }}
+                        className={cn(
+                          "absolute top-2 right-2 p-1.5 rounded-full z-10",
+                          "bg-red-500 text-white shadow-lg",
+                          "opacity-0 group-hover:opacity-100 transition-opacity duration-200",
+                          "hover:bg-red-600 active:scale-95"
+                        )}
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+
+                      {/* Overlay */}
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-200" />
+                    </div>
+                  ))}
                 </div>
-              ))}
+              )}
+
+              {/* Image count indicator */}
+              {currentImages && currentImages.length > 0 && (
+                <p className="text-xs text-text-muted flex items-center gap-1">
+                  <ImageIcon className="w-3 h-3" />
+                  {currentImages.length} of {maxFiles} images uploaded
+                </p>
+              )}
             </div>
           </FormControl>
+
           <FormMessage />
         </FormItem>
       )}

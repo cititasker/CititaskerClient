@@ -1,7 +1,7 @@
 "use client";
 
 import CustomAccordion from "@/components/reusables/CustomAccordion";
-import CategoryFilter from "./CategoryFilter/CategoryFilter";
+import CategoryFilter from "./CategoryFilter";
 import { Card } from "@/components/ui/card";
 import PriceFilter from "./PriceFilter";
 import DistanceFilter from "./DistanceFilter";
@@ -32,8 +32,9 @@ const FilterList = ({ searchTerm }: IProps) => {
     <Card className="md:rounded-[20px] shadow-none md:shadow-sm">
       <CustomAccordion
         items={items}
-        type="multiple"
-        defaultValue={["category"]}
+        collapsible
+        type="single"
+        // defaultValue={["category"]}
         itemWrapperClassName="md:px-5 border-b-[0.8px] border-light-grey"
       />
     </Card>

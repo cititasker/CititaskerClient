@@ -70,6 +70,8 @@ interface IUser {
 
 type TRole = "tasker" | "poster";
 
+type LocationTypeT = "in_person" | "online";
+
 interface ITasker {
   created_at: string;
   email: string;
@@ -117,7 +119,7 @@ interface ITask {
   budget: number;
   images: string[];
   location: string[];
-  location_type: string;
+  location_type: LocationTypeT;
   name: string;
   poster: {
     created_at: string;
@@ -147,6 +149,7 @@ interface ITask {
 interface ITaskCategory {
   id: number;
   name: string;
+  subcategories: { id: number; name: string }[];
 }
 
 interface ICategory {

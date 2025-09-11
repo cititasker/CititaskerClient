@@ -4,97 +4,64 @@ import Link from "next/link";
 import { otpApi, resendEmailVerificationApi } from "@/services/auth";
 import { useMutation } from "@tanstack/react-query";
 import { useSnackbar } from "@/providers/SnackbarProvider";
-import StepWrapper from "./StepWrapper";
-import { useCountdown } from "@/hooks/useCountdown";
-import CustomPinInput from "@/components/reusables/CustomPinInput";
 import { ROUTES } from "@/constant";
-import FormButton from "@/components/forms/FormButton";
+import AuthCard from "../../components/AuthCard";
+import StepIndicator from "../../components/StepIndicator";
+import OTPInput from "@/components/reusables/OTPInput";
 
-interface IProps {
-  onNext: () => void;
+interface Props {
+  onNext?: () => void;
 }
 
-const StepTwo = ({ onNext }: IProps) => {
-  const [otpValues, setOtpValues] = useState("");
+const StepTwo = ({ onNext }: Props) => {
+  const [otp, setOtp] = useState("");
   const [email, setEmail] = useState("");
   const { showSnackbar } = useSnackbar();
-  const { secondsLeft, isRunning, start } = useCountdown(60);
 
-  const mutation = useMutation({
-    mutationFn: otpApi,
-    onSuccess: (data) => {
-      showSnackbar(data?.message, "success");
-      onNext();
-    },
-    onError(error) {
-      showSnackbar(error?.message, "error");
-    },
-  });
-
-  const resendMutation = useMutation({
-    mutationFn: resendEmailVerificationApi,
-    onSuccess: (data) => {
-      showSnackbar(data?.message, "success");
-      start();
-    },
-    onError(error) {
-      showSnackbar(error?.message, "error");
-    },
-  });
-
-  // Load stored email from localStorage
   useEffect(() => {
     const storedEmail = localStorage.getItem("email");
     if (storedEmail) setEmail(storedEmail);
   }, []);
 
-  const handleResendClick = () => {
-    resendMutation.mutate();
-  };
+  const verifyMutation = useMutation({
+    mutationFn: otpApi,
+    onSuccess: (data) => {
+      showSnackbar(data?.message, "success");
+      onNext?.();
+    },
+    onError: (error: any) => showSnackbar(error?.message, "error"),
+  });
 
-  const onComplete = (v: any) => {
-    mutation.mutate({ token: otpValues });
-  };
+  const resendMutation = useMutation({
+    mutationFn: resendEmailVerificationApi,
+    onSuccess: (data) => showSnackbar(data?.message, "success"),
+    onError: (error: any) => showSnackbar(error?.message, "error"),
+  });
 
   return (
-    <StepWrapper>
-      <form>
-        <div className="mb-[2.5rem] text-center">
-          <h2 className="text-xl font-semibold mb-3">Email Verification</h2>
-          <p className="text-sm font-normal">
-            We&apos;ve sent a 4-digit code to <strong>{email}</strong>. The code
-            expires shortly, so please enter it soon.
-          </p>
-        </div>
+    <AuthCard>
+      <StepIndicator currentStep={2} totalSteps={5} />
 
-        <CustomPinInput
-          value={otpValues}
-          onChange={setOtpValues}
-          onComplete={onComplete}
-        />
+      <OTPInput
+        title="Email Verification"
+        subtitle={`We've sent a 4-digit code to ${email}. The code expires shortly, so please enter it soon.`}
+        value={otp}
+        onChange={setOtp}
+        onComplete={() => verifyMutation.mutate({ token: otp })}
+        onResend={() => resendMutation.mutate()}
+        loading={verifyMutation.isPending}
+        resending={resendMutation.isPending}
+      />
 
-        <div className="text-sm text-center mt-6 flex items-center justify-center">
-          Didn’t receive an email?
-          <FormButton
-            type="button"
-            disabled={isRunning}
-            loading={resendMutation.isPending || mutation.isPending}
-            handleClick={handleResendClick}
-            className="text-primary ml-1.5 disabled:opacity-50 !bg-transparent p-0 mt-0 h-fit gap-1"
-          >
-            {resendMutation.isPending ? "Resending" : "Resend"}{" "}
-            {isRunning ? `in (${secondsLeft}s)` : ""}
-          </FormButton>
-        </div>
-
+      <div className="text-center mt-6">
         <Link
           href={ROUTES.LOGIN}
-          className="mt-3 underline text-dark-secondary text-sm font-normal text-left w-fit block mx-auto"
+          className="text-sm text-text-muted hover:text-primary-600 transition-colors"
         >
           Return to Login
         </Link>
-      </form>
-    </StepWrapper>
+      </div>
+    </AuthCard>
   );
 };
 

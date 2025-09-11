@@ -1,24 +1,26 @@
 "use client";
-
 import React, { useEffect, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { redirect } from "next/navigation";
-import { AnimatePresence } from "framer-motion";
-
+import { AnimatePresence, motion } from "framer-motion";
 import StepOne from "./_components/StepOne";
 import StepTwo from "./_components/StepTwo";
 import StepThree from "./_components/StepThree";
 import StepFour from "./_components/StepFour";
 import StepFive from "./_components/StepFive";
 import { ROUTES } from "@/constant";
+import ProgressBar from "../components/ProgressBar";
 
-const stepsMap: { [key: number]: React.FC<any> } = {
-  1: StepOne,
-  2: StepTwo,
-  3: StepThree,
-  4: StepFour,
-  5: StepFive,
+// Step configuration
+const stepConfig = {
+  1: { component: StepOne, title: "Create Account" },
+  2: { component: StepTwo, title: "Verify Email" },
+  3: { component: StepThree, title: "Add Phone" },
+  4: { component: StepFour, title: "Verify Phone" },
+  5: { component: StepFive, title: "Complete Profile" },
 };
+
+// Improved SignUp Page - much cleaner
 
 const SignUpPage = () => {
   const searchParams = useSearchParams();
@@ -26,36 +28,79 @@ const SignUpPage = () => {
 
   const role = searchParams.get("role");
   const currentStep = useMemo(
-    () => Number(searchParams.get("step") || 1),
+    () => Math.max(1, Math.min(5, Number(searchParams.get("step")) || 1)),
     [searchParams]
   );
 
+  // Redirect if no role
   useEffect(() => {
-    if (!role) redirect(ROUTES.CREATE_ACCOUNT);
+    if (!role) {
+      redirect(ROUTES.CREATE_ACCOUNT);
+      return;
+    }
 
-    // Ensure URL always includes the step
-    const url = new URL(window.location.href);
-    if (!url.searchParams.get("step")) {
-      url.searchParams.set("step", String(currentStep));
+    // Add step to URL if missing
+    if (!searchParams.get("step")) {
+      const url = new URL(window.location.href);
+      url.searchParams.set("step", "1");
       router.replace(url.toString());
     }
-  }, [role, currentStep, router]);
+  }, [role, router, searchParams]);
 
+  // Navigate to next step
   const handleNextStep = () => {
-    const nextStep = currentStep + 1;
-    const url = new URL(window.location.href);
-    url.searchParams.set("step", String(nextStep));
-    router.push(url.toString());
+    if (currentStep < 5) {
+      const url = new URL(window.location.href);
+      url.searchParams.set("step", String(currentStep + 1));
+      router.push(url.toString());
+    }
   };
 
-  const StepComponent = stepsMap[currentStep];
+  // Get current step component and title
+  const stepData = stepConfig[currentStep as keyof typeof stepConfig];
+
+  if (!stepData) {
+    redirect(ROUTES.CREATE_ACCOUNT);
+    return null;
+  }
+
+  const { component: StepComponent, title } = stepData;
 
   return (
-    <AnimatePresence mode="wait">
-      {StepComponent && (
-        <StepComponent onNext={currentStep < 5 ? handleNextStep : undefined} />
-      )}
-    </AnimatePresence>
+    <div className="max-w-xl mx-auto">
+      {/* Progress Bar */}
+      <ProgressBar currentStep={currentStep} totalSteps={5} />
+
+      {/* Step Title */}
+      <motion.div
+        key={`title-${currentStep}`}
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="text-center mb-8"
+      >
+        <h1 className="text-2xl font-semibold text-text-primary mb-2">
+          {title}
+        </h1>
+        <p className="text-text-secondary">
+          Complete this step to continue with your account setup
+        </p>
+      </motion.div>
+
+      {/* Step Content */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentStep}
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -20 }}
+          transition={{ duration: 0.3 }}
+        >
+          <StepComponent
+            onNext={currentStep < 5 ? handleNextStep : undefined}
+          />
+        </motion.div>
+      </AnimatePresence>
+    </div>
   );
 };
 

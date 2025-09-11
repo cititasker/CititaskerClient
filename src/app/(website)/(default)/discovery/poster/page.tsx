@@ -3,14 +3,14 @@ import BecomeBanner from "@/components/posterDiscovery/BecomeBanner";
 import Hero from "@/components/posterDiscovery/Hero";
 import React from "react";
 import TaskCategorySelector from "@/components/posterDiscovery/TaskCategorySelector";
-import PopularTasksCarousel from "@/components/posterDiscovery/PopularTaskCarousel";
+// import PopularTasksCarousel from "@/components/posterDiscovery/PopularTaskCarousel";
 import { ROUTES } from "@/constant";
 export default function page() {
   return (
     <div>
       <Hero />
       <TaskCategorySelector />
-      <PopularTasksCarousel />
+      {/* <PopularTasksCarousel /> */}
       <BecomeBanner />
       <CantFind
         title="Can’t find what you need?"

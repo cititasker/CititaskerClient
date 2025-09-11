@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { ROUTES } from "@/constant";
 import CategoryDropdown from "../CategoryDropdown";
-import { NavItem } from "./nav";
 import HowItWorksDropdown from "./HowItWorksDropdown";
 import { navbar } from "data";
 import { cn } from "@/lib/utils";
+import { useGetCategories } from "@/services/general/index.hook";
+import { useMemo } from "react";
+import { capitalize } from "@/utils";
 
 interface Props {
   isAuth: boolean;
@@ -17,9 +19,31 @@ interface Props {
 export default function DesktopNav({ isAuth, path, user }: Props) {
   const isPoster = user?.role === "poster";
 
+  const { data = [], isPending } = useGetCategories();
+
+  const navbarList = useMemo(
+    () =>
+      navbar.map((el) => {
+        if (el.name === "Categories") {
+          return {
+            ...el,
+            children: data.map((cat) => ({
+              category: capitalize(cat.name),
+              children: cat.subcategories.map((sub) => ({
+                name: capitalize(sub.name),
+                href: `${ROUTES.BROWSE_TASK}?sub_category_id=${sub.id}`,
+              })),
+            })),
+          };
+        }
+        return el;
+      }),
+    [data]
+  );
+
   return (
     <ul className="hidden lg:flex items-center gap-4">
-      {navbar.map((nav: NavItem, index) => {
+      {navbarList.map((nav, index) => {
         if (nav.name === "Browse Tasks" && isPoster) return null;
 
         return nav.children ? (

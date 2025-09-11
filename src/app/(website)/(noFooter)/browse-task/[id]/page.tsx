@@ -1,5 +1,5 @@
 import TaskDetails from "@/components/browseTask/TaskDetails";
-import { API_ROUTES } from "@/constant";
+import { API_ROUTES, ROUTES } from "@/constant";
 import { queryClient } from "@/providers/ServerProvider";
 import { getSingleTask } from "@/services/task";
 import { getUserTaskById } from "@/services/tasks/tasks.api";
@@ -34,5 +34,5 @@ export default async function Page({ params }: Props) {
     queryKey: [API_ROUTES.GET_TASK_BY_ID, id],
     queryFn: () => getUserTaskById(id),
   });
-  return <TaskDetails back="/browse-task" />;
+  return <TaskDetails back={ROUTES.BROWSE_TASK} />;
 }

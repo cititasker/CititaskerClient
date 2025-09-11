@@ -1,28 +1,50 @@
+// DoughnutChart.tsx - Clean and responsive chart component
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
 import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 
-const data = [
-  { id: 1, value: 5, label: "Pending Payment" },
-  { id: 2, value: 20, label: "Completed Payment" },
+interface ChartData {
+  id: string;
+  label: string;
+  value: number;
+  color: string;
+}
+
+interface DoughnutChartProps {
+  data?: ChartData[];
+  title?: string;
+  centerLabel?: string;
+  centerValue?: string;
+  className?: string;
+}
+
+const DEFAULT_DATA: ChartData[] = [
+  { id: "completed", label: "Completed", value: 20, color: "var(--primary)" },
+  { id: "pending", label: "Pending", value: 5, color: "var(--chart-5)" },
 ];
 
-const COLORS = ["var(--chart-5)", "var(--primary)"];
+export const DoughnutChart = ({
+  data = DEFAULT_DATA,
+  title = "Task Overview",
+  centerLabel = "Total Tasks",
+  centerValue = "25",
+  className,
+}: DoughnutChartProps) => {
+  const total = data.reduce((sum, item) => sum + item.value, 0);
 
-const LEGENDS = [
-  { label: "Completed", colorClass: "bg-primary" },
-  { label: "Pending", colorClass: "bg-[var(--chart-5)]" },
-];
-
-export const DoughnutChart: React.FC = () => {
   return (
-    <Card className="md:max-w-[288px] p-0 w-full rounded-2xl border flex flex-col overflow-hidden shadow-none px-[14px] pt-[18px]">
-      <CardContent className="flex flex-col gap-6 px-0">
-        <div className="relative h-[250px]">
-          <ResponsiveContainer width="100%">
+    <Card className={cn("overflow-hidden", className)}>
+      <CardHeader className="pb-4">
+        <CardTitle className="text-lg font-semibold">{title}</CardTitle>
+      </CardHeader>
+
+      <CardContent className="space-y-6">
+        {/* Chart */}
+        <div className="relative h-64">
+          <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
                 data={data}
@@ -30,31 +52,53 @@ export const DoughnutChart: React.FC = () => {
                 nameKey="label"
                 cx="50%"
                 cy="50%"
-                outerRadius={100}
-                innerRadius={55}
-                cornerRadius={5}
+                outerRadius={80}
+                innerRadius={50}
+                cornerRadius={4}
+                paddingAngle={2}
               >
-                {data.map((_, i) => (
-                  <Cell key={`cell-${i}`} fill={COLORS[i]} />
+                {data.map((entry) => (
+                  <Cell key={entry.id} fill={entry.color} />
                 ))}
               </Pie>
               <Tooltip
-                wrapperClassName="z-50"
-                wrapperStyle={{ zIndex: 9999 }}
+                formatter={(value: number, name: string) => [
+                  `${value} tasks`,
+                  name,
+                ]}
+                contentStyle={{
+                  backgroundColor: "hsl(var(--background))",
+                  border: "1px solid hsl(var(--border))",
+                  borderRadius: "8px",
+                  fontSize: "14px",
+                }}
               />
             </PieChart>
           </ResponsiveContainer>
-          <div className="text-xs absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-10">
-            <p>Total Expenses</p>
-            <p className="text-sm font-bold">₦200,000</p>
+
+          {/* Center Label */}
+          <div className="absolute inset-0 flex flex-col items-center justify-center">
+            <p className="text-xs text-text-muted">{centerLabel}</p>
+            <p className="text-lg font-bold text-text-primary">{centerValue}</p>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-6 mx-auto">
-          {LEGENDS.map(({ label, colorClass }) => (
-            <div key={label} className="flex items-center gap-2">
-              <div className={cn("w-3 h-3 rounded-full", colorClass)} />
-              <p className="text-xs">{label}</p>
+        {/* Legend */}
+        <div className="grid grid-cols-2 gap-4">
+          {data.map((item) => (
+            <div key={item.id} className="flex items-center gap-3">
+              <div
+                className="w-3 h-3 rounded-full flex-shrink-0"
+                style={{ backgroundColor: item.color }}
+              />
+              <div className="min-w-0">
+                <p className="text-sm font-medium text-text-primary truncate">
+                  {item.label}
+                </p>
+                <p className="text-xs text-text-muted">
+                  {item.value} ({((item.value / total) * 100).toFixed(0)}%)
+                </p>
+              </div>
             </div>
           ))}
         </div>

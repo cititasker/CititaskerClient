@@ -89,7 +89,6 @@ export default function RatingModal({
             <FormTextArea
               name="comment"
               placeholder="Add additional comment here (Optional)"
-              className="px-4"
             />
             <FormButton type="submit" className="w-full mt-4" loading={loading}>
               Submit

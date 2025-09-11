@@ -25,10 +25,11 @@ import {
   UseFetchUserTaskByIdOptions,
 } from "./tasks.types";
 
-export const useGetAllTasks = () =>
+export const useGetAllTasks = (queryParams?: Record<string, any>) =>
   useInfiniteQuery<TaskData, TaskError>({
-    queryKey: [API_ROUTES.TASKS],
-    queryFn: async ({ pageParam = 1 }) => getAllTasks({ page: pageParam }),
+    queryKey: [API_ROUTES.TASKS, queryParams], // make queryKey dependent on params
+    queryFn: async ({ pageParam = 1 }) =>
+      getAllTasks({ page: pageParam, ...queryParams }),
     initialPageParam: 1,
     getNextPageParam: (data) => {
       const lastPage = data.data as any;
@@ -51,16 +52,20 @@ export const useFetchTaskById = ({
   });
 };
 
-export const useGetUserTasks = (
-  params: Record<string, any>,
-  options?: UseQueryOptions<TaskData, TaskError>
-) => {
-  return useQuery<TaskData, TaskError>({
-    queryKey: [API_ROUTES.USER_TASKS, params],
-    queryFn: () => getUserTasks(params),
-    ...options,
+export const useGetMyTasks = (queryParams?: Record<string, any>) =>
+  useInfiniteQuery<TaskData, TaskError>({
+    queryKey: [API_ROUTES.USER_TASKS, queryParams], // make queryKey dependent on params
+    queryFn: async ({ pageParam = 1 }) =>
+      getUserTasks({ page: pageParam, ...queryParams }),
+    initialPageParam: 1,
+    getNextPageParam: (data) => {
+      const lastPage = data.data as any;
+      const currentPage = lastPage?.meta?.current_page ?? 1;
+      const totalPages = lastPage?.meta?.last_page ?? 1;
+
+      return currentPage < totalPages ? currentPage + 1 : undefined;
+    },
   });
-};
 
 export const useFetchUserTaskById = ({
   id,

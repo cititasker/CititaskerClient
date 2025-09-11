@@ -4,7 +4,7 @@ import { API_ROUTES } from "@/constant";
 
 export function getCategories(): Promise<ITaskCategory[]> {
   return api
-    .get(API_ROUTES.UTILITY.CATEGORY)
+    .get(API_ROUTES.UTILITY.CATEGORIES)
     .then((data) => {
       return data.data.data;
     })

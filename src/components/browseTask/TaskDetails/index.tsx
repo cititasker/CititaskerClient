@@ -111,7 +111,7 @@ const TaskDetails = ({ back }: IProps) => {
         </div>
       </div>
 
-      <div className="px-5 sm:px-[30px] pt-5 sm:pt-[28px] mb-10 w-full">
+      <div className="p-5 sm:px-[30px] sm:pt-[28px] mb-5 w-full">
         <PosterInfo task={task} />
 
         <section className="mb-6">

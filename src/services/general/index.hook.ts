@@ -8,7 +8,7 @@ export const useGetCategories = (
   opt?: UseQueryOptions<ITaskCategory[], TaskError>
 ) => {
   return useQuery<ITaskCategory[], TaskError>({
-    queryKey: [API_ROUTES.UTILITY.CATEGORY],
+    queryKey: [API_ROUTES.UTILITY.CATEGORIES],
     queryFn: getCategories,
     ...opt,
   });

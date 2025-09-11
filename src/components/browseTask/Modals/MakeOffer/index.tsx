@@ -1,13 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "@/store/hook";
-import { purgeStateData } from "@/store/slices/task";
+import { useAppSelector } from "@/store/hook";
 import CustomModal from "@/components/reusables/CustomModal";
 import StepTwo from "./StepTwo";
 import StepThree from "./StepThree";
 import StepFour from "./StepFour";
 import StepOne from "../shared/StepOne";
 import AnimatedStep from "@/components/reusables/AnimatedStep";
+import { usePurgeData } from "@/utils/dataPurge";
 
 interface MakeOfferModalProps {
   open: boolean;
@@ -22,12 +22,11 @@ const MakeOfferModal: React.FC<MakeOfferModalProps> = ({
 }) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [edit, setEdit] = useState(false);
-  const [direction, setDirection] = useState<"forward" | "backward">("forward");
   const [showConfetti, setShowConfetti] = useState(false);
 
-  const dispatch = useAppDispatch();
   const { isAuth } = useAppSelector((state) => state.user);
   const { taskersOffer } = useAppSelector((state) => state.task);
+  const { purgeOffer } = usePurgeData();
 
   useEffect(() => {
     if (open) {
@@ -38,14 +37,12 @@ const MakeOfferModal: React.FC<MakeOfferModalProps> = ({
 
   const nextStep = () => {
     const next = currentStep + 1;
-    setDirection("forward");
     setCurrentStep(next);
     if (next === 4 && !edit) setShowConfetti(true);
   };
 
   const prevStep = () => {
     if (currentStep > 1) {
-      setDirection("backward");
       setCurrentStep((prev) => prev - 1);
     }
   };
@@ -76,9 +73,9 @@ const MakeOfferModal: React.FC<MakeOfferModalProps> = ({
     }
   };
 
-  const closeModal = () => {
+  const closeModal = async () => {
     if (isAuth) {
-      dispatch(purgeStateData({ path: "offer" }));
+      await purgeOffer();
     }
     setShowConfetti(false);
     handleClose();
@@ -102,7 +99,6 @@ const MakeOfferModal: React.FC<MakeOfferModalProps> = ({
       title={modalTitle}
     >
       <AnimatedStep
-        direction={direction}
         currentStep={currentStep}
         renderStepContent={renderStepContent}
       />

@@ -41,6 +41,9 @@ const Offer: React.FC<OfferProps> = ({ offers }) => {
       queryClient.invalidateQueries({
         queryKey: [API_ROUTES.GET_TASK_BY_ID, id],
       });
+      queryClient.invalidateQueries({
+        queryKey: [API_ROUTES.TASKS],
+      });
     },
     onError: (error) => {
       showSnackbar(errorHandler(error), "error");
@@ -70,7 +73,6 @@ const Offer: React.FC<OfferProps> = ({ offers }) => {
       </div>
 
       <ConfirmModal
-        variant="destructive"
         open={withdrawModal.isOpen}
         onClose={withdrawModal.closeModal}
         title="Withdraw Offer"

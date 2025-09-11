@@ -36,7 +36,10 @@ export const postTaskSchema = z.object({
     })
     .nullable()
     .refine((value) => value, { message: "Please select your state" }),
-  location: z.array(z.any()).nonempty("Location is required"),
+  location: z.union([
+    z.tuple([z.number(), z.number()]),
+    z.array(z.number()).length(0), // allow empty array
+  ]),
   address: z.string().nullable(),
   time_frame: z
     .enum(["on_date", "before_date", "flexible_date"], {
