@@ -13,7 +13,6 @@ export function TaskMap({ tasks }: TaskMapProps) {
   const mapBounds = useMemo(() => calculateMapBounds(tasks), [tasks]);
   const mapCenter = useMemo(() => getMapCenter(tasks), [tasks]);
 
-  // Filter tasks with valid coordinates
   const validTasks = useMemo(
     () =>
       tasks.filter((task) => {

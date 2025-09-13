@@ -35,7 +35,7 @@ const DashboardSidebar = ({ role }: DashboardSidebarProps) => {
           isOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
-        <Card className="h-full rounded-none lg:rounded-xl border-r lg:border shadow-xl lg:shadow-sm">
+        <Card className="h-full rounded-none lg:rounded-xl border-r lg:border-none shadow-xl lg:shadow-sm">
           {/* Mobile Header */}
           <div className="flex items-center justify-between p-4 border-b lg:hidden">
             <div className="flex items-center gap-2">

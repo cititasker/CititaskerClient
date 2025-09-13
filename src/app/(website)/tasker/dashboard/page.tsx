@@ -104,7 +104,7 @@ export default function Page() {
         <DoughnutChart />
       </div>
 
-      <div className="space-y-6">
+      <Card className="space-y-6 p-5">
         <div className="space-y-1">
           <h2 className="text-2xl font-bold tracking-tight">Recent Activity</h2>
           <p className="text-muted-foreground">
@@ -147,7 +147,7 @@ export default function Page() {
           </div>
         </div>
         <DataTable data={mockRecentTasks} columns={columns} pageSize={20} />
-      </div>
+      </Card>
     </div>
   );
 }

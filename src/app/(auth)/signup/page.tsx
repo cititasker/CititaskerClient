@@ -9,7 +9,6 @@ import StepThree from "./_components/StepThree";
 import StepFour from "./_components/StepFour";
 import StepFive from "./_components/StepFive";
 import { ROUTES } from "@/constant";
-import ProgressBar from "../components/ProgressBar";
 
 // Step configuration
 const stepConfig = {
@@ -69,7 +68,7 @@ const SignUpPage = () => {
   return (
     <div className="max-w-xl mx-auto">
       {/* Progress Bar */}
-      <ProgressBar currentStep={currentStep} totalSteps={5} />
+      {/* <ProgressBar currentStep={currentStep} totalSteps={5} /> */}
 
       {/* Step Title */}
       <motion.div
@@ -88,17 +87,7 @@ const SignUpPage = () => {
 
       {/* Step Content */}
       <AnimatePresence mode="wait">
-        <motion.div
-          key={currentStep}
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -20 }}
-          transition={{ duration: 0.3 }}
-        >
-          <StepComponent
-            onNext={currentStep < 5 ? handleNextStep : undefined}
-          />
-        </motion.div>
+        <StepComponent onNext={currentStep < 5 ? handleNextStep : undefined} />
       </AnimatePresence>
     </div>
   );

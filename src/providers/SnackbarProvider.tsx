@@ -50,7 +50,7 @@ export const SnackbarProvider: FC<SnackbarProviderProps> = ({ children }) => {
   return (
     <SnackbarContext.Provider value={{ showSnackbar }}>
       {children}
-      <Toaster position="top-right" richColors expand />
+      <Toaster position="top-center" richColors expand />
     </SnackbarContext.Provider>
   );
 };

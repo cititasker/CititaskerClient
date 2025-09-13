@@ -66,8 +66,6 @@ const STYLES = {
   subtitle:
     "text-lg md:text-xl text-dark-grey leading-relaxed max-w-2xl mx-auto",
   grid: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12",
-  ctaButton:
-    "mx-auto bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white font-semibold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300",
 } as const;
 
 const PopularTasks: React.FC = () => {
@@ -185,7 +183,6 @@ const PopularTasks: React.FC = () => {
         >
           <FormButton
             text="Explore More on CitiTasker"
-            className={STYLES.ctaButton}
             href={ROUTES.BROWSE_TASK}
           />
         </motion.div>

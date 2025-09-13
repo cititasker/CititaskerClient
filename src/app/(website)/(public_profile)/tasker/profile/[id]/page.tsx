@@ -3,8 +3,8 @@ import React from "react";
 import CustomTab from "@/components/reusables/CustomTab";
 import { useParams } from "next/navigation";
 import Portfolio from "../../../_components/portfolio/Portfolio";
-import PublicProfile from "@/components/shared/dashboard/profile/public-view/PublicProfile";
 import FAQList from "@/app/(website)/tasker/dashboard/(settings)/profile/faq/FAQList";
+import PublicProfile from "@/components/shared/dashboard/profile/public-view/components/PublicProfile";
 
 export default function PublicProfilePage() {
   const params = useParams();

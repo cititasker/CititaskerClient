@@ -6,7 +6,10 @@ import { useAppSelector } from "@/store/hook";
 import { updateProfileDetails } from "@/services/user/users.api";
 import { useGetUserProfile } from "@/services/user/user.hook";
 import { API_ROUTES } from "@/constant";
-import { FormSchema, schema } from "@/components/tasker/ProfileView/schema";
+import {
+  FormSchema,
+  schema,
+} from "@/components/shared/dashboard/profile/schema";
 
 export const useProfileForm = () => {
   const { user } = useAppSelector((state) => state.user);

@@ -29,7 +29,7 @@ const Offer: React.FC<OfferProps> = ({ offers }) => {
 
   const handleToggleModal = (offerId?: string) => {
     setSelectedOfferId(offerId ?? null);
-    withdrawModal.openModal();
+    withdrawModal.toggleModal();
   };
 
   const { mutate, isPending } = useMutation({

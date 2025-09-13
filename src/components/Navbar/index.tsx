@@ -5,6 +5,7 @@ import { API_ROUTES } from "@/constant";
 import { getQueryClient } from "@/constant/queryClient";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { getUserApi } from "@/services/user/users.api";
+import { AuthProvider } from "@/providers/AuthProvider";
 
 export default async function Navbar() {
   const session = await auth();
@@ -21,7 +22,9 @@ export default async function Navbar() {
 
   return (
     <HydrationBoundary state={dehydratedState}>
-      <MainNavbar isAuth={!!session} />
+      <AuthProvider session={session}>
+        <MainNavbar />
+      </AuthProvider>
     </HydrationBoundary>
   );
 }

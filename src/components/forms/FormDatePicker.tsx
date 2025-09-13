@@ -71,8 +71,8 @@ export default function FormDatePicker({
                   disabled={disabled}
                   className={cn(
                     // Base styles
-                    "w-full h-12 px-4 text-base rounded-xl border justify-start font-normal transition-all duration-200",
-                    "bg-background hover:bg-background-secondary",
+                    "w-full h-12 px-4 shadow-none text-base rounded-xl border justify-start font-normal transition-all duration-200",
+                    "bg-background hover:bg-background",
 
                     // Border states
                     error
@@ -114,6 +114,8 @@ export default function FormDatePicker({
                     if (maxDate && date > maxDate) return true;
                     return false;
                   }}
+                  defaultMonth={!field.value && maxDate ? maxDate : undefined}
+                  captionLayout="dropdown"
                   initialFocus
                   className="rounded-xl"
                 />

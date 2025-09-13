@@ -24,7 +24,7 @@ export const FAQItem = ({
   onEdit,
   onCopy,
   onDelete,
-  onCancelEdit, // Receive the cancel callback
+  onCancelEdit,
   onSuccessEdit,
 }: FAQItemProps) => {
   if (isEditing) {

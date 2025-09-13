@@ -66,6 +66,12 @@ interface IUser {
     id_verification: boolean;
     profile: boolean;
   };
+  bank_details: {
+    account_name: string;
+    account_no: string;
+    bank_code: string;
+    bank_name: string;
+  };
 }
 
 type TRole = "tasker" | "poster";

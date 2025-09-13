@@ -278,7 +278,7 @@ body {
 
   /* === NEW COMPONENT CLASSES === */
   .btn-primary {
-    @apply px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105;
+    @apply px-6 py-3 rounded-xl font-semibold transition-all duration-300;
     background: linear-gradient(
       135deg,
       var(--primary) 0%,
@@ -293,7 +293,7 @@ body {
   }
 
   .btn-secondary {
-    @apply px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105;
+    @apply px-6 py-3 rounded-xl font-semibold transition-all duration-300;
     background: linear-gradient(
       135deg,
       var(--secondary) 0%,
@@ -314,10 +314,10 @@ body {
     box-shadow: var(--shadow-md);
   }
 
-  .card-modern:hover {
+  /* .card-modern:hover {
     box-shadow: var(--shadow-xl);
     border-color: var(--border-medium);
-  }
+  } */
 
   .badge-success {
     @apply px-3 py-1 rounded-full text-sm font-semibold;
@@ -441,4 +441,13 @@ body {
 .prose p {
   margin-top: 0 !important;
   margin-bottom: 0 !important;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
 }

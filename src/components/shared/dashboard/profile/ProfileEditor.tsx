@@ -11,8 +11,9 @@ import { SkillsInput } from "./SkillsInput";
 import { CertificatesInput } from "./CertificatesInput";
 import FormTextEditor from "@/components/reusables/FormTextEditor";
 import { useProfileForm } from "./hooks/useProfileForm";
-import PublicProfile from "./public-view/PublicProfile";
 import LoadingMessage from "../LoadingMessage";
+import PublicProfile from "./public-view/components/PublicProfile";
+import { FormActionButtons } from "../FormActionButtons";
 
 const ProfileEditor = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -59,38 +60,11 @@ const ProfileEditor = () => {
         <CardTitle className="text-xl font-semibold text-gray-900">
           Edit Profile
         </CardTitle>
-        <div className="flex gap-3">
-          <Button
-            type="button"
-            onClick={handleCancel}
-            variant="outline"
-            size="sm"
-            className="flex items-center gap-2"
-            disabled={mutation.isPending}
-          >
-            <X className="w-4 h-4" />
-            Cancel
-          </Button>
-          <Button
-            type="submit"
-            form="profile-form"
-            disabled={mutation.isPending}
-            size="sm"
-            className="flex items-center gap-2 min-w-[100px]"
-          >
-            {mutation.isPending ? (
-              <>
-                <Loader2 className="w-4 h-4 animate-spin" />
-                Saving...
-              </>
-            ) : (
-              <>
-                <Save className="w-4 h-4" />
-                Save Changes
-              </>
-            )}
-          </Button>
-        </div>
+        <FormActionButtons
+          onCancel={handleCancel}
+          isDisabled={mutation.isPending}
+          formId="profile-form"
+        />
       </CardHeader>
 
       <CardContent className="space-y-8 p-0">

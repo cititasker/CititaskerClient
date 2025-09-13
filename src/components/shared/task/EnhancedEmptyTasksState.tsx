@@ -103,7 +103,6 @@ function NoSearchResultsState({
           />
 
           {/* Secondary actions */}
-
           {!statusFilter && (
             <FormButton
               text="Browse All Tasks"
@@ -117,21 +116,6 @@ function NoSearchResultsState({
               href={ROUTES.BROWSE_TASK}
             />
           )}
-          {/* <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            
-
-            <FormButton
-              text="Create Task"
-              size="lg"
-              icon={<Plus className="w-4 h-4" />}
-              className="
-                bg-white border border-gray-200 text-gray-700 hover:bg-gray-50
-                hover:border-gray-300 px-6 py-2.5 rounded-lg
-                transition-all duration-200 font-medium
-              "
-              href={ROUTES.POST_TASK}
-            />
-          </div> */}
         </div>
       </div>
     </div>
@@ -139,11 +123,13 @@ function NoSearchResultsState({
 }
 
 function DefaultEmptyState() {
-  const { isAuth, role } = useAppSelector((state) => state.user);
+  const { isAuth, user } = useAppSelector((state) => state.user);
+  const role = user.role;
+
   return (
     <div className="flex flex-col items-center justify-center h-full min-h-[400px] px-6 py-12 bg-white">
       {/* Animated Background Gradient */}
-      {/* <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-purple-50 opacity-60 rounded-xl"></div> */}
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-purple-50 opacity-60 rounded-xl"></div>
 
       {/* Main Content */}
       <div className="relative z-10 text-center max-w-md">
@@ -179,34 +165,24 @@ function DefaultEmptyState() {
             text="Create Your First Task"
             size="lg"
             icon={<Plus className="w-5 h-5" />}
-            className="
-            bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70
-            text-white font-semibold px-8 py-4 rounded-xl
-            shadow-lg hover:shadow-xl
-            transform hover:scale-105 transition-all duration-200
-            border-0 min-w-48
-          "
             href={ROUTES.POST_TASK}
           />
         )}
 
         {/* Secondary Action */}
-        <div className="mt-6 pt-6 border-t border-gray-100">
-          <p className="text-sm text-gray-500 mb-3">
-            Or explore what others are looking for
-          </p>
-          <FormButton
-            text="Browse Available Tasks"
-            size="lg"
-            icon={<Search className="w-4 h-4" />}
-            className="
-              bg-white border border-gray-200 text-gray-700 hover:bg-gray-50
-              hover:border-gray-300 px-6 py-2.5 rounded-lg
-              transition-all duration-200 font-medium
-            "
-            href={ROUTES.BROWSE_TASK}
-          />
-        </div>
+        {(!isAuth || role == ROLE.tasker) && (
+          <div className="mt-6 pt-6 border-t border-gray-100">
+            <p className="text-sm text-gray-500 mb-3">
+              Or explore what others are looking for
+            </p>
+            <FormButton
+              text="Browse Available Tasks"
+              size="lg"
+              icon={<Search className="w-4 h-4" />}
+              href={ROUTES.BROWSE_TASK}
+            />
+          </div>
+        )}
       </div>
 
       {/* Subtle Pattern Overlay */}
@@ -335,6 +311,5 @@ export function EnhancedEmptyTasksState({
     );
   }
 
-  // Default variant (the enhanced version above)
   return <EmptyTasksState />;
 }

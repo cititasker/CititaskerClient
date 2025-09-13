@@ -3,7 +3,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Menu } from "lucide-react";
-import { useAppDispatch, useAppSelector } from "@/store/hook";
+import { useAppDispatch } from "@/store/hook";
 import { logoutUser } from "@/actions/authActions";
 import { logout } from "@/store/slices/user";
 import { ROUTES } from "@/constant";
@@ -19,17 +19,19 @@ import MobileNavbar from "./components/MobileNavbar";
 import { Button } from "@/components/ui/button";
 import { useSidebar } from "@/components/dashboard/sidebar/hooks/useSidebar";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/providers/AuthProvider";
+import { useGetUser } from "@/services/user/user.hook";
+import Loader from "@/components/reusables/Loading";
 
-interface MainNavbarProps {
-  isAuth: boolean;
-}
-
-export default function MainNavbar({ isAuth }: MainNavbarProps) {
+export default function MainNavbar() {
   const { openSidebar } = useSidebar();
   const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state) => state.user);
+  const { data } = useGetUser();
   const showMobileNav = useToggle();
   const path = usePathname();
+
+  const user = data?.data;
+  const { isAuth } = useAuth();
 
   const isDashboard = path.includes("dashboard");
 
@@ -40,7 +42,9 @@ export default function MainNavbar({ isAuth }: MainNavbarProps) {
     logoutUser();
   };
 
-  const homeRoute = isAuth ? `${ROUTES.DISCOVERY}/${user.role}` : ROUTES.HOME;
+  const homeRoute = isAuth ? `${ROUTES.DISCOVERY}/${user?.role}` : ROUTES.HOME;
+
+  if (!user) return <Loader />;
 
   return (
     <>
@@ -57,10 +61,7 @@ export default function MainNavbar({ isAuth }: MainNavbarProps) {
                     variant="outline"
                     size="icon"
                     className="lg:hidden bg-background border-border"
-                    onClick={() => {
-                      console.log("Click: open sidebar");
-                      openSidebar();
-                    }}
+                    onClick={openSidebar}
                   >
                     <Menu className="h-4 w-4" />
                   </Button>
@@ -102,7 +103,6 @@ export default function MainNavbar({ isAuth }: MainNavbarProps) {
 
             {/* Right Section */}
             <div className="flex items-center gap-4">
-              {/* Desktop Role-based Actions - Hidden on Mobile */}
               <div className="hidden md:flex">
                 <RoleBasedActions user={user} isAuth={isAuth} />
               </div>

@@ -45,7 +45,7 @@ const SidebarMenuItem = ({
     return (
       <div className="space-y-1">
         <Button
-          variant="ghost"
+          variant="custom"
           className={baseClasses}
           onClick={onToggleExpanded}
         >
@@ -88,7 +88,7 @@ const SidebarMenuItem = ({
 
   // Single item
   const MenuButton = (
-    <Button variant="ghost" className={baseClasses}>
+    <Button variant="custom" className={baseClasses}>
       <Icon className="mr-3 h-5 w-5 flex-shrink-0" />
       <span className="flex-1 text-left font-medium">{item.name}</span>
       {item.badge && (

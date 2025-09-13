@@ -11,11 +11,12 @@ import { useSnackbar } from "@/providers/SnackbarProvider";
 import FormInput from "@/components/forms/FormInput";
 import FormDatePicker from "@/components/forms/FormDatePicker";
 import FormSelect from "@/components/forms/FormSelect";
-import { maxDate } from "@/utils";
 import { ROUTES } from "@/constant";
 import AuthCard from "../../components/AuthCard";
 import StepIndicator from "../../components/StepIndicator";
 import AuthForm from "../../components/AuthForm";
+import moment from "moment";
+import { getMaxDate } from "@/utils";
 
 const genderOptions = [
   { id: "male", name: "Male" },
@@ -97,7 +98,7 @@ const StepFive = () => {
             <FormDatePicker
               name="date_of_birth"
               label="Date of Birth"
-              maxDate={maxDate}
+              maxDate={getMaxDate(18)}
             />
 
             <FormSelect

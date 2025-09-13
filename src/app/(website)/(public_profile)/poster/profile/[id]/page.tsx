@@ -1,6 +1,6 @@
 "use client";
 import CustomTab from "@/components/reusables/CustomTab";
-import PublicProfile from "@/components/shared/dashboard/profile/public-view/PublicProfile";
+import PublicProfile from "@/components/shared/dashboard/profile/public-view/components/PublicProfile";
 import { useParams } from "next/navigation";
 
 export default function page() {

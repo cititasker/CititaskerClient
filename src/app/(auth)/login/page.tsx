@@ -34,6 +34,7 @@ export default function LoginPage() {
     } else {
       handleAuthError(res.message);
     }
+    setLoading(false);
   };
 
   return (

@@ -135,16 +135,25 @@ export const DeleteConfirmModal = (
   props: Omit<ConfirmModalProps, "type" | "confirmText"> & {
     itemName?: string;
     title?: string;
+    confirmText?: string;
+    type?: "warning" | "danger" | "success" | "info";
   }
 ) => {
   const {
     itemName,
-    title = `Delete ${itemName || "item"}?`, // use title if provided, otherwise default
+    title = `Delete ${itemName || "item"}?`,
+    confirmText,
+    type = "danger",
     ...rest
   } = props;
 
   return (
-    <ConfirmModal type="danger" title={title} confirmText="Delete" {...rest} />
+    <ConfirmModal
+      type={type}
+      title={title}
+      confirmText={confirmText}
+      {...rest}
+    />
   );
 };
 

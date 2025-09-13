@@ -360,14 +360,14 @@ export default {
             "linear-gradient(135deg, var(--primary) 0%, var(--primary-600) 100%)",
           "box-shadow": "var(--shadow-md)",
           transition: "all 300ms ease",
-          transform: "translateY(0)",
-          "&:hover": {
-            transform: "translateY(-1px) scale(1.02)",
-            "box-shadow": "var(--shadow-lg)",
-          },
-          "&:active": {
-            transform: "translateY(0) scale(0.98)",
-          },
+          // transform: "translateY(0)",
+          // "&:hover": {
+          //   transform: "translateY(-1px) scale(1.02)",
+          //   "box-shadow": "var(--shadow-lg)",
+          // },
+          // "&:active": {
+          //   transform: "translateY(0) scale(0.98)",
+          // },
         },
         ".btn-secondary": {
           display: "inline-flex",
@@ -383,14 +383,14 @@ export default {
             "linear-gradient(135deg, var(--secondary) 0%, var(--secondary-600) 100%)",
           "box-shadow": "var(--shadow-md)",
           transition: "all 300ms ease",
-          transform: "translateY(0)",
-          "&:hover": {
-            transform: "translateY(-1px) scale(1.02)",
-            "box-shadow": "var(--shadow-lg)",
-          },
-          "&:active": {
-            transform: "translateY(0) scale(0.98)",
-          },
+          // transform: "translateY(0)",
+          // "&:hover": {
+          //   transform: "translateY(-1px) scale(1.02)",
+          //   "box-shadow": "var(--shadow-lg)",
+          // },
+          // "&:active": {
+          //   transform: "translateY(0) scale(0.98)",
+          // },
         },
         ".card-modern": {
           padding: "1.5rem",
@@ -401,8 +401,8 @@ export default {
           transition: "all 300ms ease",
           "&:hover": {
             transform: "translateY(-4px)",
-            "box-shadow": "var(--shadow-md)",
-            "border-color": "var(--border-medium)",
+            // "box-shadow": "var(--shadow-md)",
+            // "border-color": "var(--border-medium)",
           },
         },
         // Mobile-first card component
@@ -456,7 +456,7 @@ export default {
           color: "var(--text-primary)",
         },
         "h1,h2,h3,h4,h5,h6": {
-          color: "var(--text-primary)",
+          // color: "var(--text-primary)",
           "font-family": theme("fontFamily.articulat"),
         },
       });
