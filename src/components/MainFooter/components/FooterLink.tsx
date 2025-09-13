@@ -7,7 +7,7 @@ export const FooterLink: React.FC<{
 }> = ({ href, children, className = "" }) => (
   <Link
     href={href}
-    className={`text-text-secondary hover:text-white transition-colors duration-300 ${className}`}
+    className={`text-text-disabled hover:text-white transition-colors duration-300 ${className}`}
   >
     {children}
   </Link>

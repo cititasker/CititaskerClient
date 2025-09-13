@@ -6,8 +6,6 @@ import {
   Search,
   Plus,
   User,
-  Briefcase,
-  UserCheck,
   Bell,
   MessageCircle,
   Settings,
@@ -30,12 +28,14 @@ import { ROLE, ROUTES } from "@/constant";
 import { defaultProfile } from "@/constant/images";
 import { loggedInUser } from "@/utils";
 import { useNavbarData } from "../hooks/useNavbarData";
+import { useQueryClient } from "@tanstack/react-query";
+import { howItWorksItems } from "../constant";
 
 interface MobileNavbarProps {
   showMobileNav: boolean;
   toggleMobileNav: () => void;
   isAuth: boolean;
-  user: Partial<IUser>;
+  user: IUser | undefined;
   onLogout: () => void;
 }
 
@@ -144,23 +144,6 @@ const HowItWorksSection = ({
 }: {
   toggleMobileNav: () => void;
 }) => {
-  const howItWorksItems = [
-    {
-      icon: Briefcase,
-      title: "For Task Posters",
-      description: "Learn how to post and manage tasks",
-      href: "/how-it-works/poster",
-      color: "text-blue-600 bg-blue-50",
-    },
-    {
-      icon: UserCheck,
-      title: "For Taskers",
-      description: "Discover how to find and complete tasks",
-      href: "/how-it-works/tasker",
-      color: "text-success bg-success-light",
-    },
-  ];
-
   return (
     <AccordionItem value="how-it-works" className="border-none">
       <AccordionTrigger className="text-text-primary hover:text-primary-600 text-base font-medium py-4 px-4 rounded-lg hover:bg-primary-50 transition-all duration-200 hover:no-underline [&[data-state=open]]:bg-primary-50 [&[data-state=open]]:text-primary-700">
@@ -173,7 +156,7 @@ const HowItWorksSection = ({
               key={i}
               href={item.href}
               onClick={toggleMobileNav}
-              className="flex items-start gap-3 p-3 rounded-lg hover:bg-background-secondary transition-colors"
+              className="flex !items-start gap-3 p-3 rounded-none rounded-b-lg hover:bg-background-secondary transition-colors"
             >
               <div className={`p-2 rounded-lg ${item.color}`}>
                 <item.icon className="w-4 h-4" />
@@ -203,10 +186,17 @@ const UserProfileSection = ({
   toggleMobileNav: () => void;
 }) => {
   const [notifications] = React.useState(2);
+  const queryClient = useQueryClient();
 
   const userInitials = `${user.first_name?.[0] || ""}${
     user.last_name?.[0] || ""
   }`.toUpperCase();
+
+  const handleLogout = async () => {
+    await onLogout();
+    queryClient.clear();
+    toggleMobileNav();
+  };
 
   return (
     <div className="border-t border-border-light pt-6">
@@ -306,10 +296,7 @@ const UserProfileSection = ({
         </Link>
 
         <button
-          onClick={() => {
-            onLogout();
-            toggleMobileNav();
-          }}
+          onClick={handleLogout}
           className="flex items-center gap-3 w-full p-3 rounded-lg text-error hover:bg-error-light transition-colors"
         >
           <LogOut className="w-4 h-4" />
@@ -326,11 +313,11 @@ const ActionButtons = ({
   isAuth,
   toggleMobileNav,
 }: {
-  user: Partial<IUser>;
+  user: IUser | undefined;
   isAuth: boolean;
   toggleMobileNav: () => void;
 }) => {
-  if (!isAuth) {
+  if (!isAuth || !user) {
     return (
       <div className="px-4 space-y-3 border-t border-border-light pt-6">
         <Link
@@ -430,7 +417,7 @@ export default function MobileNavbar({
             </nav>
 
             {/* User Profile Section (only for authenticated users) */}
-            {isAuth && (
+            {isAuth && user && (
               <UserProfileSection
                 user={user}
                 onLogout={onLogout}

@@ -181,7 +181,7 @@ const TaskCategoryCard: React.FC<TaskCategoryCardProps> = ({
             {/* Stats and Rating */}
             <div
               className={cn(
-                "flex items-center justify-between gap-3 mb-3",
+                "flex items-center justify-between gap-3",
                 rtl && "flex-row-reverse"
               )}
             >
@@ -201,16 +201,16 @@ const TaskCategoryCard: React.FC<TaskCategoryCardProps> = ({
               </div>
 
               {/* Response time */}
-              {data.responseTime && (
+              {/* {data.responseTime && (
                 <div className="flex items-center gap-1 text-xs text-dark-grey">
                   <FaClock className="w-3 h-3" />
                   {data.responseTime}
                 </div>
-              )}
+              )} */}
             </div>
 
             {/* Price and CTA */}
-            <div
+            {/* <div
               className={cn(
                 "flex items-center justify-between gap-3",
                 rtl && "flex-row-reverse"
@@ -227,7 +227,7 @@ const TaskCategoryCard: React.FC<TaskCategoryCardProps> = ({
               >
                 View Profile
               </motion.button>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

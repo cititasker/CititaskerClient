@@ -5,13 +5,12 @@ import { API_ROUTES } from "@/constant";
 import { getQueryClient } from "@/constant/queryClient";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { getUserApi } from "@/services/user/users.api";
-import { AuthProvider } from "@/providers/AuthProvider";
 
 export default async function Navbar() {
   const session = await auth();
   const queryClient = getQueryClient();
 
-  if (!!session) {
+  if (session?.user) {
     await queryClient.prefetchQuery({
       queryKey: [API_ROUTES.GET_USER_DETAILS],
       queryFn: getUserApi,
@@ -22,9 +21,7 @@ export default async function Navbar() {
 
   return (
     <HydrationBoundary state={dehydratedState}>
-      <AuthProvider session={session}>
-        <MainNavbar />
-      </AuthProvider>
+      <MainNavbar />
     </HydrationBoundary>
   );
 }

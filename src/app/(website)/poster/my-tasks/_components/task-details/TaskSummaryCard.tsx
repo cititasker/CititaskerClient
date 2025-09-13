@@ -6,7 +6,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { formatCurrency, formatDate } from "@/utils";
-import MoreOptionsMenu, { OptionItem } from "./MoreOptionsMenu";
 import useModal from "@/hooks/useModal";
 import CancelTaskModal from "./CancelTaskModal";
 import ImageGallery from "@/components/browseTask/Modals/ImageGalleryModal/ImageGallery";
@@ -16,11 +15,12 @@ import {
   Edit,
   MapPin,
   Clock,
-  User,
   MessageCircle,
   Eye,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { moreOptions } from "./constant";
+import MoreOptionsMenu from "@/components/reusables/MoreOptionMenu";
 
 interface TaskSummaryCardProps {
   task: ITask;
@@ -107,7 +107,7 @@ export default function TaskSummaryCard({
   const router = useRouter();
   const cancelTask = useModal();
 
-  const handleOptionSelect = (option: OptionItem) => {
+  const handleOptionSelect = (option: MoreOptionItem) => {
     switch (option.name) {
       case "reschedule":
         router.push(`/post-task/${task.id}?step=3&action=reschedule`);
@@ -302,13 +302,7 @@ export default function TaskSummaryCard({
             <div className="grid grid-cols-[repeat(auto-fit,minmax(160px,1fr))] gap-3">
               {/* More Options - Always present */}
               <MoreOptionsMenu
-                moreOptions={[
-                  { text: "Cancel Task", name: "cancel-task" },
-                  { text: "Reschedule Task", name: "reschedule" },
-                  { text: "Post Similar Task", name: "similar-task" },
-                  { text: "Refund Details", name: "refund" },
-                  { text: "Help", name: "help" },
-                ]}
+                moreOptions={moreOptions}
                 onSelect={handleOptionSelect}
                 className="w-full h-10"
               />

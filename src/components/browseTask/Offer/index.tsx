@@ -1,12 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import TaskerOffer from "./TaskerOffer";
 import { withdrawOffer } from "@/services/offer";
 import { useSnackbar } from "@/providers/SnackbarProvider";
-import { queryClient } from "@/providers/ServerProvider";
 import { useAppDispatch } from "@/store/hook";
 import { setUserTaskOffer } from "@/store/slices/task";
 import { errorHandler } from "@/utils";
@@ -23,6 +22,7 @@ const Offer: React.FC<OfferProps> = ({ offers }) => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const { showSnackbar } = useSnackbar();
+  const queryClient = useQueryClient();
 
   const [selectedOfferId, setSelectedOfferId] = useState<string | null>(null);
   const withdrawModal = useModal();

@@ -14,11 +14,11 @@ export const ContactLink: React.FC<{
   };
 
   return type === "address" ? (
-    <span className="text-text-secondary">{children}</span>
+    <span className="text-text-disabled">{children}</span>
   ) : (
     <a
       href={getHref()}
-      className="text-text-secondary hover:text-white transition-colors duration-300"
+      className="text-text-disabled hover:text-white transition-colors duration-300"
     >
       {children}
     </a>

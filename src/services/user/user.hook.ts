@@ -8,10 +8,15 @@ import {
   getUserProfileDetails,
 } from "./users.api";
 
+type GetUserResponse = { data: IUser };
+
 export const useGetUser = (
-  options?: UseQueryOptions<{ data: IUser }, Error>
+  options?: Omit<
+    UseQueryOptions<GetUserResponse, Error>,
+    "queryKey" | "queryFn"
+  >
 ) => {
-  return useQuery<{ data: IUser }, Error>({
+  return useQuery<GetUserResponse, Error>({
     queryKey: [API_ROUTES.GET_USER_DETAILS],
     queryFn: getUserApi,
     ...options,

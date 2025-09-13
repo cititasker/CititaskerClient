@@ -3,7 +3,7 @@ import React, { Suspense } from "react";
 import { Provider } from "react-redux";
 import { persistor, store } from "@/store";
 import { PersistGate } from "redux-persist/integration/react";
-import ServerProvider from "./ServerProvider";
+import TanStackProvider from "./TanStackProvider";
 import dynamic from "next/dynamic";
 import { PostHogProvider } from "./PostHogProvider";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
@@ -25,13 +25,13 @@ const AppProvider = ({ children }: any) => {
   return (
     <ErrorBoundary errorComponent={ErrorFallback}>
       <Suspense fallback={<Loader />}>
-        <ServerProvider>
+        <TanStackProvider>
           <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
               <PostHogProvider>{children}</PostHogProvider>
             </PersistGate>
           </Provider>
-        </ServerProvider>
+        </TanStackProvider>
       </Suspense>
     </ErrorBoundary>
   );

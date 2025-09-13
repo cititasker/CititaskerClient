@@ -7,12 +7,12 @@ import { Button } from "@/components/ui/button";
 import { ROUTES, ROLE } from "@/constant";
 
 interface RoleBasedActionsProps {
-  user: Partial<IUser>;
+  user: IUser | undefined;
   isAuth: boolean;
 }
 
 export function RoleBasedActions({ user, isAuth }: RoleBasedActionsProps) {
-  // if (!isAuth || !user.role) return null;
+  if (!isAuth || !user?.role) return null;
 
   return (
     <div className="flex items-center gap-3">

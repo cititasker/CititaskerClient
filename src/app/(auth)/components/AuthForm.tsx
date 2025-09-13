@@ -1,8 +1,8 @@
 import React from "react";
 import Link from "next/link";
 import { FcGoogle } from "react-icons/fc";
-import { Logo } from "@/constant/icons";
 import FormButton from "@/components/forms/FormButton";
+import BrandLogo from "@/components/reusables/BrandLogo";
 
 interface AuthFormProps {
   title: string;
@@ -39,9 +39,7 @@ const AuthForm: React.FC<AuthFormProps> = ({
         <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-text-primary">
           {title}
         </h2>
-        <div className="h-6">
-          <Logo className="h-full w-auto" />
-        </div>
+        <BrandLogo width={110} />
       </div>
     </div>
 

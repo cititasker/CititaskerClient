@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { Menu } from "lucide-react";
 import { useAppDispatch } from "@/store/hook";
 import { logoutUser } from "@/actions/authActions";
@@ -19,32 +18,35 @@ import MobileNavbar from "./components/MobileNavbar";
 import { Button } from "@/components/ui/button";
 import { useSidebar } from "@/components/dashboard/sidebar/hooks/useSidebar";
 import { usePathname } from "next/navigation";
-import { useAuth } from "@/providers/AuthProvider";
 import { useGetUser } from "@/services/user/user.hook";
-import Loader from "@/components/reusables/Loading";
+import { useSession } from "next-auth/react";
+import BrandLogo from "@/components/reusables/BrandLogo";
+import { useResetQueryClient } from "@/providers/TanStackProvider";
 
 export default function MainNavbar() {
   const { openSidebar } = useSidebar();
   const dispatch = useAppDispatch();
   const { data } = useGetUser();
+
   const showMobileNav = useToggle();
   const path = usePathname();
+  const resetQueryClient = useResetQueryClient();
 
   const user = data?.data;
-  const { isAuth } = useAuth();
+  const { data: session } = useSession();
+  const isAuth = !!session?.user;
 
   const isDashboard = path.includes("dashboard");
 
   const { categoryGroups, isLoading } = useNavbarData();
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     dispatch(logout());
-    logoutUser();
+    await logoutUser();
+    resetQueryClient();
   };
 
   const homeRoute = isAuth ? `${ROUTES.DISCOVERY}/${user?.role}` : ROUTES.HOME;
-
-  if (!user) return <Loader />;
 
   return (
     <>
@@ -67,19 +69,7 @@ export default function MainNavbar() {
                   </Button>
                 )}
 
-                <Link
-                  href={homeRoute}
-                  aria-label="Homepage"
-                  className="flex-shrink-0"
-                >
-                  <Image
-                    src="/icons/logo_icon.svg"
-                    alt="Brand Logo"
-                    width={120}
-                    height={32}
-                    className="h-8 w-auto"
-                  />
-                </Link>
+                <BrandLogo href={homeRoute} className="flex-shrink-0" />
               </div>
 
               {/* Desktop Navigation */}
@@ -109,10 +99,10 @@ export default function MainNavbar() {
 
               {/* User Actions */}
               <div className="hidden md:flex">
-                {isAuth ? (
+                {isAuth && user ? (
                   <UserActions user={user} onLogout={handleLogout} />
                 ) : (
-                  <GuestActions user={user} />
+                  <GuestActions />
                 )}
               </div>
 

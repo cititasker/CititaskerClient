@@ -13,6 +13,7 @@ import {
   getUserTaskById,
   getUserTasks,
   paymentReference,
+  requestPayment,
   updateTask,
 } from "./tasks.api";
 import {
@@ -108,11 +109,20 @@ export const useUpdateTask = (opt?: UseMutationOptions<any, Error, any>) => {
   });
 };
 
-export const usPostTask = (
+export const usePostTask = (
   opt?: UseMutationOptions<CreateTask, Error, { id: string; body: any }>
 ) => {
   return useMutation<CreateTask, Error, { id: any; body: any }>({
     mutationFn: ({ id, body }) => (!id ? createTask(body) : updateTask(body)),
+    ...opt,
+  });
+};
+
+export const useRequestPayment = (
+  opt?: UseMutationOptions<any, Error, any>
+) => {
+  return useMutation<any, Error, any>({
+    mutationFn: requestPayment,
     ...opt,
   });
 };

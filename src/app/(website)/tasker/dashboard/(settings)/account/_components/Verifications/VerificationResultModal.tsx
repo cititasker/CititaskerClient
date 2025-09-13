@@ -19,7 +19,7 @@ const VerificationResultModal: React.FC<VerificationResultModalProps> = ({
     <CustomModal
       isOpen={isOpen}
       onClose={onClose}
-      contentClassName="min-h-[496px] max-w-[496px] w-full flex items-center"
+      // contentClassName="min-h-[496px] max-w-[496px] w-full flex items-center"
     >
       <div className="w-full h-full flex flex-col items-center justify-center">
         {success ? <ITickCircle /> : <ICloseCirle />}

@@ -217,7 +217,7 @@ const TaskCategories: React.FC = () => {
             <motion.h1 className={STYLES.mainTitle} variants={itemVariants}>
               Discover Nigeria's
               <br />
-              <span className="text-transparent bg-gradient-to-r from-green-state-color via-primary to-secondary bg-clip-text">
+              <span className="text-transparent bg-gradient-to-r from-primary to-secondary bg-clip-text">
                 Top-Rated Taskers
               </span>
             </motion.h1>

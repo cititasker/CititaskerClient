@@ -82,3 +82,14 @@ export function updateTask(data: any) {
       throw error.response?.data;
     });
 }
+
+export function requestPayment(data: any) {
+  return api
+    .post(`tasks/request-payment`, data)
+    .then((data) => {
+      return data.data;
+    })
+    .catch((error: AxiosError) => {
+      throw error.response?.data;
+    });
+}

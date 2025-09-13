@@ -20,17 +20,17 @@
   --primary-900: hsl(197, 50%, 20%);
 
   /* === COMPLEMENTARY SECONDARY PALETTE === */
-  --secondary: hsl(142 76% 36%); /* #16a34a - Fresh green */
-  --secondary-50: hsl(138 76% 97%); /* #f0fdf4 */
-  --secondary-100: hsl(141 84% 93%); /* #dcfce7 */
-  --secondary-200: hsl(141 79% 85%); /* #bbf7d0 */
-  --secondary-300: hsl(142 77% 73%); /* #86efac */
-  --secondary-400: hsl(142 69% 58%); /* #4ade80 */
-  --secondary-500: hsl(142 71% 45%); /* #22c55e */
-  --secondary-600: hsl(142 76% 36%); /* #16a34a */
-  --secondary-700: hsl(142 72% 29%); /* #15803d */
-  --secondary-800: hsl(143 64% 24%); /* #166534 */
-  --secondary-900: hsl(144 61% 20%); /* #14532d */
+  --secondary: hsl(195, 85%, 50%); /* #13B5EA */
+  --secondary-50: hsl(195, 85%, 96%); /* #e6f8fc */
+  --secondary-100: hsl(195, 85%, 90%); /* #c2eefd */
+  --secondary-200: hsl(195, 85%, 80%); /* #9fe3fb */
+  --secondary-300: hsl(195, 85%, 70%); /* #7bd7f6 */
+  --secondary-400: hsl(195, 85%, 60%); /* #56caf0 */
+  --secondary-500: hsl(195, 85%, 50%); /* #13B5EA (base) */
+  --secondary-600: hsl(195, 85%, 42%); /* #0e9ac7 */
+  --secondary-700: hsl(195, 85%, 35%); /* #0b7ea7 */
+  --secondary-800: hsl(195, 85%, 28%); /* #096488 */
+  --secondary-900: hsl(195, 85%, 22%); /* #074c6a */
 
   /* === ACCENT COLORS === */
   --accent-purple: hsl(262 83% 58%); /* #8b5cf6 */

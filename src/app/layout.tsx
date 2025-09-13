@@ -4,6 +4,11 @@ import "./globals.css";
 import Providers from "@/providers";
 import AppProvider from "@/providers/AppProvider";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { auth } from "@/auth";
+import { getQueryClient } from "@/constant/queryClient";
+import { API_ROUTES } from "@/constant";
+import { getUserApi } from "@/services/user/users.api";
+import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 
 export const metadata: Metadata = {
   title: "CitiTasker",
@@ -17,19 +22,34 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
+  const queryClient = getQueryClient();
+
+  if (session?.user) {
+    await queryClient.prefetchQuery({
+      queryKey: [API_ROUTES.GET_USER_DETAILS],
+      queryFn: getUserApi,
+    });
+  }
+
+  const dehydratedState = dehydrate(queryClient);
+
   return (
     <html lang="en">
       <body className="relative">
         <SessionProvider>
           <AppProvider>
-            <Providers>
-              <TooltipProvider>{children}</TooltipProvider>
-            </Providers>
+            {/* Hydrate React Query cache */}
+            <HydrationBoundary state={dehydratedState}>
+              <Providers>
+                <TooltipProvider>{children}</TooltipProvider>
+              </Providers>
+            </HydrationBoundary>
           </AppProvider>
         </SessionProvider>
       </body>

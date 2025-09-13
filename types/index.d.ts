@@ -163,3 +163,11 @@ interface ICategory {
   href: string;
   img?: any;
 }
+
+interface MoreOptionItem {
+  text: string;
+  name: string;
+  disabled?: boolean;
+  type?: "default" | "destructive" | "primary";
+  customIcon?: any;
+}

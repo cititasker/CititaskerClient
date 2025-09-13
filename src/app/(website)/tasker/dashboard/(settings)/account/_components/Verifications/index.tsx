@@ -192,7 +192,7 @@ const Verifications = () => {
         onSubmit={onSubmit}
         bankList={bankList}
         name={name}
-        isSubmitting={mutation.isPending}
+        isSubmitting={mutation.isPending || resolveAccountQuery.isLoading}
       />
       <VerificationResultModal
         isOpen={isSuccessVerification.isOpen}

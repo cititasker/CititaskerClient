@@ -1,18 +1,19 @@
-import { usPostTask } from "@/services/tasks/tasks.hook";
+import { usePostTask } from "@/services/tasks/tasks.hook";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { queryClient } from "@/providers/ServerProvider";
 import { API_ROUTES, ROUTES } from "@/constant";
 import { errorHandler } from "@/utils";
 import { usePurgeData } from "@/utils/dataPurge";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const useTaskSubmission = () => {
-  const taskMutation = usPostTask();
+  const taskMutation = usePostTask();
   const { showSnackbar } = useSnackbar();
   const router = useRouter();
   const { data: session } = useSession();
   const { purgeTask } = usePurgeData();
+  const queryClient = useQueryClient();
 
   const submitTask = async (formData: FormData, taskId?: string) => {
     if (!session) {

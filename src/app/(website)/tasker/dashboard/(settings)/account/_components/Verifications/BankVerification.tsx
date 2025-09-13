@@ -34,11 +34,7 @@ const BankVerificationModal: React.FC<PaymentVerificationModalProps> = ({
   isSubmitting,
 }) => {
   return (
-    <CustomModal
-      isOpen={isOpen}
-      onClose={onClose}
-      contentClassName="min-h-[496px] max-w-[496px]"
-    >
+    <CustomModal isOpen={isOpen} onClose={onClose}>
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)} className="relative">
           <div className="mb-9">

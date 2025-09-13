@@ -97,9 +97,6 @@ const PopularTasks: React.FC = () => {
 
   return (
     <section className={STYLES.container}>
-      {/* Background Pattern */}
-      <div className='absolute inset-0 bg-[url(&apos;data:image/svg+xml,%3Csvg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23e2e8f0" fill-opacity="0.3"%3E%3Cpath d="M50 50c13.8 0 25-11.2 25-25S63.8 0 50 0 25 11.2 25 25s11.2 25 25 25zm25 25c13.8 0 25-11.2 25-25s-11.2-25-25-25-25 11.2-25 25 11.2 25 25 25z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E&apos;)] opacity-30' />
-
       {/* Floating Elements using your brand colors */}
       <div className="absolute top-20 right-20 w-32 h-32 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full blur-2xl animate-pulse" />
       <div className="absolute bottom-20 left-20 w-40 h-40 bg-gradient-to-br from-green-state-color/20 to-primary/20 rounded-full blur-2xl animate-pulse delay-1000" />

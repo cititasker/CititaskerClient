@@ -7,11 +7,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { BiLoader } from "react-icons/bi";
 import { MdOutlineCameraAlt } from "react-icons/md";
 
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateProfile, uploadProfile } from "@/services/user/users.api";
 import { useSnackbar } from "@/providers/SnackbarProvider";
-import { queryClient } from "@/providers/ServerProvider";
-import { USERS } from "@/queries/queryKeys";
 import { profileSchema, profileSchemaType, accountSchemaType } from "@/schema";
 import { useAppSelector } from "@/store/hook";
 import { errorHandler, getMaxDate } from "@/utils";
@@ -21,6 +19,7 @@ import FormInput from "@/components/forms/FormInput";
 import FormSelect from "@/components/forms/FormSelect";
 import FormDatePicker from "@/components/forms/FormDatePicker";
 import FormButton from "@/components/forms/FormButton";
+import { API_ROUTES } from "@/constant";
 
 const genderOptions = [
   { id: "male", name: "Male" },
@@ -30,12 +29,15 @@ const genderOptions = [
 export default function Account() {
   const { user } = useAppSelector((state) => state.user);
   const { showSnackbar } = useSnackbar();
+  const queryClient = useQueryClient();
 
   const profileUpload = useMutation({
     mutationFn: uploadProfile,
     onSuccess: (data) => {
       showSnackbar(data.message, "success");
-      queryClient.invalidateQueries({ queryKey: [USERS] });
+      queryClient.invalidateQueries({
+        queryKey: [API_ROUTES.GET_USER_DETAILS],
+      });
     },
     onError: (error) => showSnackbar(errorHandler(error), "error"),
   });
@@ -44,7 +46,9 @@ export default function Account() {
     mutationFn: updateProfile,
     onSuccess: (data) => {
       showSnackbar(data.message, "success");
-      queryClient.invalidateQueries({ queryKey: [USERS] });
+      queryClient.invalidateQueries({
+        queryKey: [API_ROUTES.GET_USER_DETAILS],
+      });
     },
     onError: (error) => showSnackbar(errorHandler(error), "error"),
   });
@@ -131,7 +135,7 @@ export default function Account() {
 
           {/* Email & Phone */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormInput name="email" label="Email" />
+            <FormInput name="email" label="Email" disabled />
             <FormInput name="phone_number" label="Phone Number" />
           </div>
 

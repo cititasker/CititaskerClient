@@ -8,8 +8,6 @@ const STYLES = {
   container: "mx-auto px-4 md:px-8 py-8 md:py-20",
   cardContainer:
     "relative rounded-3xl md:rounded-[3.125rem] overflow-hidden bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 shadow-2xl",
-  backgroundPattern:
-    'absolute inset-0 bg-[url(\'data:image/svg+xml,%3Csvg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.05"%3E%3Cpath d="M20 20c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10 10-4.5 10-10zm10 0c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10 10-4.5 10-10z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\')]',
   contentWrapper: "relative z-10 py-12 md:py-20 px-6 md:px-12",
   decorativeShape: "absolute w-auto h-16 md:h-48 opacity-20",
   title:
@@ -46,9 +44,6 @@ const Testimonies: React.FC = () => {
         viewport={{ once: true, amount: 0.3 }}
         variants={cardVariants}
       >
-        {/* Background Pattern */}
-        <div className={STYLES.backgroundPattern} />
-
         {/* Glow Effects */}
         <div className={STYLES.glowEffect} />
         <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-r from-emerald-400/15 to-cyan-400/15 rounded-full blur-3xl animate-pulse delay-1000" />

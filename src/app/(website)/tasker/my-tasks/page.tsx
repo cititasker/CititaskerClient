@@ -1,19 +1,20 @@
 import { getUserTasks } from "@/actions";
-import { queryClient } from "@/providers/ServerProvider";
-import { USER_TASKS } from "@/queries/queryKeys";
 import MapWrapper from "@/components/myTasks";
+import { API_ROUTES } from "@/constant";
+import { getQueryClient } from "@/constant/queryClient";
 
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
 
 export default async function MyTasksPage(props: {
   searchParams: SearchParams;
 }) {
+  const queryClient = getQueryClient();
   const searchParams = await props.searchParams;
   const status =
     typeof searchParams.status === "string" ? searchParams.status : "all";
 
   await queryClient.prefetchQuery({
-    queryKey: USER_TASKS(status),
+    queryKey: [API_ROUTES.USER_TASKS, status],
     queryFn: () => getUserTasks({ status }),
   });
 
