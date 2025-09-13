@@ -66,9 +66,17 @@ interface IUser {
     id_verification: boolean;
     profile: boolean;
   };
+  bank_details: {
+    account_name: string;
+    account_no: string;
+    bank_code: string;
+    bank_name: string;
+  };
 }
 
 type TRole = "tasker" | "poster";
+
+type LocationTypeT = "in_person" | "online";
 
 interface ITasker {
   created_at: string;
@@ -117,7 +125,7 @@ interface ITask {
   budget: number;
   images: string[];
   location: string[];
-  location_type: string;
+  location_type: LocationTypeT;
   name: string;
   poster: {
     created_at: string;
@@ -147,10 +155,19 @@ interface ITask {
 interface ITaskCategory {
   id: number;
   name: string;
+  subcategories: { id: number; name: string }[];
 }
 
 interface ICategory {
   name: string;
   href: string;
   img?: any;
+}
+
+interface MoreOptionItem {
+  text: string;
+  name: string;
+  disabled?: boolean;
+  type?: "default" | "destructive" | "primary";
+  customIcon?: any;
 }

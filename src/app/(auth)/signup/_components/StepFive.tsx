@@ -1,31 +1,33 @@
+// StepFive.tsx - Final Onboarding
 "use client";
 import React from "react";
-import { useForm, FormProvider, SubmitHandler } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { signUpSchema, signupSchemaType } from "@/schema/auth";
 import { completeOnboarding } from "@/services/auth";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import FormInput from "@/components/forms/FormInput";
-import FormButton from "@/components/forms/FormButton";
 import FormDatePicker from "@/components/forms/FormDatePicker";
 import FormSelect from "@/components/forms/FormSelect";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
-import StepWrapper from "./StepWrapper";
-import Link from "next/link";
-import { maxDate } from "@/utils";
 import { ROUTES } from "@/constant";
-import { Logo } from "@/constant/icons";
+import AuthCard from "../../components/AuthCard";
+import StepIndicator from "../../components/StepIndicator";
+import AuthForm from "../../components/AuthForm";
+import moment from "moment";
+import { getMaxDate } from "@/utils";
 
-const options = [
+const genderOptions = [
   { id: "male", name: "Male" },
   { id: "female", name: "Female" },
+  { id: "other", name: "Other" },
+  { id: "prefer-not-to-say", name: "Prefer not to say" },
 ];
 
 const StepFive = () => {
   const { showSnackbar } = useSnackbar();
-  const { push } = useRouter();
+  const router = useRouter();
 
   const methods = useForm<signupSchemaType>({
     defaultValues: {
@@ -40,81 +42,75 @@ const StepFive = () => {
   const mutation = useMutation({
     mutationFn: completeOnboarding,
     onSuccess: () => {
-      showSnackbar("Welcome to CitiTasker 🎉", "success");
+      showSnackbar("Welcome to CitiTasker! 🎉", "success");
       localStorage.removeItem("signup-token");
-      push(ROUTES.LOGIN);
+      localStorage.removeItem("email");
+      localStorage.removeItem("phone_number");
+      router.push(ROUTES.LOGIN);
     },
     onError: (error: any) =>
       showSnackbar(error?.message || "Onboarding failed", "error"),
   });
 
-  const onSubmit: SubmitHandler<signupSchemaType> = (data) => {
-    mutation.mutate(data);
-  };
-
   return (
-    <StepWrapper>
+    <AuthCard>
+      <StepIndicator currentStep={5} totalSteps={5} />
+
       <FormProvider {...methods}>
-        <form
-          onSubmit={methods.handleSubmit(onSubmit)}
-          className="max-w-[342px] mx-auto"
-        >
-          <div className="mb-7 flex items-center w-fit mx-auto">
-            <h2 className="text-center text-xl font-semibold mr-2">
-              Sign Up on
-            </h2>
-            <Logo />
-          </div>
+        <form onSubmit={methods.handleSubmit((data) => mutation.mutate(data))}>
+          <AuthForm
+            title="Complete Profile"
+            showGoogleAuth={false}
+            submitButton={{
+              text: "Complete Registration",
+              loading: mutation.isPending,
+              type: "submit",
+            }}
+            bottomLink={{
+              text: "Already have an account?",
+              linkText: "Login",
+              href: ROUTES.LOGIN,
+            }}
+            termsText="By completing registration, I confirm that I agree to CitiTasker's"
+          >
+            <div className="mb-6">
+              <p className="text-center text-text-secondary">
+                Just a few more details to complete your account setup.
+              </p>
+            </div>
 
-          <FormInput
-            label="First Name"
-            name="first_name"
-            type="text"
-            placeholder="Enter your first name"
-            className="mb-2"
-          />
+            <div className="grid grid-cols-2 gap-4">
+              <FormInput
+                label="First Name"
+                name="first_name"
+                type="text"
+                placeholder="First name"
+              />
 
-          <FormInput
-            label="Last Name"
-            name="last_name"
-            type="text"
-            placeholder="Enter your last name"
-            className="mb-2"
-          />
+              <FormInput
+                label="Last Name"
+                name="last_name"
+                type="text"
+                placeholder="Last name"
+              />
+            </div>
 
-          <FormDatePicker
-            name="date_of_birth"
-            label="Date of Birth"
-            className="mb-2"
-            maxDate={maxDate}
-          />
+            <FormDatePicker
+              name="date_of_birth"
+              label="Date of Birth"
+              maxDate={getMaxDate(18)}
+            />
 
-          <FormSelect name="gender" label="Gender" options={options} required />
-
-          <p className="mt-8 text-sm text-left w-fit block ml-auto">
-            By creating an account, I agree to CitiTasker&apos;s{" "}
-            <Link href="#" className="text-primary">
-              Terms and Privacy Policy
-            </Link>
-            .
-          </p>
-
-          <FormButton
-            text="Create an account"
-            type="submit"
-            className="w-full mt-3"
-            loading={mutation.isPending}
-          />
-
-          <p className="mt-4 text-center text-base">
-            Already have an account?{" "}
-            <Link href={ROUTES.LOGIN} className="text-primary">
-              Login
-            </Link>
-          </p>
+            <FormSelect
+              name="gender"
+              label="Gender"
+              options={genderOptions}
+              required
+            />
+          </AuthForm>
         </form>
       </FormProvider>
-    </StepWrapper>
+    </AuthCard>
   );
 };
 

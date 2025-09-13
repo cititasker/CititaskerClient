@@ -41,7 +41,7 @@ const BecomeBanner = () => {
           <FormButton
             href={ROUTES.POST_TASK}
             text="Post a Task"
-            className="mt-auto !bg-white !text-primary"
+            className="mt-auto"
           />
         </div>
 

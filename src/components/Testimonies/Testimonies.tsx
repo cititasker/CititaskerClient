@@ -2,28 +2,87 @@
 import Image from "next/image";
 import React from "react";
 import TestimonialCarousel from "./TestimonialCarousel";
+import { motion } from "framer-motion";
 
-const Testimonies = () => {
+const STYLES = {
+  container: "mx-auto px-4 md:px-8 py-8 md:py-20",
+  cardContainer:
+    "relative rounded-3xl md:rounded-[3.125rem] overflow-hidden bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 shadow-2xl",
+  contentWrapper: "relative z-10 py-12 md:py-20 px-6 md:px-12",
+  decorativeShape: "absolute w-auto h-16 md:h-48 opacity-20",
+  title:
+    "max-w-2xl md:max-w-4xl mx-auto text-center text-white text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold leading-tight md:leading-snug mb-12 md:mb-16",
+  glowEffect:
+    "absolute -top-40 -right-40 w-80 h-80 bg-gradient-primary opacity-20 rounded-full blur-3xl animate-pulse",
+} as const;
+
+const Testimonies: React.FC = () => {
+  const titleVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.8, ease: "easeOut" },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, scale: 0.95 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: { duration: 0.6, ease: "easeOut" },
+    },
+  };
+
   return (
-    <div className="container-w py-[4.25rem]">
-      <div className="h-fit w-full rounded-[13px] md:rounded-[3.125rem] bg-dark-secondary relative overflow-hidden pt-6 pb-8 sm:py-[6.25rem]">
+    <section className={STYLES.container}>
+      <motion.div
+        className={STYLES.cardContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={cardVariants}
+      >
+        {/* Glow Effects */}
+        <div className={STYLES.glowEffect} />
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-r from-emerald-400/15 to-cyan-400/15 rounded-full blur-3xl animate-pulse delay-1000" />
+
+        {/* Decorative Shape */}
         <Image
           src="/images/dotted_shape.svg"
           alt=""
           width={208}
           height={280}
-          className="object-cover absolute -top-1 -left-1 sm:-top-[10%] sm:-left-[10%] w-auto h-[71px] sm:h-[13rem]"
+          className={`${STYLES.decorativeShape} -top-4 -left-4 md:-top-16 md:-left-16`}
+          priority={false}
         />
 
-        <h1 className="w-[80%] max-w-[16.375rem] sm:max-w-[40.625rem] pt-6 mx-auto text-center text-white text-xl md:text-3xl lg:text-[2.5rem] font-bold leading-relaxed md:leading-snug lg:leading-[3.25rem]">
-          See what happy customers are saying about CitiTasker
-        </h1>
+        <div className={STYLES.contentWrapper}>
+          {/* Title */}
+          <motion.h1 className={STYLES.title} variants={titleVariants}>
+            See what{" "}
+            <span className="text-transparent bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text">
+              happy customers
+            </span>{" "}
+            are saying about CitiTasker
+          </motion.h1>
 
-        <div>
-          <TestimonialCarousel />
+          {/* Testimonial Carousel */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.4, duration: 0.6 }}
+          >
+            <TestimonialCarousel />
+          </motion.div>
         </div>
-      </div>
-    </div>
+
+        {/* Bottom Accent Gradient */}
+        <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-blue-400/50 to-transparent" />
+      </motion.div>
+    </section>
   );
 };
 

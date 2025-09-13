@@ -204,6 +204,19 @@ export function formatTime(dateString: string, format = "hh:mm a"): string {
 }
 export const maxDate = moment().endOf("day").toDate();
 
+/**
+ * Returns a maxDate based on how many years ago you want to subtract.
+ * @param years - number of years to subtract from today (e.g., 18 for DOB)
+ * @returns Date object
+ */
+export function getMaxDate(years?: number): Date {
+  if (typeof years === "number") {
+    return moment().subtract(years, "years").endOf("day").toDate();
+  }
+
+  return moment().endOf("day").toDate(); // default to today
+}
+
 export const updateQueryParams = (
   searchParams: URLSearchParams,
   key: string,

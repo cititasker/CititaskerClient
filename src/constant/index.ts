@@ -24,7 +24,7 @@ export const API_ROUTES = {
   UTILITY: {
     BANKS: "/utility/banks",
     VERIFY_ACCOUNT_NUMBER: "/utility/verify-account-details",
-    CATEGORY: "/utility/categories",
+    CATEGORIES: "/utility/categories",
     SUB_CATEGORY: "/utility/sub-categories",
   },
   LOGIN: "/auth/login",
@@ -59,7 +59,7 @@ export const API_ROUTES = {
   UPDATE_PROFILE_DETAILS: "/auth/update-account-details",
   GET_PROFILE_DETAILS: "/auth/fetch-user-account-details",
   GET_PORTFOLIO: "/auth/fetch-user-portfolio-details",
-  UPDATE_PORTFOLIO: "/auth/update-portfolio",
+  UPDATE_PORTFOLIO: "/profile/portfolio",
   DELETE_PORTFOLIO: "/auth/remove-portfolio-image",
   CREATE_FAQ: "/faqs/create",
   GET_FAQ: "/faqs/user-faqs",
@@ -71,13 +71,47 @@ export const API_ROUTES = {
 
 const isProd = process.env.NEXT_PUBLIC_NODE_ENV === "production";
 
+type RouteFunction = (role: "poster" | "tasker") => string;
+
 export const ROUTES = {
-  HOME: "/",
-  MY_TASKS: "/my-tasks",
+  // Auth routes
   LOGIN: isProd ? "/waitlist" : "/login",
   SIGNUP: isProd ? "/waitlist" : "/signup",
-  CREATE_ACCOUNT: "/create-account",
   FORGOT_PASSWORD: "/forgot-password",
+  CREATE_ACCOUNT: "/create-account",
+  RESET_PASSWORD: "/reset-password",
+  OTP: "/otp",
+
+  // Static routes
+  HOME: "/",
+  PROFILE: "/dashboard/profile",
+  ACCOUNT: "/dashboard/account",
+
+  // Role-based route templates
+  DASHBOARD_TEMPLATE: "/{role}/dashboard",
+  MY_TASKS_TEMPLATE: "/{role}/my-tasks",
+  SETTINGS_TEMPLATE: "/{role}/settings",
+
+  // Helper functions for dynamic routes
+  getDashboard: ((role: UserRole) => `/${role}/dashboard`) as RouteFunction,
+  getMyTasks: ((role: UserRole) => `/${role}/my-tasks`) as RouteFunction,
+  getSettings: ((role: UserRole) => `/${role}/settings`) as RouteFunction,
+  getTaskDetails: (role: UserRole, taskId: string) =>
+    `/${role}/my-tasks/${taskId}`,
+
+  // Role-specific constants (for convenience)
+  POSTERs: {
+    DASHBOARD: "/poster/dashboard",
+    MY_TASKS: "/poster/my-tasks",
+    SETTINGS: "/poster/settings",
+  },
+  TASKERs: {
+    DASHBOARD: "/tasker/dashboard",
+    MY_TASKS: "/tasker/my-tasks",
+    SETTINGS: "/tasker/settings",
+  },
+
+  MY_TASKS: "/my-tasks",
   DASHBOARD: "/dashboard",
   POSTER: isProd ? "/waitlist" : "/discovery/poster",
   TASKER: isProd ? "/waitlist" : "/discovery/tasker",
@@ -89,14 +123,14 @@ export const ROUTES = {
   HOW_IT_WORKS: "/how-it-works",
   DISCOVERY: "/discovery",
 
-  // Dashboard
-  // DASHBOARD: (role:string) => `/${role}/dashboard`,
   DASHBOARD_TASKER: "/tasker/dashboard",
   DASHBOARD_PAYMENT: "/dashboard/payment",
   DASHBOARD_ACCOUNT: "/dashboard/account",
   DASHBOARD_MESSAGE: "/dashboard/message",
   DASHBOARD_PROFILE: "/dashboard/profile",
 } as const;
+
+export type UserRole = "poster" | "tasker";
 
 export const animationVariants = {
   enterFromLeft: { x: 100, opacity: 0 },
@@ -105,3 +139,27 @@ export const animationVariants = {
   exitToLeft: { x: -100, opacity: 0 },
   exitToRight: { x: 100, opacity: 0 },
 } as const;
+
+// Simplified animation variants
+export const animationVariant = {
+  enter: {
+    opacity: 0,
+    scale: 0.96,
+    y: 10,
+  },
+  center: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+  },
+  exit: {
+    opacity: 0,
+    scale: 0.96,
+    y: -10,
+  },
+};
+
+export const LOCATION_TYPE: Record<LocationTypeT, string> = {
+  in_person: "In Person",
+  online: "Remote",
+};

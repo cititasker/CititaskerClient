@@ -22,6 +22,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import { ChevronDown, Check } from "lucide-react";
 import FormError from "../reusables/FormError";
 
 interface FormAutoCompleteProps<TOption, TFieldValues extends FieldValues> {
@@ -35,25 +36,27 @@ interface FormAutoCompleteProps<TOption, TFieldValues extends FieldValues> {
   isOptionEqualToValue?: (a: TOption, b: TOption) => boolean;
   onChange?: (value: TOption | null) => void;
   renderOption?: (option: TOption, selected: boolean) => React.ReactNode;
+  loading?: boolean;
 }
 
 export function FormAutoComplete<TOption, TFieldValues extends FieldValues>({
   name,
   label,
   options,
-  placeholder = "Select...",
+  placeholder = "Select an option...",
   disabled,
   className,
   getOptionLabel,
   isOptionEqualToValue = (a, b) => a === b,
   onChange,
   renderOption,
+  loading = false,
 }: FormAutoCompleteProps<TOption, TFieldValues>) {
   const { control } = useFormContext<TFieldValues>();
   const [open, setOpen] = useState(false);
 
   return (
-    <div className={cn("space-y-1 flex-1 w-full", className)}>
+    <div className={cn("space-y-2 flex-1 w-full", className)}>
       {label && <Label htmlFor={name}>{label}</Label>}
 
       <Controller
@@ -73,41 +76,80 @@ export function FormAutoComplete<TOption, TFieldValues extends FieldValues>({
                   variant="outline"
                   role="combobox"
                   aria-expanded={open}
-                  disabled={disabled}
+                  disabled={disabled || loading}
                   className={cn(
-                    "border-input w-full justify-between font-normal hover:bg-transparent shadow-none rounded-[40px]",
-                    !field.value && "text-muted-foreground"
+                    "w-full justify-between font-normal h-12",
+                    "border-border-light hover:border-border-medium",
+                    "bg-background hover:bg-background-secondary text-base text-text-primary placeholder:text-text-muted",
+                    "text-left px-4 rounded-xl shadow-none",
+                    !field.value && "text-text-muted",
+                    disabled && "opacity-50 cursor-not-allowed",
+                    open && "border-primary"
                   )}
                 >
-                  {selectedLabel || placeholder}
+                  <span className="truncate">
+                    {loading ? "Loading..." : selectedLabel || placeholder}
+                  </span>
+                  <ChevronDown
+                    className={cn(
+                      "h-4 w-4 text-text-muted transition-transform duration-200 flex-shrink-0 ml-2",
+                      open && "rotate-180"
+                    )}
+                  />
                 </Button>
               </PopoverTrigger>
+
               <PopoverContent
                 side="bottom"
                 align="start"
-                className="w-[var(--radix-popover-trigger-width)] p-0"
+                className={cn(
+                  "w-[var(--radix-popover-trigger-width)] p-0",
+                  "bg-background border-border-light shadow-lg rounded-xl"
+                )}
               >
-                <Command>
-                  <CommandInput placeholder="Search..." />
-                  <CommandEmpty>No results found.</CommandEmpty>
-                  <CommandList>
+                <Command className="rounded-xl">
+                  <CommandInput
+                    placeholder={`Search ${
+                      label?.toLowerCase() || "options"
+                    }...`}
+                    className="border-none focus:ring-0 text-sm px-4 py-3"
+                  />
+
+                  <CommandEmpty className="py-4 text-center text-sm text-text-muted">
+                    No results found.
+                  </CommandEmpty>
+
+                  <CommandList className="max-h-48 overflow-y-auto">
                     {options.map((option, index) => {
                       const isSelected =
                         selected && isOptionEqualToValue(option, selected);
+                      const label = getOptionLabel(option);
+
                       return (
                         <CommandItem
                           key={index}
-                          value={getOptionLabel(option)}
+                          value={label}
                           onSelect={() => {
                             field.onChange(option);
                             if (onChange) onChange(option);
                             setOpen(false);
                           }}
-                          className="cursor-pointer"
+                          className={cn(
+                            "flex items-center justify-between px-4 py-3 cursor-pointer",
+                            "hover:bg-background-secondary text-text-primary",
+                            "transition-colors duration-150",
+                            isSelected && "bg-primary-50 text-primary"
+                          )}
                         >
-                          {renderOption
-                            ? renderOption(option, !!isSelected)
-                            : getOptionLabel(option)}
+                          <div className="flex-1 truncate">
+                            {renderOption
+                              ? renderOption(option, !!isSelected)
+                              : label}
+                          </div>
+
+                          {isSelected && (
+                            <Check className="h-4 w-4 text-primary flex-shrink-0 ml-2" />
+                          )}
                         </CommandItem>
                       );
                     })}

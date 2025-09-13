@@ -32,14 +32,8 @@ export default function StepOne() {
             <FormTextArea
               name="description"
               placeholder="Write here...."
-              className="h-[104px] mb-0 p-4 rounded-[10px] bg-light-grey"
               maxLength={maxLengthChar}
             />
-            {!errors.description && (
-              <p className="text-xs text-muted-foreground mt-1">
-                {remainingChars} characters remaining
-              </p>
-            )}
           </div>
         )}
       </div>

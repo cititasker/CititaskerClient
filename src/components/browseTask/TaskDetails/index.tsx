@@ -77,7 +77,7 @@ const TaskDetails = ({ back }: IProps) => {
       <div className="rounded-t-xl pl-4 pr-1 sm:px-8 h-[65px] flex justify-between items-center border-b sticky top-0 z-[20] bg-white">
         <Link
           href={back}
-          className="flex items-center gap-2 text-base text-primary font-normal"
+          className="flex items-center gap-2 text-primary font-normal"
         >
           <Icons.arrowLeft />{" "}
           <span className="hidden md:inline-block">Back to Map</span>
@@ -111,7 +111,7 @@ const TaskDetails = ({ back }: IProps) => {
         </div>
       </div>
 
-      <div className="px-5 sm:px-[30px] pt-5 sm:pt-[28px] mb-10 w-full">
+      <div className="p-5 sm:px-[30px] sm:pt-[28px] mb-5 w-full">
         <PosterInfo task={task} />
 
         <section className="mb-6">
@@ -131,7 +131,7 @@ const TaskDetails = ({ back }: IProps) => {
             <p>No images available for this task.</p>
           )}
         </section>
-        <CustomTab items={tabs} listClassName="mb-7" />
+        <CustomTab items={tabs} />
       </div>
 
       <ShareTaskModal open={shareModalOpen} onClose={closeShareModal} />

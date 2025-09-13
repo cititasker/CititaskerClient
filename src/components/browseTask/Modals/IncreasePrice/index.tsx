@@ -1,17 +1,17 @@
 "use client";
 
 import React from "react";
-import { useAppDispatch, useAppSelector } from "@/store/hook";
-import { purgeStateData } from "@/store/slices/task";
+import { useAppSelector } from "@/store/hook";
 import CustomModal from "@/components/reusables/CustomModal";
 import { AnimatePresence, motion } from "framer-motion";
-import { animationVariants } from "@/constant";
 import StepOne from "../shared/StepOne";
 import StepTwo from "./StepTwo";
 import StepThree from "./StepThree";
 import Success from "@/components/reusables/Success";
 import { initializeName } from "@/utils";
 import { useStepFormAction } from "@/hooks/useStepFormAction";
+import { animationVariant } from "@/constant";
+import { usePurgeData } from "@/utils/dataPurge";
 
 interface Props {
   open: boolean;
@@ -46,9 +46,8 @@ const steps = [
 ];
 
 const IncreasePriceModal: React.FC<Props> = ({ open, handleClose }) => {
-  const { currentStep, direction, nextStep, prevStep } =
-    useStepFormAction(open);
-  const dispatch = useAppDispatch();
+  const { currentStep, nextStep, prevStep } = useStepFormAction(open);
+  const { purgeOffer } = usePurgeData();
 
   const { isAuth } = useAppSelector((state) => state.user);
   const { taskDetails } = useAppSelector((state) => state.task);
@@ -59,8 +58,8 @@ const IncreasePriceModal: React.FC<Props> = ({ open, handleClose }) => {
 
   const isFinalStep = currentStep === steps.length + 1;
 
-  const closeModal = () => {
-    if (isAuth) dispatch(purgeStateData({ path: "offer" }));
+  const closeModal = async () => {
+    if (isAuth) await purgeOffer();
     handleClose();
   };
 
@@ -73,27 +72,33 @@ const IncreasePriceModal: React.FC<Props> = ({ open, handleClose }) => {
         !isFinalStep ? steps[currentStep - 1]?.description : undefined
       }
     >
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={currentStep}
-          initial={direction === "forward" ? "enterFromRight" : "enterFromLeft"}
-          animate="center"
-          exit={direction === "forward" ? "exitToLeft" : "exitToRight"}
-          variants={animationVariants}
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        >
-          {isFinalStep ? (
-            <Success
-              title="Success"
-              desc={`Your request was successfully sent to ${posterName}`}
-              className="justify-center"
-              contentClassName="mt-0"
-            />
-          ) : (
-            steps[currentStep - 1]?.content(nextStep, prevStep)
-          )}
-        </motion.div>
-      </AnimatePresence>
+      <div className="relative min-h-[300px]">
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={currentStep}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            variants={animationVariant}
+            transition={{
+              duration: 0.25,
+              ease: [0.4, 0.0, 0.2, 1], // Custom easing curve for smooth feel
+            }}
+            className="w-full"
+          >
+            {isFinalStep ? (
+              <Success
+                title="Success"
+                desc={`Your request was successfully sent to ${posterName}`}
+                className="justify-center"
+                contentClassName="mt-0"
+              />
+            ) : (
+              steps[currentStep - 1]?.content(nextStep, prevStep)
+            )}
+          </motion.div>
+        </AnimatePresence>
+      </div>
     </CustomModal>
   );
 };

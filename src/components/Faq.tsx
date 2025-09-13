@@ -41,7 +41,7 @@ const Faq = () => {
                   Feel free to contact us anytime!
                 </div>
               </div>
-              <FormButton text="Contact Us" className="bg-white text-primary" />
+              <FormButton text="Contact Us" />
             </div>
           </div>
           <div className="flex-1">

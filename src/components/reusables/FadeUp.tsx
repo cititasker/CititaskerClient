@@ -1,51 +1,58 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { motion, useAnimation, useInView } from "framer-motion";
 import { cn } from "@/utils";
 
-interface IProps {
+interface FadeUpProps {
   className?: string;
   children: React.ReactNode;
-  hidden?: any;
-  exit?: any;
-  visible?: any;
-  transition?: {
-    delay?: number;
-    duration: number;
-  };
+  delay?: number;
+  duration?: number;
+  distance?: number;
 }
 
-const FadeUp = ({
+const FadeUp: React.FC<FadeUpProps> = ({
   children,
-  hidden = { opacity: 0, y: 20 },
-  visible = { opacity: 1, y: 0 },
-  transition = { duration: 0.5 },
-  exit = { opacity: 0, y: -20 },
   className,
-}: IProps) => {
+  delay = 0,
+  duration = 0.6,
+  distance = 30,
+}) => {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const mainControls = useAnimation();
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
+  const controls = useAnimation();
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (isInView) {
-      mainControls.start("visible");
+      controls.start("visible");
     }
-  }, [isInView, mainControls]);
+  }, [isInView, controls]);
+
+  const variants = {
+    hidden: {
+      opacity: 0,
+      y: distance,
+      scale: 0.95,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        duration,
+        delay,
+        ease: [0.25, 0.46, 0.45, 0.94], // Custom easing
+      },
+    },
+  };
 
   return (
     <motion.div
       ref={ref}
-      variants={{
-        hidden: hidden,
-        visible: visible,
-        exit: exit,
-      }}
       initial="hidden"
-      exit="exit"
-      animate={mainControls}
-      transition={{ ...transition }}
-      className={cn("", className)}
+      animate={controls}
+      variants={variants}
+      className={cn("w-full", className)}
     >
       {children}
     </motion.div>

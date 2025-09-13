@@ -1,6 +1,27 @@
 import { API_ROUTES } from "@/constant";
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
-import { getFaq, getReviews, getUserPorfolio, getUserProfileDetails } from "./users.api";
+import {
+  getFaq,
+  getReviews,
+  getUserApi,
+  getUserPorfolio,
+  getUserProfileDetails,
+} from "./users.api";
+
+type GetUserResponse = { data: IUser };
+
+export const useGetUser = (
+  options?: Omit<
+    UseQueryOptions<GetUserResponse, Error>,
+    "queryKey" | "queryFn"
+  >
+) => {
+  return useQuery<GetUserResponse, Error>({
+    queryKey: [API_ROUTES.GET_USER_DETAILS],
+    queryFn: getUserApi,
+    ...options,
+  });
+};
 
 export const useGetUserProfile = (
   data: { id: any },
@@ -39,7 +60,7 @@ export const useGetFaq = (
 };
 
 export const useGetReviews = (
-  data: {id: string | number},
+  data: { id: string | number },
   options?: UseQueryOptions<GetReviewsResponse, Error>
 ) => {
   return useQuery<GetReviewsResponse, Error>({

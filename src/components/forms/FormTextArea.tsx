@@ -1,13 +1,7 @@
 import { Textarea } from "@/components/ui/textarea";
 import { useFormContext } from "react-hook-form";
 import { cn } from "@/lib/utils";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/form";
+import { FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 
 interface FormTextAreaProps {
   name: string;
@@ -16,47 +10,82 @@ interface FormTextAreaProps {
   required?: boolean;
   className?: string;
   maxLength?: number;
+  rows?: number;
+  disabled?: boolean;
+  readOnly?: boolean;
 }
 
 export default function FormTextArea({
   name,
   label,
   placeholder,
-  required,
+  required = false,
   className,
   maxLength,
+  rows = 4,
+  disabled = false,
+  readOnly = false,
 }: FormTextAreaProps) {
-  const { control } = useFormContext();
+  const { control, formState } = useFormContext();
+  const error = formState.errors[name];
 
   return (
     <FormField
       name={name}
       control={control}
-      render={({ field, fieldState }) => (
-        <FormItem>
-          <div className="space-y-1.5">
-            {label && (
-              <FormLabel htmlFor={name}>
-                {label}
-                {required && <span className="text-destructive ml-1">*</span>}
-              </FormLabel>
+      render={({ field }) => (
+        <FormItem className={cn("space-y-2", className)}>
+          {label && (
+            <FormLabel
+              htmlFor={name}
+              className="text-sm font-medium text-text-primary"
+            >
+              {label}
+              {required && <span className="text-error ml-1">*</span>}
+            </FormLabel>
+          )}
+
+          <div className="relative group">
+            <Textarea
+              id={name}
+              {...field}
+              placeholder={placeholder}
+              disabled={disabled}
+              readOnly={readOnly}
+              maxLength={maxLength}
+              rows={rows}
+              aria-invalid={!!error}
+              className={cn(
+                // Base styles
+                "w-full px-4 py-3 text-base rounded-xl border resize-none transition-all duration-200",
+                "bg-background text-text-primary placeholder:text-text-muted",
+                "focus:outline-none",
+
+                // Border states
+                error
+                  ? "border-error focus:border-error"
+                  : "border-border-light focus:border-primary hover:border-border-medium",
+
+                // State styles
+                disabled &&
+                  "opacity-50 cursor-not-allowed bg-background-secondary",
+                readOnly && "bg-background-secondary cursor-default",
+
+                // Minimum height
+                rows <= 3 && "min-h-[100px]",
+                rows > 3 && "min-h-[120px]"
+              )}
+            />
+
+            {/* Character count */}
+            {maxLength && (
+              <div className="absolute bottom-2 right-3 text-xs text-text-muted">
+                {field.value?.length || 0}/{maxLength}
+              </div>
             )}
-            <FormControl>
-              <Textarea
-                id={name}
-                placeholder={placeholder}
-                aria-invalid={!!fieldState.error}
-                className={cn(
-                  "min-h-[120px] rounded sm:rounded-lg md:rounded-xl",
-                  fieldState.error && "border-destructive",
-                  className
-                )}
-                maxLength={maxLength}
-                {...field}
-              />
-            </FormControl>
           </div>
-          <FormMessage />
+
+          <FormMessage className="text-error text-sm" />
         </FormItem>
       )}
     />

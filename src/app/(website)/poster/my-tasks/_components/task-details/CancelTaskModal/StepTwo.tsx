@@ -7,8 +7,6 @@ import { useMemo } from "react";
 export default function StepTwo() {
   const { taskDetails } = useAppSelector((state) => state.task);
 
-  console.log(66, taskDetails);
-
   const amountPaid = useMemo(() => {
     const offers = taskDetails?.offers ?? [];
     const accepted = offers.find((offer) => offer.status === "accepted");

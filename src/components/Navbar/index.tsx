@@ -10,7 +10,7 @@ export default async function Navbar() {
   const session = await auth();
   const queryClient = getQueryClient();
 
-  if (!!session) {
+  if (session?.user) {
     await queryClient.prefetchQuery({
       queryKey: [API_ROUTES.GET_USER_DETAILS],
       queryFn: getUserApi,
@@ -21,7 +21,7 @@ export default async function Navbar() {
 
   return (
     <HydrationBoundary state={dehydratedState}>
-      <MainNavbar isAuth={!!session} />
+      <MainNavbar />
     </HydrationBoundary>
   );
 }

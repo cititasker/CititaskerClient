@@ -4,7 +4,7 @@ import { MdOutlineAdd } from "react-icons/md";
 import { useAppSelector } from "@/store/hook";
 import WalletBalanceCard from "@/components/reusables/WalletCard";
 import { IDataWallet, walletColumns } from "./columns";
-import { CustomTable } from "@/components/reusables/CustomTable";
+import { CustomTable } from "@/components/reusables/table/CustomTable";
 
 const WalletTab = () => {
   const { user } = useAppSelector((state) => state.user);

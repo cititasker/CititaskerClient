@@ -67,7 +67,7 @@ export default function VerificationModal({
         {verificationList.map((el, i) => (
           <Card
             key={i}
-            className="flex items-center justify-between pl-4 pr-2 py-2 rounded-full border"
+            className="flex items-center justify-between p-1 pl-4 rounded-lg border shadow-none"
           >
             <span className="text-[16px] font-medium text-black">
               {el.label}

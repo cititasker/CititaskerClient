@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -39,7 +38,7 @@ const schema = postTaskSchema
 
 type SchemaType = z.infer<typeof schema>;
 
-const StepThree = () => {
+export default function StepThree() {
   const dispatch = useAppDispatch();
   const { task } = useAppSelector((state) => state.task);
   const { push } = useRouter();
@@ -53,7 +52,7 @@ const StepThree = () => {
   const { role } = useAppSelector((state) => state.user);
   const router = useRouter();
 
-  const isReschedule = action == "reschedule";
+  const isReschedule = action === "reschedule";
 
   const updateMutation = useUpdateTask({
     onSuccess: async (data) => {
@@ -85,50 +84,46 @@ const StepThree = () => {
     if (task.date) setValue("date", task.date);
     if (task.time) setValue("time", task.time);
     if (task.showTimeOfDay) setValue("showTimeOfDay", task.showTimeOfDay);
-  }, [task]);
+  }, [task, setValue]);
 
   const onSubmit: SubmitHandler<SchemaType> = (values) => {
     dispatch(setTaskData(values));
     const currentUrl = new URL(window.location.href);
+
     if (isReschedule) {
       currentUrl.searchParams.set("step", "5");
-      push(`${currentUrl}`);
-      // const { showTimeOfDay: _, ...rest } = values;
-      // const payload = { ...task, ...rest, task_id: id };
-      // console.log(10, payload);
-      // updateMutation.mutate(payload);
     } else {
-      currentUrl.searchParams.set("step", `${step + 1}`);
-      push(`${currentUrl}`);
+      currentUrl.searchParams.set("step", String(step + 1));
     }
+
+    push(currentUrl.toString());
   };
 
   return (
-    <FormProvider {...methods}>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="overflow-auto hide-scrollbar min-h-[65dvh] md:max-h-[600px] flex flex-col"
-      >
-        <div className="flex-1 space-y-4 sm:space-y-6">
+    <div className="space-y-6">
+      <FormProvider {...methods}>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <TimeFrameSelector />
+
           <FormDatePicker
             name="date"
             label="When do you need this done?"
             minDate={moment().toDate()}
           />
+
           <FormCheckbox
             name="showTimeOfDay"
             label="Pick a particular time of the day."
           />
-          <TimeOfDaySelector />
-        </div>
-        <PostTaskFormActions
-          okText={isReschedule ? "Submit" : "Next"}
-          loading={updateMutation.isPending}
-        />
-      </form>
-    </FormProvider>
-  );
-};
 
-export default StepThree;
+          <TimeOfDaySelector />
+
+          <PostTaskFormActions
+            okText={isReschedule ? "Submit" : "Next"}
+            loading={updateMutation.isPending}
+          />
+        </form>
+      </FormProvider>
+    </div>
+  );
+}

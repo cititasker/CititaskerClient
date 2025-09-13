@@ -1,26 +1,22 @@
 "use client";
+
 import React from "react";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
+import {
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
+import { useFormContext } from "react-hook-form";
 
-interface CustomQuillEditorProps {
-  value: string;
-  onChange: (value: string) => void;
-  placeholder?: string;
-  modules?: any;
-  formats?: string[];
-  className?: string;
-}
-
-const defaultModules = {
+const editorModules = {
   toolbar: [
-    [{ size: [] }],
-    ["bold", "italic", "underline", "strike", "code-block"],
+    [{ header: [1, 2, 3, false] }],
+    ["bold", "italic", "underline"],
     ["blockquote", "code-block"],
-    // [{ header: "1" }, { header: "2" }, { font: [] }],
-    [{ header: [1, 2, 3, 4, 5, 6, false] }],
-    [{ direction: "rtl" }],
-    [{ color: [] }, { background: [] }],
     [
       { list: "ordered" },
       { list: "bullet" },
@@ -33,43 +29,45 @@ const defaultModules = {
   ],
 };
 
-const defaultFormats = [
-  "header",
-  "font",
-  "size",
-  "bold",
-  "italic",
-  "underline",
-  "strike",
-  "blockquote",
-  "list",
-  //   "bullet",
-  "indent",
-  "link",
-  "image",
-  "video",
-  "code-block",
-];
+interface TextEditorProps {
+  name: string;
+  label: string;
+  placeholder?: string;
+  className?: string;
+}
 
-function FormTextEditor({
-  value,
-  onChange,
+const FormTextEditor = ({
+  name,
+  label,
   placeholder = "Type your text here...",
-  modules = defaultModules,
-  formats = defaultFormats,
-  className,
-}: CustomQuillEditorProps) {
+  className = "",
+}: TextEditorProps) => {
+  const form = useFormContext();
+
   return (
-    <ReactQuill
-      theme="snow"
-      value={value}
-      onChange={onChange}
-      placeholder={placeholder}
-      modules={modules}
-      formats={formats}
-      className={className}
+    <FormField
+      control={form.control}
+      name={name}
+      render={({ field }) => (
+        <FormItem className={`space-y-2 ${className}`}>
+          <FormLabel>{label}</FormLabel>
+          <FormControl>
+            <div className="prose-editor">
+              <ReactQuill
+                theme="snow"
+                value={field.value}
+                onChange={field.onChange}
+                placeholder={placeholder}
+                modules={editorModules}
+                className="bg-white"
+              />
+            </div>
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
     />
   );
-}
+};
 
 export default FormTextEditor;

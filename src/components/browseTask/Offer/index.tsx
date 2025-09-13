@@ -1,12 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import TaskerOffer from "./TaskerOffer";
 import { withdrawOffer } from "@/services/offer";
 import { useSnackbar } from "@/providers/SnackbarProvider";
-import { queryClient } from "@/providers/ServerProvider";
 import { useAppDispatch } from "@/store/hook";
 import { setUserTaskOffer } from "@/store/slices/task";
 import { errorHandler } from "@/utils";
@@ -23,13 +22,14 @@ const Offer: React.FC<OfferProps> = ({ offers }) => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const { showSnackbar } = useSnackbar();
+  const queryClient = useQueryClient();
 
   const [selectedOfferId, setSelectedOfferId] = useState<string | null>(null);
   const withdrawModal = useModal();
 
   const handleToggleModal = (offerId?: string) => {
     setSelectedOfferId(offerId ?? null);
-    withdrawModal.openModal();
+    withdrawModal.toggleModal();
   };
 
   const { mutate, isPending } = useMutation({
@@ -40,6 +40,9 @@ const Offer: React.FC<OfferProps> = ({ offers }) => {
       handleToggleModal();
       queryClient.invalidateQueries({
         queryKey: [API_ROUTES.GET_TASK_BY_ID, id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [API_ROUTES.TASKS],
       });
     },
     onError: (error) => {
@@ -70,7 +73,6 @@ const Offer: React.FC<OfferProps> = ({ offers }) => {
       </div>
 
       <ConfirmModal
-        variant="destructive"
         open={withdrawModal.isOpen}
         onClose={withdrawModal.closeModal}
         title="Withdraw Offer"

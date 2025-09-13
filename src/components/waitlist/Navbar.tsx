@@ -1,7 +1,6 @@
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { MdClose } from "react-icons/md";
 
 import Icons from "../Icons";
@@ -12,6 +11,7 @@ import { useAppDispatch } from "@/store/hook";
 import { toggleWaitlistModal } from "@/store/slices/general";
 import { Logo } from "@/constant/icons";
 import { ROUTES } from "@/constant";
+import BrandLogo from "../reusables/BrandLogo";
 
 const NAV_ITEMS = [
   { href: "#home", name: "Home" },
@@ -68,15 +68,7 @@ const Navbar = () => {
     <div className="fixed top-5 w-full z-40 px-5">
       <div className="shadow-md bg-white rounded-[3.125rem] h-[4.688rem] px-5 flex items-center max-w-[87.5rem] mx-auto">
         <div className="w-full flex justify-between items-center max-w-[79.375rem] mx-auto">
-          <a href={`${ROUTES.WAITLIST}#home`}>
-            <Image
-              src="/icons/logo_icon.svg"
-              alt="brand_logo"
-              width={200}
-              height={70}
-              className="h-5 w-auto sm:h-auto"
-            />
-          </a>
+          <BrandLogo href={`${ROUTES.WAITLIST}#home`} />
 
           <ul className="hidden md:flex items-center mx-2">
             {renderNavLinks()}

@@ -46,7 +46,7 @@ const FormButton: React.FC<FormButtonProps> = ({
         variant={variant}
         size={size}
         className={cn(
-          "w-fit min-w-max px-5 text-base font-normal rounded-full flex items-center justify-center gap-2",
+          "w-fit px-5 flex items-center justify-center gap-2",
           className
         )}
         {...props}
@@ -66,7 +66,7 @@ const FormButton: React.FC<FormButtonProps> = ({
       disabled={disabled || loading}
       onClick={handleClick}
       className={cn(
-        "min-w-max px-5 text-base font-normal rounded-full flex items-center justify-center gap-2",
+        "min-w-max flex items-center justify-center gap-2",
         className
       )}
       {...props}

@@ -1,6 +1,6 @@
 import TaskDetails from "@/components/browseTask/TaskDetails";
-import { API_ROUTES } from "@/constant";
-import { queryClient } from "@/providers/ServerProvider";
+import { API_ROUTES, ROUTES } from "@/constant";
+import { getQueryClient } from "@/constant/queryClient";
 import { getSingleTask } from "@/services/task";
 import { getUserTaskById } from "@/services/tasks/tasks.api";
 import { Metadata } from "next";
@@ -30,9 +30,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function Page({ params }: Props) {
   const id = (await params).id;
 
+  const queryClient = getQueryClient();
+
   await queryClient.prefetchQuery({
     queryKey: [API_ROUTES.GET_TASK_BY_ID, id],
     queryFn: () => getUserTaskById(id),
   });
-  return <TaskDetails back="/browse-task" />;
+  return <TaskDetails back={ROUTES.BROWSE_TASK} />;
 }

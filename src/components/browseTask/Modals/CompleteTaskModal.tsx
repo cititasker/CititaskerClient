@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { API_ROUTES } from "@/constant";
 import useToggle from "@/hooks/useToggle";
 import { useSnackbar } from "@/providers/SnackbarProvider";
-import { useRequestPayment } from "@/queries/task";
+import { useRequestPayment } from "@/services/tasks/tasks.hook";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
@@ -81,7 +81,6 @@ export default function CompleteTaskModal({ isOpen, onClose }: IModal) {
       onClose={handleClose}
       contentClassName="max-w-md"
       title={!success.isOpen ? "Complete task" : undefined}
-      titleClassName="font-bold text-2xl"
     >
       {!success.isOpen ? (
         <div>

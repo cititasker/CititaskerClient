@@ -1,7 +1,7 @@
-import Account from "@/app/(website)/_components/dashboard/Account";
+import Account from "@/components/shared/dashboard/account/Account";
 import Verifications from "./Verifications";
-import Security from "@/app/(website)/_components/dashboard/Security";
-import Notification from "@/app/(website)/_components/dashboard/Notification";
+import Security from "@/components/shared/dashboard/account/Security";
+import Notification from "@/components/shared/dashboard/account/Notification";
 
 export const tabs = [
   {

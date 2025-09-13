@@ -5,11 +5,13 @@ import {
   useGetSubCategories,
 } from "@/services/general/index.hook";
 
-export const useCategoryOptions = (categoryId: number | null) => {
+export const useCategoryOptions = (categoryId?: number | null) => {
   const { data: rawCategories = [] } = useGetCategories();
   const { data: rawSubCategories = [] } = useGetSubCategories({
     id: categoryId,
   });
+
+  const { data } = useGetCategories();
 
   const categories = useMemo(
     () => rawCategories.map((c) => ({ ...c, name: capitalize(c.name) })),

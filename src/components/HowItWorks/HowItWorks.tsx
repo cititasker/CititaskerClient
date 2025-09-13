@@ -3,6 +3,7 @@ import React from "react";
 import SlidingImageCarousel from "./SlidingImageCarousel";
 import HowItWorksListItem from "./HowItWorksListItem";
 import { motion } from "framer-motion";
+import UnderlinedHeader from "../reusables/UnderlinedHeader";
 
 const data = [
   {
@@ -41,7 +42,11 @@ const HowItWorks = () => {
     <div className="container-w bg-white sm:py-[5.125rem]" id="how_it_works">
       <div className="mb-[3.375rem] sm:mb-[3.75rem] max-w-[45.625rem] mx-auto">
         <h1 className="header mb-[0.688rem] sm:mb-5">
-          How does CitiTasker work?
+          How does{" "}
+          <span className="text-transparent bg-gradient-to-r from-primary to-secondary bg-clip-text">
+            CitiTasker
+          </span>{" "}
+          work?
         </h1>
         <p className="text-[14px] md:text-[18px] font-normal text-center">
           CitiTasker connects you with verified Taskers to get your tasks done

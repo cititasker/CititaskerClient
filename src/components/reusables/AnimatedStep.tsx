@@ -1,10 +1,10 @@
 import React from "react";
 import { AnimatePresence, motion, Variants } from "framer-motion";
+import { animationVariant } from "@/constant";
 
 // Type for the props that the component will receive
 interface AnimatedStepProps {
   currentStep: number; // Current step number
-  direction?: "forward" | "backward"; // Direction of animation (default is "forward")
   animationVariants?: Variants; // Optional custom animation variants
   renderStepContent?: () => React.ReactNode; // Function that returns the content of the current step
   children?: React.ReactNode;
@@ -12,36 +12,23 @@ interface AnimatedStepProps {
 
 const AnimatedStep: React.FC<AnimatedStepProps> = ({
   currentStep,
-  direction = "forward",
-  animationVariants = {},
+  animationVariants = animationVariant,
   renderStepContent,
   children,
 }) => {
-  // Default animation variants
-  const defaultAnimationVariants: Variants = {
-    enterFromLeft: { x: "-100%", opacity: 0 },
-    enterFromRight: { x: "100%", opacity: 0 },
-    center: { x: 0, opacity: 1 },
-    exitToLeft: { x: "-100%", opacity: 0 },
-    exitToRight: { x: "100%", opacity: 0 },
-  };
-
-  // Merge the default variants with any custom ones passed in
-  const finalAnimationVariants = {
-    ...defaultAnimationVariants,
-    ...animationVariants,
-  };
-
   return (
     <AnimatePresence mode="wait">
       <motion.div
         key={currentStep}
-        initial={direction === "forward" ? "enterFromRight" : "enterFromLeft"}
+        initial="enter"
         animate="center"
-        exit={direction === "forward" ? "exitToLeft" : "exitToRight"}
-        variants={finalAnimationVariants}
-        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="h-full min-h-[350px]"
+        exit="exit"
+        variants={animationVariants}
+        transition={{
+          duration: 0.25,
+          ease: [0.4, 0.0, 0.2, 1], // Custom easing curve for smooth feel
+        }}
+        className="h-full min-h-[350px] flex flex-col"
       >
         {children ?? renderStepContent?.()}
       </motion.div>

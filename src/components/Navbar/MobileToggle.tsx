@@ -1,26 +1,23 @@
 import { Menu } from "lucide-react";
 import { MdClose } from "react-icons/md";
+import { Button } from "../ui/button";
 
-const MobileToggle = ({
-  onClick,
-  open,
-}: {
-  onClick: () => void;
+interface MobileToggleProps {
   open: boolean;
-}) => {
-  if (open)
-    return (
-      <MdClose
-        className="text-2xl cursor-pointer"
-        onClick={onClick}
-        aria-label="Close mobile menu"
-      />
-    );
+  onClick: () => void;
+}
+
+const MobileToggle = ({ open, onClick }: MobileToggleProps) => {
   return (
-    <Menu
-      className="md:hidden cursor-pointer w-auto h-auto"
+    <Button
+      variant="outline"
+      size="icon"
       onClick={onClick}
-    />
+      aria-label={open ? "Close menu" : "Open menu"}
+      className="bg-background border-border xl:hidden"
+    >
+      {open ? <MdClose className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+    </Button>
   );
 };
 

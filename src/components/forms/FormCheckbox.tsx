@@ -1,52 +1,65 @@
 "use client";
 
-import { Controller, useFormContext } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
-import FormError from "../reusables/FormError";
+import { FormField, FormItem, FormMessage } from "../ui/form";
 import { ReactNode } from "react";
 
 interface FormCheckboxProps {
   name: string;
   label: ReactNode;
   className?: string;
-  labelClassName?: string;
+  disabled?: boolean;
+  required?: boolean;
 }
 
 export default function FormCheckbox({
   name,
   label,
   className,
-  labelClassName,
+  disabled = false,
+  required = false,
 }: FormCheckboxProps) {
-  const { control } = useFormContext();
+  const { control, formState } = useFormContext();
+  const error = formState.errors[name];
 
   return (
-    <div className={cn("space-y-1", className)}>
-      <Controller
-        name={name}
-        control={control}
-        render={({ field }) => (
-          <div className="flex items-center gap-2">
+    <FormField
+      name={name}
+      control={control}
+      render={({ field }) => (
+        <FormItem className={cn("space-y-2", className)}>
+          <div className="flex items-start gap-3 group">
             <Checkbox
               id={name}
-              checked={field.value ?? false}
+              checked={field.value || false}
               onCheckedChange={field.onChange}
+              disabled={disabled}
+              className={cn(
+                "mt-0.5 transition-all duration-200",
+                "data-[state=checked]:bg-primary data-[state=checked]:border-primary",
+                "focus:ring-2 focus:ring-primary/20",
+                error && "border-error",
+                disabled && "opacity-50 cursor-not-allowed"
+              )}
             />
             <Label
               htmlFor={name}
               className={cn(
-                "text-sm font-normal leading-snug cursor-pointer",
-                labelClassName
+                "text-sm leading-relaxed cursor-pointer text-text-primary",
+                "group-hover:text-text-secondary transition-colors duration-200",
+                disabled && "opacity-50 cursor-not-allowed",
+                required && "after:content-['*'] after:text-error after:ml-1"
               )}
             >
               {label}
             </Label>
           </div>
-        )}
-      />
-      <FormError name={name} />
-    </div>
+          <FormMessage className="text-error text-sm ml-6" />
+        </FormItem>
+      )}
+    />
   );
 }

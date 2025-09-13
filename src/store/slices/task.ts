@@ -1,7 +1,7 @@
 import { offerSchemaType } from "@/schema/offer";
 import { postTaskSchemaType } from "@/schema/task";
 import { purgeData } from "@/utils";
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface TaskState {
   taskId: number | null;
@@ -32,16 +32,17 @@ const taskDetailIdSlice = createSlice({
     setOfferData: (state, { payload }) => {
       state.offer = payload;
     },
-    purgeStateData: (state, { payload }) => {
-      state.offer = {};
-      purgeData(payload);
-    },
     setTaskDetails: (state, { payload }) => {
       state.taskDetails = payload;
     },
     setUserTaskOffer: (state, { payload }) => {
       state.taskersOffer = payload;
     },
+    purgeStateData: (state, action: PayloadAction<"task" | "offer">) => {
+      state[action.payload] = {};
+    },
+    // Reset entire state to initial
+    resetTaskState: () => initialState,
   },
 });
 
@@ -50,6 +51,8 @@ export const {
   setTaskDetails,
   setOfferData,
   setUserTaskOffer,
+  resetTaskState,
   purgeStateData,
 } = taskDetailIdSlice.actions;
+
 export default taskDetailIdSlice.reducer;

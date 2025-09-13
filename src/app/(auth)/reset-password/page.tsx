@@ -11,6 +11,7 @@ import FormButton from "@/components/forms/FormButton";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import FormInput from "@/components/forms/FormInput";
 import { ROUTES } from "@/constant";
+import AuthCard from "../components/AuthCard";
 
 const ResetPasswordPage = () => {
   const { showSnackbar } = useSnackbar();
@@ -54,7 +55,7 @@ const ResetPasswordPage = () => {
     mutation.mutate(payload);
   };
   return (
-    <div className="sm:shadow-md mt-[40px] flex flex-col items-center md:-mt-[3.5rem] max-w-[31.25rem] h-fit w-full mx-auto sm:bg-white rounded-30 px-0 sm:px-5 xl:px-[4.875rem] lg:py-[3.125rem] overflow-hidden">
+    <AuthCard>
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <div className="mb-7">
@@ -94,7 +95,7 @@ const ResetPasswordPage = () => {
       >
         Back to login
       </Link>
-    </div>
+    </AuthCard>
   );
 };
 

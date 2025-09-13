@@ -8,7 +8,7 @@ import React from "react";
 
 export default function Page() {
   return (
-    <main className="bg-light-primary-1">
+    <main className="bg-primary-50">
       <div className="container-w pt-[100px] sm:pt-[133px] pb-0">
         <PromotionBanner />
       </div>
@@ -18,7 +18,7 @@ export default function Page() {
       </div>
       <BrowseCategories />
       <CantFind
-        title="Can’t find the task you want?"
+        title="Can't find the task you want?"
         description="No worries! There are many tasks that deserve your skills on CitiTasker."
         buttonText="Browse Task"
         buttonLink={ROUTES.BROWSE_TASK}

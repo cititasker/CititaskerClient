@@ -5,6 +5,7 @@ import { useAppSelector } from "@/store/hook";
 import { initializeName } from "@/utils";
 import { ROUTES } from "@/constant";
 import Success from "@/components/reusables/Success";
+import FormButton from "@/components/forms/FormButton";
 
 export default function StepFour() {
   const {
@@ -26,11 +27,9 @@ export default function StepFour() {
 }
 
 const Action = () => (
-  <Link href={ROUTES.BROWSE_TASK} className="mt-auto">
-    <div className="flex gap-5">
-      <button className="border text-white bg-[#236F8E] w-full text-center h-[51px] font-normal text-[16px] rounded-40">
-        Browse More Task
-      </button>
-    </div>
-  </Link>
+  <FormButton
+    href={ROUTES.BROWSE_TASK}
+    className="mt-auto w-full"
+    text="Browse More Task"
+  />
 );

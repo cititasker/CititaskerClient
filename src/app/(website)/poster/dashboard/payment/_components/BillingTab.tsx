@@ -1,6 +1,6 @@
 import React from "react";
 import { billingColumns, IDataBilling } from "./columns";
-import { CustomTable } from "@/components/reusables/CustomTable";
+import { CustomTable } from "@/components/reusables/table/CustomTable";
 
 const BillingTab = () => {
   const rows: IDataBilling[] = [

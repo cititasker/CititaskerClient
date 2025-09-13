@@ -30,7 +30,6 @@ export default function DisputeFormPage() {
     const files = e.target.files;
     if (files?.length) {
       setValue("files", Array.from(files));
-      console.log("Uploaded files:", files);
     }
   };
 

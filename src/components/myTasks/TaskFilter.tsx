@@ -1,49 +1,70 @@
 "use client";
+import React from "react";
+import { TaskStatusCard } from "./TaskStatusCard";
+import { Filter, RotateCcw } from "lucide-react";
+import FormButton from "@/components/forms/FormButton";
+import { TASK_FILTERS, TaskStatus } from "./constants";
+import { useTaskFilter } from "./hooks/useTaskFilter";
 
-import { updateQueryParams } from "@/utils";
-import Link from "next/link";
-import { useSearchParams, useRouter } from "next/navigation";
-import React, { useEffect } from "react";
-
-interface IProps {
-  filter: { href: string; name: string }[];
+interface TaskFilterProps {
+  onClose?: () => void; // Add onClose prop
 }
 
-const TaskFilter = ({ filter }: IProps) => {
-  const searchParams = useSearchParams();
-  const status = searchParams.get("status") || "all";
-  const router = useRouter();
+export function TaskFilter({ onClose }: TaskFilterProps) {
+  const { currentStatus, updateStatus, clearFilter } = useTaskFilter();
+  const hasActiveFilter = currentStatus !== "all";
 
-  useEffect(() => {
-    const params = updateQueryParams(searchParams, "status", status);
-    router.replace(`?${params}`);
-  }, [status, searchParams, router]);
+  const handleStatusUpdate = (status: TaskStatus) => {
+    updateStatus(status);
+    onClose?.(); // Close the sheet after selection
+  };
+
+  const handleClearFilter = () => {
+    clearFilter();
+    onClose?.(); // Close the sheet after clearing
+  };
 
   return (
-    <div className="w-full rounded-[20px] bg-white py-[24.5px]">
-      <div className="px-[22.5px] pb-4">
-        <input
-          className="w-full h-[44px] focus:outline-none"
-          placeholder="Search for a task"
-        />
+    <div className="bg-white sm:rounded-xl sm:shadow-sm sm:border border-gray-100 sm:p-6">
+      <div className="mb-6">
+        <h3 className="text-lg font-semibold text-gray-900 mb-1 flex items-center gap-2">
+          <Filter size={18} />
+          Task Status
+        </h3>
+        <p className="text-sm text-gray-500">
+          Filter your tasks by their current status
+        </p>
       </div>
-      <div className="flex flex-col">
-        {filter.map((el, i) => (
-          <Link
-            key={i}
-            href={`?status=${el.href}`}
-            className={`py-5 px-6 w-full text-base ${
-              status === el.href
-                ? "bg-light-primary-1 border-r-2 border-primary text-primary"
-                : "text-black-2"
-            }`}
-          >
-            {el.name}
-          </Link>
+
+      <div className="space-y-3">
+        {TASK_FILTERS.map((filter) => (
+          <TaskStatusCard
+            key={filter.value}
+            status={filter}
+            isActive={currentStatus === filter.value}
+            onClick={() => handleStatusUpdate(filter.value)}
+          />
         ))}
       </div>
+
+      {hasActiveFilter && (
+        <div className="pt-4 border-t border-gray-100 mt-6">
+          <FormButton
+            type="button"
+            onClick={handleClearFilter}
+            className="
+              w-full px-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-600 
+              hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800
+              transition-all duration-200 ease-in-out
+              focus:ring-2 focus:ring-gray-200 focus:ring-offset-2
+              flex items-center justify-center gap-2 font-medium
+            "
+          >
+            <RotateCcw size={16} />
+            Clear Filter
+          </FormButton>
+        </div>
+      )}
     </div>
   );
-};
-
-export default TaskFilter;
+}

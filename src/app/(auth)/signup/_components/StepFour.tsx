@@ -1,80 +1,59 @@
+// StepFour.tsx - Phone OTP Verification
 "use client";
-
 import React, { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import CustomPinInput from "@/components/reusables/CustomPinInput";
 import { sendPhoneVerificationToken, verifyPhoneNumber } from "@/services/auth";
 import { useSnackbar } from "@/providers/SnackbarProvider";
-import StepWrapper from "./StepWrapper";
-import { useCountdown } from "@/hooks/useCountdown";
-import FormButton from "@/components/forms/FormButton";
+import AuthCard from "../../components/AuthCard";
+import StepIndicator from "../../components/StepIndicator";
+import OTPInput from "@/components/reusables/OTPInput";
 
-const StepFour = ({ onNext }: { onNext: () => void }) => {
+interface Props {
+  onNext?: () => void;
+}
+
+const StepFour = ({ onNext }: Props) => {
   const [otp, setOtp] = useState("");
   const [phone, setPhone] = useState("");
   const { showSnackbar } = useSnackbar();
-  const { secondsLeft, isRunning, start } = useCountdown(30);
 
   useEffect(() => {
     const storedPhone = localStorage.getItem("phone_number");
     if (storedPhone) setPhone(storedPhone);
   }, []);
 
-  const showError = (error: any, fallback = "Something went wrong") =>
-    showSnackbar(error?.message || fallback, "error");
-
-  const { mutate: verifyOtp, isPending: verifying } = useMutation({
+  const verifyMutation = useMutation({
     mutationFn: verifyPhoneNumber,
     onSuccess: () => {
-      showSnackbar("Phone verified", "success");
-      onNext();
+      showSnackbar("Phone verified successfully!", "success");
+      onNext?.();
     },
-    onError: (err) => showError(err, "OTP verification failed"),
+    onError: (error: any) =>
+      showSnackbar(error?.message || "OTP verification failed", "error"),
   });
 
-  const { mutate: resendOtp, isPending: resending } = useMutation({
+  const resendMutation = useMutation({
     mutationFn: sendPhoneVerificationToken,
-    onSuccess: (data) => {
-      showSnackbar(data?.message, "success");
-      start();
-    },
-    onError: (err) => showError(err),
+    onSuccess: (data) => showSnackbar(data?.message, "success"),
+    onError: (error: any) => showSnackbar(error?.message, "error"),
   });
 
   return (
-    <StepWrapper>
-      <form
-        className="max-w-[342px] mx-auto"
-        onSubmit={(e) => e.preventDefault()}
-      >
-        <h2 className="text-center text-xl font-semibold mb-3">
-          Phone Number Verification
-        </h2>
-        <p className="text-center text-sm mb-8">
-          We've sent a 4-digit code to {phone}. The code expires soon.
-        </p>
+    <AuthCard>
+      <StepIndicator currentStep={4} totalSteps={5} />
 
-        <CustomPinInput
-          value={otp}
-          onChange={setOtp}
-          onComplete={(token) => verifyOtp({ token })}
-        />
-
-        <div className="text-sm text-center mt-6 flex items-center justify-center">
-          Didn’t receive a code?{" "}
-          <FormButton
-            type="button"
-            disabled={isRunning}
-            loading={resending || verifying}
-            handleClick={() => resendOtp({ phone_number: phone })}
-            className="text-primary ml-1.5 disabled:opacity-50 !bg-transparent p-0 mt-0 h-fit gap-1"
-          >
-            {resending ? "Resending" : "Resend"}{" "}
-            {isRunning ? `in (${secondsLeft}s)` : ""}
-          </FormButton>
-        </div>
-      </form>
-    </StepWrapper>
+      <OTPInput
+        title="Phone Verification"
+        subtitle={`We've sent a 4-digit code to ${phone}. Please enter it to continue.`}
+        value={otp}
+        onChange={setOtp}
+        onComplete={(token) => verifyMutation.mutate({ token })}
+        onResend={() => resendMutation.mutate({ phone_number: phone })}
+        loading={verifyMutation.isPending}
+        resending={resendMutation.isPending}
+        countdownSeconds={30}
+      />
+    </AuthCard>
   );
 };
 

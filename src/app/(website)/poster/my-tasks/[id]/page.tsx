@@ -4,29 +4,27 @@ import { useParams, useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
+import { useEffect } from "react";
 
 import HeaderNavigation from "../_components/task-details/HeaderNavigation";
 import TaskStatusCard from "../_components/task-details/TaskStatusCard";
 import TaskSummaryCard from "../_components/task-details/TaskSummaryCard";
-
 import AllOffers from "@/components/myTasks/AllOffers";
 import Questions from "@/components/myTasks/Questions";
 import Reviews from "@/components/myTasks/Reviews";
-
 import AcceptOfferModal from "../_components/task-details/AcceptOfferModal";
 import PaymentSuccessModal from "../_components/task-details/PaymentSuccessModal";
-import CustomTab from "@/components/reusables/CustomTab";
 import PaySurChargeModal from "../_components/surcharge/PaySurChargeModal";
+import CustomTab from "@/components/reusables/CustomTab";
 
 import { useFetchUserTaskById } from "@/services/tasks/tasks.hook";
 import { useOfferTaskLogic } from "../_components/hooks/useOfferTaskLogic";
-import { useEffect } from "react";
 import { useAppDispatch } from "@/store/hook";
 import { setTaskDetails } from "@/store/slices/task";
 
 const schema = z.object({
   agreed: z.boolean().refine((v) => v, {
-    message: "Please confirm you agree to the terms and condition",
+    message: "Please confirm you agree to the terms and conditions",
   }),
 });
 
@@ -39,12 +37,6 @@ export default function Offer() {
 
   const { data } = useFetchUserTaskById({ id: id as string });
   const task = data?.data;
-
-  useEffect(() => {
-    if (task) {
-      dispatch(setTaskDetails(task));
-    }
-  }, [task, dispatch]);
 
   const {
     showAcceptModal,
@@ -65,13 +57,31 @@ export default function Offer() {
     defaultValues: { agreed: false },
   });
 
+  // useEffect(() => {
+  //   if (task) {
+  //     dispatch(setTaskDetails(task));
+  //   }
+  // }, [task, dispatch]);
+
+  if (!task) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
   const tabs = [
     {
-      label: `Offers (${task.offer_count})`,
+      label: `Offers (${task.offer_count || 0})`,
       value: "offers",
       render: () => <AllOffers task={task} toggleModal={toggleAcceptModal} />,
     },
-    { label: "Questions (0)", value: "questions", render: () => <Questions /> },
+    {
+      label: "Questions",
+      value: "questions",
+      render: () => <Questions />,
+    },
     {
       label: "Reviews",
       value: "reviews",
@@ -79,13 +89,26 @@ export default function Offer() {
     },
   ];
 
+  const getButtonText = () => {
+    switch (task.status) {
+      case "open":
+        return "Edit Task";
+      case "assigned":
+        return "Pay Surcharge";
+      default:
+        return null;
+    }
+  };
+
   return (
     <FormProvider {...methods}>
-      <div className="p-top bg-light-grey min-h-dvh">
-        <div className="max-w-[1300px] mx-auto px-5">
-          <HeaderNavigation />
-          <div className="flex flex-col md:flex-row gap-4 lg:gap-x-6 w-full">
-            <div className="w-full md:w-2/5 flex flex-col gap-y-4 lg:gap-6">
+      <div className="min-h-screen bg-background-secondary p-top">
+        <div className="container-w mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          {/* <HeaderNavigation /> */}
+
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+            {/* Left Column - Task Cards */}
+            <div className="lg:col-span-2 space-y-6">
               <TaskStatusCard
                 date={task.date}
                 offerCount={task.offer_count}
@@ -96,21 +119,17 @@ export default function Offer() {
                 onEditDate={() => router.push(`/post-task/${task.id}?step=3`)}
                 onEditPrice={() => router.push(`/post-task/${task.id}?step=4`)}
                 onPrimaryAction={handlePrimaryAction}
-                buttonText={
-                  task.status === "open"
-                    ? "Edit Task"
-                    : task.status === "assigned"
-                    ? "Pay Surcharge"
-                    : null
-                }
+                buttonText={getButtonText()}
               />
             </div>
-            <div className="w-full md:w-3/5">
+
+            {/* Right Column - Tabs */}
+            <div className="lg:col-span-3">
               <CustomTab
                 items={tabs}
                 className="h-full"
-                listClassName="mb-0"
-                contentClassName="max-h-[calc(100dvh-250px)] h-full"
+                // listClassName="mb-6"
+                contentClassName="max-h-[600px] h-full"
               />
             </div>
           </div>

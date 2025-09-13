@@ -1,20 +1,29 @@
-import { cn } from "@/utils";
 import Link from "next/link";
 import React from "react";
 import { BsArrowLeft } from "react-icons/bs";
+import { cn } from "@/utils";
 
-const BackTo: React.FC<{
+interface BackToProps {
   href: string;
   text?: string;
-  extraClass?: string;
-}> = ({ href, text = "Back to website", extraClass }) => {
+  className?: string;
+}
+
+const BackTo: React.FC<BackToProps> = ({
+  href,
+  text = "Back to website",
+  className,
+}) => {
   return (
     <Link
       href={href}
-      className={cn("flex items-center w-fit text-primary py-4", extraClass)}
+      className={cn(
+        "group inline-flex items-center gap-2 text-primary hover:text-primary-600 transition-colors duration-200",
+        className
+      )}
     >
-      <BsArrowLeft className="text-lg text-primary mr-2" />
-      <span className="underline text-primary text-base inline-block">
+      <BsArrowLeft className="text-lg group-hover:-translate-x-1 transition-transform duration-200" />
+      <span className="text-sm font-medium underline underline-offset-2">
         {text}
       </span>
     </Link>

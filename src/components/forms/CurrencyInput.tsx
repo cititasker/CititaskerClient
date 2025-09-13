@@ -8,50 +8,83 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormControl,
   FormMessage,
 } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
+import { DollarSign } from "lucide-react";
 
 interface CurrencyInputProps {
   name: string;
   label?: string;
   placeholder?: string;
   className?: string;
+  disabled?: boolean;
+  required?: boolean;
+  currency?: string;
+  allowNegative?: boolean;
 }
 
-const CurrencyInput: React.FC<CurrencyInputProps> = ({
+export default function CurrencyInput({
   name,
   label,
-  placeholder,
+  placeholder = "Enter amount",
   className,
-}) => {
-  const { control } = useFormContext();
+  disabled = false,
+  required = false,
+  currency = "₦",
+  allowNegative = false,
+}: CurrencyInputProps) {
+  const { control, formState } = useFormContext();
+  const error = formState.errors[name];
 
   return (
     <FormField
       name={name}
       control={control}
       render={({ field }) => (
-        <FormItem className={className}>
-          {label && <FormLabel>{label}</FormLabel>}
-          <FormControl>
+        <FormItem className={cn("space-y-2", className)}>
+          {label && (
+            <FormLabel
+              htmlFor={name}
+              className="text-sm font-medium text-text-primary"
+            >
+              {label}
+              {required && <span className="text-error ml-1">*</span>}
+            </FormLabel>
+          )}
+
+          <div className="relative">
             <NumericFormat
               value={field.value}
               onValueChange={({ value }) => field.onChange(value)}
-              thousandSeparator
+              thousandSeparator=","
+              allowNegative={allowNegative}
               valueIsNumericString
-              prefix="₦ "
-              placeholder={placeholder}
+              prefix={`${currency} `}
+              placeholder={`${currency} ${placeholder}`}
+              disabled={disabled}
               customInput={Input}
-              className={cn("placeholder:font-normal font-medium px-5")}
+              className={cn(
+                // Base styles
+                "w-full h-12 px-4 text-base rounded-xl border transition-all duration-200",
+                "bg-background text-text-primary placeholder:text-text-muted font-medium",
+                "focus:outline-none",
+
+                // Border states
+                error
+                  ? "border-error focus:border-error"
+                  : "border-border-light focus:border-primary hover:border-border-medium",
+
+                // State styles
+                disabled &&
+                  "opacity-50 cursor-not-allowed bg-background-secondary"
+              )}
             />
-          </FormControl>
-          <FormMessage />
+          </div>
+
+          <FormMessage className="text-error text-sm" />
         </FormItem>
       )}
     />
   );
-};
-
-export default CurrencyInput;
+}

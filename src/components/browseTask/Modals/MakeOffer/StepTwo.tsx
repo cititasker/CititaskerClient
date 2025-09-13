@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useForm, FormProvider } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
@@ -68,46 +68,38 @@ export default function StepTwo({ nextStep, prevStep, isEdit }: StepTwoProps) {
   };
 
   return (
-    <FormProvider {...methods}>
-      <Form {...methods}>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="h-full flex flex-col space-y-6"
-        >
-          <div className="flex-1">
-            <div className="mb-6">
-              <p className="text-base font-semibold text-black-2">
-                Why are you the best person for this task?
-              </p>
-              <p className="text-sm text-black-2">
-                Write a short description to help the task poster know why
-                you're a great fit.
-              </p>
-            </div>
-            <div>
-              <FormTextArea
-                name="description"
-                placeholder="Write here...."
-                className="mt-3 h-[120px] mb-0 px-5 rounded-[10px] bg-light-grey"
-                maxLength={maxLengthChar}
-              />
-              {!errors.description && (
-                <p className="text-xs text-muted-foreground mt-1">
-                  {remainingChars} characters remaining
-                </p>
-              )}
-            </div>
+    <Form {...methods}>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col flex-1 h-full"
+      >
+        <div className="flex-1">
+          <div className="mb-6">
+            <p className="text-base font-semibold text-black-2">
+              Why are you the best person for this task?
+            </p>
+            <p className="text-sm text-black-2">
+              Write a short description to help the task poster know why you're
+              a great fit.
+            </p>
           </div>
+          <div>
+            <FormTextArea
+              name="description"
+              placeholder="Write here...."
+              maxLength={maxLengthChar}
+            />
+          </div>
+        </div>
 
-          <ActionsButtons
-            type="submit"
-            cancelText="Back"
-            okText="Next"
-            className="mt-auto sm:gap-x-5"
-            handleCancel={prevStep}
-          />
-        </form>
-      </Form>
-    </FormProvider>
+        <ActionsButtons
+          type="submit"
+          cancelText="Back"
+          okText="Next"
+          className="mt-auto"
+          handleCancel={prevStep}
+        />
+      </form>
+    </Form>
   );
 }
