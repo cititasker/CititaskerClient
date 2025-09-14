@@ -5,7 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { FaStar, FaMapMarkerAlt, FaDollarSign } from "react-icons/fa";
 import { MdBookmarkBorder, MdBookmark } from "react-icons/md";
-import { formatCurrency, truncate } from "@/utils/index";
+import { formatCurrency } from "@/utils/index";
 import { Badge } from "@/components/ui/badge";
 import { LOCATION_TYPE, ROUTES } from "@/constant";
 import { PLACEHOLDER } from "@/constant/images";
@@ -33,10 +33,10 @@ const TaskCard: React.FC<TaskCardProps> = ({
   return (
     <motion.div
       className="w-[280px] h-[420px] flex-shrink-0 snap-start"
-      whileHover={{ y: -8 }}
+      // whileHover={{ y: -8 }}
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
     >
-      <div className="h-full bg-background rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-border-light hover:border-border-medium group cursor-pointer">
+      <div className="h-full bg-background rounded-3xl shadow-sm hover:shadow-md transition-all duration-500 overflow-hidden border border-border-light hover:border-border-medium group cursor-pointer">
         {/* Image Container */}
         <div className="relative h-48 w-full overflow-hidden">
           <Link

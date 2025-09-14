@@ -55,7 +55,7 @@ export const useFetchTaskById = ({
 
 export const useGetMyTasks = (queryParams?: Record<string, any>) =>
   useInfiniteQuery<TaskData, TaskError>({
-    queryKey: [API_ROUTES.USER_TASKS, queryParams], // make queryKey dependent on params
+    queryKey: [API_ROUTES.USER_TASKS, queryParams],
     queryFn: async ({ pageParam = 1 }) =>
       getUserTasks({ page: pageParam, ...queryParams }),
     initialPageParam: 1,

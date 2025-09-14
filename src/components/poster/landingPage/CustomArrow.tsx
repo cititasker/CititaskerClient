@@ -19,7 +19,7 @@ const CustomArrow: React.FC<CustomArrowProps> = ({
 
   const baseClasses = cn(
     // Base styles
-    "absolute z-[99] cursor-pointer select-none",
+    "absolute z-[2] cursor-pointer select-none",
     "flex items-center justify-center",
     "w-10 h-10 md:w-12 md:h-12",
     "rounded-full shadow-lg",

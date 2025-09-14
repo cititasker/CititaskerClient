@@ -11,8 +11,8 @@ import CustomArrow from "./CustomArrow";
 // Images
 import Tasker1 from "@/../public/images/plumbing.svg?url";
 import Tasker2 from "@/../public/images/wcu-4.svg?url";
-import Curl from "@/../public/icons/curl.svg?url";
-import Star from "@/../public/icons/star.svg?url";
+// import Curl from "@/../public/icons/curl.svg?url";
+// import Star from "@/../public/icons/star.svg?url";
 
 // Types
 interface SlideData {
@@ -38,12 +38,12 @@ const SLIDE_DATA: SlideData[] = [
   {
     img: Tasker1,
     amount: "2000",
-    // gradient: "bg-gradient-primary",
+    gradient: "bg-gradient-primary",
   },
   {
     img: Tasker2,
     amount: "4000",
-    // gradient: "bg-gradient-secondary",
+    gradient: "bg-gradient-secondary",
   },
 ];
 
@@ -67,7 +67,7 @@ const PromotionBanner: React.FC = () => {
         {SLIDE_DATA.map((slide, index) => (
           <motion.div
             key={index}
-            className={`relative w-full h-96 md:h-[25.5rem] rounded-2xl md:rounded-3xl overflow-hidden bg-gradient-primary shadow-2xl`}
+            className={`relative w-full h-auto lg:h-[25.5rem] rounded-2xl md:rounded-3xl overflow-hidden bg-gradient-primary shadow-2xl ${slide.gradient}`}
             {...slideVariants}
           >
             {/* Background Pattern */}
@@ -135,7 +135,7 @@ const PromotionBanner: React.FC = () => {
                     alt="Tasker illustration"
                     fill
                     className="object-cover object-top"
-                    sizes="(max-width: 768px) 300px, (max-width: 1024px) 350px, 400px"
+                    // sizes="(max-width: 768px) 300px, (max-width: 1024px) 350px, 400px"
                     priority={index === 0}
                   />
 
@@ -146,7 +146,7 @@ const PromotionBanner: React.FC = () => {
             </div>
 
             {/* Decorative Elements */}
-            <motion.div
+            {/* <motion.div
               className="absolute top-4 left-4 w-8 h-8 opacity-60"
               animate={{ rotate: 360 }}
               transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
@@ -160,7 +160,7 @@ const PromotionBanner: React.FC = () => {
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
             >
               <Image src={Curl} alt="" fill className="object-contain" />
-            </motion.div>
+            </motion.div> */}
           </motion.div>
         ))}
       </Carousel>

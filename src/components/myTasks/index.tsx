@@ -9,10 +9,18 @@ import { ErrorState } from "../browseTask/ErrorState";
 import { MyTaskHeader } from "../shared/task/MyTaskHeader";
 import { MyTaskContent } from "../shared/task/MyTaskContent";
 
-export default function MyTask() {
+export default function MyTask({ path }: { path: string }) {
   const showFilter = useToggle();
   const { searchTerm, setSearchTerm, isSearching } = useSearch();
-  const { tasks, isLoading, error, refetch } = useMyTasksQuery();
+  const {
+    tasks,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    error,
+    refetch,
+  } = useMyTasksQuery();
 
   if (error) {
     return (
@@ -34,7 +42,14 @@ export default function MyTask() {
 
       {/* Content */}
       <div className="flex-1 min-h-0">
-        <MyTaskContent tasks={tasks} isLoading={isLoading} />
+        <MyTaskContent
+          tasks={tasks}
+          isLoading={isLoading}
+          fetchNextPage={fetchNextPage}
+          hasNextPage={hasNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+          path={path}
+        />
       </div>
 
       {/* Filter Sheet */}

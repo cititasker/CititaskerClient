@@ -1,4 +1,3 @@
-import { TaskCardSkeleton } from "../../skeletons/TaskCardSkeleton";
 import TaskCard from "./TaskCard";
 
 interface TaskGridProps {

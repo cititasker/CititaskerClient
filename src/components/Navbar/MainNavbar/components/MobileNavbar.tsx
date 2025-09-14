@@ -11,6 +11,9 @@ import {
   Settings,
   LogOut,
   LayoutDashboard,
+  Workflow,
+  ClipboardCheck,
+  ClipboardList,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -75,7 +78,7 @@ const CategorySearch = ({
 
   return (
     <AccordionItem value="categories" className="border-none">
-      <AccordionTrigger className="text-text-primary hover:text-primary-600 text-base font-medium py-4 px-4 rounded-lg hover:bg-primary-50 transition-all duration-200 hover:no-underline [&[data-state=open]]:bg-primary-50 [&[data-state=open]]:text-primary-700">
+      <AccordionTrigger className="text-text-primary hover:text-primary-600 text-base font-medium py-4 px-4 rounded-none hover:bg-primary-50 transition-all duration-200 hover:no-underline [&[data-state=open]]:bg-primary-50 [&[data-state=open]]:text-primary-700">
         <div className="flex items-center gap-3">
           <Grid className="w-5 h-5" />
           <span>Categories</span>
@@ -146,8 +149,11 @@ const HowItWorksSection = ({
 }) => {
   return (
     <AccordionItem value="how-it-works" className="border-none">
-      <AccordionTrigger className="text-text-primary hover:text-primary-600 text-base font-medium py-4 px-4 rounded-lg hover:bg-primary-50 transition-all duration-200 hover:no-underline [&[data-state=open]]:bg-primary-50 [&[data-state=open]]:text-primary-700">
-        How It Works
+      <AccordionTrigger className="text-text-primary hover:text-primary-600 text-base font-medium py-4 px-4 rounded-none hover:bg-primary-50 transition-all duration-200 hover:no-underline [&[data-state=open]]:bg-primary-50 [&[data-state=open]]:text-primary-700">
+        <div className="flex items-center gap-3">
+          <ClipboardCheck className="w-5 h-5" />
+          <span>How It Works</span>
+        </div>
       </AccordionTrigger>
       <AccordionContent className="pb-2 pt-2">
         <div className="px-4 space-y-3">
@@ -257,13 +263,16 @@ const UserProfileSection = ({
 
       {/* My Tasks (for authenticated users) */}
       {user.role && (
-        <Link
-          href={`/${user.role}${ROUTES.MY_TASKS}`}
-          onClick={toggleMobileNav}
-          className="block mx-4 mb-2 px-4 py-3 text-text-secondary hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-all duration-200"
-        >
-          My Tasks
-        </Link>
+        <div className="px-4">
+          <Link
+            href={`/${user.role}${ROUTES.MY_TASKS}`}
+            onClick={toggleMobileNav}
+            className="flex items-center gap-3 p-3 rounded-lg hover:bg-background-secondary transition-colors"
+          >
+            <ClipboardList className="w-4 h-4 text-text-muted" />
+            <span>My Tasks</span>
+          </Link>
+        </div>
       )}
 
       {/* User Menu Items */}
@@ -390,17 +399,16 @@ export default function MobileNavbar({
 
   return (
     <CustomSheet
-      title=""
       open={showMobileNav}
       onOpenChange={toggleMobileNav}
       side="right"
-      showCloseIcon={false}
-      className="bg-background px-0"
+      showCloseIcon={true}
+      className="bg-background px-0 pt-10"
     >
       <div className="flex flex-col h-full">
         {/* Navigation Section */}
         <div className="flex-1 overflow-y-auto no-scrollbar">
-          <div className="max-w-sm mx-auto">
+          <div className="max-w-[500px] w-full mx-auto">
             {/* Main Navigation */}
             <nav>
               <Accordion type="multiple" className="space-y-2">

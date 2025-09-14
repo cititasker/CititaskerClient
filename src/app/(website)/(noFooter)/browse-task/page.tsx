@@ -8,11 +8,20 @@ import { useSearch } from "@/components/browseTask/hooks/useSearch";
 import { useTasksQuery } from "@/components/browseTask/hooks/useTasksQuery";
 import { MyTaskHeader } from "@/components/shared/task/MyTaskHeader";
 import { MyTaskContent } from "@/components/shared/task/MyTaskContent";
+import { ROUTES } from "@/constant";
 
 export default function BrowseTasksPage() {
   const showFilter = useToggle();
   const { searchTerm, setSearchTerm, isSearching } = useSearch();
-  const { tasks, isLoading, error, refetch } = useTasksQuery();
+  const {
+    tasks,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    error,
+    refetch,
+  } = useTasksQuery();
 
   if (error) {
     return <ErrorState message="Failed to load tasks" onRetry={refetch} />;
@@ -30,7 +39,14 @@ export default function BrowseTasksPage() {
 
       {/* Content */}
       <div className="flex-1 min-h-0">
-        <MyTaskContent tasks={tasks} isLoading={isLoading} />
+        <MyTaskContent
+          tasks={tasks}
+          isLoading={isLoading}
+          fetchNextPage={fetchNextPage}
+          hasNextPage={hasNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+          path={ROUTES.BROWSE_TASK}
+        />
       </div>
 
       {/* Filter Sheet */}

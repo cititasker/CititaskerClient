@@ -29,13 +29,13 @@ const FilterList = ({ searchTerm }: IProps) => {
   ];
 
   return (
-    <Card className="md:rounded-[20px] shadow-none md:shadow-sm">
+    <Card className="md:rounded-[20px] shadow-none xl:shadow-sm">
       <CustomAccordion
         items={items}
         collapsible
         type="single"
         // defaultValue={["category"]}
-        itemWrapperClassName="md:px-5 border-b-[0.8px] border-light-grey"
+        itemWrapperClassName="xl:px-5 border-b-[0.8px] border-light-grey"
       />
     </Card>
   );

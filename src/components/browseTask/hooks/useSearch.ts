@@ -11,7 +11,6 @@ export function useSearch() {
     () => searchParams.get("search") || ""
   );
 
-  // Debounce the search term
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
   // Update URL when debounced search term changes
@@ -19,7 +18,7 @@ export function useSearch() {
     const current = new URLSearchParams(searchParams.toString());
 
     if (debouncedSearchTerm.trim()) {
-      current.set("search", debouncedSearchTerm.trim());
+      current.set("search", debouncedSearchTerm);
     } else {
       current.delete("search");
     }
@@ -33,7 +32,7 @@ export function useSearch() {
     }
   }, [debouncedSearchTerm, router, searchParams]);
 
-  // Sync state with URL changes (for back/forward navigation)
+  // Sync state with URL changes
   useEffect(() => {
     const urlSearch = searchParams.get("search") || "";
     if (urlSearch !== searchTerm) {
@@ -45,6 +44,6 @@ export function useSearch() {
     searchTerm,
     setSearchTerm,
     debouncedSearchTerm,
-    isSearching: searchTerm !== debouncedSearchTerm, // True when debouncing
+    isSearching: searchTerm !== debouncedSearchTerm,
   };
 }

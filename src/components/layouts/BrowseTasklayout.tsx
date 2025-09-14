@@ -1,6 +1,6 @@
 import React from "react";
 import FilterList from "../browseTask/FilterList";
-import Tasklist from "../browseTask/Tasklist";
+import TaskList from "../browseTask/Tasklist";
 
 const BrowseTasklayout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -11,7 +11,7 @@ const BrowseTasklayout = ({ children }: { children: React.ReactNode }) => {
         </aside>
         <main className="flex gap-[14px] w-full xl:w-3/4 h-[calc(100dvh-90px)]">
           <div className="w-full hidden md:inline-block sm:max-w-[300px] lg:basis-1/3 h-full overflow-y-auto pt-3 hide-scrollbar">
-            <Tasklist />
+            <TaskList />
           </div>
           <div className="h-full flex-1 overflow-y-auto md:pt-3 max-w-full no-scrollbar">
             {children}

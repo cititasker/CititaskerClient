@@ -52,7 +52,7 @@ export default function MainNavbar() {
     <>
       {/* Fixed Navbar */}
       <div className="fixed w-[95%] left-1/2 -translate-x-1/2 top-5 z-40">
-        <div className="bg-white/95 backdrop-blur-md border border-gray-200 shadow-lg mx-auto h-16 flex items-center rounded-2xl px-6 w-full">
+        <div className="bg-white/95 backdrop-blur-md border border-gray-200 shadow-sm md:shadow-md mx-auto h-16 flex items-center rounded-2xl px-6 w-full">
           <div className="w-full flex items-center justify-between">
             {/* Left Section */}
             <div className="flex items-center gap-6">

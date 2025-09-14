@@ -1,8 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
-import TaskList from "../../myTasks/TaskList";
 import { LoadingState } from "../../browseTask/LoadingState";
+import InfiniteTaskList from "./InfiniteTaskList";
 
 const TaskMap = dynamic(
   () =>
@@ -15,14 +15,32 @@ const TaskMap = dynamic(
 interface MyTaskContentProps {
   tasks: any[];
   isLoading: boolean;
+  fetchNextPage: any;
+  hasNextPage: any;
+  isFetchingNextPage: any;
+  path: string;
 }
 
-export function MyTaskContent({ tasks, isLoading }: MyTaskContentProps) {
+export function MyTaskContent({
+  tasks,
+  isLoading,
+  fetchNextPage,
+  hasNextPage,
+  isFetchingNextPage,
+  path,
+}: MyTaskContentProps) {
   return (
     <div className="flex gap-6 h-full">
       {/* Mobile Task List */}
       <div className="w-full md:hidden h-full overflow-y-auto">
-        <TaskList />
+        <InfiniteTaskList
+          tasks={tasks}
+          isLoading={isLoading}
+          fetchNextPage={fetchNextPage}
+          hasNextPage={hasNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+          path={path}
+        />
       </div>
 
       {/* Desktop Layout */}

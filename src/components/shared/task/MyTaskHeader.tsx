@@ -1,7 +1,7 @@
 import React from "react";
 import FormButton from "@/components/forms/FormButton";
-import { IFilterLines } from "@/constant/icons";
 import { SearchBar } from "../../browseTask/SearchBar";
+import { Funnel } from "lucide-react";
 
 interface MyTaskHeaderProps {
   searchTerm: string;
@@ -26,16 +26,13 @@ export function MyTaskHeader({
       />
 
       <FormButton
-        icon={<IFilterLines />}
+        icon={<Funnel />}
         className="
-          px-4 py-3 rounded-lg bg-white border border-gray-200 text-gray-700 
-          font-medium text-sm hover:bg-gray-50 hover:border-gray-300
-          transition-all duration-200 flex items-center gap-2 md:hidden
+          !px-4 py-3 xl:hidden
         "
+        text="Filters"
         onClick={onOpenFilter}
-      >
-        Filters
-      </FormButton>
+      />
     </div>
   );
 }

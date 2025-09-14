@@ -1,5 +1,4 @@
 import BrowseCategories from "@/components/poster/landingPage/BrowseCategories/BrowseCategories";
-import FeaturedTasks from "@/components/poster/landingPage/FeaturedTasks";
 import PromotionBanner from "@/components/poster/landingPage/PromotionBanner";
 import Recommended from "@/components/poster/landingPage/Recommended";
 import CantFind from "@/components/posterDiscovery/CantFind";

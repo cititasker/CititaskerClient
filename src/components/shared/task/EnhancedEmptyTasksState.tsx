@@ -128,9 +128,6 @@ function DefaultEmptyState() {
 
   return (
     <div className="flex flex-col items-center justify-center h-full min-h-[400px] px-6 py-12 bg-white">
-      {/* Animated Background Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-purple-50 opacity-60 rounded-xl"></div>
-
       {/* Main Content */}
       <div className="relative z-10 text-center max-w-md">
         {/* Icon with Animation */}
@@ -183,17 +180,6 @@ function DefaultEmptyState() {
             />
           </div>
         )}
-      </div>
-
-      {/* Subtle Pattern Overlay */}
-      <div className="absolute inset-0 opacity-5">
-        <div
-          className="w-full h-full bg-repeat"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-            backgroundSize: "60px 60px",
-          }}
-        ></div>
       </div>
     </div>
   );
