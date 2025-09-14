@@ -1,7 +1,6 @@
 import { getUserTasks } from "@/actions";
 import MyTasksLayout from "@/components/layouts/MyTaskLayout";
 import MyTask from "@/components/myTasks";
-import { ROUTES } from "@/constant";
 import { getQueryClient } from "@/constant/queryClient";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import React from "react";
@@ -35,7 +34,7 @@ export default async function Page({
   return (
     <HydrationBoundary state={dehydratedState}>
       <MyTasksLayout>
-        <MyTask path={ROUTES.MY_TASKS} />
+        <MyTask />
       </MyTasksLayout>
     </HydrationBoundary>
   );

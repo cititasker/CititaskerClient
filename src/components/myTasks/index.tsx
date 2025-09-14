@@ -8,8 +8,11 @@ import { useMyTasksQuery } from "./hooks/useMyTasksQuery";
 import { ErrorState } from "../browseTask/ErrorState";
 import { MyTaskHeader } from "../shared/task/MyTaskHeader";
 import { MyTaskContent } from "../shared/task/MyTaskContent";
+import { useAppSelector } from "@/store/hook";
+import { ROUTES } from "@/constant";
 
-export default function MyTask({ path }: { path: string }) {
+export default function MyTask() {
+  const { user } = useAppSelector((state) => state.user);
   const showFilter = useToggle();
   const { searchTerm, setSearchTerm, isSearching } = useSearch();
   const {
@@ -48,7 +51,7 @@ export default function MyTask({ path }: { path: string }) {
           fetchNextPage={fetchNextPage}
           hasNextPage={hasNextPage}
           isFetchingNextPage={isFetchingNextPage}
-          path={path}
+          path={`/${user.role}/${ROUTES.MY_TASKS}`}
         />
       </div>
 

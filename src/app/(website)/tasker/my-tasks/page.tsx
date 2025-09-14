@@ -1,6 +1,6 @@
 import { getUserTasks } from "@/actions";
 import MyTask from "@/components/myTasks";
-import { API_ROUTES, ROUTES } from "@/constant";
+import { API_ROUTES } from "@/constant";
 import { getQueryClient } from "@/constant/queryClient";
 
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
@@ -18,5 +18,5 @@ export default async function MyTasksPage(props: {
     queryFn: () => getUserTasks({ status }),
   });
 
-  return <MyTask path={ROUTES.MY_TASKS} />;
+  return <MyTask />;
 }
