@@ -6,25 +6,21 @@ import { getQueryClient } from "@/constant/queryClient";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import React from "react";
 
-interface PageProps {
-  searchParams: {
-    status?: string;
-    search?: string;
-    [key: string]: string | undefined;
-  };
-}
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
 
-export default async function Page({ searchParams }: PageProps) {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}) {
   const queryClient = getQueryClient();
-
+  const { status, search } = await searchParams;
   const queryParams: Record<string, any> = {};
 
-  const status = searchParams.status;
   if (status && status !== "all") {
     queryParams.status = status;
   }
 
-  const search = searchParams.search;
   if (search) {
     queryParams.search = search;
   }
