@@ -75,14 +75,11 @@ export default function FormInput({
                 autoComplete={isPassword ? "current-password" : "on"}
                 className={cn(
                   // Base styles
-                  "w-full h-12 px-4 text-base rounded-xl border transition-all duration-200",
+                  "transition-all duration-200",
                   "bg-background text-text-primary placeholder:text-text-muted",
-                  // "focus:outline-none focus:ring-2 focus:ring-primary/20",
 
                   // Border states
-                  error
-                    ? "border-error focus:border-error"
-                    : "border-border-light focus:border-primary hover:border-border-medium",
+                  error && "border-error focus:border-error",
 
                   // Disabled state
                   disabled &&

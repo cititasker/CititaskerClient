@@ -66,14 +66,12 @@ export default function CurrencyInput({
               customInput={Input}
               className={cn(
                 // Base styles
-                "w-full h-12 px-4 text-base rounded-xl border transition-all duration-200",
+                "px-4 rounded-xl transition-all duration-200",
                 "bg-background text-text-primary placeholder:text-text-muted font-medium",
                 "focus:outline-none",
 
                 // Border states
-                error
-                  ? "border-error focus:border-error"
-                  : "border-border-light focus:border-primary hover:border-border-medium",
+                error && "border-error focus:border-error",
 
                 // State styles
                 disabled &&

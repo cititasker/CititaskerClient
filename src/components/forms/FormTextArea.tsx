@@ -57,14 +57,11 @@ export default function FormTextArea({
               aria-invalid={!!error}
               className={cn(
                 // Base styles
-                "w-full px-4 py-3 text-base rounded-xl border resize-none transition-all duration-200",
+                "px-4 py-3 rounded-xl resize-none transition-all duration-200",
                 "bg-background text-text-primary placeholder:text-text-muted",
-                "focus:outline-none",
 
                 // Border states
-                error
-                  ? "border-error focus:border-error"
-                  : "border-border-light focus:border-primary hover:border-border-medium",
+                error && "border-error focus:border-error",
 
                 // State styles
                 disabled &&

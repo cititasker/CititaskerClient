@@ -71,13 +71,12 @@ export default function FormDatePicker({
                   disabled={disabled}
                   className={cn(
                     // Base styles
-                    "w-full h-12 px-4 shadow-none text-base rounded-xl border justify-start font-normal transition-all duration-200",
+                    "w-full h-12 px-4 shadow-none rounded-xl border justify-start font-normal transition-all duration-200",
                     "bg-background hover:bg-background",
+                    "focus:ring-2 focus:ring-ring ring-offset-1",
 
                     // Border states
-                    error
-                      ? "border-error focus:border-error"
-                      : "border-border-light focus:border-primary hover:border-border-medium",
+                    error && "border-error focus:border-error",
 
                     // Text states
                     !field.value && "text-text-muted",

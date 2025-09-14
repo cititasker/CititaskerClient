@@ -38,7 +38,7 @@ export const OptionCardSelector = ({
       case 4:
         return "grid-cols-4";
       default:
-        return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3";
+        return "grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4";
     }
   };
 
@@ -62,13 +62,13 @@ export const OptionCardSelector = ({
                 className={cn(
                   // Base styles
                   "group relative flex flex-col items-center justify-center text-center cursor-pointer",
-                  "min-h-[100px] sm:min-h-[120px] p-4 rounded-2xl border-2 transition-all duration-300",
-                  "hover:scale-[1.02] hover:shadow-md active:scale-[0.98]",
+                  "min-h-[100px] sm:min-h-[120px] p-4 rounded-2xl border transition-all duration-300",
+                  "active:scale-[0.98]",
 
                   // Selection states
                   isSelected
-                    ? "border-primary bg-primary-50 shadow-md shadow-primary/20"
-                    : "border-border-light bg-background hover:border-border-medium hover:bg-background-secondary",
+                    ? "border-primary bg-primary-50 shadow-sm shadow-primary/20"
+                    : "border-input bg-background hover:border-border-medium hover:bg-background-secondary",
 
                   itemClassName
                 )}

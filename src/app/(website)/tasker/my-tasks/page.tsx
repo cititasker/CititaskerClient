@@ -18,5 +18,5 @@ export default async function MyTasksPage(props: {
     queryFn: () => getUserTasks({ status }),
   });
 
-  return <MyTask path={ROUTES.BROWSE_TASK} />;
+  return <MyTask path={ROUTES.MY_TASKS} />;
 }

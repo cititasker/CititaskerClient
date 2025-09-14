@@ -156,7 +156,7 @@ export default {
           foreground: "var(--destructive-foreground)",
         },
         input: "var(--input)",
-        ring: "var(--ring)",
+        ring: "var(--primary-200)",
         chart: {
           "1": "var(--chart-1)",
           "2": "var(--chart-2)",

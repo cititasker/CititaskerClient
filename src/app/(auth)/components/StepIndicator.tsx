@@ -32,7 +32,7 @@ const StepIndicator: React.FC<StepIndicatorProps> = ({
 
           {stepNumber < totalSteps && (
             <div
-              className={`w-12 h-1 mx-2 rounded transition-colors duration-200 ${
+              className={`w-5 sm:w-10 h-1 mx-2 rounded transition-colors duration-200 ${
                 stepNumber < currentStep ? "bg-success" : "bg-border-light"
               }`}
             />

@@ -7,7 +7,7 @@ import AuthBg1 from "../../../public/images/hiw-1.svg?url";
 import AuthBg2 from "../../../public/images/hiw-2.svg?url";
 import AuthBg3 from "../../../public/images/hiw-3.svg?url";
 import { cn } from "@/utils";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { ROUTES } from "@/constant";
 
 interface AuthLayoutProps {
@@ -33,7 +33,6 @@ const testimonials = [
 const AuthLayout: React.FC<AuthLayoutProps> = ({ children, extraClass }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const pathname = usePathname();
-  const router = useRouter();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -109,13 +108,13 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ children, extraClass }) => {
               extraClass
             )}
           >
-            <button
-              onClick={router.back}
+            <Link
+              href={ROUTES.HOME}
               className="focus:outline-none border-none flex items-center gap-2 py-6 w-fit text-primary-600 hover:text-primary-700 transition-colors group"
             >
               <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-              <span className="font-medium">Back</span>
-            </button>
+              <span className="font-medium text-sm">Back to website</span>
+            </Link>
 
             <div className="flex justify-center pt-5 md:pt-0 md:items-center min-h-[calc(100vh-96px)]">
               {children}

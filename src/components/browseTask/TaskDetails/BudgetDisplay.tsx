@@ -21,7 +21,7 @@ const BudgetDisplay: React.FC<BudgetDisplayProps> = ({
   isButtonDisabled,
   canIncreaseOffer,
 }) => (
-  <div className="rounded-[10px] p-[17px] bg-light-primary-1 text-center max-w-[217px] w-full">
+  <div className="rounded-[10px] p-4 bg-light-primary-1 text-center max-w-[156px] sm:max-w-[217px] w-full">
     <p className="text-dark-grey-2 text-xs sm:text-sm mb-1.5 sm:mb-4">
       Estimated Task Budget
     </p>

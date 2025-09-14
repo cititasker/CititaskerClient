@@ -114,11 +114,9 @@ export default function ImageUploader({
     <FormField
       control={control}
       name={name}
-      render={({ field }) => (
+      render={() => (
         <FormItem className={cn("space-y-3", className)}>
-          <FormLabel className="text-base font-medium text-text-primary">
-            {label}
-          </FormLabel>
+          <FormLabel>{label}</FormLabel>
 
           {description && (
             <FormDescription className="text-sm text-text-muted">

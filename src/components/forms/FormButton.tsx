@@ -66,12 +66,13 @@ const FormButton: React.FC<FormButtonProps> = ({
       disabled={disabled || loading}
       onClick={handleClick}
       className={cn(
-        "min-w-max flex items-center justify-center gap-2",
+        "relative min-w-max flex items-center justify-center gap-2",
         className
       )}
       {...props}
     >
       {content}
+      {/* <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300" /> */}
     </Button>
   );
 };

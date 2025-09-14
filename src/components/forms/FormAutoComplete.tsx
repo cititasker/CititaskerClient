@@ -78,13 +78,13 @@ export function FormAutoComplete<TOption, TFieldValues extends FieldValues>({
                   aria-expanded={open}
                   disabled={disabled || loading}
                   className={cn(
-                    "w-full justify-between font-normal h-12",
-                    "border-border-light hover:border-border-medium",
-                    "bg-background hover:bg-background-secondary text-base text-text-primary placeholder:text-text-muted",
+                    "w-full justify-between font-normal h-12 focus:ring-2 focus:ring-ring",
+                    "border-input focus:border-ring",
+                    "!bg-background text-text-primary placeholder:text-text-muted",
                     "text-left px-4 rounded-xl shadow-none",
                     !field.value && "text-text-muted",
                     disabled && "opacity-50 cursor-not-allowed",
-                    open && "border-primary"
+                    open && "border-primary-200"
                   )}
                 >
                   <span className="truncate">
@@ -112,7 +112,7 @@ export function FormAutoComplete<TOption, TFieldValues extends FieldValues>({
                     placeholder={`Search ${
                       label?.toLowerCase() || "options"
                     }...`}
-                    className="border-none focus:ring-0 text-sm px-4 py-3"
+                    className="border-none focus:ring-0 text-sm pl-0 pr-4 py-3"
                   />
 
                   <CommandEmpty className="py-4 text-center text-sm text-text-muted">
