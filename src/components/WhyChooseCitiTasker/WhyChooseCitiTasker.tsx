@@ -3,6 +3,7 @@ import React, { useRef, useState, useCallback } from "react";
 import { motion, useInView } from "framer-motion";
 import UnderlinedHeader from "../reusables/UnderlinedHeader";
 import Image from "next/image";
+import SectionHeader from "../reusables/SectionHeader";
 
 // Data and constants
 const FEATURES = [
@@ -44,8 +45,6 @@ const STYLES = {
   container:
     "relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 overflow-hidden",
   content: "relative z-10 container-w mx-auto px-4 md:px-8 py-16 md:py-24",
-  header: "text-center mb-16",
-  title: "text-3xl md:text-4xl lg:text-5xl font-bold text-slate-800 mb-4",
   grid: "grid lg:grid-cols-2 gap-12 lg:gap-16 items-center",
   featuresList: "space-y-6",
   featureItem: "group cursor-pointer transition-all duration-500 ease-out",
@@ -54,8 +53,8 @@ const STYLES = {
   featureIcon:
     "flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-lg",
   featureText: "flex-1 min-w-0",
-  featureTitle: "text-lg font-semibold mb-2 transition-colors duration-300",
-  featureDesc: "text-sm leading-relaxed transition-colors duration-300",
+  featureTitle: "text-xl font-semibold mb-2 transition-colors duration-300",
+  featureDesc: "text-base leading-relaxed transition-colors duration-300",
   imageContainer:
     "relative h-96 lg:h-[500px] rounded-3xl overflow-hidden shadow-2xl",
   imageWrapper: "absolute inset-0 transition-all duration-700 ease-in-out",
@@ -138,20 +137,14 @@ const WhyChooseCitiTasker: React.FC = () => {
 
       <div className={STYLES.content}>
         {/* Header */}
-        <motion.div
-          className={STYLES.header}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-          variants={containerVariants}
-        >
-          <motion.h2 className={STYLES.title} variants={itemVariants}>
-            Why Choose{" "}
-            <UnderlinedHeader
-              text="CitiTasker?"
-              extraStyle="before:!translate-x-0 inline-block text-transparent bg-gradient-to-r from-primary to-secondary bg-clip-text"
-            />
-          </motion.h2>
-        </motion.div>
+        <SectionHeader
+          title={
+            <h2>
+              Why Choose{" "}
+              <span className="text-gradient-primary">Cititasker</span>
+            </h2>
+          }
+        />
 
         {/* Main Content Grid */}
         <div className={STYLES.grid}>

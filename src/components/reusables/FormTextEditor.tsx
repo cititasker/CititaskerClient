@@ -59,7 +59,7 @@ const FormTextEditor = ({
                 onChange={field.onChange}
                 placeholder={placeholder}
                 modules={editorModules}
-                className="bg-white"
+                className="bg-white text-sm"
               />
             </div>
           </FormControl>

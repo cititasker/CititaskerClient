@@ -4,6 +4,7 @@ import React from "react";
 import CustomAccordion from "./Accordion/CustomAccordion";
 import { accordionData } from "../../data";
 import FormButton from "./forms/FormButton";
+import SectionHeader from "./reusables/SectionHeader";
 
 const Faq = () => {
   return (
@@ -12,9 +13,11 @@ const Faq = () => {
       <div className="container-w py-10 sm:pt-[5.625rem] sm:pb-[8.875rem] ">
         <div className="justify-between items-start gap-5 flex flex-col-reverse lg:flex-row">
           <div className="w-full lg:max-w-[419px]">
-            <h2 className="text-slate-900 text-[40px] font-bold mb-10 hidden lg:block">
-              Common Questions, Clear Answers
-            </h2>
+            <SectionHeader
+              title="Common Questions, Clear Answers"
+              titleClassName="!text-5xl"
+              className="hidden lg:block !mb-12"
+            />
             <div className="lg:max-w-[402px] w-full relative bg-sky-200 rounded-[20px] sm:py-7 sm:px-10 p-5">
               <div className="justify-center items-start inline-flex relative h-[50px] w-full">
                 {Array.from({ length: 5 }).map((_, i) => (
@@ -45,9 +48,10 @@ const Faq = () => {
             </div>
           </div>
           <div className="flex-1">
-            <h2 className="text-slate-900 text-[20px] sm:text-2xl font-bold mb-5 block lg:hidden text-center">
-              Common Questions, Clear Answers
-            </h2>
+            <SectionHeader
+              title="Common Questions, Clear Answers"
+              className="block lg:hidden text-center"
+            />
             <CustomAccordion data={accordionData} />
           </div>
         </div>

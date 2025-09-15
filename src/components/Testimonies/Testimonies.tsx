@@ -3,6 +3,7 @@ import Image from "next/image";
 import React from "react";
 import TestimonialCarousel from "./TestimonialCarousel";
 import { motion } from "framer-motion";
+import SectionHeader from "../reusables/SectionHeader";
 
 const STYLES = {
   container: "mx-auto px-4 md:px-8 py-8 md:py-20",
@@ -10,22 +11,11 @@ const STYLES = {
     "relative rounded-3xl md:rounded-[3.125rem] overflow-hidden bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 shadow-2xl",
   contentWrapper: "relative z-10 py-12 md:py-20 px-6 md:px-12",
   decorativeShape: "absolute w-auto h-16 md:h-48 opacity-20",
-  title:
-    "max-w-2xl md:max-w-4xl mx-auto text-center text-white text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold leading-tight md:leading-snug mb-12 md:mb-16",
   glowEffect:
     "absolute -top-40 -right-40 w-80 h-80 bg-gradient-primary opacity-20 rounded-full blur-3xl animate-pulse",
 } as const;
 
 const Testimonies: React.FC = () => {
-  const titleVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.8, ease: "easeOut" },
-    },
-  };
-
   const cardVariants = {
     hidden: { opacity: 0, scale: 0.95 },
     visible: {
@@ -60,13 +50,18 @@ const Testimonies: React.FC = () => {
 
         <div className={STYLES.contentWrapper}>
           {/* Title */}
-          <motion.h1 className={STYLES.title} variants={titleVariants}>
-            See what{" "}
-            <span className="text-transparent bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text">
-              happy customers
-            </span>{" "}
-            are saying about CitiTasker
-          </motion.h1>
+          <SectionHeader
+            title={
+              <h2 className="text-white">
+                What Our{" "}
+                <span className="text-transparent bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text">
+                  Happy Customers
+                </span>{" "}
+                Are Saying
+              </h2>
+            }
+            className="max-w-[700px] mx-auto w-full"
+          />
 
           {/* Testimonial Carousel */}
           <motion.div

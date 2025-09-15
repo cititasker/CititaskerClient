@@ -316,7 +316,8 @@ export default {
         },
         ".text-gradient-primary": {
           background:
-            "linear-gradient(135deg, var(--primary) 0%, var(--accent-purple) 100%)",
+            // "linear-gradient(135deg, var(--primary) 0%, var(--accent-purple) 100%)",
+            "linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%)",
           "background-clip": "text",
           "-webkit-background-clip": "text",
           "-webkit-text-fill-color": "transparent",

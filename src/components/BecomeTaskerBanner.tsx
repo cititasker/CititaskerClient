@@ -8,7 +8,7 @@ const BecomeTaskerBanner = () => {
   return (
     <div className="container-w sm:pt-[5.625rem] sm:pb-16 bg-white">
       <div className="relative rounded-30 sm:rounded-[3.125rem] bg-primary w-full">
-        <div className="absolute z-[0] left-0  right-0 top-0 bottom-0 rounded-30 sm:rounded-[3.125rem] overflow-hidden">
+        <div className="hidden md:block absolute z-[0] left-0  right-0 top-0 bottom-0 rounded-30 sm:rounded-[3.125rem] overflow-hidden">
           <span className="rounded-full absolute w-[6.875rem] h-[6.875rem] bg-[#FF7A03] -top-[55px] -left-[55px] md:-top-[30px] md:-left-[30px]"></span>
           <span className="rounded-full absolute w-[56px] sm:w-[8.875rem] h-[56px] sm:h-[8.875rem] bg-[#C9F07D] left-[50%] top-[calc(100%-26px)] sm:top-[-80px] translate-x-[-50%]"></span>
           <span className="rounded-full absolute w-[200px] md:w-[30.125rem] h-[200px] md:h-[30.125rem] bg-[#fb9596] -top-2 md:-top-[200px] -right-[100px] md:-right-[130px]"></span>
@@ -17,7 +17,7 @@ const BecomeTaskerBanner = () => {
         </div>
         <div className="relative z-[1] px-5 py-5 sm:py-[42px] md:px-12 lg:px-24 md:py-[4.875rem] flex flex-col h-full max-w-full lg:max-w-[44.375rem] w-full">
           <div className="mb-6 sm:mb-[3.75rem]">
-            <h2 className="text-white font-bold text-[18px] sm:text-[2.5rem] mb-2 sm:mb-5">
+            <h2 className="text-white font-bold text-4xl md:text-7xl mb-2 sm:mb-5">
               Become a Tasker for free
             </h2>
             <p className="text-white text-base font-normal">

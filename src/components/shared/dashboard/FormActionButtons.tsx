@@ -3,6 +3,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Save, X, Loader2 } from "lucide-react";
 import clsx from "clsx";
+import FormButton from "@/components/forms/FormButton";
 
 interface FormActionButtonsProps {
   isLoading?: boolean;
@@ -46,7 +47,7 @@ export const FormActionButtons: React.FC<FormActionButtonsProps> = ({
   onSubmit,
 
   cancelText = "Cancel",
-  submitText = "Save Changes",
+  submitText = "Save",
 
   cancelIcon = <X className="w-4 h-4" />,
   submitIcon = <Save className="w-4 h-4" />,
@@ -66,48 +67,36 @@ export const FormActionButtons: React.FC<FormActionButtonsProps> = ({
   return (
     <div className="flex gap-3">
       {showCancel && (
-        <Button
+        <FormButton
           type={cancelType}
           onClick={onCancel}
           variant={cancelVariant}
           size="sm"
-          className={clsx(
-            "flex items-center gap-2",
-            cancelButtonProps.className
-          )}
+          className={clsx("sm:min-w-[100px]", cancelButtonProps.className)}
           disabled={isDisabled || isLoading}
           {...cancelButtonProps}
         >
-          {cancelIcon}
-          {cancelText}
-        </Button>
+          <span className="sm:inline-block inline">{cancelIcon}</span>
+          <span className="hidden sm:inline">{cancelText}</span>
+        </FormButton>
       )}
 
       {showSubmit && (
-        <Button
+        <FormButton
           type={submitType}
           form={formId}
           onClick={onSubmit}
           size="sm"
           disabled={isDisabled || isLoading}
-          className={clsx(
-            "flex items-center gap-2 min-w-[100px]",
-            submitButtonProps.className
-          )}
+          className={clsx("sm:min-w-[100px]", submitButtonProps.className)}
+          loading={isLoading}
           {...submitButtonProps}
         >
-          {isLoading ? (
-            <>
-              <Loader2 className="w-4 h-4 animate-spin" />
-              Saving...
-            </>
-          ) : (
-            <>
-              {submitIcon}
-              {submitText}
-            </>
-          )}
-        </Button>
+          <>
+            <span className="sm:inline-block inline">{submitIcon}</span>
+            <span className="">{submitText}</span>
+          </>
+        </FormButton>
       )}
     </div>
   );

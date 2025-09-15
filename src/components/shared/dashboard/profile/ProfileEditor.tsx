@@ -3,8 +3,6 @@
 import React, { useState } from "react";
 import { FormProvider } from "react-hook-form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Save, X, Loader2 } from "lucide-react";
 import { ROLE } from "@/constant";
 import { useAppSelector } from "@/store/hook";
 import { SkillsInput } from "./SkillsInput";
@@ -19,8 +17,6 @@ const ProfileEditor = () => {
   const [isEditing, setIsEditing] = useState(false);
   const { user } = useAppSelector((state) => state.user);
   const { methods, data, isLoading, mutation, onSubmit } = useProfileForm();
-
-  console.log(77, data);
 
   const handleSubmit = async (formData: any) => {
     try {
@@ -64,6 +60,7 @@ const ProfileEditor = () => {
           onCancel={handleCancel}
           isDisabled={mutation.isPending}
           formId="profile-form"
+          isLoading={isLoading}
         />
       </CardHeader>
 

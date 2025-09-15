@@ -85,13 +85,13 @@ const TaskBudget: React.FC<TaskBudgetProps> = ({ task }) => {
       isTaskAssignedToYou &&
         !hasCompletedTask && {
           name: "reschedule",
-          text: "Reschedule task...",
-          customIcon: Calendar,
+          text: "Reschedule task",
+          // customIcon: Calendar,
         },
       hasCompletedTask && {
         name: "add-to-alert",
         text: "Add task to alert",
-        customIcon: Calendar,
+        // customIcon: Calendar,
       },
     ].filter((el) => !!el);
   }, []);

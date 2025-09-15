@@ -21,12 +21,12 @@ const STYLES = {
   testimonialOverlay:
     "absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent",
   testimonialContent:
-    "absolute bottom-6 left-6 right-6 glass-effect rounded-2xl p-6 md:p-8",
+    "hidden sm:block absolute bottom-6 left-6 right-6 glass-effect rounded-2xl p-6 md:p-8",
   quote:
     "text-white text-lg md:text-xl lg:text-2xl xl:text-3xl leading-relaxed font-medium mb-4",
   author: "text-white/80 text-sm md:text-base font-medium",
   statsLabel:
-    "text-white/90 text-sm md:text-base uppercase tracking-wider font-medium mb-4",
+    "text-white/90 text-lg md:2xl uppercase tracking-wider font-medium mb-4",
   statsNumber:
     "text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-white font-bold mb-4 leading-none",
   statsDescription:

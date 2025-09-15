@@ -3,8 +3,10 @@
 import { ROUTES } from "@/constant";
 import { useMyTasksQuery } from "./hooks/useMyTasksQuery";
 import InfiniteTaskList from "../shared/task/InfiniteTaskList";
+import { useAppSelector } from "@/store/hook";
 
 const TaskList = () => {
+  const { user } = useAppSelector((state) => state.user);
   const { tasks, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useMyTasksQuery();
 
@@ -15,7 +17,7 @@ const TaskList = () => {
       fetchNextPage={fetchNextPage}
       hasNextPage={hasNextPage}
       isFetchingNextPage={isFetchingNextPage}
-      path={ROUTES.MY_TASKS}
+      path={`/${user.role}${ROUTES.MY_TASKS}`}
     />
   );
 };

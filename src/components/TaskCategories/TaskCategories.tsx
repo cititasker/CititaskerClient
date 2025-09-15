@@ -22,8 +22,7 @@ const STYLES = {
     "text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 leading-tight",
   titleGradient:
     "bg-gradient-to-r from-text-black via-primary to-secondary bg-clip-text text-transparent",
-  subtitle:
-    "text-lg md:text-xl text-dark-grey max-w-2xl mx-auto leading-relaxed",
+  subtitle: "text-lg md:text-xl text-black-2 max-w-2xl mx-auto leading-relaxed",
   tabsSection: "mb-12 md:mb-16",
   tabsContainer:
     "relative bg-white bg-opacity-60 backdrop-blur-xl rounded-2xl p-2 shadow-xl border border-light-primary-2 border-opacity-30 max-w-6xl mx-auto",

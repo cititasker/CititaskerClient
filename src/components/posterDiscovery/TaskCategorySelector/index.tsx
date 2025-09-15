@@ -147,7 +147,7 @@ const TaskCategorySelector = () => {
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4">
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4">
           {filteredCategories.map((category) => (
             <CategoryCard
               key={category.id}

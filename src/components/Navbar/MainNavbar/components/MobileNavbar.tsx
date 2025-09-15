@@ -326,53 +326,44 @@ const ActionButtons = ({
   isAuth: boolean;
   toggleMobileNav: () => void;
 }) => {
-  if (!isAuth || !user) {
-    return (
-      <div className="px-4 space-y-3 border-t border-border-light pt-6">
-        <Link
-          href={ROUTES.SIGNUP}
-          onClick={toggleMobileNav}
-          className="block px-4 py-3 text-center text-text-secondary hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-all duration-200 font-medium"
-        >
-          Sign Up
-        </Link>
-
-        <FormButton
-          href={ROUTES.LOGIN}
-          onClick={toggleMobileNav}
-          variant="outline"
-          className="w-full border-primary-200 text-primary-600 hover:bg-primary-50"
-        >
-          <User className="w-4 h-4 mr-2" />
-          Login
-        </FormButton>
-
-        <FormButton
-          href={ROUTES.POST_TASK}
-          onClick={toggleMobileNav}
-          className="w-full"
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          Post a Task
-        </FormButton>
-      </div>
-    );
-  }
-
   return (
-    <div className="px-4 space-y-3 border-t border-border-light pt-6">
-      {user.role === ROLE.poster && (
-        <FormButton
-          href={ROUTES.POST_TASK}
-          onClick={toggleMobileNav}
-          className="w-full"
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          Post Task
-        </FormButton>
+    <div className="px-4 space-y-3 border-t border-border-light py-6">
+      {!isAuth && (
+        <>
+          <FormButton
+            href={ROUTES.CREATE_ACCOUNT}
+            onClick={toggleMobileNav}
+            variant="outline"
+            className="w-full border-primary-200 text-primary-600 hover:bg-primary-50"
+          >
+            <User className="w-4 h-4 mr-2" />
+            Sign Up
+          </FormButton>
+
+          <FormButton
+            href={ROUTES.LOGIN}
+            onClick={toggleMobileNav}
+            variant="outline"
+            className="w-full border-primary-200 text-primary-600 hover:bg-primary-50"
+          >
+            <User className="w-4 h-4 mr-2" />
+            Login
+          </FormButton>
+        </>
       )}
 
-      {user.role === ROLE.tasker && (
+      {!isAuth ||
+        (user?.role === ROLE.poster && (
+          <FormButton
+            href={ROUTES.POST_TASK}
+            onClick={toggleMobileNav}
+            className="w-full"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Post Task
+          </FormButton>
+        ))}
+      {(!isAuth || user?.role === ROLE.tasker) && (
         <FormButton
           href={ROUTES.BROWSE_TASK}
           onClick={toggleMobileNav}

@@ -26,7 +26,7 @@ const responsive = {
 
 const TestimonialCarousel = () => {
   return (
-    <div className="pt-[15px] md:pt-[70px] lg:pt-[6.75rem]">
+    <div>
       <Carousel
         swipeable={true}
         responsive={responsive}

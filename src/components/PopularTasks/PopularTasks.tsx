@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
-import TaskCategoryCard from "./TaskCategoryCard";
 import FormButton from "../forms/FormButton";
 import { motion } from "framer-motion";
 import { ROUTES } from "@/constant";
+import SectionHeader from "../reusables/SectionHeader";
 
 // Mock data for popular tasks using your custom color palette
 const POPULAR_TASKS = [
@@ -61,10 +61,6 @@ const STYLES = {
   container:
     "bg-gradient-to-br from-light-primary-1 via-light-grey to-light-primary-2 relative overflow-hidden",
   content: "max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-20",
-  header: "text-center max-w-3xl mx-auto mb-16",
-  title: "text-3xl md:text-4xl lg:text-5xl font-bold text-text-black mb-6",
-  subtitle:
-    "text-lg md:text-xl text-dark-grey leading-relaxed max-w-2xl mx-auto",
   grid: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12",
 } as const;
 
@@ -103,25 +99,17 @@ const PopularTasks: React.FC = () => {
 
       <div className={STYLES.content}>
         {/* Header */}
-        <motion.div
-          className={STYLES.header}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={containerVariants}
-        >
-          <motion.h1 className={STYLES.title} variants={itemVariants}>
-            Explore Popular Tasks on{" "}
-            <span className="text-transparent bg-gradient-to-r from-primary to-secondary bg-clip-text">
-              CitiTasker
-            </span>
-          </motion.h1>
-          <motion.p className={STYLES.subtitle} variants={itemVariants}>
-            Discover a world of possibilities with CitiTasker. Connect with
+        <SectionHeader
+          title={
+            <h2>
+              Explore Popular Tasks <br /> on{" "}
+              <span className="text-gradient-primary">Cititasker</span>{" "}
+            </h2>
+          }
+          subtitle="Discover a world of possibilities with CitiTasker. Connect with
             skilled professionals ready to tackle your to-dos with expertise and
-            care.
-          </motion.p>
-        </motion.div>
+            care."
+        />
 
         {/* Task Cards Grid */}
         <motion.div

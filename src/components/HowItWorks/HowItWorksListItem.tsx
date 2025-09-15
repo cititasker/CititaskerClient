@@ -13,10 +13,10 @@ const HowItWorksListItem = ({ data }: { data: IProps }) => {
           {data.id}
         </div>
         <div>
-          <p className="mb-2.5 sm:mb-5 text-[16px] sm:text-[1.5rem] font-semibold">
+          <p className="mb-2 sm:mb-4 text-lg sm:text-2xl font-semibold">
             {data.title}
           </p>
-          <p className="text-[14px] sm:text-base font-normal">{data.text}</p>
+          <p className="text-base sm:text-lg font-normal">{data.text}</p>
         </div>
       </div>
     </div>

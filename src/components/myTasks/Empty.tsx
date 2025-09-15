@@ -79,7 +79,7 @@ const Empty: React.FC<EmptyProps> = ({
             alt="Empty state illustration"
             width={config.imageSize.width}
             height={config.imageSize.height}
-            className="opacity-80"
+            className="opacity-80 h-auto w-[140px] sm:w-[174px]"
             priority
           />
         </div>
@@ -88,7 +88,7 @@ const Empty: React.FC<EmptyProps> = ({
         <div className="space-y-2">
           <h3
             className={cn(
-              "font-bold text-text-primary leading-tight",
+              "font-bold text-text-primary leading-tight text-sm sm:text-base",
               config.textSize
             )}
           >

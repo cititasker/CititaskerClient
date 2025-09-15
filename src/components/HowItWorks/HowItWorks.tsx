@@ -3,7 +3,7 @@ import React from "react";
 import SlidingImageCarousel from "./SlidingImageCarousel";
 import HowItWorksListItem from "./HowItWorksListItem";
 import { motion } from "framer-motion";
-import UnderlinedHeader from "../reusables/UnderlinedHeader";
+import SectionHeader from "../reusables/SectionHeader";
 
 const data = [
   {
@@ -40,23 +40,22 @@ const itemVariants = {
 const HowItWorks = () => {
   return (
     <div className="container-w bg-white sm:py-[5.125rem]" id="how_it_works">
-      <div className="mb-[3.375rem] sm:mb-[3.75rem] max-w-[45.625rem] mx-auto">
-        <h1 className="header mb-[0.688rem] sm:mb-5">
-          How does{" "}
-          <span className="text-transparent bg-gradient-to-r from-primary to-secondary bg-clip-text">
-            CitiTasker
-          </span>{" "}
-          work?
-        </h1>
-        <p className="text-[14px] md:text-[18px] font-normal text-center">
-          CitiTasker connects you with verified Taskers to get your tasks done
-          effortlessly. Here's how it works:
-        </p>
-      </div>
-      <div className="max-w-[74rem] mx-auto gap-x-5 flex justify-between items-center flex-col xl:flex-row">
+      {/* Header */}
+      <SectionHeader
+        title={
+          <h2>
+            How does <span className="text-gradient-primary">Cititasker</span>{" "}
+            work?
+          </h2>
+        }
+        subtitle="CitiTasker connects you with verified Taskers to get your tasks done
+          effortlessly. Here's how it works:"
+      />
+
+      <div className="max-w-[74rem]  mx-auto gap-x-5 flex justify-between items-center flex-col xl:flex-row">
         <SlidingImageCarousel />
         <motion.div
-          className="max-w-full xl:max-w-[31.25rem] mt-[4.25rem] xl:mt-0 space-y-4"
+          className="max-w-full xl:max-w-[31.25rem] xl:mt-0 space-y-4 mt-[4.25rem]"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"

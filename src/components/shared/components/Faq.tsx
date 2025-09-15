@@ -3,6 +3,7 @@ import Image from "next/image";
 import React from "react";
 import FormButton from "@/components/forms/FormButton";
 import CustomAccordion from "@/components/Accordion/CustomAccordion";
+import SectionHeader from "@/components/reusables/SectionHeader";
 
 interface IProps {
   accordionData: { question: string; answer: string }[];
@@ -15,9 +16,7 @@ const Faq = ({ accordionData }: IProps) => {
       <div className="container-w py-10 sm:pt-[5.625rem] sm:pb-[8.875rem] ">
         <div className="justify-between items-start gap-5 flex flex-col-reverse lg:flex-row">
           <div className="w-full lg:max-w-[419px]">
-            <h2 className="text-slate-900 text-[40px] font-bold mb-10 hidden lg:block">
-              Common Questions, Clear Answers
-            </h2>
+            <SectionHeader title="Common Questions, Clear Answers" />
             <div className="lg:max-w-[402px] w-full relative bg-sky-200 rounded-[20px] py-7 px-10">
               <div className="justify-center items-start inline-flex relative h-[50px] w-full">
                 {Array.from({ length: 5 }).map((_, i) => (
@@ -49,7 +48,7 @@ const Faq = ({ accordionData }: IProps) => {
           </div>
           <div className="flex-1">
             <h2 className="text-slate-900 text-[20px] sm:text-2xl font-bold mb-5 block lg:hidden text-center">
-              Common Questions, Clear Answers
+              <SectionHeader title="Common Questions, Clear Answers" />
             </h2>
             <CustomAccordion data={accordionData} />
           </div>
