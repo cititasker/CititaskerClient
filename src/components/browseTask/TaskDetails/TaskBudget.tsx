@@ -71,11 +71,14 @@ const TaskBudget: React.FC<TaskBudgetProps> = ({ task }) => {
 
   const verifications = useMemo(() => {
     const kyc = (user.kyc_stage || {}) as any;
+
+    const face = kyc.face_verification || false;
+    const id = kyc.id_verification || false;
+    const home = kyc.home_address || false;
+
     return {
-      face: kyc.face_verification || false,
-      id: kyc.id_verification || false,
+      id: face && id && home, // Only true if all three are true
       bank: kyc.bank || false,
-      home: kyc.home_address || false,
       profile: kyc.profile || false,
     };
   }, [user.kyc_stage]);

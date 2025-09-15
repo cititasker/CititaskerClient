@@ -12,19 +12,15 @@ interface ModalType {
   open: boolean;
   handleClose: () => void;
   verifications: {
-    face: boolean;
     id: boolean;
     bank: boolean;
-    home: boolean;
     profile: boolean;
   };
 }
 
 const verificationMeta = {
-  face: { label: "Face ID", text: "Verify" },
-  id: { label: "ID Verification", text: "Upload" },
-  bank: { label: "Bank Details", text: "Verify" },
-  home: { label: "Home Address", text: "Upload" },
+  id: { label: "ID Verification", text: "Verify" },
+  bank: { label: "Payment Method", text: "Verify" },
   profile: {
     label: "Profile Info",
     text: "Update",
@@ -75,7 +71,7 @@ export default function VerificationModal({
             <FormButton
               size="lg"
               className={cn(
-                "min-w-[120px] w-fit text-sm",
+                "min-w-[120px] w-fit text-sm btn-secondary",
                 el.value && "bg-green-state-color"
               )}
               href={!el.value ? el.href : undefined}
@@ -86,6 +82,7 @@ export default function VerificationModal({
               }
               text={!el.value ? el.text : "Verified"}
               disabled={el.value}
+              variant="custom"
             />
           </Card>
         ))}

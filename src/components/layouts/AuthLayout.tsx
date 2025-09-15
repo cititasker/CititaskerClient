@@ -104,7 +104,7 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ children, extraClass }) => {
           {/* Right Side - Form */}
           <div
             className={cn(
-              "min-h-screen px-7 flex-1 bg-background md:bg-primary-50",
+              "min-h-screen px-5 flex-1 bg-background md:bg-primary-50",
               extraClass
             )}
           >

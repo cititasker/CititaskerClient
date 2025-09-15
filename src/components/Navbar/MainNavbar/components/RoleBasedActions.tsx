@@ -12,12 +12,10 @@ interface RoleBasedActionsProps {
 }
 
 export function RoleBasedActions({ user, isAuth }: RoleBasedActionsProps) {
-  if (!isAuth || !user?.role) return null;
-
   return (
     <div className="flex items-center gap-3">
       {/* Post Task - Only for Posters */}
-      {(!isAuth || user.role === ROLE.poster) && (
+      {(!isAuth || user?.role === ROLE.poster) && (
         <Button asChild className="btn-primary shadow-glow-primary" size="lg">
           <Link href={ROUTES.POST_TASK} className="flex items-center gap-2">
             <Plus className="w-4 h-4" />
@@ -27,7 +25,7 @@ export function RoleBasedActions({ user, isAuth }: RoleBasedActionsProps) {
       )}
 
       {/* Browse Tasks - Only for Taskers */}
-      {(!isAuth || user.role === ROLE.tasker) && (
+      {(!isAuth || user?.role === ROLE.tasker) && (
         <Button
           asChild
           variant="outline"

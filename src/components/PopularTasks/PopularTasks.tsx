@@ -102,7 +102,7 @@ const PopularTasks: React.FC = () => {
         <SectionHeader
           title={
             <h2>
-              Explore Popular Tasks <br /> on{" "}
+              Explore popular tasks on{" "}
               <span className="text-gradient-primary">Cititasker</span>{" "}
             </h2>
           }

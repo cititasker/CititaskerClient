@@ -37,7 +37,7 @@ export default function SectionHeader({
 }: IProps) {
   return (
     <motion.div
-      className={cn("text-center mb-8 sm:mb-12 md:mb-20", className)}
+      className={cn("text-center mb-8 sm:mb-12 md:mb-20 mx-auto", className)}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}

@@ -270,7 +270,7 @@ const UserProfileSection = ({
             className="flex items-center gap-3 p-3 rounded-lg hover:bg-background-secondary transition-colors"
           >
             <ClipboardList className="w-4 h-4 text-text-muted" />
-            <span>My Tasks</span>
+            <span className="text-text-secondary">My Tasks</span>
           </Link>
         </div>
       )}
@@ -327,7 +327,7 @@ const ActionButtons = ({
   toggleMobileNav: () => void;
 }) => {
   return (
-    <div className="px-4 space-y-3 border-t border-border-light py-6">
+    <div className="p-4 space-y-2 border-t border-border-light ">
       {!isAuth && (
         <>
           <FormButton
@@ -352,17 +352,6 @@ const ActionButtons = ({
         </>
       )}
 
-      {!isAuth ||
-        (user?.role === ROLE.poster && (
-          <FormButton
-            href={ROUTES.POST_TASK}
-            onClick={toggleMobileNav}
-            className="w-full"
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            Post Task
-          </FormButton>
-        ))}
       {(!isAuth || user?.role === ROLE.tasker) && (
         <FormButton
           href={ROUTES.BROWSE_TASK}
@@ -372,6 +361,16 @@ const ActionButtons = ({
         >
           <Search className="w-4 h-4 mr-2" />
           Browse Tasks
+        </FormButton>
+      )}
+      {(!isAuth || user?.role === ROLE.poster) && (
+        <FormButton
+          href={ROUTES.POST_TASK}
+          onClick={toggleMobileNav}
+          className="w-full"
+        >
+          <Plus className="w-4 h-4 mr-2" />
+          Post Task
         </FormButton>
       )}
     </div>
@@ -393,8 +392,8 @@ export default function MobileNavbar({
       open={showMobileNav}
       onOpenChange={toggleMobileNav}
       side="right"
-      showCloseIcon={true}
-      className="bg-background px-0 pt-10"
+      showCloseIcon={false}
+      className="bg-background px-0 py-0"
     >
       <div className="flex flex-col h-full">
         {/* Navigation Section */}
