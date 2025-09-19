@@ -5,11 +5,11 @@ import { createPortal } from "react-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
-import { Link as LinkIcon, ExternalLink, X } from "lucide-react";
+import { Link as LinkIcon, ExternalLink } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import FormInput from "@/components/forms/FormInput";
-import CustomModal from "@/components/reusables/CustomModal";
+import BaseModal from "../../Modals/BaseModal";
 
 const linkSchema = z.object({
   linkUrl: z.string().url("Please enter a valid URL"),
@@ -98,23 +98,15 @@ const LinkModal: React.FC<LinkModalProps> = ({ open, onClose, editor }) => {
 
   // Use portal to render outside of any parent forms
   const modalContent = (
-    <CustomModal
+    <BaseModal
       isOpen={open}
       onClose={handleClose}
-      contentClassName="rounded-xl shadow-xl w-full max-w-md mx-4 animate-in zoom-in-95 duration-200"
+      className="max-w-md"
+      title=" Insert Link"
+      description="Add a link to your message"
+      icon={<LinkIcon className="w-6 h-6 text-primary" />}
     >
       <div className="space-y-6">
-        {/* Header */}
-        <div className="text-center space-y-2">
-          <div className="w-12 h-12 bg-primary-50 rounded-full flex items-center justify-center mx-auto">
-            <LinkIcon className="w-6 h-6 text-primary" />
-          </div>
-          <h2 className="text-lg font-semibold text-text-primary">
-            Insert Link
-          </h2>
-          <p className="text-sm text-text-muted">Add a link to your message</p>
-        </div>
-
         {/* Form - Now completely separate from parent form */}
         <FormProvider {...methods}>
           <form
@@ -171,7 +163,7 @@ const LinkModal: React.FC<LinkModalProps> = ({ open, onClose, editor }) => {
           </form>
         </FormProvider>
       </div>
-    </CustomModal>
+    </BaseModal>
   );
 
   // Render to document.body using portal to avoid nested form issues

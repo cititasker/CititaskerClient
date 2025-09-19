@@ -3,9 +3,9 @@
 import React from "react";
 import { Shield, CheckCircle } from "lucide-react";
 
-import BaseVerificationModal from "../../../../../../../../components/browseTask/Modals/BaseVerificationModal";
 import DojahVerification from "@/components/DojahVerification";
 import ExtraInfo from "@/components/forms/ExtraInfo";
+import BaseModal from "@/components/browseTask/Modals/BaseModal";
 
 interface IDVerificationModalProps {
   isOpen: boolean;
@@ -49,7 +49,7 @@ const IDVerificationModal: React.FC<IDVerificationModalProps> = ({
   user,
 }) => {
   return (
-    <BaseVerificationModal
+    <BaseModal
       isOpen={isOpen}
       onClose={onClose}
       title="Verify Your Identity"
@@ -81,7 +81,7 @@ const IDVerificationModal: React.FC<IDVerificationModalProps> = ({
           />
         </div>
       </div>
-    </BaseVerificationModal>
+    </BaseModal>
   );
 };
 

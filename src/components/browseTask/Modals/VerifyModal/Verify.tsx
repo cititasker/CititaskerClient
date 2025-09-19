@@ -8,7 +8,7 @@ import { ROUTES } from "@/constant";
 import ProgressBar from "@/app/(auth)/components/ProgressBar";
 import { verificationConfig, VerificationStep } from "./constant";
 import { VerificationStepCard } from "./VerificationStepCard";
-import BaseVerificationModal from "@/components/browseTask/Modals/BaseVerificationModal";
+import BaseModal from "@/components/browseTask/Modals/BaseModal";
 
 interface VerificationModalProps {
   open: boolean;
@@ -54,7 +54,7 @@ const VerificationModal: React.FC<VerificationModalProps> = ({
   const allCompleted = completedCount === totalCount;
 
   return (
-    <BaseVerificationModal
+    <BaseModal
       isOpen={open}
       onClose={onClose}
       title="Verify Your Account"
@@ -90,7 +90,7 @@ const VerificationModal: React.FC<VerificationModalProps> = ({
           </div>
         )}
       </div>
-    </BaseVerificationModal>
+    </BaseModal>
   );
 };
 

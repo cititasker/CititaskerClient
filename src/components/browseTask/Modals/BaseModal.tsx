@@ -6,7 +6,7 @@ import { Shield, Lock } from "lucide-react";
 import CustomModal from "@/components/reusables/CustomModal";
 import { cn } from "@/lib/utils";
 
-interface BaseVerificationModalProps {
+interface BaseModalProps {
   isOpen: boolean;
   onClose: () => void;
   title: string;
@@ -17,7 +17,7 @@ interface BaseVerificationModalProps {
   className?: string;
 }
 
-const BaseVerificationModal: React.FC<BaseVerificationModalProps> = ({
+const BaseModal: React.FC<BaseModalProps> = ({
   isOpen,
   onClose,
   title,
@@ -70,4 +70,4 @@ const BaseVerificationModal: React.FC<BaseVerificationModalProps> = ({
   );
 };
 
-export default BaseVerificationModal;
+export default BaseModal;

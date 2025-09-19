@@ -4,12 +4,12 @@ import React, { useState } from "react";
 import { FormProvider, UseFormReturn } from "react-hook-form";
 import { CreditCard, Building2, Loader } from "lucide-react";
 
-import BaseVerificationModal from "../../../../../../../../components/browseTask/Modals/BaseVerificationModal";
 import FormInput from "@/components/forms/FormInput";
 import { FormAutoComplete } from "@/components/forms/FormAutoComplete";
 import { Button } from "@/components/ui/button";
 import ExtraInfo from "@/components/forms/ExtraInfo";
 import { cn } from "@/lib/utils";
+import BaseModal from "@/components/browseTask/Modals/BaseModal";
 
 interface BankOption {
   id: number | string;
@@ -74,7 +74,7 @@ const BankVerificationModal: React.FC<BankVerificationModalProps> = ({
     name && selectedBank && accountNumber?.length >= 10 && !isSubmitting;
 
   return (
-    <BaseVerificationModal
+    <BaseModal
       isOpen={isOpen}
       onClose={onClose}
       title="Verify Bank Account"
@@ -169,7 +169,7 @@ const BankVerificationModal: React.FC<BankVerificationModalProps> = ({
           </div>
         </form>
       </FormProvider>
-    </BaseVerificationModal>
+    </BaseModal>
   );
 };
 

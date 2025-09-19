@@ -1,7 +1,5 @@
 import { Card } from "@/components/ui/card";
 import { VerificationStep } from "./constant";
-import { Badge } from "@/components/ui/badge";
-import { CheckCircle } from "lucide-react";
 import FormButton from "@/components/forms/FormButton";
 import { CustomStatusBadge } from "@/app/(website)/tasker/dashboard/payment/_components/WalletTab/TransactionStatus";
 

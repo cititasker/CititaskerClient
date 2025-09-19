@@ -13,13 +13,11 @@ import { useSnackbar } from "@/providers/SnackbarProvider";
 import { API_ROUTES } from "@/constant";
 import { useGetPorfolio } from "@/services/user/user.hook";
 import useModal from "@/hooks/useModal";
-import PulseLoader from "@/components/reusables/loaders/PulseLoader";
 import { ImageCard } from "./ImageCard";
 import { UploadCard } from "./UploadCard";
 import { MAX_IMAGES, PortfolioFormData, portfolioSchema } from "./constant";
 import { EmptyState } from "./EmptyState";
 import SaveButton from "@/components/reusables/SaveButton.tsx";
-import ConfirmationModal from "@/components/reusables/Modals/ConfirmationModal";
 import { DeleteConfirmModal } from "@/components/reusables/Modals/ConfirmModal";
 import LoadingMessage from "@/components/shared/dashboard/LoadingMessage";
 

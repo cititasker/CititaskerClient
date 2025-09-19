@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { Star, Award, TrendingUp } from "lucide-react";
+import { Star, TrendingUp } from "lucide-react";
 
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
