@@ -3,13 +3,14 @@ import { VerificationStep } from "./constant";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle } from "lucide-react";
 import FormButton from "@/components/forms/FormButton";
+import { CustomStatusBadge } from "@/app/(website)/tasker/dashboard/payment/_components/WalletTab/TransactionStatus";
 
 export const VerificationStepCard = ({ step }: { step: VerificationStep }) => {
   const { icon: Icon, label, description, completed, href, actionText } = step;
 
   return (
     <Card className="p-4 border border-neutral-200">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6">
         {/* Left Side - Icon and Info */}
         <div className="flex items-start gap-3 flex-1">
           <div
@@ -25,16 +26,10 @@ export const VerificationStepCard = ({ step }: { step: VerificationStep }) => {
           </div>
 
           <div className="flex-1 space-y-1">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <h3 className="font-semibold text-text-primary">{label}</h3>
               {completed && (
-                <Badge
-                  variant="outline"
-                  className="bg-success-light text-success border-success/30"
-                >
-                  <CheckCircle className="w-3 h-3 mr-1" />
-                  Verified
-                </Badge>
+                <CustomStatusBadge status="successful" label="Verified" />
               )}
             </div>
             <p className="text-sm text-text-muted">{description}</p>
@@ -42,7 +37,7 @@ export const VerificationStepCard = ({ step }: { step: VerificationStep }) => {
         </div>
 
         {/* Right Side - Action Button */}
-        <div className="flex-shrink-0 ml-4">
+        <div className="sm:ml-4">
           <FormButton
             size="sm"
             href={!completed ? href : undefined}

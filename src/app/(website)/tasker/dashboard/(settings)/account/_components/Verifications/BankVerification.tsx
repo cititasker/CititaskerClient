@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { FormProvider, UseFormReturn } from "react-hook-form";
 import { CreditCard, Building2, Loader } from "lucide-react";
 
-import BaseVerificationModal from "./BaseVerificationModal";
+import BaseVerificationModal from "../../../../../../../../components/browseTask/Modals/BaseVerificationModal";
 import FormInput from "@/components/forms/FormInput";
 import { FormAutoComplete } from "@/components/forms/FormAutoComplete";
 import { Button } from "@/components/ui/button";

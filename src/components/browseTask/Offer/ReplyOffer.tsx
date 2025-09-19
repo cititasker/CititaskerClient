@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { formatTime } from "@/utils";
 import CommentBox from "./CommentBox";
 import DOMPurify from "dompurify";
+import { cn } from "@/lib/utils";
 
 interface ReplyOfferProps {
   offer: ICommenThreadProps | undefined;
@@ -66,7 +67,12 @@ const ReplyOffer: React.FC<ReplyOfferProps> = ({ offer, level = 0 }) => {
 
       {/* Reply Input */}
       {showReplyBox && (
-        <div style={{ marginLeft: `${(level + 1) * 24}px` }}>
+        <div
+          className={cn(
+            "ml-0", // default for <sm
+            `sm:ml-[${(level + 1) * 24}px]` // only apply margin from sm and up
+          )}
+        >
           <CommentBox
             offer_id={offer.id}
             onSuccess={() => setShowReplyBox(false)}

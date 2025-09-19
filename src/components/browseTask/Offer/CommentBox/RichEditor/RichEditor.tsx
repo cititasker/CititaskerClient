@@ -30,7 +30,6 @@ const RichEditor = ({
   const {
     editor,
     showToolbar,
-    isEmojiPickerOpen,
     fileInputRef,
     insertEmoji,
     handleKeyDown,

@@ -104,10 +104,10 @@ const TaskerOffer: React.FC<TaskerOfferProps> = ({
 
   return (
     <div className="">
-      <div className="flex gap-4">
+      <div className="flex gap-2 sm:gap-4">
         {/* Avatar */}
         <div className="flex-shrink-0">
-          <Avatar className="w-12 h-12 sm:w-16 sm:h-16 border-2 border-neutral-200">
+          <Avatar className="w-10 h-10 sm:w-16 sm:h-16 border-2 border-neutral-200">
             <AvatarImage
               src={offer.tasker.profile_image}
               alt={`${fullName}'s profile`}
@@ -122,7 +122,7 @@ const TaskerOffer: React.FC<TaskerOfferProps> = ({
         <div className="flex-1 min-w-0 space-y-3">
           {/* Header */}
           <div className="flex items-start justify-between gap-4">
-            <div className="space-y-2 flex-1 min-w-0">
+            <div className="space-y-1 sm:space-y- flex-1 min-w-0">
               <Link
                 href={`/tasker/profile/${offer.tasker.id}`}
                 className="text-lg font-semibold text-text-primary hover:text-primary transition-colors inline-block truncate"

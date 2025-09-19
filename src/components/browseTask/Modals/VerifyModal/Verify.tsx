@@ -1,14 +1,14 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { Shield, CheckCircle, AlertCircle } from "lucide-react";
+import { CheckCircle, AlertCircle } from "lucide-react";
 
-import CustomModal from "@/components/reusables/CustomModal";
 import { Separator } from "@/components/ui/separator";
 import { ROUTES } from "@/constant";
 import ProgressBar from "@/app/(auth)/components/ProgressBar";
 import { verificationConfig, VerificationStep } from "./constant";
 import { VerificationStepCard } from "./VerificationStepCard";
+import BaseVerificationModal from "@/components/browseTask/Modals/BaseVerificationModal";
 
 interface VerificationModalProps {
   open: boolean;
@@ -54,25 +54,14 @@ const VerificationModal: React.FC<VerificationModalProps> = ({
   const allCompleted = completedCount === totalCount;
 
   return (
-    <CustomModal
+    <BaseVerificationModal
       isOpen={open}
       onClose={onClose}
-      contentClassName="max-w-lg mx-auto"
+      title="Verify Your Account"
+      description="Complete these steps to start making offers on tasks"
+      className="max-w-lg mx-auto"
     >
       <div className="space-y-6">
-        {/* Header */}
-        <div className="text-center space-y-2">
-          <div className="w-16 h-16 bg-primary-50 rounded-full flex items-center justify-center mx-auto mb-3">
-            <Shield className="w-8 h-8 text-primary" />
-          </div>
-          <h2 className="text-2xl font-bold text-text-primary">
-            Verify Your Account
-          </h2>
-          <p className="text-text-muted">
-            Complete these steps to start making offers on tasks
-          </p>
-        </div>
-
         {/* Progress Bar */}
         <ProgressBar currentStep={completedCount} totalSteps={totalCount} />
 
@@ -101,7 +90,7 @@ const VerificationModal: React.FC<VerificationModalProps> = ({
           </div>
         )}
       </div>
-    </CustomModal>
+    </BaseVerificationModal>
   );
 };
 

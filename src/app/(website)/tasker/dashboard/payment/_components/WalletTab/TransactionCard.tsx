@@ -1,6 +1,6 @@
 import React from "react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { TransactionStatus } from "./TransactionStatus";
+import { CustomStatusBadge } from "./TransactionStatus";
 import { WalletTransaction } from "./hooks/useWallet";
 
 interface TransactionCardProps {
@@ -46,7 +46,7 @@ export const TransactionCard: React.FC<TransactionCardProps> = ({
             </p>
           </div>
           <div className="flex-shrink-0 mt-1 sm:mt-0">
-            <TransactionStatus status={transaction.status} />
+            <CustomStatusBadge status={transaction.status} />
           </div>
         </div>
       </div>

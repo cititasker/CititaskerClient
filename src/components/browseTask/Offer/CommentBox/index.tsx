@@ -13,6 +13,8 @@ import { defaultProfile } from "@/constant/images";
 import { API_ROUTES } from "@/constant";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import RichEditor from "./RichEditor/RichEditor";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { cn } from "@/lib/utils";
 
 const schema = z.object({
   content: z.string().min(1, "Please write your reply"),
@@ -96,14 +98,21 @@ const CommentBox: React.FC<CommentBoxProps> = ({
     <FormProvider {...methods}>
       <div className="flex gap-3">
         {/* Avatar */}
-        <div className="flex-shrink-0">
-          <Image
-            src={user.profile_image ?? defaultProfile}
-            alt="Your avatar"
-            width={40}
-            height={40}
-            className={`${avatarSize} rounded-full object-cover border border-neutral-200`}
-          />
+        <div className="flex-shrink-0 hidden sm:inline-block">
+          <Avatar className={cn(avatarSize, "border border-neutral-200")}>
+            <AvatarImage
+              src={user.profile_image ?? undefined}
+              alt="Your avatar"
+              className="object-cover"
+            />
+            <AvatarFallback>
+              <img
+                src={defaultProfile.src}
+                alt="Fallback"
+                className="object-cover w-full h-full rounded-full"
+              />
+            </AvatarFallback>
+          </Avatar>
         </div>
 
         {/* Comment Input */}

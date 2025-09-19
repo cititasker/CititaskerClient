@@ -8,7 +8,7 @@ export interface WalletTransaction {
   amount: string;
   method: string;
   date: string;
-  status: "successful" | "on_hold" | "failed";
+  status: "successful" | "pending" | "failed";
 }
 
 export const useWallet = () => {
@@ -33,7 +33,7 @@ export const useWallet = () => {
         amount: "NGN 50,000",
         method: "Card",
         date: "Jan 21, 2024 09:15 am",
-        status: "on_hold",
+        status: "pending",
       },
     ],
     []

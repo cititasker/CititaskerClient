@@ -3,7 +3,7 @@
 import React from "react";
 import { Shield, CheckCircle } from "lucide-react";
 
-import BaseVerificationModal from "./BaseVerificationModal";
+import BaseVerificationModal from "../../../../../../../../components/browseTask/Modals/BaseVerificationModal";
 import DojahVerification from "@/components/DojahVerification";
 import ExtraInfo from "@/components/forms/ExtraInfo";
 
