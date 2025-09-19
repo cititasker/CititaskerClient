@@ -7,6 +7,7 @@ import { HowItWorksSection } from "./components/mobile-nav/HowItWorksSection";
 import { UserProfile } from "./components/mobile-nav/UserProfile";
 import { ActionButtons } from "./components/mobile-nav/ActionButtons";
 import { X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface MobileNavbarProps {
   showMobileNav: boolean;
@@ -35,15 +36,22 @@ export default function MobileNavbar({
       onOpenChange={toggleMobileNav}
       side="right"
       showCloseIcon={false}
-      className="bg-white p-0 sm:max-w-sm w-full"
+      className="bg-white p-0 max-w-xs sm:max-w-sm w-full"
     >
       <div className="flex flex-col h-full">
-        {/* Header */}
-        <div className="p-4 border-b border-neutral-200 bg-white flex items-center justify-between gap-3">
-          <h2 className="text-xl font-semibold text-primary">Menu</h2>
-          <button onClick={toggleMobileNav}>
-            <X className="w-6 h-6 text-black-2" />
-          </button>
+        {/* Mobile Header */}
+        <div className="flex items-center justify-between p-4 border-b lg:hidden">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+              <span className="text-primary-foreground font-bold text-sm">
+                M
+              </span>
+            </div>
+            <span className="font-semibold">Menu</span>
+          </div>
+          <Button variant="ghost" size="icon" onClick={toggleMobileNav}>
+            <X className="h-4 w-4" />
+          </Button>
         </div>
 
         {/* Navigation Content */}

@@ -63,6 +63,7 @@ export const useSidebar = () => {
   return {
     isOpen: showSidebar,
     toggleSidebar,
+    setSidebar,
     openSidebar: useCallback(() => setSidebar(true), [setSidebar]),
     closeSidebar: useCallback(() => setSidebar(false), [setSidebar]),
     expandedItems,

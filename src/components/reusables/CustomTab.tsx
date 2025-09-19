@@ -65,7 +65,7 @@ export default function CustomTab({
               "data-[state=active]:bg-background data-[state=active]:text-primary",
               "data-[state=active]:shadow-sm transition-all duration-200",
               "text-text-muted hover:text-text-primary font-medium",
-              "max-w-[200px] w-full",
+              "max-w-[200px] w-full min-w-[140px]",
               triggerClassName
             )}
           >

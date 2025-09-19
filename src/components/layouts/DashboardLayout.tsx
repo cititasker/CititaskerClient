@@ -7,16 +7,15 @@ const DashboardLayout = async ({ children }: IChildren) => {
   const user = session?.user;
 
   return (
-    <div className="bg-light-grey relative h-full">
-      <div className="container-w py-0 relative h-full">
-        <div className="relative p-top w-full h-full flex gap-3 md:gap-5 overflow-y-auto">
-          <DashboardSidebar role={user?.role} />
-          <main className="flex-1 min-w-0 overflow-hidden">
-            <div className="h-full overflow-y-auto no-scrollbar">
-              {children}
-            </div>
-          </main>
-        </div>
+    <div className="p-top bg-light-grey min-h-screen relative">
+      <div className="container-w py-0 relative min-h-screen flex flex-col md:flex-row gap-3 md:gap-5">
+        <DashboardSidebar role={user?.role} />
+
+        <main className="flex-1 min-w-0">
+          <div className="h-full min-h-screen overflow-y-auto no-scrollbar">
+            {children}
+          </div>
+        </main>
       </div>
     </div>
   );

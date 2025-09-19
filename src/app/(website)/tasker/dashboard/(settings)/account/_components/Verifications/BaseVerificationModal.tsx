@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 import { Shield, Lock } from "lucide-react";
 
 import CustomModal from "@/components/reusables/CustomModal";
