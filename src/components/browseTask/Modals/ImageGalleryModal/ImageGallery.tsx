@@ -3,17 +3,8 @@
 import { useState, useCallback, useEffect } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { ChevronLeft, ChevronRight, X, ZoomIn } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { VisuallyHidden } from "@/components/ui/visually-hidden";
+import { ZoomIn } from "lucide-react";
 import ImageViewerDialog from "@/components/reusables/ImageViewerDialog";
-
 interface ImageGalleryProps {
   images: string[];
   className?: string;

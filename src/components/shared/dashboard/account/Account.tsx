@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { BiLoader } from "react-icons/bi";
-import { MdOutlineCameraAlt } from "react-icons/md";
+import { MdOutlineCameraAlt, MdEdit } from "react-icons/md";
+import { Camera, Edit3 } from "lucide-react";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateProfile, uploadProfile } from "@/services/user/users.api";
@@ -20,16 +21,136 @@ import FormSelect from "@/components/forms/FormSelect";
 import FormDatePicker from "@/components/forms/FormDatePicker";
 import FormButton from "@/components/forms/FormButton";
 import { API_ROUTES } from "@/constant";
+import { Button } from "@/components/ui/button";
+import EditImageModal from "@/app/(website)/tasker/dashboard/(settings)/profile/portfolio/EditImageModal";
 
 const genderOptions = [
   { id: "male", name: "Male" },
   { id: "female", name: "Female" },
+  { id: "other", name: "Other" },
+  { id: "prefer-not-to-say", name: "Prefer not to say" },
 ];
+
+const ProfileImageUpload = ({
+  profileImage,
+  onImageSelect,
+  isUploading,
+}: {
+  profileImage: string;
+  onImageSelect: (file: File) => void;
+  isUploading: boolean;
+}) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && file.type.startsWith("image/")) {
+      onImageSelect(file);
+    }
+  };
+
+  const triggerFileSelect = () => {
+    fileInputRef.current?.click();
+  };
+
+  return (
+    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+      {/* Profile Image */}
+      <div className="relative group">
+        <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-4 border-neutral-200 shadow-md">
+          <Image
+            src={profileImage || defaultProfile}
+            alt="Profile"
+            width={112}
+            height={112}
+            className="object-cover w-full h-full"
+          />
+        </div>
+
+        {/* Overlay */}
+        <div
+          className={`absolute inset-0 flex items-center justify-center bg-neutral-900/60 backdrop-blur-sm rounded-full transition-all duration-300 ${
+            isUploading
+              ? "opacity-100"
+              : "opacity-0 group-hover:opacity-100 cursor-pointer"
+          }`}
+          onClick={!isUploading ? triggerFileSelect : undefined}
+        >
+          {isUploading ? (
+            <BiLoader className="w-6 h-6 text-white animate-spin" />
+          ) : (
+            <Camera className="w-6 h-6 text-white" />
+          )}
+        </div>
+      </div>
+
+      {/* Upload Controls */}
+      <div className="space-y-2">
+        <div className="space-y-1">
+          <h3 className="font-semibold text-text-primary">Profile Photo</h3>
+          <p className="text-sm text-text-muted">
+            Upload a clear photo of yourself
+          </p>
+        </div>
+
+        <div className="flex gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={triggerFileSelect}
+            disabled={isUploading}
+            className="text-sm"
+          >
+            <Camera className="w-4 h-4 mr-2" />
+            {profileImage ? "Change" : "Upload"}
+          </Button>
+        </div>
+
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          onChange={handleFileSelect}
+          className="hidden"
+        />
+      </div>
+    </div>
+  );
+};
+
+const FormSection = ({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) => (
+  <div className="space-y-4">
+    <h3 className="text-lg font-semibold text-text-primary border-b border-neutral-200 pb-2">
+      {title}
+    </h3>
+    {children}
+  </div>
+);
+
+const FormGrid = ({ children }: { children: React.ReactNode }) => (
+  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+    {children}
+  </div>
+);
 
 export default function Account() {
   const { user } = useAppSelector((state) => state.user);
   const { showSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
+
+  // Image editing state
+  const [selectedImage, setSelectedImage] = useState<{
+    src: string;
+    file: File;
+  } | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const profileUpload = useMutation({
     mutationFn: uploadProfile,
@@ -56,36 +177,52 @@ export default function Account() {
   const methods = useForm<profileSchemaType>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      profile_image: user.profile_image ?? "",
-      first_name: user.first_name ?? "",
-      last_name: user.last_name ?? "",
-      email: user.email ?? "",
-      phone_number: user.phone_number ?? "",
-      gender: user.gender ?? "",
-      date_of_birth: user.date_of_birth ?? "",
+      profile_image: "",
+      first_name: "",
+      last_name: "",
+      email: "",
+      phone_number: "",
+      gender: "",
+      date_of_birth: "",
     },
   });
 
-  const { handleSubmit, setValue } = methods;
+  const { handleSubmit, setValue, reset } = methods;
 
+  // Initialize form with user data
   useEffect(() => {
     if (user) {
-      setValue("profile_image", user.profile_image ?? "");
-      setValue("first_name", user.first_name ?? "");
-      setValue("last_name", user.last_name ?? "");
-      setValue("email", user.email ?? "");
-      setValue("phone_number", user.phone_number ?? "");
-      setValue("gender", user.gender ?? "");
-      setValue("date_of_birth", user.date_of_birth ?? "");
+      reset({
+        profile_image: user.profile_image ?? "",
+        first_name: user.first_name ?? "",
+        last_name: user.last_name ?? "",
+        email: user.email ?? "",
+        phone_number: user.phone_number ?? "",
+        gender: user.gender ?? "",
+        date_of_birth: user.date_of_birth ?? "",
+      });
     }
-  }, [user]);
+  }, [user, reset]);
 
-  const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const formData = new FormData();
-      formData.append("profile_image", file);
-      profileUpload.mutate(formData);
+  const handleImageSelect = (file: File) => {
+    const imageUrl = URL.createObjectURL(file);
+    setSelectedImage({ src: imageUrl, file });
+    setIsEditModalOpen(true);
+  };
+
+  const handleSaveEditedImage = (editedImage: { src: string; file: File }) => {
+    const formData = new FormData();
+    formData.append("profile_image", editedImage.file);
+    profileUpload.mutate(formData);
+    setIsEditModalOpen(false);
+    setSelectedImage(null);
+  };
+
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
+    if (selectedImage) {
+      URL.revokeObjectURL(selectedImage.src);
+      setSelectedImage(null);
     }
   };
 
@@ -94,71 +231,104 @@ export default function Account() {
     profileUpdate.mutate(rest);
   };
 
+  const isLoading = profileUpdate.isPending || profileUpload.isPending;
+
   return (
-    <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(onSubmit)} className="max-w-[716px] w-full">
-        {/* Profile Image Upload */}
-        <label
-          htmlFor="upload"
-          className="inline-block w-[100px] h-[100px] rounded-full relative overflow-hidden group"
-        >
-          <Image
-            src={user.profile_image ?? defaultProfile}
-            alt="user profile"
-            width={200}
-            height={200}
-            className="object-cover w-full h-full rounded-full"
-          />
-          <div
-            className={`absolute inset-0 flex items-center justify-center bg-black/30 transition-opacity ${
-              profileUpload.isPending
-                ? "opacity-100"
-                : "opacity-0 group-hover:opacity-100"
-            }`}
-          >
-            {profileUpload.isPending ? (
-              <BiLoader size={24} className="text-white animate-spin" />
-            ) : (
-              <MdOutlineCameraAlt size={24} className="text-white" />
-            )}
-          </div>
-          <input id="upload" type="file" hidden onChange={handleUpload} />
-        </label>
-
-        {/* Form Fields */}
-        <div className="mt-6 space-y-6">
-          {/* Name */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormInput name="first_name" label="First Name" />
-            <FormInput name="last_name" label="Last Name" />
-          </div>
-
-          {/* Email & Phone */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormInput name="email" label="Email" disabled />
-            <FormInput name="phone_number" label="Phone Number" />
-          </div>
-
-          {/* Date of Birth & Gender */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormDatePicker
-              name="date_of_birth"
-              label="Date of Birth"
-              maxDate={getMaxDate(18)}
-            />
-            <FormSelect name="gender" label="Gender" options={genderOptions} />
-          </div>
+    <>
+      <div>
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-text-primary mb-2">
+            Account Settings
+          </h1>
+          <p className="text-text-muted">
+            Manage your personal information and preferences
+          </p>
         </div>
 
-        {/* Submit */}
-        <FormButton
-          type="submit"
-          className="w-full mt-10"
-          loading={profileUpdate.isPending}
-        >
-          Save
-        </FormButton>
-      </form>
-    </FormProvider>
+        <FormProvider {...methods}>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+            {/* Profile Image Section */}
+            <FormSection title="Profile Photo">
+              <ProfileImageUpload
+                profileImage={user?.profile_image || ""}
+                onImageSelect={handleImageSelect}
+                isUploading={profileUpload.isPending}
+              />
+            </FormSection>
+
+            {/* Personal Information */}
+            <FormSection title="Personal Information">
+              <div className="space-y-6">
+                <FormGrid>
+                  <FormInput
+                    name="first_name"
+                    label="First Name"
+                    placeholder="Enter your first name"
+                  />
+                  <FormInput
+                    name="last_name"
+                    label="Last Name"
+                    placeholder="Enter your last name"
+                  />
+                </FormGrid>
+
+                <FormGrid>
+                  <FormInput
+                    name="email"
+                    label="Email Address"
+                    disabled
+                    className="bg-neutral-50"
+                  />
+                  <FormInput
+                    name="phone_number"
+                    label="Phone Number"
+                    placeholder="Enter your phone number"
+                  />
+                </FormGrid>
+
+                <FormGrid>
+                  <FormDatePicker
+                    name="date_of_birth"
+                    label="Date of Birth"
+                    maxDate={getMaxDate(18)}
+                    placeholder="Select your birth date"
+                  />
+                  <FormSelect
+                    name="gender"
+                    label="Gender"
+                    options={genderOptions}
+                    placeholder="Select your gender"
+                  />
+                </FormGrid>
+              </div>
+            </FormSection>
+
+            {/* Submit Button */}
+            <div className="flex justify-end pt-6 border-t border-neutral-200">
+              <FormButton
+                type="submit"
+                loading={isLoading}
+                className="btn-primary px-8 py-3 min-w-[120px]"
+              >
+                {isLoading ? "Saving..." : "Save Changes"}
+              </FormButton>
+            </div>
+          </form>
+        </FormProvider>
+      </div>
+
+      {/* Edit Image Modal */}
+      <EditImageModal
+        open={isEditModalOpen}
+        onClose={handleCloseEditModal}
+        selectedImage={selectedImage}
+        onSaveImage={handleSaveEditedImage}
+        cropShape="round"
+        aspectRatio={1}
+        title="Edit Profile Photo"
+        description="Crop and position your profile photo perfectly"
+      />
+    </>
   );
 }

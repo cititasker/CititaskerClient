@@ -1,16 +1,18 @@
 "use client";
-import * as React from "react";
-import CustomModal from "@/components/reusables/CustomModal";
-import Icons from "@/components/Icons";
-import FormButton from "@/components/forms/FormButton";
-import { Card } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
-import { ROUTES } from "@/constant";
 
-interface ModalType {
+import React, { useMemo } from "react";
+import { Shield, CheckCircle, AlertCircle } from "lucide-react";
+
+import CustomModal from "@/components/reusables/CustomModal";
+import { Separator } from "@/components/ui/separator";
+import { ROUTES } from "@/constant";
+import ProgressBar from "@/app/(auth)/components/ProgressBar";
+import { verificationConfig, VerificationStep } from "./constant";
+import { VerificationStepCard } from "./VerificationStepCard";
+
+interface VerificationModalProps {
   open: boolean;
-  handleClose: () => void;
+  onClose: () => void;
   verifications: {
     id: boolean;
     bank: boolean;
@@ -18,75 +20,89 @@ interface ModalType {
   };
 }
 
-const verificationMeta = {
-  id: { label: "ID Verification", text: "Verify" },
-  bank: { label: "Payment Method", text: "Verify" },
-  profile: {
-    label: "Profile Info",
-    text: "Update",
-    href: `/tasker/${ROUTES.DASHBOARD_ACCOUNT}?tab=account`,
-  },
-};
+const AlertMessage = () => (
+  <div className="flex items-start gap-3 p-4 bg-warning-light rounded-lg border border-warning/20">
+    <AlertCircle className="w-5 h-5 text-warning flex-shrink-0 mt-0.5" />
+    <div className="space-y-1">
+      <h4 className="font-medium text-text-primary">Verification Required</h4>
+      <p className="text-sm text-text-secondary">
+        You need to complete all verification steps before you can make offers
+        on tasks.
+      </p>
+    </div>
+  </div>
+);
 
-export default function VerificationModal({
+const VerificationModal: React.FC<VerificationModalProps> = ({
   open,
-  handleClose,
+  onClose,
   verifications,
-}: ModalType) {
-  const verificationList = React.useMemo(
-    () =>
-      Object.entries(verifications).map(([key, value]) => ({
-        key,
-        value,
-        href: `/tasker/${ROUTES.DASHBOARD_ACCOUNT}?tab=verifications&type=${key}`,
-        ...verificationMeta[key as keyof typeof verificationMeta],
-      })),
-    [verifications]
-  );
+}) => {
+  const verificationSteps = useMemo<VerificationStep[]>(() => {
+    return Object.entries(verificationConfig).map(([key, config]) => ({
+      key: key as keyof typeof verificationConfig,
+      completed: verifications[key as keyof typeof verifications],
+      href: `/tasker/${ROUTES.DASHBOARD_ACCOUNT}?tab=verifications&type=${key}`,
+      ...config,
+    }));
+  }, [verifications]);
+
+  const completedCount = verificationSteps.filter(
+    (step) => step.completed
+  ).length;
+  const totalCount = verificationSteps.length;
+  const allCompleted = completedCount === totalCount;
 
   return (
     <CustomModal
       isOpen={open}
-      onClose={handleClose}
-      contentClassName="p-5 sm:p-[30px] rounded-[20px] text-center"
+      onClose={onClose}
+      contentClassName="max-w-lg mx-auto"
     >
-      <div className="space-y-2">
-        <h2 className="text-2xl font-bold">Verify your account</h2>
-        <p className="text-sm text-muted-foreground font-medium">
-          You need to verify your account before you can make an offer.
-        </p>
-      </div>
+      <div className="space-y-6">
+        {/* Header */}
+        <div className="text-center space-y-2">
+          <div className="w-16 h-16 bg-primary-50 rounded-full flex items-center justify-center mx-auto mb-3">
+            <Shield className="w-8 h-8 text-primary" />
+          </div>
+          <h2 className="text-2xl font-bold text-text-primary">
+            Verify Your Account
+          </h2>
+          <p className="text-text-muted">
+            Complete these steps to start making offers on tasks
+          </p>
+        </div>
 
-      <Separator className="my-4" />
+        {/* Progress Bar */}
+        <ProgressBar currentStep={completedCount} totalSteps={totalCount} />
 
-      <div className="space-y-3">
-        {verificationList.map((el, i) => (
-          <Card
-            key={i}
-            className="flex items-center justify-between p-1 pl-4 rounded-lg border shadow-none"
-          >
-            <span className="text-[16px] font-medium text-black">
-              {el.label}
-            </span>
-            <FormButton
-              size="lg"
-              className={cn(
-                "min-w-[120px] w-fit text-sm btn-secondary",
-                el.value && "bg-green-state-color"
-              )}
-              href={!el.value ? el.href : undefined}
-              icon={
-                el.value ? (
-                  <Icons.greenTick className="[&_path]:stroke-white" />
-                ) : undefined
-              }
-              text={!el.value ? el.text : "Verified"}
-              disabled={el.value}
-              variant="custom"
-            />
-          </Card>
-        ))}
+        <Separator />
+
+        {/* Alert Message */}
+        {!allCompleted && <AlertMessage />}
+
+        {/* Verification Steps */}
+        <div className="space-y-4">
+          {verificationSteps.map((step, index) => (
+            <VerificationStepCard key={index} step={step} />
+          ))}
+        </div>
+
+        {/* Success Message */}
+        {allCompleted && (
+          <div className="text-center p-6 bg-success-light rounded-xl border border-success/20">
+            <CheckCircle className="w-12 h-12 text-success mx-auto mb-3" />
+            <h3 className="text-lg font-semibold text-success mb-2">
+              Account Verified!
+            </h3>
+            <p className="text-sm text-success/80">
+              You can now make offers on tasks. Good luck!
+            </p>
+          </div>
+        )}
       </div>
     </CustomModal>
   );
-}
+};
+
+export default VerificationModal;

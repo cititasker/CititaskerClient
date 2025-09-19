@@ -92,7 +92,7 @@ const SidebarMenuItem = ({
       <Icon className="mr-3 h-5 w-5 flex-shrink-0" />
       <span className="flex-1 text-left font-medium">{item.name}</span>
       {item.badge && (
-        <Badge variant="secondary" className="h-5 px-1.5 text-xs">
+        <Badge variant="default" className="h-5 px-1.5 text-xs bg-success">
           {item.badge}
         </Badge>
       )}

@@ -1,37 +1,58 @@
-import FormButton from "@/components/forms/FormButton";
-import FormInput from "@/components/forms/FormInput";
-import CustomModal from "@/components/reusables/CustomModal";
+"use client";
+
+import React, { useEffect } from "react";
+import { createPortal } from "react-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
+import { Link as LinkIcon, ExternalLink, X } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import FormInput from "@/components/forms/FormInput";
+import CustomModal from "@/components/reusables/CustomModal";
+
+const linkSchema = z.object({
+  linkUrl: z.string().url("Please enter a valid URL"),
+  linkText: z.string().optional(),
+});
+
+type LinkFormData = z.infer<typeof linkSchema>;
 
 interface LinkModalProps {
   open: boolean;
-  onCancel: () => void;
+  onClose: () => void;
   editor: any;
 }
 
-const LinkModal = ({ open, onCancel, editor }: LinkModalProps) => {
-  const methods = useForm({
+const LinkModal: React.FC<LinkModalProps> = ({ open, onClose, editor }) => {
+  const methods = useForm<LinkFormData>({
     defaultValues: {
       linkUrl: "",
       linkText: "",
     },
-    resolver: zodResolver(
-      z.object({
-        linkUrl: z.string().url("Please enter a valid URL").optional(),
-        linkText: z.string().optional(),
-      })
-    ),
+    resolver: zodResolver(linkSchema),
   });
 
-  const onInsert = methods.handleSubmit((values: any) => {
-    const { linkUrl, linkText } = values;
-    if (!editor || !linkUrl.trim()) return;
+  const { handleSubmit, reset, watch, setValue } = methods;
+  const urlValue = watch("linkUrl");
 
-    const url = linkUrl.trim();
-    const text = linkText.trim() || url;
+  // Auto-generate link text from URL if not provided
+  useEffect(() => {
+    if (urlValue && !watch("linkText")) {
+      try {
+        const url = new URL(urlValue);
+        setValue("linkText", url.hostname);
+      } catch {
+        // Invalid URL, ignore
+      }
+    }
+  }, [urlValue, setValue, watch]);
+
+  const onInsertLink = handleSubmit((values) => {
+    if (!editor || !values.linkUrl.trim()) return;
+
+    const url = values.linkUrl.trim();
+    const text = values.linkText?.trim() || url;
 
     editor
       .chain()
@@ -51,45 +72,112 @@ const LinkModal = ({ open, onCancel, editor }: LinkModalProps) => {
         ],
       })
       .run();
-    onCancel();
-    methods.reset();
+
+    handleClose();
   });
-  return (
+
+  const handleClose = () => {
+    onClose();
+    reset();
+  };
+
+  // Handle escape key
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && open) {
+        handleClose();
+      }
+    };
+
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [open, handleClose]);
+
+  // Don't render anything if not open
+  if (!open) return null;
+
+  // Use portal to render outside of any parent forms
+  const modalContent = (
     <CustomModal
       isOpen={open}
-      onClose={onCancel}
-      className="absolute bottom-[60px] left-0 z-50 bg-white border rounded-md p-4 shadow-md w-[300px]"
+      onClose={handleClose}
+      contentClassName="rounded-xl shadow-xl w-full max-w-md mx-4 animate-in zoom-in-95 duration-200"
     >
-      <FormProvider {...methods}>
-        <form className="flex flex-col gap-4">
-          <FormInput name="linkUrl" label="Link" placeholder="example.com" />
-          <FormInput
-            name="linkText"
-            label="Text"
-            placeholder="Display text (optional)"
-          />
-          <div className="flex justify-end gap-2 mt-2">
-            <FormButton
-              type="button"
-              onClick={onCancel}
-              size="lg"
-              variant="outline"
-            >
-              Cancel
-            </FormButton>
-            <FormButton
-              type="button"
-              size="lg"
-              variant="default"
-              onClick={onInsert}
-            >
-              Insert
-            </FormButton>
+      <div className="space-y-6">
+        {/* Header */}
+        <div className="text-center space-y-2">
+          <div className="w-12 h-12 bg-primary-50 rounded-full flex items-center justify-center mx-auto">
+            <LinkIcon className="w-6 h-6 text-primary" />
           </div>
-        </form>
-      </FormProvider>
+          <h2 className="text-lg font-semibold text-text-primary">
+            Insert Link
+          </h2>
+          <p className="text-sm text-text-muted">Add a link to your message</p>
+        </div>
+
+        {/* Form - Now completely separate from parent form */}
+        <FormProvider {...methods}>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onInsertLink(e);
+            }}
+            className="space-y-4"
+          >
+            <FormInput
+              name="linkUrl"
+              label="URL"
+              placeholder="https://example.com"
+            />
+
+            <FormInput
+              name="linkText"
+              label="Link Text (optional)"
+              placeholder="Display text for the link"
+            />
+
+            {/* Preview */}
+            {urlValue && (
+              <div className="p-3 bg-neutral-50 rounded-lg border border-neutral-200">
+                <div className="flex items-center gap-2 text-sm text-text-muted mb-1">
+                  <ExternalLink className="w-4 h-4" />
+                  Link Preview
+                </div>
+                <p className="text-primary hover:underline cursor-pointer text-sm">
+                  {watch("linkText") || urlValue}
+                </p>
+              </div>
+            )}
+
+            {/* Actions */}
+            <div className="flex gap-3 pt-2">
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={handleClose}
+                className="flex-1"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                className="flex-1 btn-primary"
+                disabled={!urlValue}
+              >
+                Insert Link
+              </Button>
+            </div>
+          </form>
+        </FormProvider>
+      </div>
     </CustomModal>
   );
+
+  // Render to document.body using portal to avoid nested form issues
+  return typeof document !== "undefined"
+    ? createPortal(modalContent, document.body)
+    : null;
 };
 
 export default LinkModal;

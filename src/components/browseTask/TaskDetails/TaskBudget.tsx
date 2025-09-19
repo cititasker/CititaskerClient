@@ -7,9 +7,11 @@ import { useAppSelector } from "@/store/hook";
 import BudgetDisplay from "./BudgetDisplay";
 import IncreasePriceModal from "../Modals/IncreasePrice";
 import CompleteTaskModal from "../Modals/CompleteTaskModal";
-import { Calendar } from "lucide-react";
 import MoreOptionsMenu from "@/components/reusables/MoreOptionMenu";
 import RescheduleTaskModal from "./RescheduleTaskModal";
+import { useTaskState } from "./hooks/useTaskState";
+import { useVerifications } from "./hooks/useVerifications";
+import { useMoreOptions } from "./hooks/useMoreOptions";
 
 interface TaskBudgetProps {
   task: ITask;
@@ -21,83 +23,44 @@ const TaskBudget: React.FC<TaskBudgetProps> = ({ task }) => {
   const completeTask = useModal();
   const rescheduleModal = useModal();
 
-  const { isOpen: offerModalOpen, openModal, closeModal } = useModal();
+  const offerModal = useModal();
 
   const { isAuth, user } = useAppSelector((state) => state.user);
-  const { taskDetails } = useAppSelector((state) => state.task);
 
-  const status = task.status;
-  const isOpen = status === "open";
-  const isAssigned = status === "assigned";
-  const isTaskAssignedToYou =
-    isAssigned && task.tasker && task.tasker.id == user.id;
-  const hasCompletedTask = task.payment_requested && isTaskAssignedToYou;
+  const state = useTaskState(task, user);
+  const verifications = useVerifications(user);
+  const moreOptions = useMoreOptions(state);
 
-  const hasMadeOffer = useMemo(
-    () => task.offers.some((el) => el.tasker.id === user?.id),
-    [task.offers, user?.id]
-  );
+  const buttonConfig = useMemo(() => {
+    if (state.canMakeOffer) return { text: "Make offer", action: "offer" };
+    if (state.canUpdateOffer) return { text: "Update offer", action: "offer" };
+    if (state.canCompleteTask)
+      return { text: "Complete task", action: "complete" };
+    if (state.hasCompletedTask)
+      return { text: "Payment requested", action: "none" };
+    return { text: "Assigned", action: "none" };
+  }, [state]);
 
-  const hasCompletedKyc = useMemo(
-    () => !!user.kyc_stage && Object.values(user.kyc_stage).every(Boolean),
-    [user.kyc_stage]
-  );
-
-  const canMakeOffer = isOpen && !hasMadeOffer;
-  const canUpdateOffer = isOpen && hasMadeOffer;
-  const canCompleteTask = isAssigned && hasMadeOffer && !hasCompletedTask;
-  const canReschedule = taskDetails.tasker?.id === user.id;
-
-  const buttonText = useMemo(() => {
-    if (canMakeOffer) return "Make offer";
-    if (canUpdateOffer) return "Update offer";
-    if (canCompleteTask) return "Complete task";
-    if (hasCompletedTask) return "Payment requested";
-    return "Assigned";
-  }, [canMakeOffer, canUpdateOffer, canCompleteTask, hasCompletedTask]);
-
+  // const isButtonDisabled = !["offer", "complete"].includes(buttonConfig.action);
   const isButtonDisabled =
-    hasCompletedTask || !(canMakeOffer || canUpdateOffer || canCompleteTask);
+    state.hasCompletedTask ||
+    !(state.canMakeOffer || state.canUpdateOffer || state.canCompleteTask);
 
-  const handleButtonClick = () => {
-    if (!hasCompletedKyc) {
+  const handleMainAction = () => {
+    if (!state.hasCompletedKyc) {
       setVerifyModalOpen(true);
-    } else if (canMakeOffer || canUpdateOffer) {
-      openModal();
-    } else if (canCompleteTask) {
-      completeTask.openModal();
+      return;
+    }
+
+    switch (buttonConfig.action) {
+      case "offer":
+        offerModal.openModal();
+        break;
+      case "complete":
+        completeTask.openModal();
+        break;
     }
   };
-
-  const verifications = useMemo(() => {
-    const kyc = (user.kyc_stage || {}) as any;
-
-    const face = kyc.face_verification || false;
-    const id = kyc.id_verification || false;
-    const home = kyc.home_address || false;
-
-    return {
-      id: face && id && home, // Only true if all three are true
-      bank: kyc.bank || false,
-      profile: kyc.profile || false,
-    };
-  }, [user.kyc_stage]);
-
-  const moreOptions = useMemo(() => {
-    return [
-      isTaskAssignedToYou &&
-        !hasCompletedTask && {
-          name: "reschedule",
-          text: "Reschedule task",
-          // customIcon: Calendar,
-        },
-      hasCompletedTask && {
-        name: "add-to-alert",
-        text: "Add task to alert",
-        // customIcon: Calendar,
-      },
-    ].filter((el) => !!el);
-  }, []);
 
   const handleOptionSelect = (action: MoreOptionItem) => {
     if (action.name === "reschedule") {
@@ -110,13 +73,13 @@ const TaskBudget: React.FC<TaskBudgetProps> = ({ task }) => {
       <div>
         <BudgetDisplay
           budget={task.budget}
-          buttonText={buttonText}
+          buttonText={buttonConfig.text}
           onIncrease={increaseBudget.openModal}
-          handleButtonClick={handleButtonClick}
+          handleButtonClick={handleMainAction}
           isButtonDisabled={isButtonDisabled}
-          canIncreaseOffer={canCompleteTask}
+          canIncreaseOffer={state.canCompleteTask}
         />
-        {isAuth && canReschedule && (
+        {isAuth && moreOptions.length > 0 && (
           <div className="mt-1">
             <MoreOptionsMenu
               moreOptions={moreOptions}
@@ -129,14 +92,14 @@ const TaskBudget: React.FC<TaskBudgetProps> = ({ task }) => {
 
       <VerificationModal
         open={verifyModalOpen}
-        handleClose={() => setVerifyModalOpen(false)}
+        onClose={() => setVerifyModalOpen(false)}
         verifications={verifications}
       />
 
       <MakeOfferModal
-        open={offerModalOpen}
-        handleClose={closeModal}
-        isEdit={hasMadeOffer}
+        open={offerModal.isOpen}
+        handleClose={offerModal.closeModal}
+        isEdit={state.hasMadeOffer}
       />
 
       <IncreasePriceModal

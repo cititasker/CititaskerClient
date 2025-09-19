@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
+
 import TaskerOffer from "./TaskerOffer";
 import { withdrawOffer } from "@/services/offer";
 import { useSnackbar } from "@/providers/SnackbarProvider";
@@ -27,17 +28,20 @@ const Offer: React.FC<OfferProps> = ({ offers }) => {
   const [selectedOfferId, setSelectedOfferId] = useState<string | null>(null);
   const withdrawModal = useModal();
 
-  const handleToggleModal = (offerId?: string) => {
-    setSelectedOfferId(offerId ?? null);
-    withdrawModal.toggleModal();
+  const handleWithdrawRequest = (offerId: string) => {
+    setSelectedOfferId(offerId);
+    withdrawModal.openModal();
   };
 
-  const { mutate, isPending } = useMutation({
+  const { mutate: withdrawMutation, isPending } = useMutation({
     mutationFn: withdrawOffer,
     onSuccess: (data) => {
       dispatch(setUserTaskOffer(null));
       showSnackbar(data.message, "success");
-      handleToggleModal();
+      withdrawModal.closeModal();
+      setSelectedOfferId(null);
+
+      // Invalidate related queries
       queryClient.invalidateQueries({
         queryKey: [API_ROUTES.GET_TASK_BY_ID, id],
       });
@@ -50,37 +54,46 @@ const Offer: React.FC<OfferProps> = ({ offers }) => {
     },
   });
 
-  const handleWithdraw = () => {
+  const handleConfirmWithdraw = () => {
     if (selectedOfferId) {
-      mutate({ offer_id: selectedOfferId });
+      withdrawMutation({ offer_id: selectedOfferId });
     }
   };
 
+  const handleCloseModal = () => {
+    withdrawModal.closeModal();
+    setSelectedOfferId(null);
+  };
+
+  if (offers.length === 0) {
+    return (
+      <div className="text-center py-12">
+        <Empty text="No offers have been made yet" />
+      </div>
+    );
+  }
+
   return (
     <>
-      <div className="w-full">
-        {offers.length > 0 ? (
-          offers.map((offer) => (
-            <TaskerOffer
-              key={offer.id}
-              offer={offer}
-              toggleModal={() => handleToggleModal(`${offer.id}`)}
-            />
-          ))
-        ) : (
-          <Empty text=" No offer has been made yet" />
-        )}
+      <div className="space-y-6">
+        {offers.map((offer) => (
+          <TaskerOffer
+            key={offer.id}
+            offer={offer}
+            onWithdrawRequest={() => handleWithdrawRequest(offer.id.toString())}
+          />
+        ))}
       </div>
 
       <ConfirmModal
         open={withdrawModal.isOpen}
-        onClose={withdrawModal.closeModal}
+        onClose={handleCloseModal}
         title="Withdraw Offer"
-        description="Are you sure you want to withdraw your offer?"
+        description="Are you sure you want to withdraw your offer? This action cannot be undone."
         loading={isPending}
-        onConfirm={handleWithdraw}
-        confirmText="Withdraw"
-        cancelText="Keep my offer"
+        onConfirm={handleConfirmWithdraw}
+        confirmText="Withdraw Offer"
+        cancelText="Keep Offer"
       />
     </>
   );

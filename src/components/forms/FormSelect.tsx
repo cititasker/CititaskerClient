@@ -64,7 +64,7 @@ export default function FormSelect({
             <SelectTrigger
               className={cn(
                 // Base styles
-                "w-full h-12 px-4 text-base rounded-xl border transition-all duration-200",
+                "w-full h-12 px-4 rounded-xl border transition-all duration-200",
                 "bg-background text-text-primary",
                 "focus:outline-none",
 

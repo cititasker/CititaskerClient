@@ -1,6 +1,7 @@
 import FormButton from "@/components/forms/FormButton";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/utils";
+import { Plus } from "lucide-react";
 
 interface BudgetDisplayProps {
   budget: number;
@@ -26,17 +27,18 @@ const BudgetDisplay: React.FC<BudgetDisplayProps> = ({
       Estimated Task Budget
     </p>
     <div className="space-y-2 sm:space-y-3">
-      <h2 className="text-xl sm:text-[2rem] font-semibold text-black-2">
+      <div className="text-3xl sm:text-4xl font-bold text-primary-900">
         {formatCurrency({ value: budget, noFraction: true })}
-      </h2>
+      </div>
       {canIncreaseOffer && (
         <Button
           variant="outline"
           size="sm"
-          className="max-w-[175px] hover:bg-white border-none w-full mx-auto text-secondary text-xs font-medium rounded-20"
           onClick={onIncrease}
+          className="w-full mb-3 bg-white/80 hover:bg-white border-primary-200 text-primary-700 hover:text-primary-800 transition-all duration-200"
         >
-          + Increase Price
+          <Plus className="w-4 h-4 mr-2" />
+          Increase Price
         </Button>
       )}
 

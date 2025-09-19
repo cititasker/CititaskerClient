@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { ROLE, TASK_STATUS } from "@/constant";
+import { TASK_STATUS } from "@/constant";
 import { defaultProfile } from "@/constant/images";
 import {
   cn,
@@ -10,10 +10,10 @@ import {
   initializeName,
   truncate,
 } from "@/utils";
-import Icons from "@/components/Icons";
 import TaskBudget from "./TaskBudget";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
+import { Calendar, Clock, MapPin } from "lucide-react";
 
 interface PosterInfoProps {
   task: ITask;
@@ -28,50 +28,60 @@ const PosterAvatar = ({
   name: string;
   className?: string;
 }) => (
-  <div className={cn("shrink-0 text-center", className)}>
-    <Image
-      src={image ?? defaultProfile}
-      alt={ROLE.poster}
-      width={60}
-      height={60}
-      className="w-[70px] h-[70px] sm:w-[60px] sm:h-[60px] mx-auto rounded-full object-cover"
-    />
-    <p className="text-black-2 text-xs font-semibold mt-2">Posted by</p>
-    <p className="text-dark-grey-2 text-xs">{name}</p>
+  <div className={cn("flex-shrink-0 text-center space-y-2", className)}>
+    <div className="relative">
+      <Image
+        src={image ?? defaultProfile}
+        alt={`${name}'s profile`}
+        width={72}
+        height={72}
+        className="w-16 h-16 sm:w-18 sm:h-18 rounded-full object-cover border-2 border-neutral-200"
+      />
+      {/* Online status indicator could go here if needed */}
+    </div>
+    <div className="space-y-1">
+      <p className="text-xs font-medium text-text-muted">Posted by</p>
+      <p className="text-sm font-medium text-text-primary">{name}</p>
+    </div>
   </div>
 );
 
 const TaskDetails = ({ task }: { task: ITask }) => {
   const infoItems = [
     {
-      icon: <Icons.distance width={20} height={20} />,
+      icon: MapPin,
       label: "Location",
-      value: truncate(task.address, 20),
+      value: truncate(task.address, 25),
     },
     {
-      icon: <Icons.calendar width={18} height={18} />,
+      icon: Calendar,
       label: "Due Date",
       value: convertDate(task.date, "MMM DD, YYYY"),
     },
     {
-      icon: <Icons.avTimer />,
+      icon: Clock,
       label: "Posted",
       value: formatDateAgo(task?.created_at),
     },
   ];
 
   return (
-    <div>
-      <h1 className="mb-3 sm:mb-5 text-lg sm:text-2xl font-semibold text-black-2">
-        {task.name}
-      </h1>
+    <div className="space-y-4">
+      <div>
+        <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-text-primary mb-2">
+          {task.name}
+        </h1>
+        <p className="text-text-muted">Task ID: #{task.id}</p>
+      </div>
       <div className="grid grid-cols-[repeat(auto-fit,minmax(140px,1fr))] gap-4">
-        {infoItems.map(({ icon, label, value }, index) => (
+        {infoItems.map(({ icon: Icon, label, value }, index) => (
           <div key={index} className="flex items-start gap-3">
-            <span className="pt-0.5">{icon}</span>
-            <div>
-              <p className="text-black-2 text-xs font-semibold">{label}</p>
-              <p className="text-dark-grey-2 text-xs">{value}</p>
+            <div className="p-1 text-text-muted">
+              <Icon className="w-4 h-4" />
+            </div>
+            <div className="space-y-0.5">
+              <p className="text-xs font-medium text-text-muted">{label}</p>
+              <p className="text-sm text-text-primary">{value}</p>
             </div>
           </div>
         ))}
@@ -83,7 +93,7 @@ const TaskDetails = ({ task }: { task: ITask }) => {
 const PosterInfo: React.FC<PosterInfoProps> = ({ task }) => {
   const posterName = task.poster?.profile
     ? initializeName(task.poster?.profile)
-    : "N/A";
+    : "Anonymous User";
 
   return (
     <div className="flex gap-7 mb-6 sm:mb-12">
@@ -103,7 +113,8 @@ const PosterInfo: React.FC<PosterInfoProps> = ({ task }) => {
               key={status}
               variant="outline"
               className={cn(
-                "text-xs px-[14px] py-2 capitalize bg-light-grey text-black-2 border-none",
+                "px-3 py-1.5 text-xs capitalize transition-colors",
+                "bg-neutral-100 text-text-secondary border-neutral-200",
                 task.status == status && "bg-light-primary-2 text-black"
               )}
             >
@@ -127,7 +138,6 @@ const PosterInfo: React.FC<PosterInfoProps> = ({ task }) => {
               <TaskDetails task={task} />
             </div>
           </div>
-
           <TaskBudget task={task} />
         </div>
 

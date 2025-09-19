@@ -63,7 +63,7 @@ export default function FormInput({
               </FormLabel>
             )}
 
-            <div className="relative group">
+            <div className="relative group px-1">
               <Input
                 id={name}
                 {...field}

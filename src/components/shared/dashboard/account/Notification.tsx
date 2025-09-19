@@ -119,10 +119,10 @@ const Notification = () => {
   return (
     <div className="w-full mx-auto space-y-4">
       {/* Header */}
-      <div className="space-y-2 mb-6">
-        <h2 className="text-2xl font-bold text-text-primary">
+      <div className="mb-8">
+        <h1 className="text-2xl sm:text-3xl font-bold text-text-primary mb-2">
           Notification Preferences
-        </h2>
+        </h1>
         <p className="text-text-muted">
           Choose how you want to be notified about different activities.
         </p>

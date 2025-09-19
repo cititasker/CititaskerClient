@@ -1,5 +1,5 @@
-import React from "react";
+import MessagesWelcome from "@/components/shared/dashboard/messages/components/MessagesWelcome";
 
-export default function Page() {
-  return <div>Message page</div>;
+export default function MessagesPage() {
+  return <MessagesWelcome />;
 }

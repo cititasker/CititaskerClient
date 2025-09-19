@@ -14,7 +14,7 @@ import { RoleBasedActions } from "./components/RoleBasedActions";
 import { UserActions } from "./components/UserActions";
 import { GuestActions } from "./components/GuestActions";
 import MobileToggle from "../MobileToggle";
-import MobileNavbar from "./components/MobileNavbar";
+import MobileNavbar from "./components/MobileNavbar/MobileNavbar";
 import { Button } from "@/components/ui/button";
 import { useSidebar } from "@/components/dashboard/sidebar/hooks/useSidebar";
 import { usePathname } from "next/navigation";

@@ -1,18 +1,18 @@
 "use client";
 
-import React from "react";
+import React, { useState, useRef } from "react";
 import Image from "next/image";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FormProvider, useForm } from "react-hook-form";
+import { z } from "zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
 import { useAppSelector } from "@/store/hook";
 import { replyOffer } from "@/services/offer";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { FormProvider, useForm } from "react-hook-form";
 import { defaultProfile } from "@/constant/images";
 import { API_ROUTES } from "@/constant";
 import { useSnackbar } from "@/providers/SnackbarProvider";
-import FormError from "@/components/reusables/FormError";
-import RichEditor from "./RichEditor";
+import RichEditor from "./RichEditor/RichEditor";
 
 const schema = z.object({
   content: z.string().min(1, "Please write your reply"),
@@ -29,15 +29,23 @@ const schema = z.object({
 type SchemaType = z.infer<typeof schema>;
 
 interface CommentBoxProps {
-  offer_id?: number | undefined;
-  parentId?: number | null;
+  offer_id?: number;
   onSuccess?: () => void;
+  placeholder?: string;
+  compact?: boolean;
 }
 
-const CommentBox = ({ offer_id }: CommentBoxProps) => {
+const CommentBox: React.FC<CommentBoxProps> = ({
+  offer_id,
+  onSuccess,
+  placeholder = "Write a comment...",
+  compact = false,
+}) => {
   const { user } = useAppSelector((state) => state.user);
   const queryClient = useQueryClient();
   const { showSnackbar } = useSnackbar();
+  const [isFocused, setIsFocused] = useState(false);
+  const [isEmpty, setIsEmpty] = useState(true);
 
   const methods = useForm<SchemaType>({
     defaultValues: {
@@ -54,55 +62,81 @@ const CommentBox = ({ offer_id }: CommentBoxProps) => {
     mutationFn: replyOffer,
     onSuccess(data) {
       reset();
+      setIsEmpty(true);
+      setIsFocused(false);
       showSnackbar(data.message, "success");
+      onSuccess?.();
       queryClient.invalidateQueries({
         queryKey: [API_ROUTES.OFFER_REPLIES, offer_id],
       });
     },
     onError(error: any) {
-      console.error("Reply failed", error);
-      showSnackbar(error.message, "error");
+      showSnackbar(error.message || "Failed to send reply", "error");
     },
   });
 
-  // Update form content from editor
-  const onEditorContentUpdate = (html: string) => {
+  const onContentUpdate = (html: string, isEmpty: boolean) => {
     setValue("content", html);
+    setIsEmpty(isEmpty);
   };
 
-  const onSubmit = handleSubmit((values: SchemaType) => {
-    console.log(11, values);
-    const { attachments, content, offer_id } = values;
+  const onSubmit = handleSubmit((values) => {
+    if (isEmpty || !values.content.trim()) return;
+
     const formData = new FormData();
-    formData.append("offer_id", `${offer_id}`);
-    formData.append("content", `${content}`);
-    attachments?.forEach((file) => formData.append("images[]", file));
+    formData.append("offer_id", `${values.offer_id}`);
+    formData.append("content", values.content);
+    values.attachments?.forEach((file) => formData.append("images[]", file));
     mutation.mutate(formData);
   });
 
+  const avatarSize = compact ? "w-8 h-8" : "w-10 h-10";
+
   return (
     <FormProvider {...methods}>
-      <form onSubmit={onSubmit} className="flex w-full " noValidate>
-        <div className="w-full flex gap-3 sm:gap-4">
+      <div className="flex gap-3">
+        {/* Avatar */}
+        <div className="flex-shrink-0">
           <Image
             src={user.profile_image ?? defaultProfile}
-            alt="User avatar"
-            width={48}
-            height={48}
-            className="rounded-full object-cover shrink-0 h-6 w-6 sm:h-[48px] sm:w-[48px] object-top"
+            alt="Your avatar"
+            width={40}
+            height={40}
+            className={`${avatarSize} rounded-full object-cover border border-neutral-200`}
           />
-
-          <div className="flex-1 min-w-0 relative max-w-full">
-            <RichEditor
-              onContentUpdate={onEditorContentUpdate}
-              isLoading={mutation.isPending}
-              setAttachments={(files) => setValue("attachments", files)}
-              attachments={watch("attachments") ?? []}
-            />
-            <FormError name="content" />
-          </div>
         </div>
-      </form>
+
+        {/* Comment Input */}
+        <div className="flex-1 min-w-0">
+          <form onSubmit={onSubmit} className="space-y-2">
+            <div
+              className={`border rounded-2xl transition-all duration-200 ${
+                isFocused
+                  ? "border-primary shadow-sm bg-background"
+                  : "border-neutral-200 bg-neutral-50 hover:bg-background hover:border-neutral-300"
+              }`}
+            >
+              <RichEditor
+                onContentUpdate={onContentUpdate}
+                onFocusChange={setIsFocused}
+                placeholder={placeholder}
+                attachments={watch("attachments") ?? []}
+                setAttachments={(files) => setValue("attachments", files)}
+                isLoading={mutation.isPending}
+                onSubmit={onSubmit}
+                compact={compact}
+              />
+            </div>
+
+            {/* Error Display */}
+            {methods.formState.errors.content && (
+              <p className="text-xs text-error mt-1 px-3">
+                {methods.formState.errors.content.message}
+              </p>
+            )}
+          </form>
+        </div>
+      </div>
     </FormProvider>
   );
 };

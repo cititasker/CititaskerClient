@@ -9,7 +9,6 @@ import { changePassword } from "@/services/auth";
 import FormInput from "@/components/forms/FormInput";
 import ActionsButtons from "@/components/reusables/ActionButtons";
 import FormButton from "@/components/forms/FormButton";
-import { Card } from "@/components/ui/card";
 import { Power, Trash2 } from "lucide-react";
 import useToggle from "@/hooks/useToggle";
 import { DeleteConfirmModal } from "@/components/reusables/Modals/ConfirmModal";

@@ -1,6 +1,6 @@
 import BillingTab from "./BillingTab";
 import PaymentTab from "./PaymentTab";
-import WalletTab from "./WalletTab";
+import WalletTab from "./WalletTab/WalletTab";
 
 export const tabs = [
   {

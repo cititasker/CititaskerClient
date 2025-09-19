@@ -9,7 +9,7 @@ export default function Page() {
     <CustomTab
       items={tabs}
       listClassName="sticky top-0"
-      contentClassName="px-5 sm:px-[30px] pb-5 sm:pb-[30px] h-full"
+      contentClassName="px-5 sm:px-[30px] md:px-[50px] pb-5 sm:pb-[30px] h-full"
     />
   );
 }

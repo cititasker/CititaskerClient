@@ -27,7 +27,7 @@ export const MENU_ITEMS: MenuItem[] = [
     name: "Messages",
     href: "/dashboard/messages",
     icon: MessageCircle,
-    badge: 3, // Example badge for unread messages
+    badge: 5, // Example badge for unread messages
     description: "Chat and notifications",
   },
   {

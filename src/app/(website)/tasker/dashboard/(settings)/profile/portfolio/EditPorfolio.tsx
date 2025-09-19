@@ -191,7 +191,7 @@ const EditPortfolio = () => {
           setSelectedImage(null);
         }}
         selectedImage={selectedImage}
-        handleSaveImage={handleSaveImage}
+        onSaveImage={handleSaveImage}
       />
       <DeleteConfirmModal
         description="kindly note that this action is irrevsible and the image will be permanently deleted."
