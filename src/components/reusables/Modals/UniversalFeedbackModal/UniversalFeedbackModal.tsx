@@ -17,6 +17,7 @@ const UniversalFeedbackModal: React.FC<UniversalFeedbackModalProps> = ({
   type,
   title,
   message,
+  showActionBtn = false,
   size = "md",
   actions,
   autoClose,
@@ -44,11 +45,11 @@ const UniversalFeedbackModal: React.FC<UniversalFeedbackModalProps> = ({
     {
       label: "OK",
       onClick: onClose,
-      variant: type === "success" ? "default" : "secondary",
+      variant: "default",
     },
   ];
 
-  const modalActions = actions || defaultActions;
+  const modalActions = actions || showActionBtn ? defaultActions : [];
   const displayTitle = title || config.defaultTitle;
 
   return (
@@ -56,7 +57,7 @@ const UniversalFeedbackModal: React.FC<UniversalFeedbackModalProps> = ({
       isOpen={isOpen}
       onClose={onClose}
       contentClassName={cn(sizeConfig.modal, "mx-auto", className)}
-      hideClose={showCloseButton}
+      hideClose={!showCloseButton}
     >
       <div
         className={cn(
@@ -100,10 +101,10 @@ const UniversalFeedbackModal: React.FC<UniversalFeedbackModalProps> = ({
         {modalActions.length > 0 && (
           <div
             className={cn(
-              "flex gap-3 pt-2",
+              "flex gap-3 pt-2 w-full",
               modalActions.length === 1
                 ? "justify-center"
-                : "justify-center flex-wrap"
+                : "justify-center flex-col sm:flex-row "
             )}
           >
             {modalActions.map((action, index) => (
@@ -113,7 +114,7 @@ const UniversalFeedbackModal: React.FC<UniversalFeedbackModalProps> = ({
                 variant={action.variant || "secondary"}
                 loading={action.loading}
                 className={cn(
-                  "min-w-[100px]",
+                  "min-w-[100px] flex-1",
                   action.variant === "default" && "btn-primary"
                 )}
               >

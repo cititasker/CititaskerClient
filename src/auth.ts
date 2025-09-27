@@ -1,29 +1,23 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
-import { ROLE, ROUTES } from "./constant";
+import { ROUTES } from "./constant";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Google,
     Credentials({
       async authorize(credentials) {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}auth/login`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(credentials),
-          }
-        );
-        const result = await res.json();
+        const token = credentials?.token as string | undefined;
+        const role = credentials?.role as TRole | undefined;
 
-        if (result.success) {
+        if (token && role) {
           return {
-            ...result.data,
-            role: result.data.role || ROLE.poster,
+            token,
+            role,
           };
         }
+
         return null;
       },
     }),
@@ -32,7 +26,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   secret: process.env.AUTH_SECRET,
   session: {
     strategy: "jwt",
-    maxAge: 60 * 1 * 24 * 7, // 7 days session lifetime
+    maxAge: 60 * 60 * 24 * 7, // 7 days session lifetime
   },
   jwt: {
     maxAge: 60 * 60 * 24 * 7, // 7 days token lifetime
@@ -40,10 +34,24 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     signIn: async ({ account }) => account?.provider !== "google",
     authorized: ({ auth }) => !!auth,
-    jwt: ({ token, user, account }) => {
+    jwt: ({ token, user, account, trigger }) => {
+      // On sign-in
       if (account?.provider === "credentials" && user) {
-        token.userData = { ...user, role: user.role };
+        token.userData = {
+          ...user,
+          role: user.role,
+          token: user.token,
+        };
       }
+      // On session update
+      if (trigger === "update" && user) {
+        token.userData = {
+          ...(token.userData ?? {}),
+          token: user.token || token.userData?.token,
+          role: user.role || token.userData?.role,
+        };
+      }
+
       return token;
     },
     session: ({ session, token }) => {

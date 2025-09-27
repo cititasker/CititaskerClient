@@ -1,6 +1,6 @@
 import React from "react";
 import { cn } from "@/lib/utils";
-import EmojiDropdown from "@/components/browseTask/Offer/CommentBox/RichEditor/components/EmojiDropdown";
+import EmojiDropdown from "@/components/shared/components/comment/CommentBox/RichEditor/components/EmojiDropdown";
 
 interface InputAreaProps {
   inputRef: React.RefObject<HTMLTextAreaElement>;

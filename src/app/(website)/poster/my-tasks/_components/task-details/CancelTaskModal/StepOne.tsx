@@ -1,42 +1,53 @@
+import React from "react";
+import { useFormContext } from "react-hook-form";
 import FormSelect from "@/components/forms/FormSelect";
 import FormTextArea from "@/components/forms/FormTextArea";
 import { maxLengthChar } from "@/constant";
-import React from "react";
-import { useFormContext } from "react-hook-form";
+import { CancelTaskFormData } from "./hooks/useCancelTask";
 
-const options = [
-  { id: "1", name: "Tasker is not responding to messages" },
-  { id: "2", name: "Taskers requested to cancel the task" },
-  {
-    id: "3",
-    name: "You found someone else outside CitiTasker to complete the task",
-  },
-  { id: "4", name: "You don’t need the task done anymore" },
-  { id: "5", name: "Other reasons" },
-];
+interface StepOneProps {
+  reasons: SelectOption[];
+  selectedReason: string;
+}
 
-export default function StepOne() {
-  const {
-    watch,
-    formState: { errors },
-  } = useFormContext();
-  const reason = watch("reason");
-  const description = watch("description");
-  const remainingChars = maxLengthChar - (description?.length || 0);
+export const StepOne: React.FC<StepOneProps> = ({
+  reasons,
+  selectedReason,
+}) => {
+  const { watch } = useFormContext<CancelTaskFormData>();
+  const description = watch("description") || "";
+  const remainingChars = maxLengthChar - description.length;
+
   return (
-    <div>
-      <div className="space-y-6">
-        <FormSelect name="reason" options={options} />
-        {reason == "5" && (
-          <div>
-            <FormTextArea
-              name="description"
-              placeholder="Write here...."
-              maxLength={maxLengthChar}
-            />
-          </div>
-        )}
+    <div className="space-y-6">
+      <div>
+        <FormSelect
+          name="reason"
+          options={reasons}
+          placeholder="Select a reason for cancellation"
+        />
       </div>
+
+      {selectedReason === "5" && (
+        <div className="space-y-2">
+          <FormTextArea
+            name="description"
+            placeholder="Please provide more details about your reason for cancellation..."
+            maxLength={maxLengthChar}
+            rows={4}
+            className="resize-none"
+          />
+          <div className="flex justify-end">
+            <span
+              className={`text-xs ${
+                remainingChars < 50 ? "text-warning" : "text-neutral-500"
+              }`}
+            >
+              {remainingChars} characters remaining
+            </span>
+          </div>
+        </div>
+      )}
     </div>
   );
-}
+};

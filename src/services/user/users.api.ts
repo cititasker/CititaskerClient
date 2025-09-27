@@ -1,6 +1,7 @@
 import { AxiosError } from "axios";
 import { API_ROUTES } from "@/constant";
 import api from "../apiService";
+import { loginSchemaType } from "@/schema/auth";
 
 export function getUserApi() {
   return api
@@ -168,3 +169,36 @@ export const reorderFaqs = (data: any): Promise<GetReviewsResponse> => {
       throw error.response?.data;
     });
 };
+
+export const switchRoles = (data: { role: TRole }): Promise<any> => {
+  return api
+    .post(`${API_ROUTES.SWITCH_ROLE}`, data)
+    .then((data) => {
+      return data.data;
+    })
+    .catch((error: AxiosError) => {
+      throw error.response?.data;
+    });
+};
+
+export function updateBankDetails(data: any): Promise<any> {
+  return api
+    .post(API_ROUTES.AUTH.UPDATE_BANK_DETAILS, data)
+    .then((data) => {
+      return data.data.data;
+    })
+    .catch((error: AxiosError) => {
+      throw error.response?.data;
+    });
+}
+
+export function loginUser(data: loginSchemaType): Promise<ILoginRes> {
+  return api
+    .post(API_ROUTES.LOGIN, data)
+    .then((data) => {
+      return data.data;
+    })
+    .catch((error: AxiosError) => {
+      throw error.response?.data;
+    });
+}

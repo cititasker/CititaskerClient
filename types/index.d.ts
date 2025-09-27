@@ -89,14 +89,17 @@ interface ITasker {
   status: null;
 }
 
-interface ITaskerProfile {
-  img: string;
-  name: string;
-  occupation: string;
-  ratings: string;
-  taskCompleted: number;
-  charges: string;
-}
+type TaskerProfileT = {
+  id: number;
+  email: string;
+  first_name: string;
+  last_name: string;
+  profile_image: string;
+  average_rating: number;
+  completion_rate: number;
+  number_of_tasks_completed: number;
+  phone_number: number;
+};
 
 interface IOffer {
   created_at: string;
@@ -105,13 +108,7 @@ interface IOffer {
   id: number;
   offer_amount: number;
   status: string;
-  tasker: {
-    id: number;
-    email: string;
-    first_name: string;
-    last_name: string;
-    profile_image: string;
-  };
+  tasker: TaskerProfileT;
 }
 
 interface ITask {
@@ -170,4 +167,10 @@ interface MoreOptionItem {
   disabled?: boolean;
   type?: "default" | "destructive" | "primary";
   customIcon?: any;
+}
+
+interface SelectOption {
+  id: string | number;
+  name: string;
+  disabled?: boolean;
 }

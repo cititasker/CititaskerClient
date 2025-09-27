@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import ReviewCard from "./ReviewCard";
-import Empty from "./Empty";
 import Rating from "../reusables/Rating";
 import RatingModal from "./RatingModal";
 import { initializeName } from "@/utils";
@@ -15,6 +14,8 @@ import { useGetReviews } from "@/services/user/user.hook";
 import { useAppSelector } from "@/store/hook";
 import { defaultProfile } from "@/constant/images";
 import { useScreenBreakpoints } from "@/hooks/useScreenBreakpoints";
+import EmptyState from "../reusables/EmptyState";
+import { MessageSquare } from "lucide-react";
 
 interface IProps {
   task: ITask;
@@ -33,6 +34,8 @@ const Reviews = ({ task }: IProps) => {
 
   const { data: reviews } = useGetReviews({ id: task.id });
   const reviewList = reviews?.data || [];
+
+  console.log(87, reviews);
 
   useEffect(() => {
     if (reviewList.length) setPosterReview(reviewList[0]);
@@ -63,7 +66,11 @@ const Reviews = ({ task }: IProps) => {
 
   if (!isAssigned || !tasker) {
     return (
-      <Empty text="No review has been made yet. You will be notified when you get a review." />
+      <EmptyState
+        title="No review has been made yet."
+        message="You will be notified when you get a review."
+        icon={<MessageSquare className="w-8 h-8 text-neutral-400" />}
+      />
     );
   }
 

@@ -221,7 +221,7 @@ export function FormAutoComplete<TOption, TFieldValues extends FieldValues>({
                   {/* Search Input */}
                   {searchable && (
                     <div className="flex items-center border-b border-neutral-100 px-3">
-                      <Search className="h-4 w-4 text-text-muted mr-2 flex-shrink-0" />
+                      {/* <Search className="h-4 w-4 text-text-muted mr-2 flex-shrink-0" /> */}
                       <CommandInput
                         placeholder={`Search ${
                           label?.toLowerCase() || "options"
@@ -295,9 +295,7 @@ export function FormAutoComplete<TOption, TFieldValues extends FieldValues>({
                                 !!isSelected
                               )
                             ) : (
-                              <span className="truncate font-medium">
-                                {optionLabel}
-                              </span>
+                              <span className="truncate">{optionLabel}</span>
                             )}
                           </div>
 

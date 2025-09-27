@@ -22,8 +22,7 @@ export default function TaskStatusCard({
         return {
           title: "Task Assigned",
           content: `Wait for your task to be completed. Completion date: ${formatDate(
-            date,
-            "DD MMM, YYYY"
+            date
           )}`,
           badge: "In Progress",
           badgeColor: "bg-info text-info-light",

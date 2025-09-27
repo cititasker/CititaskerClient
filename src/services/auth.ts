@@ -135,14 +135,3 @@ export function googleAuth() {
       throw error.response?.data;
     });
 }
-
-export function updateBankDetails(data: any): Promise<any> {
-  return api
-    .post(API_ROUTES.AUTH.UPDATE_BANK_DETAILS, data)
-    .then((data) => {
-      return data.data.data;
-    })
-    .catch((error: AxiosError) => {
-      throw error.response?.data;
-    });
-}

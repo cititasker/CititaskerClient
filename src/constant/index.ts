@@ -29,6 +29,7 @@ export const API_ROUTES = {
   },
   LOGIN: "/auth/login",
   GET_USER_DETAILS: "auth/user-details",
+  SWITCH_ROLE: "auth/switch-role",
 
   TASKS: "/tasks",
   USER_TASKS: "/tasks/user",
@@ -56,6 +57,7 @@ export const API_ROUTES = {
   MAKE_OFFER: "/tasks/make-offer",
   UPDATE_OFFER: "/tasks/edit-offer",
   OFFER_REPLIES: "/tasks/offer-replies",
+  ACCEPT_OFFER: "/tasks/accept-offer",
   UPDATE_PROFILE_DETAILS: "/auth/update-account-details",
   GET_PROFILE_DETAILS: "/auth/fetch-user-account-details",
   GET_PORTFOLIO: "/auth/fetch-user-portfolio-details",
@@ -67,7 +69,11 @@ export const API_ROUTES = {
   DELETE_FAQ: "/faqs/delete",
   GET_REVIEWS: "/tasks/reviews",
   POST_REVIEW: "/tasks/review",
-};
+  GET_QUESTIONS: "/tasks/questions",
+  POST_QUESTION: "/tasks/post-question",
+  REPLY_QUESTION: "/tasks/reply-question",
+  REPLY_OFFER: "/tasks/reply-offer",
+} as const;
 
 const isProd = process.env.NEXT_PUBLIC_NODE_ENV === "production";
 

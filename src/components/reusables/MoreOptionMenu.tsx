@@ -20,7 +20,6 @@ interface MoreOptionsMenuProps {
   align?: "end" | "center" | "start" | undefined;
 }
 
-// Style variants for different option types
 const getOptionStyle = (type?: string) => {
   switch (type) {
     case "destructive":
@@ -40,16 +39,28 @@ export default function MoreOptionsMenu({
   size = "default",
   align = "end",
 }: MoreOptionsMenuProps) {
+  const [isOpen, setIsOpen] = React.useState(false);
+
   const groupedOptions = {
     primary: moreOptions.filter((opt) => opt.type === "primary"),
     default: moreOptions.filter((opt) => !opt.type || opt.type === "default"),
     destructive: moreOptions.filter((opt) => opt.type === "destructive"),
   };
 
+  const handleOptionSelect = (option: MoreOptionItem) => {
+    // Close dropdown immediately before triggering action
+    setIsOpen(false);
+
+    // Use setTimeout to ensure dropdown closes before dialog opens
+    setTimeout(() => {
+      onSelect?.(option);
+    }, 100);
+  };
+
   const renderMenuItem = (option: MoreOptionItem) => (
     <DropdownMenuItem
       key={option.name}
-      onSelect={() => onSelect?.(option)}
+      onSelect={() => handleOptionSelect(option)}
       className={cn(
         "flex items-center gap-3 px-3 py-2.5 cursor-pointer transition-colors duration-150",
         "focus:outline-none focus:ring-0",
@@ -63,13 +74,12 @@ export default function MoreOptionsMenu({
   );
 
   return (
-    <DropdownMenu>
+    <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>
         <Button
           variant={variant}
           size={size}
           className={cn(
-            // Remove justify-between to prevent text from stretching
             "justify-center font-medium transition-all duration-200 min-w-0",
             variant === "outline" && [
               "border-border-light hover:border-border-medium",
@@ -79,13 +89,11 @@ export default function MoreOptionsMenu({
             variant === "ghost" && [
               "hover:bg-background-secondary text-text-primary",
             ],
-            // Ensure the button fills container properly
             "w-full flex items-center gap-2",
             className
           )}
         >
           <span className="truncate">More Options</span>
-          {/* <MoreHorizontal className="w-4 h-4 flex-shrink-0" /> */}
         </Button>
       </DropdownMenuTrigger>
 

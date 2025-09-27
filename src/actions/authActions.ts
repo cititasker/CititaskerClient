@@ -2,21 +2,19 @@
 
 import { signIn, signOut } from "@/auth";
 import { ROUTES } from "@/constant";
-import { loginSchemaType } from "@/schema/auth";
-import { AuthError } from "next-auth";
+import { revalidatePath } from "next/cache";
 
-export const loginWithCredentials = async (data: loginSchemaType) => {
-  try {
-    await signIn("credentials", { ...data, redirect: false });
-    return { success: true, message: "Login Sucessful" };
-  } catch (error) {
-    if (error instanceof AuthError && error.type === "CredentialsSignin") {
-      return { success: false, message: "Invalid credentials" };
-    }
-    return { success: false, message: "Unexpected error during login." };
-  }
+export const loginWithCredentials = async (data: {
+  role: TRole;
+  token: string;
+}) => {
+  await signIn("credentials", { ...data, redirect: false });
+  revalidatePath("/");
+  revalidatePath("/dashboard");
 };
 
 export const logoutUser = async () => {
+  revalidatePath("/");
+  revalidatePath("/dashboard");
   await signOut({ redirectTo: ROUTES.LOGIN });
 };

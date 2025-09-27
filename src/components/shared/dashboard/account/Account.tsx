@@ -5,7 +5,6 @@ import Image from "next/image";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { BiLoader } from "react-icons/bi";
-import { MdOutlineCameraAlt, MdEdit } from "react-icons/md";
 import { Camera, Edit3 } from "lucide-react";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";

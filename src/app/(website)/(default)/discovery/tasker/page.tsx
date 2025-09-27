@@ -1,11 +1,20 @@
+import { auth } from "@/auth";
 import BrowseCategories from "@/components/poster/landingPage/BrowseCategories/BrowseCategories";
 import PromotionBanner from "@/components/poster/landingPage/PromotionBanner";
 import Recommended from "@/components/poster/landingPage/Recommended";
 import CantFind from "@/components/posterDiscovery/CantFind";
-import { ROUTES } from "@/constant";
+import { ROLE, ROUTES } from "@/constant";
+import { redirect } from "next/navigation";
 import React from "react";
 
-export default function Page() {
+export default async function Page() {
+  const session = await auth();
+  const role = session?.user.role;
+
+  if (role === ROLE.poster) {
+    redirect(`${ROUTES.DISCOVERY}/${role}`); // e.g. "/discovery/tasker"
+  }
+
   return (
     <main className="bg-primary-50">
       <div className="container-w pt-[100px] sm:pt-[133px] pb-0">

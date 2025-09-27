@@ -9,7 +9,7 @@ import { Link as LinkIcon, ExternalLink } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import FormInput from "@/components/forms/FormInput";
-import BaseModal from "../../Modals/BaseModal";
+import BaseModal from "../../../../browseTask/Modals/BaseModal";
 
 const linkSchema = z.object({
   linkUrl: z.string().url("Please enter a valid URL"),

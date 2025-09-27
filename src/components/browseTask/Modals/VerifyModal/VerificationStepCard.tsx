@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { VerificationStep } from "./constant";
 import FormButton from "@/components/forms/FormButton";
-import { CustomStatusBadge } from "@/app/(website)/tasker/dashboard/payment/_components/WalletTab/TransactionStatus";
+import { CustomStatusBadge } from "@/components/reusables/CustomStatusBadge";
 
 export const VerificationStepCard = ({ step }: { step: VerificationStep }) => {
   const { icon: Icon, label, description, completed, href, actionText } = step;

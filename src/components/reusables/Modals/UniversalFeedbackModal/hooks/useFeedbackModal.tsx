@@ -14,10 +14,12 @@ export const useFeedbackModal = () => {
     message: string;
     actions?: FeedbackAction[];
     autoClose?: number;
+    showActionBtn?: boolean;
   }>({
     isOpen: false,
     type: "success",
     message: "",
+    showActionBtn: false,
   });
 
   const showModal = React.useCallback(
@@ -27,9 +29,11 @@ export const useFeedbackModal = () => {
       message: string;
       actions?: FeedbackAction[];
       autoClose?: number;
+      showActionBtn?: boolean;
     }) => {
       setModalState({
         isOpen: true,
+        showActionBtn: false,
         ...params,
       });
     },
@@ -131,6 +135,7 @@ export const useFeedbackModal = () => {
         type={modalState.type}
         message={modalState.message}
         title={modalState.title}
+        showActionBtn={modalState.showActionBtn}
         actions={modalState.actions}
         autoClose={modalState.autoClose}
       />

@@ -1,18 +1,14 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import Link from "next/link";
 import { Star, TrendingUp } from "lucide-react";
-
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { useAppSelector } from "@/store/hook";
 import { formatCurrency, initializeName, loggedInUser } from "@/utils";
-import CommentThread from "./CommentThread";
-import { useQuery } from "@tanstack/react-query";
-import { API_ROUTES } from "@/constant";
-import { getOfferReplies } from "@/services/offers/offers.api";
+import FormButton from "@/components/forms/FormButton";
+import CustomAvatar from "@/components/reusables/CustomAvatar";
+import { useGetOfferReplies } from "@/services/offers/offers.hook";
+import OfferReplyThread from "./OfferReplyThread";
 
 interface TaskerOfferProps {
   offer: IOffer;
@@ -20,19 +16,21 @@ interface TaskerOfferProps {
 }
 
 const TaskerStats = ({
-  rating = 5.0,
-  reviewCount = 3259,
-  completionRate = 90,
+  rating = 0,
+  taskCompleted = 0,
+  completionRate = 0,
 }: {
   rating?: number;
-  reviewCount?: number;
+  taskCompleted?: number;
   completionRate?: number;
 }) => (
   <div className="flex flex-wrap items-center gap-4 text-sm">
     <div className="flex items-center gap-1.5">
       <Star className="w-4 h-4 fill-warning text-warning" />
       <span className="font-semibold text-text-primary">{rating}</span>
-      <span className="text-text-muted">({reviewCount.toLocaleString()})</span>
+      <span className="text-text-muted">
+        ({taskCompleted.toLocaleString()})
+      </span>
     </div>
 
     <div className="flex items-center gap-1.5">
@@ -58,27 +56,19 @@ const OfferAmount = ({
 
   return (
     <div className="flex flex-col sm:flex-row items-center gap-3">
-      <div className="text-right">
-        <div className="text-2xl font-bold text-primary">
-          {formatCurrency({ value: amount, noFraction: true })}
-        </div>
-        <Badge
-          variant="outline"
-          className="bg-primary-50 text-primary-700 border-primary-200"
-        >
-          Pending
-        </Badge>
-      </div>
+      <p className="text-2xl font-bold text-primary">
+        {formatCurrency({ value: amount, noFraction: true })}
+      </p>
 
       {isOwner && (
-        <Button
+        <FormButton
           variant="outline"
           size="sm"
           onClick={onWithdraw}
           className="text-error hover:text-error hover:bg-error-light border-error-light"
         >
           Withdraw
-        </Button>
+        </FormButton>
       )}
     </div>
   );
@@ -92,58 +82,79 @@ const TaskerOffer: React.FC<TaskerOfferProps> = ({
   const isOwner = offer.tasker.id === user?.id;
   const isPending = offer.status === "pending";
 
+  const stats = useMemo(() => {
+    const { average_rating, completion_rate, number_of_tasks_completed } =
+      offer.tasker;
+
+    return {
+      rating: average_rating,
+      completionRate: completion_rate,
+      taskCompleted: number_of_tasks_completed,
+    };
+  }, [offer]);
+
   const fullName = loggedInUser(
     offer.tasker.first_name,
     offer.tasker.last_name
   );
 
-  const { data } = useQuery({
-    queryKey: [API_ROUTES.OFFER_REPLIES, offer.id],
-    queryFn: () => getOfferReplies(offer.id.toString()),
-  });
+  const {
+    data,
+    isLoading,
+    isPending: loadingReplies,
+  } = useGetOfferReplies(offer.id);
+
+  const replies = data?.data;
+
+  const comment = useMemo(() => {
+    if (!replies) return undefined;
+    return {
+      id: replies.id,
+      files: [],
+      replies: replies.replies,
+      user: replies.tasker,
+      created_at: replies.created_at,
+      content: replies.description,
+    };
+  }, [replies]);
+
+  if (isLoading || loadingReplies) return <p>Loading...</p>;
 
   return (
-    <div className="">
-      <div className="flex gap-2 sm:gap-4">
-        {/* Avatar */}
-        <div className="flex-shrink-0">
-          <Avatar className="w-10 h-10 sm:w-16 sm:h-16 border-2 border-neutral-200">
-            <AvatarImage
-              src={offer.tasker.profile_image}
-              alt={`${fullName}'s profile`}
-            />
-            <AvatarFallback className="bg-primary-100 text-primary-700 font-semibold">
-              {offer.tasker.first_name?.[0] || "T"}
-            </AvatarFallback>
-          </Avatar>
-        </div>
+    <div className="flex gap-2 sm:gap-4">
+      <div className="flex-shrink-0">
+        <CustomAvatar
+          src={offer.tasker.profile_image}
+          alt={`${fullName}'s profile`}
+          size="md"
+        />
+      </div>
 
-        {/* Main Content */}
-        <div className="flex-1 min-w-0 space-y-3">
-          {/* Header */}
-          <div className="flex items-start justify-between gap-4">
-            <div className="space-y-1 sm:space-y- flex-1 min-w-0">
-              <Link
-                href={`/tasker/profile/${offer.tasker.id}`}
-                className="text-lg font-semibold text-text-primary hover:text-primary transition-colors inline-block truncate"
-              >
-                {initializeName({ full_name: fullName })}
-              </Link>
+      {/* Main Content */}
+      <div className="flex-1 min-w-0 space-y-3">
+        {/* Header */}
+        <div className="flex items-start justify-between gap-4">
+          <div className="space-y-1 sm:space-y- flex-1 min-w-0">
+            <Link
+              href={`/tasker/profile/${offer.tasker.id}`}
+              className="text-lg font-semibold text-text-primary hover:text-primary transition-colors inline-block truncate"
+            >
+              {initializeName({ full_name: fullName })}
+            </Link>
 
-              <TaskerStats />
-            </div>
-
-            <OfferAmount
-              amount={offer.offer_amount}
-              isPending={isPending}
-              isOwner={isOwner}
-              onWithdraw={onWithdrawRequest}
-            />
+            <TaskerStats {...stats} />
           </div>
 
-          {/* Comment Thread */}
-          <CommentThread offer={data?.data} />
+          <OfferAmount
+            amount={offer.offer_amount}
+            isPending={isPending}
+            isOwner={isOwner}
+            onWithdraw={onWithdrawRequest}
+          />
         </div>
+
+        {/* Comment Thread */}
+        <OfferReplyThread comment={comment} isOwner={isOwner} />
       </div>
     </div>
   );

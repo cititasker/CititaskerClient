@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { CheckCircle, AlertCircle } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 
 import { Separator } from "@/components/ui/separator";
 import { ROUTES } from "@/constant";
@@ -63,7 +63,9 @@ const VerificationModal: React.FC<VerificationModalProps> = ({
     >
       <div className="space-y-6">
         {/* Progress Bar */}
-        <ProgressBar currentStep={completedCount} totalSteps={totalCount} />
+        <div className="hidden sm:block">
+          <ProgressBar currentStep={completedCount} totalSteps={totalCount} />
+        </div>
 
         <Separator />
 
@@ -76,19 +78,6 @@ const VerificationModal: React.FC<VerificationModalProps> = ({
             <VerificationStepCard key={index} step={step} />
           ))}
         </div>
-
-        {/* Success Message */}
-        {allCompleted && (
-          <div className="text-center p-6 bg-success-light rounded-xl border border-success/20">
-            <CheckCircle className="w-12 h-12 text-success mx-auto mb-3" />
-            <h3 className="text-lg font-semibold text-success mb-2">
-              Account Verified!
-            </h3>
-            <p className="text-sm text-success/80">
-              You can now make offers on tasks. Good luck!
-            </p>
-          </div>
-        )}
       </div>
     </BaseModal>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import { useFormContext } from "react-hook-form";
-import { CalendarDays, Sun, Sunrise, Sunset, Moon } from "lucide-react";
+import { CalendarDays, Sun, Sunrise, Sunset } from "lucide-react";
 import { OptionCardSelector } from "@/components/reusables/OptionCardSelector";
 import FormError from "@/components/reusables/FormError";
 
@@ -20,12 +20,12 @@ export const TimeFrameSelector = () => {
       icon: <CalendarDays className="text-xl" />,
       description: "Task must be completed by this date",
     },
-    {
-      value: "flexible_date",
-      label: "Flexible timing",
-      icon: <CalendarDays className="text-xl" />,
-      description: "I'm flexible with the date",
-    },
+    // {
+    //   value: "flexible_date",
+    //   label: "Flexible timing",
+    //   icon: <CalendarDays className="text-xl" />,
+    //   description: "I'm flexible with the date",
+    // },
   ];
 
   return (

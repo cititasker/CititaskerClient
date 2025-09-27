@@ -91,7 +91,6 @@ const IncreasePriceModal: React.FC<Props> = ({ open, handleClose }) => {
                 title="Success"
                 desc={`Your request was successfully sent to ${posterName}`}
                 className="justify-center"
-                contentClassName="mt-0"
               />
             ) : (
               steps[currentStep - 1]?.content(nextStep, prevStep)

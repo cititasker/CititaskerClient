@@ -4,11 +4,13 @@ import dayjs from "dayjs";
 import LocalizedFormat from "dayjs/plugin/localizedFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import advancedFormat from "dayjs/plugin/advancedFormat";
 import { connectionFee } from "@/constant";
 import moment from "moment";
 dayjs.extend(LocalizedFormat);
 dayjs.extend(relativeTime);
 dayjs.extend(customParseFormat);
+dayjs.extend(advancedFormat);
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -39,18 +41,12 @@ export const errorHandler = (error: any) => {
 
 export const formatDate = (
   date: Date | string | undefined,
-  format = "DD/MM/YYYY"
+  outputFormat = "Do MMM YYYY",
+  inputFormat = "DD-MM-YYYY"
 ) => {
-  if (date) {
-    return dayjs(date, "DD-MM-YYYY").format(format);
-  }
-  return "";
+  if (!date) return "";
+  return dayjs(date, inputFormat).format(outputFormat);
 };
-
-export function convertDate(date: string, format: string): string {
-  const parsedDate = dayjs(date, "MM-DD-YYYY");
-  return parsedDate.format(format);
-}
 
 export const formatDateAgo = (date: Date | string) => {
   return dayjs(date).fromNow();
@@ -169,34 +165,46 @@ export const purgeData = ({
   }
 };
 
-interface initializeNameProp {
+export const getInitials = (name: string) =>
+  name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase();
+
+interface InitializeNameProps {
   first_name?: string | null;
   last_name?: string | null;
   full_name?: string | null;
 }
+
 export function initializeName({
   first_name,
   last_name,
   full_name,
-}: initializeNameProp) {
-  if (first_name && last_name) {
-    return `${first_name} ${last_name.charAt(0)}.`;
-  } else if (first_name) return first_name;
-  else if (last_name) return last_name;
-  else if (full_name) {
-    const nameParts = full_name.trim().split(" ");
-    const firstName = nameParts[0];
-    const lastName = nameParts[nameParts.length - 1];
-    return `${firstName} ${lastName.charAt(0)}.`;
+}: InitializeNameProps): string {
+  const firstName = first_name?.trim();
+  const lastName = last_name?.trim();
+
+  if (firstName && lastName) return `${firstName} ${getInitials(lastName)}`;
+  if (firstName) return firstName;
+  if (lastName) return lastName;
+
+  if (full_name?.trim()) {
+    const parts = full_name.trim().split(/\s+/);
+    if (parts.length === 1) return parts[0];
+    return `${parts[0]} ${getInitials(parts[parts.length - 1])}`;
   }
-  return "Guest";
+
+  return "Anonymous";
 }
+
 export function loggedInUser(first_name: any, last_name: any) {
   if (first_name && last_name) {
     return `${first_name} ${last_name}`;
   } else if (first_name) return first_name;
   else if (last_name) return last_name;
-  return "Guest";
+  return "Anonymous";
 }
 export function formatTime(dateString: string, format = "hh:mm a"): string {
   // Parse the date string and format it as time (11:23 am)

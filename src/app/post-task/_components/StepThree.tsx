@@ -1,25 +1,27 @@
 "use client";
-import React, { useEffect } from "react";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { FormProvider } from "react-hook-form";
+import { useParams } from "next/navigation";
 import { postTaskSchema } from "@/schema/task";
-import { useAppDispatch, useAppSelector } from "@/store/hook";
-import { setTaskData } from "@/store/slices/task";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { TimeFrameSelector } from "./TimeFrameSelector";
-import { TimeOfDaySelector } from "./TimeOfDaySelector";
-import FormDatePicker from "@/components/forms/FormDatePicker";
-import FormCheckbox from "@/components/forms/FormCheckbox";
-import PostTaskFormActions from "./PostTaskFormActions";
-import moment from "moment";
 import { useUpdateTask } from "@/services/tasks/tasks.hook";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import { useQueryClient } from "@tanstack/react-query";
+import { useAppSelector } from "@/store/hook";
+import { useRouter } from "next/navigation";
 import { API_ROUTES, ROUTES } from "@/constant";
 import { errorHandler } from "@/utils";
+import moment from "moment";
+import { z } from "zod";
 
-const schema = postTaskSchema
+import { TimeFrameSelector } from "./partials/TimeFrameSelector";
+import { TimeOfDaySelector } from "./partials/TimeOfDaySelector";
+import FormDatePicker from "@/components/forms/FormDatePicker";
+import FormCheckbox from "@/components/forms/FormCheckbox";
+import PostTaskFormActions from "./partials/PostTaskFormActions";
+import { useUrlParams } from "../hooks/useUrlParams";
+import { useStepForm } from "../hooks/useStepForm";
+
+// Custom schema with validation
+const stepThreeSchema = postTaskSchema
   .pick({
     time_frame: true,
     date: true,
@@ -36,23 +38,21 @@ const schema = postTaskSchema
     }
   });
 
-type SchemaType = z.infer<typeof schema>;
-
 export default function StepThree() {
-  const dispatch = useAppDispatch();
-  const { task } = useAppSelector((state) => state.task);
-  const { push } = useRouter();
-  const searchParams = useSearchParams();
-  const step = parseInt(searchParams.get("step") || "1");
-  const params = useParams();
-  const id = params?.id;
-  const action = searchParams.get("action");
+  const { id } = useParams();
+  const urlParams = useUrlParams();
   const { showSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
   const { role } = useAppSelector((state) => state.user);
   const router = useRouter();
 
-  const isReschedule = action === "reschedule";
+  const isReschedule = urlParams.action === "reschedule";
+
+  const { methods, onSubmit: handleFormSubmit } = useStepForm({
+    schema: postTaskSchema,
+    pickFields: ["time_frame", "date", "showTimeOfDay", "time"],
+    customSchema: stepThreeSchema,
+  });
 
   const updateMutation = useUpdateTask({
     onSuccess: async (data) => {
@@ -67,42 +67,24 @@ export default function StepThree() {
     },
   });
 
-  const methods = useForm<SchemaType>({
-    defaultValues: {
-      time_frame: task.time_frame || null,
-      date: task.date || "",
-      showTimeOfDay: task.showTimeOfDay || false,
-      time: task.time || null,
-    },
-    resolver: zodResolver(schema),
-  });
-
-  const { handleSubmit, setValue } = methods;
-
-  useEffect(() => {
-    if (task.time_frame) setValue("time_frame", task.time_frame);
-    if (task.date) setValue("date", task.date);
-    if (task.time) setValue("time", task.time);
-    if (task.showTimeOfDay) setValue("showTimeOfDay", task.showTimeOfDay);
-  }, [task, setValue]);
-
-  const onSubmit: SubmitHandler<SchemaType> = (values) => {
-    dispatch(setTaskData(values));
-    const currentUrl = new URL(window.location.href);
+  // Custom submit handler for reschedule case
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
 
     if (isReschedule) {
-      currentUrl.searchParams.set("step", "5");
+      // Handle reschedule logic here if needed
+      const url = new URL(window.location.href);
+      url.searchParams.set("step", "5");
+      router.push(url.toString());
     } else {
-      currentUrl.searchParams.set("step", String(step + 1));
+      handleFormSubmit(e);
     }
-
-    push(currentUrl.toString());
   };
 
   return (
     <div className="space-y-6">
       <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={onSubmit} className="space-y-6">
           <TimeFrameSelector />
 
           <FormDatePicker

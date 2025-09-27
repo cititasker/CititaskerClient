@@ -5,7 +5,7 @@ import { TASK_STATUS } from "@/constant";
 import { defaultProfile } from "@/constant/images";
 import {
   cn,
-  convertDate,
+  formatDate,
   formatDateAgo,
   initializeName,
   truncate,
@@ -56,7 +56,7 @@ const TaskDetails = ({ task }: { task: ITask }) => {
     {
       icon: Calendar,
       label: "Due Date",
-      value: convertDate(task.date, "MMM DD, YYYY"),
+      value: formatDate(task.date),
     },
     {
       icon: Clock,

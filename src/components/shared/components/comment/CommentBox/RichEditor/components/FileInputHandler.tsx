@@ -3,6 +3,7 @@ interface FileInputHandlerProps {
   attachments: File[];
   setAttachments: (files: File[]) => void;
   refocusEditor: () => void;
+  acceptTypes?: string[];
 }
 
 const FileInputHandler: React.FC<FileInputHandlerProps> = ({
@@ -10,13 +11,17 @@ const FileInputHandler: React.FC<FileInputHandlerProps> = ({
   attachments,
   setAttachments,
   refocusEditor,
+  acceptTypes,
 }) => {
   return (
     <input
       ref={inputRef}
       type="file"
       multiple
-      accept="*/*"
+      accept={
+        acceptTypes?.join(",") ??
+        "image/png,image/jpeg,image/jpg,application/pdf"
+      }
       onChange={(e) => {
         const files = Array.from(e.target.files || []);
         setAttachments([...attachments, ...files]);

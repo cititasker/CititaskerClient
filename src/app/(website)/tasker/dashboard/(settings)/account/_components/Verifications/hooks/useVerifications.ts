@@ -6,13 +6,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useSearchParams } from "next/navigation";
 
 import { getBanks, verifyAccountNumber } from "@/services";
-import { updateBankDetails } from "@/services/auth";
 import { API_ROUTES } from "@/constant";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import { useFeedbackModal } from "@/components/reusables/Modals/UniversalFeedbackModal/hooks/useFeedbackModal";
 import useModal from "@/hooks/useModal";
 import { useAppSelector } from "@/store/hook";
 import { bankVerificationSchema, BankVerificationSchema } from "../schemas";
+import { updateBankDetails } from "@/services/user/users.api";
 
 interface BankOption {
   id: number;
@@ -87,7 +87,6 @@ export const useVerifications = () => {
     onSuccess: () => {
       showSuccess("Your bank account has been successfully verified!", {
         title: "Bank Verified!",
-        autoClose: 3000,
       });
       queryClient.invalidateQueries({
         queryKey: [API_ROUTES.GET_USER_DETAILS],
@@ -120,11 +119,12 @@ export const useVerifications = () => {
     showSnackbar(res.message, "success");
     showSuccess("Your identity has been successfully verified!", {
       title: "Identity Verified!",
-      autoClose: 3000,
     });
-    queryClient.invalidateQueries({
-      queryKey: [API_ROUTES.GET_USER_DETAILS],
-    });
+    setTimeout(() => {
+      queryClient.invalidateQueries({
+        queryKey: [API_ROUTES.GET_USER_DETAILS],
+      });
+    }, 5000);
   };
 
   const isIdentityVerified = Boolean(

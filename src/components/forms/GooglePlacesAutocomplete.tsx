@@ -124,7 +124,7 @@ export const GooglePlacesAutocomplete = ({
                 aria-expanded={open}
                 aria-invalid={!!fieldState.error}
                 className={cn(
-                  "w-full h-12 px-4 text-base rounded-xl border justify-start font-normal",
+                  "w-full h-12 px-4 rounded-xl border justify-start font-normal",
                   "bg-background hover:bg-background-secondary transition-colors duration-200",
                   fieldState.error
                     ? "border-error focus:border-error"

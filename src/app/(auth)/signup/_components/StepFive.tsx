@@ -1,4 +1,3 @@
-// StepFive.tsx - Final Onboarding
 "use client";
 import React from "react";
 import { useForm, FormProvider } from "react-hook-form";
@@ -15,7 +14,6 @@ import { ROUTES } from "@/constant";
 import AuthCard from "../../components/AuthCard";
 import StepIndicator from "../../components/StepIndicator";
 import AuthForm from "../../components/AuthForm";
-import moment from "moment";
 import { getMaxDate } from "@/utils";
 
 const genderOptions = [

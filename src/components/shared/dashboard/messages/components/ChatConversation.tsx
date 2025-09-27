@@ -2,30 +2,12 @@
 
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import {
-  ArrowLeft,
-  Phone,
-  Video,
-  MoreVertical,
-  Paperclip,
-  Send,
-  Smile,
-  Check,
-  CheckCheck,
-} from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { Check, CheckCheck } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { IConversation, IMessage } from "../types";
 import { useAppSelector } from "@/store/hook";
-import { cn } from "@/lib/utils";
-import { formatDate, formatTime, getInitials } from "../utils";
+
+import { formatDate, formatTime } from "../utils";
 import ChatHeader from "./partials/ChatHeader";
 import ChatInput from "./partials/ChatInput/ChatInput";
 import ChatMessageBubble from "./partials/ChatMessageBubble";

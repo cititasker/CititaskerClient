@@ -1,78 +1,44 @@
 "use client";
-import { useEffect, useState, useMemo } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useForm, FormProvider } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useState, useEffect } from "react";
+import { FormProvider } from "react-hook-form";
 import { postTaskSchema } from "@/schema/task";
-import { z } from "zod";
-import { useAppDispatch, useAppSelector } from "@/store/hook";
-import { setTaskData } from "@/store/slices/task";
+import { useCategoryOptions } from "@/hooks/useCategoryOptions";
 
 import FormInput from "@/components/forms/FormInput";
 import FormTextArea from "@/components/forms/FormTextArea";
 import { FormAutoComplete } from "@/components/forms/FormAutoComplete";
-import PostTaskFormActions from "./PostTaskFormActions";
-import { useCategoryOptions } from "@/hooks/useCategoryOptions";
-import ImageUploader from "./ImageUploader";
-
-const schema = postTaskSchema.pick({
-  name: true,
-  description: true,
-  category_id: true,
-  sub_category_id: true,
-  images: true,
-});
-
-type SchemaType = z.infer<typeof schema>;
+import PostTaskFormActions from "./partials/PostTaskFormActions";
+import ImageUploader from "./partials/ImageUploader";
+import { useUrlParams } from "../hooks/useUrlParams";
+import { useStepForm } from "../hooks/useStepForm";
 
 export default function StepOne() {
-  const { task } = useAppSelector((s) => s.task);
-  const dispatch = useAppDispatch();
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const urlParams = useUrlParams();
+  const [categoryId, setCategoryId] = useState<number | null>(null);
 
-  const urlParams = useMemo(
-    () => ({
-      step: Number(searchParams.get("step")) || 1,
-      todo: searchParams.get("todo"),
-      categoryId: searchParams.get("category_id")
-        ? Number(searchParams.get("category_id"))
-        : null,
-      subCategoryId: searchParams.get("sub_category_id")
-        ? Number(searchParams.get("sub_category_id"))
-        : null,
-    }),
-    [searchParams]
-  );
-
-  const [categoryId, setCategoryId] = useState<number | null>(
-    task.category_id?.id || urlParams.categoryId || null
-  );
-
-  const { categories, subCategories } = useCategoryOptions(categoryId);
-
-  const methods = useForm<SchemaType>({
-    resolver: zodResolver(schema),
-    defaultValues: {
-      name: task.name || "",
-      description: task.description || "",
-      category_id: task.category_id || null,
-      sub_category_id: task.sub_category_id || null,
-      images: task.images || [],
-    },
+  const { methods, onSubmit } = useStepForm({
+    schema: postTaskSchema,
+    pickFields: [
+      "name",
+      "description",
+      "category_id",
+      "sub_category_id",
+      "images",
+    ],
   });
 
-  const { handleSubmit, setValue, watch } = methods;
+  const { setValue, watch, getValues } = methods;
+  const { categories, subCategories } = useCategoryOptions(categoryId);
 
-  // Handle URL parameter initialization
+  // Handle URL parameters
   useEffect(() => {
-    const updates: Partial<SchemaType> = {};
+    const updates: Record<string, any> = {};
 
-    if (urlParams.todo && !task.name) {
+    if (urlParams.todo && !getValues("name")) {
       updates.name = urlParams.todo;
     }
 
-    if (urlParams.categoryId && categories.length > 0 && !task.category_id) {
+    if (urlParams.categoryId && categories.length > 0) {
       const selectedCategory = categories.find(
         (cat) => cat.id === urlParams.categoryId
       );
@@ -82,27 +48,14 @@ export default function StepOne() {
       }
     }
 
-    if (Object.keys(updates).length > 0) {
-      Object.entries(updates).forEach(([key, value]) => {
-        setValue(key as keyof SchemaType, value);
-      });
-    }
-  }, [
-    urlParams.todo,
-    urlParams.categoryId,
-    categories,
-    setValue,
-    task.name,
-    task.category_id,
-  ]);
+    Object.entries(updates).forEach(([key, value]) => {
+      setValue(key, value);
+    });
+  }, [urlParams, categories, setValue, getValues]);
 
   // Handle subcategory from URL
   useEffect(() => {
-    if (
-      urlParams.subCategoryId &&
-      subCategories.length > 0 &&
-      !task.sub_category_id
-    ) {
+    if (urlParams.subCategoryId && subCategories.length > 0) {
       const selectedSubCategory = subCategories.find(
         (sub) => sub.id === urlParams.subCategoryId
       );
@@ -110,7 +63,7 @@ export default function StepOne() {
         setValue("sub_category_id", selectedSubCategory);
       }
     }
-  }, [urlParams.subCategoryId, subCategories, setValue, task.sub_category_id]);
+  }, [urlParams.subCategoryId, subCategories, setValue]);
 
   // Handle category change
   useEffect(() => {
@@ -126,18 +79,10 @@ export default function StepOne() {
     return () => subscription.unsubscribe();
   }, [watch, setValue, categoryId]);
 
-  const onSubmit = (data: SchemaType) => {
-    dispatch(setTaskData(data));
-    const nextUrl = new URL(window.location.href);
-    nextUrl.searchParams.set("step", String(urlParams.step + 1));
-    router.push(nextUrl.toString());
-  };
-
   return (
     <div className="space-y-6">
       <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          {/* Task Name */}
+        <form onSubmit={onSubmit} className="space-y-6">
           <FormInput
             name="name"
             label="What do you want to get done?"
@@ -145,7 +90,6 @@ export default function StepOne() {
             className="w-full"
           />
 
-          {/* Description */}
           <FormTextArea
             name="description"
             label="Task Description"
@@ -154,7 +98,6 @@ export default function StepOne() {
             rows={4}
           />
 
-          {/* Category Selection */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <FormAutoComplete
               name="category_id"
@@ -178,9 +121,7 @@ export default function StepOne() {
             />
           </div>
 
-          {/* Image Upload */}
           <ImageUploader name="images" />
-
           <PostTaskFormActions />
         </form>
       </FormProvider>

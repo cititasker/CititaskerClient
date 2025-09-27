@@ -49,7 +49,7 @@ const SLIDE_DATA: SlideData[] = [
 
 const PromotionBanner: React.FC = () => {
   const { user } = useAppSelector((state) => state.user);
-  const userName = user?.first_name || "Guest";
+  const userName = user?.first_name || "Anonymous";
 
   const slideVariants = {
     initial: { opacity: 0, y: 20 },

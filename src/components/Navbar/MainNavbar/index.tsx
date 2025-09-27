@@ -21,7 +21,6 @@ import { usePathname } from "next/navigation";
 import { useGetUser } from "@/services/user/user.hook";
 import { useSession } from "next-auth/react";
 import BrandLogo from "@/components/reusables/BrandLogo";
-import { useResetQueryClient } from "@/providers/TanStackProvider";
 
 export default function MainNavbar() {
   const { openSidebar } = useSidebar();
@@ -30,7 +29,6 @@ export default function MainNavbar() {
 
   const showMobileNav = useToggle();
   const path = usePathname();
-  const resetQueryClient = useResetQueryClient();
 
   const user = data?.data;
   const { data: session } = useSession();
@@ -41,9 +39,13 @@ export default function MainNavbar() {
   const { categoryGroups, isLoading } = useNavbarData();
 
   const handleLogout = async () => {
-    dispatch(logout());
-    await logoutUser();
-    resetQueryClient();
+    try {
+      dispatch(logout());
+      await logoutUser();
+      window.location.href = ROUTES.LOGIN;
+    } catch (error) {
+      window.location.href = ROUTES.LOGIN;
+    }
   };
 
   const homeRoute = isAuth ? `${ROUTES.DISCOVERY}/${user?.role}` : ROUTES.HOME;

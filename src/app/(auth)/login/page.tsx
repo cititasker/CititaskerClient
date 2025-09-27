@@ -10,6 +10,7 @@ import { ROUTES } from "@/constant";
 import { useAuth } from "../hooks/useAuth";
 import AuthCard from "../components/AuthCard";
 import AuthForm from "../components/AuthForm";
+import { useLogin } from "@/services/user/user.hook";
 
 export default function LoginPage() {
   const {
@@ -20,6 +21,8 @@ export default function LoginPage() {
     handleAuthError,
   } = useAuth();
 
+  const loginMutation = useLogin();
+
   const methods = useForm<loginSchemaType>({
     defaultValues: { email: "", password: "" },
     resolver: zodResolver(loginSchema),
@@ -27,13 +30,15 @@ export default function LoginPage() {
 
   const onSubmit = async (values: loginSchemaType) => {
     setLoading(true);
-    const res = await loginWithCredentials(values);
-
-    if (res?.success) {
-      handleAuthSuccess(res.message);
-    } else {
-      handleAuthError(res.message);
-    }
+    loginMutation.mutate(values, {
+      onSuccess: async (data) => {
+        await loginWithCredentials(data.data);
+        handleAuthSuccess(data.message);
+      },
+      onError: (error) => {
+        handleAuthError(error.message);
+      },
+    });
     setLoading(false);
   };
 
@@ -46,7 +51,7 @@ export default function LoginPage() {
             onGoogleAuth={handleGoogleAuth}
             submitButton={{
               text: "Sign In",
-              loading,
+              loading: loading || loginMutation.isPending,
               type: "submit",
             }}
             bottomLink={{

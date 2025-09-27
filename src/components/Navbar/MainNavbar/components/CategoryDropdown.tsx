@@ -11,6 +11,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { CategoryGroup } from "../types";
+import { FormProvider, useForm } from "react-hook-form";
+import FormInput from "@/components/forms/FormInput";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { usePathname } from "next/navigation";
+import FormButton from "@/components/forms/FormButton";
+import { ROUTES } from "@/constant";
 
 interface CategoryDropdownProps {
   categoryGroups: CategoryGroup[];
@@ -21,8 +28,23 @@ export function CategoryDropdown({
   categoryGroups,
   isLoading,
 }: CategoryDropdownProps) {
-  const [searchTerm, setSearchTerm] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
+  const pathname = usePathname();
+  const isBrowseTaskPage = pathname.includes("/browse-task");
+
+  const schema = z.object({
+    searchTerm: z.string().min(3, "required"),
+  });
+
+  const methods = useForm({
+    defaultValues: {
+      searchTerm: "",
+    },
+    resolver: zodResolver(schema),
+  });
+
+  const searchTerm = methods.watch("searchTerm");
 
   const filteredGroups = useMemo(() => {
     if (!searchTerm.trim()) return categoryGroups.slice(0, 8); // Limit initial display
@@ -37,6 +59,39 @@ export function CategoryDropdown({
       return categoryMatch || hasMatchingChild;
     });
   }, [categoryGroups, searchTerm]);
+
+  // Function to handle expanding a group
+  const handleExpandGroup = (groupCategory: string) => {
+    setExpandedGroups((prev) => new Set([...prev, groupCategory]));
+    // Optionally set search term to show more focused results
+    methods.setValue("searchTerm", groupCategory);
+  };
+
+  // Function to determine how many children to show
+  const getChildrenToShow = (group: CategoryGroup) => {
+    const isExpanded = expandedGroups.has(group.category);
+    const isSearchMatch =
+      searchTerm.trim() &&
+      group.category.toLowerCase().includes(searchTerm.toLowerCase());
+
+    // If expanded or search matches the group name exactly, show all
+    if (isExpanded || isSearchMatch) {
+      return group.children;
+    }
+
+    // Otherwise show only first 5
+    return group.children.slice(0, 5);
+  };
+
+  // Function to check if we should show the "more" button
+  const shouldShowMoreButton = (group: CategoryGroup) => {
+    const isExpanded = expandedGroups.has(group.category);
+    const isSearchMatch =
+      searchTerm.trim() &&
+      group.category.toLowerCase().includes(searchTerm.toLowerCase());
+
+    return !isExpanded && !isSearchMatch && group.children.length > 5;
+  };
 
   if (isLoading) {
     return (
@@ -66,21 +121,26 @@ export function CategoryDropdown({
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
-        className="w-[600px] p-0 rounded-xl shadow-xl border-0 bg-white"
+        className="w-[800px] p-0 rounded-xl shadow-xl border-0 bg-white"
         align="start"
         sideOffset={8}
       >
         {/* Search Header */}
         <div className="p-4 border-b border-gray-100">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-            <Input
-              placeholder="Search categories..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 border-gray-200 focus:border-primary"
-            />
-          </div>
+          <FormProvider {...methods}>
+            <form>
+              <FormInput
+                name="searchTerm"
+                icon={Search}
+                autoFocus
+                clearable
+                placeholder="Search categories..."
+                onClear={() => {
+                  setExpandedGroups(new Set()); // Reset expanded groups on clear
+                }}
+              />
+            </form>
+          </FormProvider>
         </div>
 
         {/* Categories Grid */}
@@ -91,39 +151,92 @@ export function CategoryDropdown({
               <p className="text-gray-500">No categories found</p>
             </div>
           ) : (
-            <div className="grid grid-cols-2 gap-4">
-              {filteredGroups.map((group, idx) => (
-                <div key={idx} className="space-y-2">
-                  <h4 className="font-semibold text-sm text-gray-900 flex items-center gap-2 px-3 py-1">
-                    <div className="w-2 h-2 bg-primary rounded-full" />
-                    {group.category}
-                  </h4>
-                  <div className="space-y-1">
-                    {group.children.slice(0, 5).map((item, i) => (
-                      <DropdownMenuItem key={i} asChild className="p-0">
-                        <Link
-                          href={item.href}
-                          onClick={() => setIsOpen(false)}
-                          className="block px-3 py-2 text-sm text-gray-600 hover:text-primary hover:bg-primary/5 rounded-md transition-colors"
-                        >
-                          {item.name}
-                        </Link>
-                      </DropdownMenuItem>
-                    ))}
-                    {group.children.length > 5 && (
-                      <button
-                        onClick={() => setSearchTerm(group.category)}
-                        className="block w-full text-left px-3 py-1 text-xs text-primary hover:bg-primary/5 rounded-md"
-                      >
-                        +{group.children.length - 5} more
-                      </button>
-                    )}
+            <div className="columns-2 gap-4 space-y-4">
+              {filteredGroups.map((group, idx) => {
+                const childrenToShow = getChildrenToShow(group);
+                const showMoreButton = shouldShowMoreButton(group);
+
+                return (
+                  <div key={idx} className="break-inside-avoid mb-6 bg-white">
+                    <div className="p-3">
+                      <div className="mb-3">
+                        <div className="flex items-start gap-2">
+                          <div className="w-2 h-2 bg-primary rounded-full mt-1.5 flex-shrink-0" />
+                          <div className="min-w-0 flex-1">
+                            <h4 className="font-semibold text-sm text-gray-900 leading-tight">
+                              {group.category}
+                            </h4>
+                            {expandedGroups.has(group.category) && (
+                              <span className="text-xs text-primary font-normal block mt-0.5">
+                                (showing all {group.children.length})
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="space-y-1">
+                        {childrenToShow.map((item, i) => (
+                          <DropdownMenuItem key={i} asChild className="p-0">
+                            <Link
+                              href={item.href}
+                              onClick={() => setIsOpen(false)}
+                              className="block px-3 py-2 text-sm text-gray-600 hover:text-primary hover:bg-primary/5 rounded-md transition-colors"
+                            >
+                              {item.name}
+                            </Link>
+                          </DropdownMenuItem>
+                        ))}
+
+                        {showMoreButton && (
+                          <button
+                            onClick={() => handleExpandGroup(group.category)}
+                            className="block w-full text-left px-3 py-1 text-xs text-primary hover:bg-primary/5 rounded-md transition-colors font-medium"
+                          >
+                            +{group.children.length - 5} more
+                          </button>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
+
+        {/* Clear filters button when search is active or groups are expanded */}
+        {(searchTerm.trim() || expandedGroups.size > 0) && (
+          <div className="px-4 py-2 border-t border-gray-100">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                methods.setValue("searchTerm", "");
+                setExpandedGroups(new Set());
+              }}
+              className="w-full text-xs text-gray-500 hover:text-gray-700"
+            >
+              Clear filters and show all categories
+            </Button>
+          </div>
+        )}
+
+        {/* Footer with View All button */}
+        {!isBrowseTaskPage && (
+          <div className="p-4 border-t border-gray-100 bg-gray-50/50">
+            <div className="flex justify-end">
+              <FormButton
+                text="View All"
+                variant="default"
+                size="sm"
+                className="bg-primary hover:bg-primary/90 text-white"
+                href={`${ROUTES.BROWSE_TASK}`}
+                onClick={() => setIsOpen(false)}
+              />
+            </div>
+          </div>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );

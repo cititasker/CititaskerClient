@@ -1,50 +1,22 @@
 "use client";
-import React, { useEffect } from "react";
-import { useForm, FormProvider, SubmitHandler } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter, useSearchParams } from "next/navigation";
+import { FormProvider } from "react-hook-form";
 import { postTaskSchema } from "@/schema/task";
-import { useAppDispatch, useAppSelector } from "@/store/hook";
-import { setTaskData } from "@/store/slices/task";
+
 import CurrencyInput from "@/components/forms/CurrencyInput";
 import ExtraInfo from "@/components/forms/ExtraInfo";
-import PostTaskFormActions from "./PostTaskFormActions";
-
-const schema = postTaskSchema.pick({ budget: true });
-type FormValues = z.infer<typeof schema>;
+import PostTaskFormActions from "./partials/PostTaskFormActions";
+import { useStepForm } from "../hooks/useStepForm";
 
 export default function StepFour() {
-  const dispatch = useAppDispatch();
-  const { task } = useAppSelector((state) => state.task);
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const step = Number(searchParams.get("step") || 1);
-
-  const methods = useForm<FormValues>({
-    defaultValues: { budget: task.budget || "" },
-    resolver: zodResolver(schema),
+  const { methods, onSubmit } = useStepForm({
+    schema: postTaskSchema,
+    pickFields: ["budget"],
   });
-
-  const { handleSubmit, setValue } = methods;
-
-  useEffect(() => {
-    if (task.budget) {
-      setValue("budget", task.budget);
-    }
-  }, [task.budget, setValue]);
-
-  const onSubmit: SubmitHandler<FormValues> = (values) => {
-    dispatch(setTaskData(values));
-    const url = new URL(window.location.href);
-    url.searchParams.set("step", String(step + 1));
-    router.push(url.toString());
-  };
 
   return (
     <div className="space-y-6">
       <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={onSubmit} className="space-y-6">
           <div className="space-y-4">
             <CurrencyInput
               name="budget"

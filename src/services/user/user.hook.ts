@@ -1,14 +1,31 @@
 import { API_ROUTES } from "@/constant";
-import { useQuery, UseQueryOptions } from "@tanstack/react-query";
+import {
+  useMutation,
+  UseMutationOptions,
+  useQuery,
+  UseQueryOptions,
+} from "@tanstack/react-query";
 import {
   getFaq,
   getReviews,
   getUserApi,
   getUserPorfolio,
   getUserProfileDetails,
+  loginUser,
+  switchRoles,
 } from "./users.api";
+import { loginSchemaType } from "@/schema/auth";
 
 type GetUserResponse = { data: IUser };
+
+export const useLogin = (
+  opt?: UseMutationOptions<ILoginRes, Error, loginSchemaType>
+) => {
+  return useMutation({
+    mutationFn: loginUser,
+    ...opt,
+  });
+};
 
 export const useGetUser = (
   options?: Omit<
@@ -68,5 +85,14 @@ export const useGetReviews = (
     queryFn: () => getReviews(data.id),
     enabled: !!data.id,
     ...options,
+  });
+};
+
+export const useSwitchRole = (
+  opt?: UseMutationOptions<ILoginRes, Error, { role: TRole }>
+) => {
+  return useMutation({
+    mutationFn: switchRoles,
+    ...opt,
   });
 };

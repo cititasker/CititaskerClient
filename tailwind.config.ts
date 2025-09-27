@@ -401,9 +401,7 @@ export default {
           "box-shadow": "var(--shadow-md)",
           transition: "all 300ms ease",
           "&:hover": {
-            transform: "translateY(-4px)",
-            // "box-shadow": "var(--shadow-md)",
-            // "border-color": "var(--border-medium)",
+            "border-color": "var(--border-medium)",
           },
         },
         // Mobile-first card component

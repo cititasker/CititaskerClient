@@ -20,8 +20,8 @@ import {
 import { Card } from "@/components/ui/card";
 import { ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-import Empty from "@/components/myTasks/Empty";
 import { TablePagination } from "./TablePagination";
+import EmptyState from "@/components/reusables/EmptyState";
 
 interface DataTableProps<TData> {
   data: TData[];
@@ -72,7 +72,7 @@ export function DataTable<TData>({
   if (!data.length) {
     return (
       <Card className={cn("p-8", className)}>
-        <Empty text={emptyMessage} size="sm" />
+        <EmptyState title={emptyMessage} />;
       </Card>
     );
   }
@@ -134,7 +134,7 @@ export function DataTable<TData>({
                     colSpan={columns.length}
                     className="h-24 text-center"
                   >
-                    <Empty text="No results found" size="sm" />
+                    <EmptyState title="No results found" />;
                   </TableCell>
                 </TableRow>
               )}

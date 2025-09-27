@@ -16,6 +16,11 @@ interface FormInputProps {
   className?: string;
   inputClassName?: string;
   onClear?: () => void;
+  // New icon props
+  icon?: React.ComponentType<{ className?: string }>;
+  iconPosition?: "left" | "right";
+  onIconClick?: () => void;
+  autoFocus?: boolean;
 }
 
 export default function FormInput({
@@ -29,6 +34,10 @@ export default function FormInput({
   className,
   inputClassName,
   onClear,
+  icon: Icon,
+  iconPosition = "left",
+  onIconClick,
+  autoFocus,
 }: FormInputProps) {
   const { control, formState } = useFormContext();
   const [showPassword, setShowPassword] = useState(false);
@@ -51,6 +60,14 @@ export default function FormInput({
         const hasValue = Boolean(field.value);
         const showClearButton = clearable && hasValue && !disabled && !readOnly;
         const showPasswordToggle = isPassword;
+        const showCustomIcon = Icon && !isPassword; // Don't show custom icon on password fields
+
+        // Calculate padding based on icons
+        const hasLeftIcon = showCustomIcon && iconPosition === "left";
+        const hasRightActions =
+          showClearButton ||
+          showPasswordToggle ||
+          (showCustomIcon && iconPosition === "right");
 
         return (
           <FormItem className={cn("space-y-2", className)}>
@@ -64,6 +81,35 @@ export default function FormInput({
             )}
 
             <div className="relative group px-1">
+              {/* Left icon */}
+              {hasLeftIcon && (
+                <div className="absolute left-5 top-1/2 -translate-y-1/2 z-10">
+                  {onIconClick ? (
+                    <button
+                      type="button"
+                      onClick={onIconClick}
+                      className={cn(
+                        "p-1 rounded text-text-muted hover:text-text-secondary",
+                        "hover:bg-background-secondary transition-colors duration-150",
+                        "focus:outline-none",
+                        disabled && "opacity-50 cursor-not-allowed"
+                      )}
+                      disabled={disabled}
+                      aria-label="Icon action"
+                    >
+                      <Icon className="w-4 h-4" />
+                    </button>
+                  ) : (
+                    <Icon
+                      className={cn(
+                        "w-4 h-4 text-text-muted",
+                        disabled && "opacity-50"
+                      )}
+                    />
+                  )}
+                </div>
+              )}
+
               <Input
                 id={name}
                 {...field}
@@ -73,6 +119,7 @@ export default function FormInput({
                 readOnly={readOnly}
                 aria-invalid={!!error}
                 autoComplete={isPassword ? "current-password" : "on"}
+                autoFocus={autoFocus}
                 className={cn(
                   // Base styles
                   "transition-all duration-200",
@@ -89,15 +136,47 @@ export default function FormInput({
                   readOnly && "bg-background-secondary cursor-default",
 
                   // Padding adjustments for icons
-                  (showClearButton || showPasswordToggle) && "pr-12",
+                  hasLeftIcon && "pl-10",
+                  hasRightActions && "pr-12",
 
                   inputClassName
                 )}
               />
 
-              {/* Action buttons container */}
-              {(showClearButton || showPasswordToggle) && (
+              {/* Right side actions */}
+              {hasRightActions && (
                 <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                  {/* Custom right icon */}
+                  {showCustomIcon && iconPosition === "right" && (
+                    <>
+                      {onIconClick ? (
+                        <button
+                          type="button"
+                          onClick={onIconClick}
+                          className={cn(
+                            "p-1.5 rounded-lg text-text-muted hover:text-text-secondary",
+                            "hover:bg-background-secondary transition-colors duration-150",
+                            "focus:outline-none",
+                            disabled && "opacity-50 cursor-not-allowed"
+                          )}
+                          disabled={disabled}
+                          aria-label="Icon action"
+                        >
+                          <Icon className="w-4 h-4" />
+                        </button>
+                      ) : (
+                        <div className="p-1.5">
+                          <Icon
+                            className={cn(
+                              "w-4 h-4 text-text-muted",
+                              disabled && "opacity-50"
+                            )}
+                          />
+                        </div>
+                      )}
+                    </>
+                  )}
+
                   {/* Clear button */}
                   {showClearButton && (
                     <button

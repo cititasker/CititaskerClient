@@ -73,6 +73,7 @@ export interface UniversalFeedbackModalProps {
   type: FeedbackType;
   title?: string;
   message: string;
+  showActionBtn?: boolean;
   size?: FeedbackSize;
   actions?: FeedbackAction[];
   autoClose?: number; // Auto close after milliseconds

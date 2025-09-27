@@ -3,7 +3,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Users, Briefcase } from "lucide-react";
+import { Users, Briefcase, Check } from "lucide-react";
 
 import { ROLE } from "@/constant";
 import { cn } from "@/utils";
@@ -17,17 +17,15 @@ import AuthCard from "../components/AuthCard";
 const roleOptions = [
   {
     id: ROLE.tasker,
-    label: "I want to earn as a Tasker",
+    label: "I Want to Earn as a Tasker",
     description: "Find tasks and earn money with your skills",
     icon: Users,
-    color: "border-success bg-success-light text-success-600",
   },
   {
     id: ROLE.poster,
-    label: "I want to post tasks",
+    label: "I Want to Post Tasks",
     description: "Get help with your tasks from skilled people",
     icon: Briefcase,
-    color: "border-primary-400 bg-primary-50 text-primary-600",
   },
 ];
 
@@ -42,13 +40,15 @@ const CreateAccountPage = () => {
     router.push(`/signup?role=${role}`);
   };
 
+  const selectedRole = form.watch("role");
+
   return (
-    <AuthCard className="max-w-2xl">
-      <div className="text-center mb-8">
-        <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-3">
-          Start your journey on CitiTasker
-        </h2>
-        <p className="text-text-secondary text-base">
+    <AuthCard className="max-w-3xl">
+      <div className="text-center mb-6">
+        <h1 className="text-xl sm:text-2xl font-bold text-text-primary mb-3">
+          Start Your Journey on CitiTasker
+        </h1>
+        <p className="text-sm sm:text-base text-text-secondary">
           Choose how you want to use our platform
         </p>
       </div>
@@ -63,69 +63,136 @@ const CreateAccountPage = () => {
                 <RadioGroup
                   onValueChange={field.onChange}
                   value={field.value}
-                  className="space-y-4"
+                  className="grid grid-cols-1 gap-3"
                 >
-                  {roleOptions.map(
-                    ({ id, label, description, icon: Icon, color }) => (
-                      <Label
-                        key={id}
-                        htmlFor={id}
-                        className={cn(
-                          "flex items-center p-6 rounded-xl cursor-pointer transition-all duration-200 border",
-                          field.value === id
-                            ? color
-                            : "border-border-light bg-background-secondary hover:border-border-medium hover:bg-background-tertiary"
-                        )}
-                      >
-                        <RadioGroupItem
-                          id={id}
-                          value={id}
-                          className="sr-only"
-                        />
+                  {roleOptions.map((option) => {
+                    const isSelected = field.value === option.id;
+                    const Icon = option.icon;
 
-                        <div className="flex items-center gap-4 flex-1">
-                          <div
+                    return (
+                      <div key={option.id} className="relative">
+                        <Label
+                          htmlFor={option.id}
+                          className={cn(
+                            // Base styles
+                            "group relative flex flex-col h-full p-4",
+                            "rounded-lg cursor-pointer transition-all duration-300",
+                            "border hover:shadow-sm",
+                            "min-h-[120px] sm:min-h-[130px]",
+
+                            // Selection styles
+                            isSelected
+                              ? "border-primary bg-primary-50 text-primary"
+                              : "border-neutral-200 bg-white hover:border-neutral-300 hover:bg-neutral-50"
+                          )}
+                        >
+                          {/* Hidden Radio Input - visible on larger screens */}
+                          <RadioGroupItem
+                            id={option.id}
+                            value={option.id}
                             className={cn(
-                              "p-3 rounded-lg hidden xs:inline-block",
-                              field.value === id
-                                ? "bg-white/20"
-                                : "bg-background"
+                              "absolute top-3 right-3",
+                              "hidden sm:flex w-4 h-4",
+                              "data-[state=checked]:bg-primary data-[state=checked]:border-primary"
                             )}
-                          >
-                            <Icon className="w-6 h-6" />
-                          </div>
+                          />
 
-                          <div className="flex-1 text-left">
-                            <h3 className="font-semibold text-lg mb-1">
-                              {label}
-                            </h3>
-                            <p className="text-sm opacity-80">{description}</p>
-                          </div>
-                        </div>
+                          {/* Content Container */}
+                          <div className="flex flex-col h-full">
+                            {/* Icon and Title Section */}
+                            <div className="flex items-start gap-3 mb-3">
+                              {/* Icon */}
+                              <div
+                                className={cn(
+                                  "p-2 rounded-lg transition-all duration-300",
+                                  "flex items-center justify-center flex-shrink-0",
+                                  isSelected
+                                    ? "bg-primary"
+                                    : "bg-neutral-100 group-hover:bg-neutral-200"
+                                )}
+                              >
+                                <Icon
+                                  className={cn(
+                                    "w-4 h-4 transition-colors duration-300",
+                                    isSelected
+                                      ? "text-white"
+                                      : "text-neutral-600 group-hover:text-neutral-700"
+                                  )}
+                                />
+                              </div>
 
-                        {field.value === id && (
-                          <div className="w-5 h-5 rounded-full bg-white flex items-center justify-center">
-                            <div className="w-2 h-2 rounded-full bg-current" />
+                              {/* Mobile Selection Indicator */}
+                              <div
+                                className={cn(
+                                  "sm:hidden ml-auto p-1 rounded-full transition-all duration-300",
+                                  isSelected
+                                    ? "bg-success text-white"
+                                    : "bg-neutral-200 opacity-0 group-hover:opacity-100"
+                                )}
+                              >
+                                <Check className="w-2.5 h-2.5" />
+                              </div>
+                            </div>
+
+                            {/* Text Content */}
+                            <div className="flex-1 text-left">
+                              <h3
+                                className={cn(
+                                  "font-semibold text-base sm:text-lg mb-1",
+                                  "leading-tight transition-colors duration-300",
+                                  isSelected
+                                    ? "text-current"
+                                    : "text-text-primary"
+                                )}
+                              >
+                                {option.label}
+                              </h3>
+
+                              <p
+                                className={cn(
+                                  "text-xs sm:text-sm leading-relaxed",
+                                  "transition-colors duration-300",
+                                  isSelected
+                                    ? "text-current opacity-90"
+                                    : "text-text-secondary"
+                                )}
+                              >
+                                {option.description}
+                              </p>
+                            </div>
                           </div>
-                        )}
-                      </Label>
-                    )
-                  )}
+                        </Label>
+                      </div>
+                    );
+                  })}
                 </RadioGroup>
-                <FormMessage className="text-error mt-2" />
+                <FormMessage className="text-error text-sm mt-3" />
               </FormItem>
             )}
           />
 
-          <FormButton
-            type="submit"
-            className="w-full h-12 text-base font-medium"
-            disabled={!form.watch("role")}
-          >
-            Continue
-          </FormButton>
+          <div className="pt-3">
+            <FormButton
+              type="submit"
+              className={cn(
+                "w-full h-10 text-sm font-medium",
+                "transition-all duration-300",
+                "disabled:opacity-50 disabled:cursor-not-allowed"
+              )}
+              disabled={!selectedRole}
+            >
+              Continue to Sign Up
+            </FormButton>
+          </div>
         </form>
       </Form>
+
+      {/* Helper Text */}
+      <div className="mt-6 text-center">
+        <p className="text-xs sm:text-sm text-text-muted">
+          You can always change your role later in your account settings
+        </p>
+      </div>
     </AuthCard>
   );
 };

@@ -307,12 +307,12 @@ body {
     box-shadow: var(--shadow-lg);
   }
 
-  .card-modern {
-    @apply rounded-2xl p-6 transition-all duration-300 hover:transform hover:-translate-y-1;
+  /* .card-modern {
+    @apply rounded-2xl p-6 transition-all duration-300 hover:transform;
     background: var(--background);
     border: 1px solid var(--border-light);
     box-shadow: var(--shadow-md);
-  }
+  } */
 
   /* .card-modern:hover {
     box-shadow: var(--shadow-xl);
@@ -450,4 +450,29 @@ body {
   100% {
     transform: translateX(100%);
   }
+}
+
+/*
+Z-Index Layer System:
+- Dropdown/Popover: z-50
+- Dialog Overlay: z-60  
+- Dialog Content: z-70
+- Toast/Notifications: z-80
+- Tooltip: z-90
+*/
+
+.z-layer-dropdown {
+  z-index: 50;
+}
+.z-layer-dialog-overlay {
+  z-index: 60;
+}
+.z-layer-dialog-content {
+  z-index: 70;
+}
+.z-layer-toast {
+  z-index: 80;
+}
+.z-layer-tooltip {
+  z-index: 90;
 }

@@ -1,6 +1,6 @@
 import MyTasksLayout from "@/components/layouts/MyTaskLayout";
 
-export default function RootLayout({
+export default function MyTaskLayout({
   children,
 }: {
   children: React.ReactNode;

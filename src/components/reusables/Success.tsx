@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import Image from "next/image";
+import { CheckCircle } from "lucide-react";
 import React from "react";
 
 interface IProps {
@@ -8,7 +8,6 @@ interface IProps {
   children?: React.ReactNode;
   action?: React.ReactNode;
   className?: string;
-  contentClassName?: string;
 }
 export default function Success({
   title,
@@ -16,36 +15,20 @@ export default function Success({
   children,
   action,
   className,
-  contentClassName,
 }: IProps) {
   return (
-    <div
-      className={cn(
-        "w-full h-full my-auto flex flex-col min-h-[350px]",
-        className
-      )}
-    >
-      <div className={cn("mt-10", contentClassName)}>
-        <div className="w-full">
-          <Image
-            src="/icons/check_circle.svg"
-            alt="success"
-            width={80}
-            height={80}
-            className="mx-auto"
-          />
-        </div>
-        {children ?? (
-          <div className="mt-5">
-            <p className="text-2xl text-center font-semibold text-black-2">
-              {title}
-            </p>
-            <p className="text-center text-wrap mt-4 text-base font-normal">
-              {desc}
-            </p>
-          </div>
-        )}
+    <div className={cn("text-center space-y-6 py-8", className)}>
+      <div className="mx-auto w-20 h-20 bg-success-light rounded-full flex items-center justify-center">
+        <CheckCircle className="w-10 h-10 text-success" />
       </div>
+
+      {children ?? (
+        <div className="space-y-3">
+          <h3 className="text-2xl font-bold text-neutral-900">{title}</h3>
+          <p className="text-neutral-600 max-w-md mx-auto">{desc}</p>
+        </div>
+      )}
+
       {action && <div className="mt-auto">{action}</div>}
     </div>
   );

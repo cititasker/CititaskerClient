@@ -1,21 +1,20 @@
 "use client";
 import { useEffect, useRef } from "react";
-import { FormProvider, useForm } from "react-hook-form";
-import { useAppDispatch, useAppSelector } from "@/store/hook";
-import { setTaskData } from "@/store/slices/task";
-import { useRouter, useSearchParams } from "next/navigation";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { FormProvider } from "react-hook-form";
 import { postTaskSchema } from "@/schema/task";
+import { reverseGeocode } from "@/services";
 import { z } from "zod";
+
 import FormInput from "@/components/forms/FormInput";
 import SelectState from "@/components/forms/SelectState";
 import { GooglePlacesAutocomplete } from "@/components/forms/GooglePlacesAutocomplete";
-import { reverseGeocode } from "@/services";
-import PostTaskFormActions from "./PostTaskFormActions";
-import { LocationTypeSelector } from "./LocationTypeSelector";
+import PostTaskFormActions from "./partials/PostTaskFormActions";
+import { LocationTypeSelector } from "./partials/LocationTypeSelector";
 import FormError from "@/components/reusables/FormError";
+import { useStepForm } from "../hooks/useStepForm";
 
-const schema = postTaskSchema
+// Custom schema with validation
+const stepTwoSchema = postTaskSchema
   .pick({
     location_type: true,
     state: true,
@@ -23,7 +22,6 @@ const schema = postTaskSchema
     address: true,
   })
   .superRefine((data, ctx) => {
-    // if (data.location_type === "in_person") {
     if (!Array.isArray(data.location) || data.location.length !== 2) {
       ctx.addIssue({
         path: ["location"],
@@ -31,33 +29,24 @@ const schema = postTaskSchema
         message: "Please select a location",
       });
     }
-    // }
   });
-
-type SchemaType = z.infer<typeof schema>;
 
 export default function StepTwo() {
-  const { task } = useAppSelector((state) => state.task);
-  const dispatch = useAppDispatch();
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const step = Number(searchParams.get("step") || 1);
   const autoFilledAddress = useRef(false);
 
-  const methods = useForm<SchemaType>({
-    defaultValues: {
-      location_type: task.location_type || null,
-      state: task.state || null,
-      location: task.location || [],
-      address: task.address || null,
-    },
-    resolver: zodResolver(schema),
+  const { methods, onSubmit } = useStepForm({
+    schema: postTaskSchema,
+    pickFields: ["location_type", "state", "location", "address"],
+    customSchema: stepTwoSchema,
   });
 
-  const { handleSubmit, watch, setValue } = methods;
+  const { watch, setValue } = methods;
+
+  // Fixed watch usage - use individual field names
   const location = watch("location");
   const address = watch("address");
 
+  // Auto-fill address from coordinates
   useEffect(() => {
     if (
       Array.isArray(location) &&
@@ -74,18 +63,28 @@ export default function StepTwo() {
     }
   }, [location, address, setValue]);
 
-  const onSubmit = (data: SchemaType) => {
-    dispatch(setTaskData(data));
+  const handleLocationSelect = (coords: [number, number]) => {
+    const numericCoords = coords.map(Number) as [number, number];
+    setValue("location", numericCoords);
 
-    const nextUrl = new URL(window.location.href);
-    nextUrl.searchParams.set("step", String(step + 1));
-    router.push(nextUrl.toString());
+    reverseGeocode(numericCoords[0], numericCoords[1]).then((addr) => {
+      if (addr) {
+        setValue("address", addr);
+        autoFilledAddress.current = true;
+      }
+    });
+  };
+
+  const handleClearLocation = () => {
+    setValue("address", null);
+    setValue("location", []);
+    autoFilledAddress.current = false;
   };
 
   return (
     <div className="space-y-6">
       <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={onSubmit} className="space-y-6">
           <div>
             <LocationTypeSelector />
             <FormError name="location_type" />
@@ -100,32 +99,13 @@ export default function StepTwo() {
                   name="address"
                   label="Location"
                   clearable
-                  onClear={() => {
-                    setValue("address", null);
-                    setValue("location", []);
-                    autoFilledAddress.current = false;
-                  }}
+                  onClear={handleClearLocation}
                 />
               ) : (
                 <GooglePlacesAutocomplete
                   name="location"
                   label="Location"
-                  onCoordinatesSelected={(coords) => {
-                    // Convert string coordinates to numbers
-                    const numericCoords = [
-                      Number(coords[0]),
-                      Number(coords[1]),
-                    ];
-                    setValue("location", numericCoords);
-                    reverseGeocode(numericCoords[0], numericCoords[1]).then(
-                      (addr) => {
-                        if (addr) {
-                          setValue("address", addr);
-                          autoFilledAddress.current = true;
-                        }
-                      }
-                    );
-                  }}
+                  onCoordinatesSelected={handleLocationSelect}
                 />
               )}
             </div>

@@ -37,3 +37,14 @@ export function getOfferReplies(id: string): Promise<{ data: IOfferReplies }> {
       throw error.response?.data;
     });
 }
+
+export function replyOffer(data: any) {
+  return api
+    .post(API_ROUTES.REPLY_OFFER, data)
+    .then((data) => {
+      return data.data;
+    })
+    .catch((error: AxiosError) => {
+      throw error.response?.data;
+    });
+}

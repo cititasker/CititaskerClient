@@ -2,7 +2,6 @@ import { API_ROUTES } from "@/constant";
 import {
   useMutation,
   useQuery,
-  UseQueryOptions,
   UseMutationOptions,
   useSuspenseQuery,
   useInfiniteQuery,
@@ -10,9 +9,12 @@ import {
 import {
   createTask,
   getAllTasks,
+  getTaskQuestion,
   getUserTaskById,
   getUserTasks,
   paymentReference,
+  postQuestion,
+  replyQuestion,
   requestPayment,
   updateTask,
 } from "./tasks.api";
@@ -20,6 +22,7 @@ import {
   CreateTask,
   IntentPayload,
   IntentResponse,
+  ITaskQuestionRes,
   TaskApiResponse,
   TaskData,
   TaskError,
@@ -124,5 +127,35 @@ export const useRequestPayment = (
   return useMutation<any, Error, any>({
     mutationFn: requestPayment,
     ...opt,
+  });
+};
+
+export const usePostQuestion = (
+  opt?: UseMutationOptions<CreateTask, Error, any>
+) => {
+  return useMutation<CreateTask, Error, any>({
+    mutationFn: postQuestion,
+    ...opt,
+  });
+};
+
+export const useReplyQuestion = (opt?: UseMutationOptions<any, Error, any>) => {
+  return useMutation<any, Error, any>({
+    mutationFn: replyQuestion,
+    ...opt,
+  });
+};
+
+// export const useFetchItemByIdMutation = () => {
+//   return useMutation<Item, Error, string>({
+//     mutationFn: fetchItemById,
+//   });
+// };
+
+export const useFetchTaskQuestion = (id: any) => {
+  return useQuery<ITaskQuestionRes, Error>({
+    queryKey: [API_ROUTES.GET_QUESTIONS, id],
+    queryFn: () => getTaskQuestion(id),
+    enabled: !!id,
   });
 };

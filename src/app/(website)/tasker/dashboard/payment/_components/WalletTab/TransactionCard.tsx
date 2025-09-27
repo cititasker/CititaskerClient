@@ -1,6 +1,6 @@
 import React from "react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { CustomStatusBadge } from "./TransactionStatus";
+import { CustomStatusBadge } from "../../../../../../../components/reusables/CustomStatusBadge";
 import { WalletTransaction } from "./hooks/useWallet";
 
 interface TransactionCardProps {

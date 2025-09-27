@@ -1,86 +1,91 @@
+import React from "react";
 import CustomModal from "@/components/reusables/CustomModal";
-import React, { useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import ActionsButtons from "@/components/reusables/ActionButtons";
-import StepOne from "./StepOne";
-import StepTwo from "./StepTwo";
+import { FormProvider } from "react-hook-form";
+import { ArrowRight } from "lucide-react";
+import { useCancelTask } from "./hooks/useCancelTask";
+import { StepOne } from "./StepOne";
+import { StepTwo } from "./StepTwo";
+import FormButton from "@/components/forms/FormButton";
 import Success from "@/components/reusables/Success";
+import ActionsButtons from "@/components/reusables/ActionButtons";
 
-// Validation schema
-const schema = z
-  .object({
-    reason: z.string().min(1, "Please select your reason"),
-    description: z.string(),
-    agreed: z.boolean().refine((v) => v, {
-      message: "Please confirm you agree to the terms and conditions",
-    }),
-  })
-  .superRefine((data, ctx) => {
-    if (data.reason === "5" && !data.description?.trim()) {
-      ctx.addIssue({
-        path: ["description"],
-        code: z.ZodIssueCode.custom,
-        message: "Description is required when reason is 'Other'",
-      });
-    }
-  });
+interface CancelTaskModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
 
-type SchemaType = z.infer<typeof schema>;
-
-const steps = [
+const stepConfig = [
   {
-    title: "Give a reason for cancellation",
-    description: "Let the Tasker know why you want to cancel the task.",
-    component: StepOne,
+    title: "Reason for Cancellation",
+    description: "Help us understand why you want to cancel this task",
   },
-  { title: "Cancellation fee", component: StepTwo },
   {
-    component: () => (
-      <Success
-        title="Success!"
-        desc="Your task has been cancelled successfully."
-        className="justify-center"
-        contentClassName="mt-0"
-      />
-    ),
+    title: "Cancellation Fee",
+    description: "Review the refund breakdown and confirm cancellation",
+  },
+  {
+    title: "Confirmation",
+    description: "",
   },
 ];
 
-export default function CancelTaskModal({ isOpen, onClose }: IModal) {
-  const [step, setStep] = useState(1);
-  const methods = useForm<SchemaType>({
-    defaultValues: { agreed: false, reason: "", description: "" },
-    resolver: zodResolver(schema),
-    mode: "onChange",
-  });
+const CancelTaskModal: React.FC<CancelTaskModalProps> = ({
+  isOpen,
+  onClose,
+}) => {
+  const {
+    methods,
+    currentStep,
+    isSubmitting,
+    selectedReason,
+    amountPaid,
+    cancelReasons,
+    handleNext,
+    handleBack,
+    handleSubmit,
+    resetForm,
+  } = useCancelTask();
 
-  const { trigger, reset } = methods;
-
-  const onSubmit = (values: SchemaType) => {
-    // Perform cancellation
-  };
-
-  const handleNext = async () => {
-    const validationFields: ("reason" | "description" | "agreed")[] =
-      step === 1 ? ["reason", "description"] : ["agreed"];
-    const isValid = await trigger(validationFields);
-
-    if (!isValid) return;
-
-    if (step < steps.length) {
-      setStep(step + 1);
+  const handleClose = () => {
+    if (currentStep === 3) {
+      onClose();
+      resetForm();
+    } else {
+      onClose();
+      setTimeout(resetForm, 300); // Delay reset for smooth modal close
     }
   };
 
-  const handleClose = () => {
-    onClose();
-    reset();
-    setStep(1);
-  };
+  const { title, description } = stepConfig[currentStep - 1];
 
-  const { title, description, component: CurrentStep } = steps[step - 1];
+  const renderStepContent = () => {
+    switch (currentStep) {
+      case 1:
+        return (
+          <StepOne reasons={cancelReasons} selectedReason={selectedReason} />
+        );
+      case 2:
+        return <StepTwo amountPaid={amountPaid} />;
+      case 3:
+        return (
+          <Success
+            title="Task Cancelled Successfully"
+            desc="Your task has been cancelled and the refund will be processed within 3-5
+        business days. You'll receive an email confirmation with the refund
+        details shortly."
+            action={
+              <FormButton
+                text="Continue"
+                icon={<ArrowRight className="w-4 h-4 ml-2" />}
+                onClick={handleClose}
+              />
+            }
+          />
+        );
+      default:
+        return null;
+    }
+  };
 
   return (
     <CustomModal
@@ -88,21 +93,37 @@ export default function CancelTaskModal({ isOpen, onClose }: IModal) {
       onClose={handleClose}
       title={title}
       description={description}
+      contentClassName="max-w-lg"
     >
       <FormProvider {...methods}>
-        <form className="flex flex-col min-h-[300px] overflow-y-auto no-scrollbar">
-          <CurrentStep />
-          {step < steps.length && (
+        <form
+          onSubmit={methods.handleSubmit(handleSubmit)}
+          className="space-y-6 flex flex-col h-full"
+        >
+          <div className="flex-1 overflow-y-auto no-scrollbar">
+            {renderStepContent()}
+          </div>
+
+          {/* ✅ Move the footer *inside* the form */}
+          {currentStep < 3 && (
             <ActionsButtons
-              className="mt-auto"
-              type="button"
-              showCancelButton={step > 1}
-              handleCancel={() => setStep((prev) => prev - 1)}
-              handleSubmit={handleNext}
+              type={currentStep === 2 ? "submit" : "button"}
+              cancelVariant="outline"
+              handleCancel={currentStep > 1 && handleBack}
+              handleSubmit={currentStep === 1 ? handleNext : undefined}
+              okText={
+                isSubmitting
+                  ? "Processing"
+                  : currentStep === 2
+                  ? "Cancel Task"
+                  : "Continue"
+              }
             />
           )}
         </form>
       </FormProvider>
     </CustomModal>
   );
-}
+};
+
+export default CancelTaskModal;

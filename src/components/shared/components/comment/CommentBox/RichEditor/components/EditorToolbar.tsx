@@ -22,6 +22,7 @@ interface EditorToolbarProps {
   insertEmoji: (emoji: any) => void;
   setIsEmojiPickerOpen: (open: boolean) => void;
   openLinkModal: () => void;
+  showLinkButton?: boolean;
 }
 
 const EditorToolbar: React.FC<EditorToolbarProps> = ({
@@ -34,6 +35,7 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({
   insertEmoji,
   setIsEmojiPickerOpen,
   openLinkModal,
+  showLinkButton,
 }) => {
   return (
     <div className="flex items-center justify-between px-2 sm:px-3 pb-2 sm:pb-3 pt-1 border-t border-neutral-100 gap-2">
@@ -83,12 +85,14 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({
             <Paperclip className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </ToolbarButton>
 
-          <ToolbarButton
-            onClick={openLinkModal}
-            className="h-8 w-8 sm:h-9 sm:w-9"
-          >
-            <LinkIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-          </ToolbarButton>
+          {showLinkButton && (
+            <ToolbarButton
+              onClick={openLinkModal}
+              className="h-8 w-8 sm:h-9 sm:w-9"
+            >
+              <LinkIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            </ToolbarButton>
+          )}
         </div>
       </div>
 

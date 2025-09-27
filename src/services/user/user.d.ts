@@ -1,3 +1,11 @@
+interface ILoginRes {
+  message: "Login Successful";
+  success: true;
+  data: {
+    role: TRole;
+    token: string;
+  };
+}
 interface UserProfileData {
   about_me: string;
   average_rating: number;
@@ -18,8 +26,8 @@ interface UserProfileRes {
 }
 
 interface Portfolio {
-  key:string;
-  url:string
+  key: string;
+  url: string;
 }
 
 type UserPorfolioRes = {
@@ -27,14 +35,14 @@ type UserPorfolioRes = {
     id: number;
     portfolio: Portfolio[];
   };
-}
+};
 
 interface UserFaq {
   answer: string;
   id: number | string;
   question: string;
 }
-type UserFaqResponse = {data: UserFaq[]};
+type UserFaqResponse = { data: UserFaq[] };
 
 interface TaskerReview {
   id: number;

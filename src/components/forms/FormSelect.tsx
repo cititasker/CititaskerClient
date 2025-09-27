@@ -10,13 +10,6 @@ import {
 import { cn } from "@/lib/utils";
 import { useFormContext } from "react-hook-form";
 import { FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
-import { ChevronDown } from "lucide-react";
-
-interface SelectOption {
-  id: string | number;
-  name: string;
-  disabled?: boolean;
-}
 
 interface FormSelectProps {
   options: SelectOption[];

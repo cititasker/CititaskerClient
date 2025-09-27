@@ -1,7 +1,6 @@
 "use client";
 
-import React from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import React, { useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 
@@ -30,16 +29,12 @@ export default function CustomTab({
   contentClassName,
   queryKey = "tab",
 }: CustomTabProps) {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
-  const selectedTab =
-    searchParams.get(queryKey) ?? defaultValue ?? items[0]?.value;
+  const [selectedTab, setSelectedTab] = useState(
+    defaultValue ?? items[0]?.value
+  );
 
   const handleTabChange = (value: string) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set(queryKey, value);
-    router.replace(`?${params.toString()}`);
+    setSelectedTab(value);
   };
 
   if (!items.length) return null;
@@ -48,12 +43,12 @@ export default function CustomTab({
     <Tabs
       value={selectedTab}
       onValueChange={handleTabChange}
-      className={cn("w-full h-[calc(100%-45px)]", className)}
+      className={cn("flex flex-col h-full w-full", className)}
     >
+      {/* Tab Headers - Fixed height */}
       <TabsList
         className={cn(
-          " w-full rounded-xl p-1 bg-background-tertiary",
-          // `grid-cols-${items.length}`,
+          "flex w-full rounded-xl p-1 bg-background-tertiary shrink-0",
           listClassName
         )}
       >
@@ -74,12 +69,14 @@ export default function CustomTab({
         ))}
       </TabsList>
 
+      {/* Tab Content - Scrollable area */}
       {items.map(({ value, render }) => (
         <TabsContent
           key={value}
           value={value}
           className={cn(
-            "focus:outline-none bg-white h-full rounded-xl py-5 md:py-8 overflow-y-auto no-scrollbar",
+            "focus:outline-none bg-white rounded-xl",
+            "flex-1 min-h-0 overflow-y-auto no-scrollbar sm:py-3",
             contentClassName
           )}
         >

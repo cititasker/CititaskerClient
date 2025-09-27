@@ -1,4 +1,4 @@
-import Empty from "@/components/myTasks/Empty";
+import EmptyState from "@/components/reusables/EmptyState";
 import { useGetPorfolio } from "@/services/user/user.hook";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
@@ -140,7 +140,7 @@ export default function Portfolio({ id }: IProps) {
 
   // Show empty state
   if (images.length === 0) {
-    return <Empty text="No portfolio has been added" />;
+    return <EmptyState title="No portfolio has been added" />;
   }
 
   return (

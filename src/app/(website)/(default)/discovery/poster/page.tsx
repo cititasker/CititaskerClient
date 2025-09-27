@@ -4,8 +4,18 @@ import Hero from "@/components/posterDiscovery/Hero";
 import React from "react";
 import TaskCategorySelector from "@/components/posterDiscovery/TaskCategorySelector";
 // import PopularTasksCarousel from "@/components/posterDiscovery/PopularTaskCarousel";
-import { ROUTES } from "@/constant";
-export default function page() {
+import { ROLE, ROUTES } from "@/constant";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
+
+export default async function page() {
+  const session = await auth();
+  const role = session?.user.role;
+
+  if (role === ROLE.tasker) {
+    redirect(`${ROUTES.DISCOVERY}/${role}`);
+  }
+
   return (
     <div>
       <Hero />

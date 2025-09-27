@@ -1,39 +1,23 @@
-// providers/TanStackProvider.tsx
 "use client";
 
-import React, {
-  useState,
-  createContext,
-  useContext,
-  PropsWithChildren,
-} from "react";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { getQueryClient } from "@/constant/queryClient";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useState } from "react";
 
-const QueryClientResetContext = createContext<() => void>(() => {});
-
-export const useResetQueryClient = () => {
-  return useContext(QueryClientResetContext);
-};
-
-const TanStackProvider = ({ children }: PropsWithChildren) => {
-  const [queryClient, setQueryClient] = useState(() => getQueryClient());
-
-  const resetClient = () => {
-    queryClient.clear();
-    queryClient.cancelQueries();
-    setQueryClient(getQueryClient());
-  };
-
-  return (
-    <QueryClientResetContext.Provider value={resetClient}>
-      <QueryClientProvider client={queryClient}>
-        {children}
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
-    </QueryClientResetContext.Provider>
+export default function TanStackProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const [client] = useState(
+    new QueryClient({
+      defaultOptions: {
+        queries: {
+          staleTime: 60 * 1000, // 1 minute
+          refetchOnWindowFocus: false,
+          retry: 1,
+        },
+      },
+    })
   );
-};
-
-export default TanStackProvider;
+  return <QueryClientProvider client={client}>{children}</QueryClientProvider>;
+}

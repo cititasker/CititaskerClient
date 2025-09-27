@@ -1,4 +1,4 @@
-import ImageUploader from "@/app/post-task/_components/ImageUploader";
+import ImageUploader from "@/app/post-task/_components/partials/ImageUploader";
 import FormButton from "@/components/forms/FormButton";
 import FormCheckbox from "@/components/forms/FormCheckbox";
 import CustomModal from "@/components/reusables/CustomModal";
@@ -51,8 +51,6 @@ export default function CompleteTaskModal({ isOpen, onClose }: IModal) {
   const { handleSubmit, reset } = methods;
 
   const onSubmit = (values: schemaType) => {
-    console.log(333, values);
-
     requestPaymentMutation.mutate(
       { task_id: id },
       {

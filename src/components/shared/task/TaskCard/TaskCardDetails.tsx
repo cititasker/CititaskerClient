@@ -25,7 +25,7 @@ export function TaskCardDetails({
   const details = [
     {
       icon: detailIcons.calendar,
-      text: formatDate(date, "D MMM YYYY"),
+      text: formatDate(date),
       color: "text-blue-600",
     },
     {

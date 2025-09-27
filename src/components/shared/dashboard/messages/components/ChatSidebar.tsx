@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Search } from "lucide-react";
 import { IConversation } from "../types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { getInitials } from "@/utils";
 
 interface ChatSidebarProps {
   conversations: IConversation[];
@@ -27,13 +28,6 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState<TabKey>("all");
-
-  const getInitials = (name: string) =>
-    name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase();
 
   const filteredConversations = useMemo(() => {
     return conversations

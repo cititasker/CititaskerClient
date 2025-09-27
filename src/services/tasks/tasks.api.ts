@@ -93,3 +93,36 @@ export function requestPayment(data: any) {
       throw error.response?.data;
     });
 }
+
+export function postQuestion(data: any) {
+  return api
+    .post(API_ROUTES.POST_QUESTION, data)
+    .then((data) => {
+      return data.data;
+    })
+    .catch((error: AxiosError) => {
+      throw error.response?.data;
+    });
+}
+
+export function replyQuestion(data: any) {
+  return api
+    .post(API_ROUTES.REPLY_QUESTION, data)
+    .then((data) => {
+      return data.data;
+    })
+    .catch((error: AxiosError) => {
+      throw error.response?.data;
+    });
+}
+
+export function getTaskQuestion(id: any) {
+  return api
+    .get(`${API_ROUTES.GET_QUESTIONS}?task_id=${id}`)
+    .then((data) => {
+      return data.data;
+    })
+    .catch((error: AxiosError) => {
+      throw error.response?.data;
+    });
+}

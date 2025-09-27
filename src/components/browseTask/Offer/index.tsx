@@ -14,6 +14,8 @@ import { API_ROUTES } from "@/constant";
 import Empty from "@/components/myTasks/Empty";
 import { ConfirmModal } from "@/components/reusables/Modals/ConfirmModal";
 import useModal from "@/hooks/useModal";
+import EmptyState from "@/components/reusables/EmptyState";
+import { Briefcase } from "lucide-react";
 
 interface OfferProps {
   offers: IOffer[];
@@ -68,7 +70,10 @@ const Offer: React.FC<OfferProps> = ({ offers }) => {
   if (offers.length === 0) {
     return (
       <div className="text-center py-12">
-        <Empty text="No offers have been made yet" />
+        <EmptyState
+          title="No offers have been made yet"
+          icon={<Briefcase className="w-8 h-8 text-neutral-400" />}
+        />
       </div>
     );
   }

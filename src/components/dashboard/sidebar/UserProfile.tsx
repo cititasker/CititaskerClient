@@ -21,7 +21,7 @@ const UserProfile = ({ className, compact = false }: UserProfileProps) => {
     initializeName({
       first_name: user.first_name,
       last_name: user.last_name,
-    }) || "Guest";
+    }) || "Anonymous";
 
   const profilePath = user?.id ? `/${user.role}/profile/${user.id}` : "#";
 

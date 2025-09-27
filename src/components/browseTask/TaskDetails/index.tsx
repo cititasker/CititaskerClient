@@ -1,23 +1,26 @@
 "use client";
 
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect } from "react";
 import { useParams } from "next/navigation";
 import { Share, Flag, Bookmark, ArrowLeft } from "lucide-react";
 import ShareTaskModal from "../Modals/ShareTaskModal";
 import ImageGallery from "../Modals/ImageGalleryModal/ImageGallery";
 import CustomTab from "@/components/reusables/CustomTab";
 import Offer from "../Offer";
-import Questions from "../Questions";
 import PosterInfo from "./PosterInfo";
 import useModal from "@/hooks/useModal";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { setTaskDetails, setUserTaskOffer } from "@/store/slices/task";
-import { useFetchTaskById } from "@/services/tasks/tasks.hook";
+import {
+  useFetchTaskById,
+  useFetchTaskQuestion,
+} from "@/services/tasks/tasks.hook";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import CustomDropdown from "@/components/reusables/CustomDropdown";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
+import Questions from "@/components/shared/components/comment/Questions";
 
 interface TaskDetailsProps {
   back: string;
@@ -90,18 +93,20 @@ const TaskHeader = ({
 };
 
 const TaskContent = ({ task }: { task: ITask }) => {
+  const { data } = useFetchTaskQuestion(task.id);
+  const questions = data?.data?.data || [];
+
   const tabs = [
     {
       label: `Offers (${task.offer_count || 0})`,
       value: "offers",
       render: () => <Offer offers={task.offers} />,
     },
-    // {
-    //   label: `Questions (${task.questions?.length || 0})`,
-    //   label: `Questions (0)`,
-    //   value: "questions",
-    //   render: () => <Questions />,
-    // },
+    {
+      label: `Questions (${questions.length || 0})`,
+      value: "questions",
+      render: () => <Questions questions={questions} taskId={task.id} />,
+    },
   ];
 
   return (

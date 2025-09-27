@@ -1,5 +1,6 @@
-import { useState, useCallback, useMemo } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+import { useState, useCallback } from "react";
+import { useRouter } from "next/navigation";
+import { ROUTES } from "@/constant";
 
 export const useMobileNav = (
   onLogout: () => void,
@@ -7,13 +8,18 @@ export const useMobileNav = (
 ) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [notifications] = useState(2);
-  const queryClient = useQueryClient();
+  const router = useRouter();
 
   const handleLogout = useCallback(async () => {
-    await onLogout();
-    queryClient.clear();
-    toggleMobileNav();
-  }, [onLogout, queryClient, toggleMobileNav]);
+    try {
+      await onLogout();
+      toggleMobileNav();
+      window.location.href = ROUTES.LOGIN;
+    } catch (error) {
+      toggleMobileNav();
+      window.location.href = ROUTES.LOGIN;
+    }
+  }, [onLogout, toggleMobileNav, router]);
 
   const handleNavClick = useCallback(() => {
     toggleMobileNav();

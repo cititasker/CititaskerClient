@@ -1,6 +1,8 @@
 import React from "react";
 import UserOffer from "../browseTask/Offer/UserOffer";
 import Empty from "./Empty";
+import EmptyState from "../reusables/EmptyState";
+import { ReceiptText } from "lucide-react";
 
 interface IProps {
   task: ITask;
@@ -13,9 +15,10 @@ function AllOffers({ task, toggleModal }: IProps) {
 
   if (!hasOffers) {
     return (
-      <Empty
-        text="No offer has been made yet. You will be notified when you get offers."
-        btnText="Check task"
+      <EmptyState
+        title="No offer has been made yet."
+        message="You will be notified when you get offers."
+        icon={<ReceiptText className="w-8 h-8 text-neutral-400" />}
       />
     );
   }
@@ -25,7 +28,7 @@ function AllOffers({ task, toggleModal }: IProps) {
     : task.offers;
 
   return (
-    <div className="paper rounded-none p-4 sm:p-8 h-full overflow-y-auto">
+    <div className="overflow-y-auto no-scrollbar">
       {visibleOffers.map((offer) => (
         <UserOffer
           key={offer.id}

@@ -3,7 +3,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Check, CheckCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { IMessage } from "../../types";
-import { formatTime, getInitials } from "../../utils";
+import { getInitials } from "@/utils";
+import { formatTime } from "../../utils";
 
 interface Props {
   message: IMessage;

@@ -1,23 +1,21 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
-import { z } from "zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { z, ZodSchema } from "zod";
 
 import { useAppSelector } from "@/store/hook";
-import { replyOffer } from "@/services/offer";
 import { defaultProfile } from "@/constant/images";
-import { API_ROUTES } from "@/constant";
-import { useSnackbar } from "@/providers/SnackbarProvider";
-import RichEditor from "./RichEditor/RichEditor";
+import RichEditor, { RichEditorRef } from "./RichEditor/RichEditor";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
+import FormButton from "@/components/forms/FormButton";
 
-const schema = z.object({
+// Define your default schema
+const defaultSchema = z.object({
   content: z.string().min(1, "Please write your reply"),
-  offer_id: z.number().nullable(),
+  id: z.number().nullable(),
   attachments: z
     .array(
       z.instanceof(File).refine((file) => file.size <= 5_000_000, {
@@ -27,31 +25,50 @@ const schema = z.object({
     .optional(),
 });
 
-type SchemaType = z.infer<typeof schema>;
+// Infer type from defaultSchema
+export type CommentBoxSchemaType = z.infer<typeof defaultSchema>;
 
 interface CommentBoxProps {
-  offer_id?: number;
-  onSuccess?: () => void;
+  id?: number;
+  schema?: ZodSchema<CommentBoxSchemaType>; // <- This fixes your type error
+  onSubmit: (values: CommentBoxSchemaType) => Promise<void>;
   placeholder?: string;
   compact?: boolean;
+  acceptTypes?: string[];
+  showLinkButton?: boolean;
+  isLoading?: boolean;
+  onSuccess?: () => void;
+  onError?: (error: string) => void;
+  autoFocus?: boolean;
+  showAvatar?: boolean;
+  className?: string;
 }
 
 const CommentBox: React.FC<CommentBoxProps> = ({
-  offer_id,
-  onSuccess,
+  id,
+  schema = defaultSchema,
+  onSubmit,
   placeholder = "Write a comment...",
   compact = false,
+  acceptTypes = ["image/png", "image/jpeg", "image/jpg"],
+  showLinkButton = false,
+  isLoading = false,
+  onSuccess,
+  onError,
+  autoFocus = false,
+  showAvatar = true,
+  className,
 }) => {
   const { user } = useAppSelector((state) => state.user);
-  const queryClient = useQueryClient();
-  const { showSnackbar } = useSnackbar();
+  const richEditorRef = useRef<RichEditorRef>(null);
+
   const [isFocused, setIsFocused] = useState(false);
   const [isEmpty, setIsEmpty] = useState(true);
 
-  const methods = useForm<SchemaType>({
+  const methods = useForm<CommentBoxSchemaType>({
     defaultValues: {
       content: "",
-      offer_id: offer_id,
+      id: id ?? null,
       attachments: [],
     },
     resolver: zodResolver(schema),
@@ -59,36 +76,34 @@ const CommentBox: React.FC<CommentBoxProps> = ({
 
   const { handleSubmit, setValue, reset, watch } = methods;
 
-  const mutation = useMutation({
-    mutationFn: replyOffer,
-    onSuccess(data) {
-      reset();
-      setIsEmpty(true);
-      setIsFocused(false);
-      showSnackbar(data.message, "success");
-      onSuccess?.();
-      queryClient.invalidateQueries({
-        queryKey: [API_ROUTES.OFFER_REPLIES, offer_id],
-      });
+  const onContentUpdate = useCallback(
+    (html: string, isEmpty: boolean) => {
+      setValue("content", html);
+      setIsEmpty(isEmpty);
     },
-    onError(error: any) {
-      showSnackbar(error.message || "Failed to send reply", "error");
-    },
-  });
+    [setValue]
+  );
 
-  const onContentUpdate = (html: string, isEmpty: boolean) => {
-    setValue("content", html);
-    setIsEmpty(isEmpty);
-  };
+  const onFocusChange = useCallback((focused: boolean) => {
+    setIsFocused(focused);
+  }, []);
 
-  const onSubmit = handleSubmit((values) => {
+  const resetEditor = useCallback(() => {
+    reset();
+    richEditorRef.current?.reset();
+    setIsEmpty(true);
+    setIsFocused(false);
+  }, [reset]);
+
+  const onInternalSubmit = handleSubmit(async (values) => {
     if (isEmpty || !values.content.trim()) return;
-
-    const formData = new FormData();
-    formData.append("offer_id", `${values.offer_id}`);
-    formData.append("content", values.content);
-    values.attachments?.forEach((file) => formData.append("images[]", file));
-    mutation.mutate(formData);
+    try {
+      await onSubmit(values);
+      onSuccess?.();
+      resetEditor();
+    } catch (error: any) {
+      onError?.(error?.message || "Failed to submit comment.");
+    }
   });
 
   const avatarSize = compact ? "w-8 h-8" : "w-10 h-10";
@@ -116,7 +131,7 @@ const CommentBox: React.FC<CommentBoxProps> = ({
 
         {/* Comment Input */}
         <div className="flex-1 min-w-0">
-          <form onSubmit={onSubmit} className="space-y-2">
+          <form onSubmit={onInternalSubmit} className="space-y-2">
             <div
               className={`border rounded-2xl transition-all duration-200 ${
                 isFocused
@@ -125,17 +140,19 @@ const CommentBox: React.FC<CommentBoxProps> = ({
               }`}
             >
               <RichEditor
+                ref={richEditorRef}
                 onContentUpdate={onContentUpdate}
-                onFocusChange={setIsFocused}
+                onFocusChange={onFocusChange}
                 placeholder={placeholder}
                 attachments={watch("attachments") ?? []}
                 setAttachments={(files) => setValue("attachments", files)}
-                isLoading={mutation.isPending}
-                onSubmit={onSubmit}
+                isLoading={isLoading}
+                onSubmit={onInternalSubmit}
                 compact={compact}
+                acceptTypes={acceptTypes}
+                showLinkButton={showLinkButton}
               />
             </div>
-
             {/* Error Display */}
             {methods.formState.errors.content && (
               <p className="text-xs text-error mt-1 px-3">

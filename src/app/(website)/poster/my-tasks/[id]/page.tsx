@@ -4,23 +4,22 @@ import { useParams, useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
-import { useEffect } from "react";
 
-import HeaderNavigation from "../_components/task-details/HeaderNavigation";
 import TaskStatusCard from "../_components/task-details/TaskStatusCard";
-import TaskSummaryCard from "../_components/task-details/TaskSummaryCard";
+import TaskSummaryCard from "../_components/task-details/TaskSummaryCard/TaskSummaryCard";
 import AllOffers from "@/components/myTasks/AllOffers";
-import Questions from "@/components/myTasks/Questions";
 import Reviews from "@/components/myTasks/Reviews";
 import AcceptOfferModal from "../_components/task-details/AcceptOfferModal";
 import PaymentSuccessModal from "../_components/task-details/PaymentSuccessModal";
 import PaySurChargeModal from "../_components/surcharge/PaySurChargeModal";
 import CustomTab from "@/components/reusables/CustomTab";
 
-import { useFetchUserTaskById } from "@/services/tasks/tasks.hook";
+import {
+  useFetchTaskQuestion,
+  useFetchUserTaskById,
+} from "@/services/tasks/tasks.hook";
 import { useOfferTaskLogic } from "../_components/hooks/useOfferTaskLogic";
-import { useAppDispatch } from "@/store/hook";
-import { setTaskDetails } from "@/store/slices/task";
+import Questions from "@/components/shared/components/comment/Questions";
 
 const schema = z.object({
   agreed: z.boolean().refine((v) => v, {
@@ -33,10 +32,12 @@ type SchemaType = z.infer<typeof schema>;
 export default function Offer() {
   const { id } = useParams();
   const router = useRouter();
-  const dispatch = useAppDispatch();
 
   const { data } = useFetchUserTaskById({ id: id as string });
   const task = data?.data;
+
+  const { data: questionData } = useFetchTaskQuestion(task?.id);
+  const questions = questionData?.data?.data || [];
 
   const {
     showAcceptModal,
@@ -57,20 +58,6 @@ export default function Offer() {
     defaultValues: { agreed: false },
   });
 
-  // useEffect(() => {
-  //   if (task) {
-  //     dispatch(setTaskDetails(task));
-  //   }
-  // }, [task, dispatch]);
-
-  if (!task) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
-    );
-  }
-
   const tabs = [
     {
       label: `Offers (${task.offer_count || 0})`,
@@ -78,9 +65,9 @@ export default function Offer() {
       render: () => <AllOffers task={task} toggleModal={toggleAcceptModal} />,
     },
     {
-      label: "Questions",
+      label: `Questions (${questions.length})`,
       value: "questions",
-      render: () => <Questions />,
+      render: () => <Questions questions={questions} taskId={task.id} />,
     },
     {
       label: "Reviews",
@@ -102,13 +89,11 @@ export default function Offer() {
 
   return (
     <FormProvider {...methods}>
-      <div className="min-h-screen bg-background-secondary p-top">
-        <div className="container-w mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          {/* <HeaderNavigation /> */}
-
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+      <div className="p-top bg-background-secondary h-full flex flex-col">
+        <div className="container-w py-0 lg:flex-1 lg:min-h-0">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:h-full">
             {/* Left Column - Task Cards */}
-            <div className="lg:col-span-2 space-y-6">
+            <div className="lg:col-span-2 space-y-6 lg:overflow-y-auto lg:min-h-0">
               <TaskStatusCard
                 date={task.date}
                 offerCount={task.offer_count}
@@ -124,12 +109,11 @@ export default function Offer() {
             </div>
 
             {/* Right Column - Tabs */}
-            <div className="lg:col-span-3">
+            <div className="lg:col-span-3 lg:min-h-0">
               <CustomTab
                 items={tabs}
-                className="h-full"
-                // listClassName="mb-6"
-                contentClassName="max-h-[600px] h-full"
+                className="lg:h-full"
+                contentClassName="p-5 sm:p-8 lg:overflow-y-auto no-scrollbar"
               />
             </div>
           </div>

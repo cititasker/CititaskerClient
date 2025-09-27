@@ -1,70 +1,19 @@
 "use client";
-import React, { useEffect } from "react";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { useAppDispatch } from "@/store/hook";
-import { setTaskData } from "@/store/slices/task";
-import { IState, State } from "country-state-city";
+import React from "react";
+import { useSearchParams } from "next/navigation";
 import BackTo from "../BackTo";
-import PostTaskHeader from "@/app/post-task/_components/PostTaskHeader";
-import { useFetchTaskById } from "@/services/tasks/tasks.hook";
+import PostTaskHeader from "@/app/post-task/_components/partials/PostTaskHeader";
+import { useTaskData } from "@/app/post-task/hooks/useTaskData";
 
 const PostTaskLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const searchParams = useSearchParams();
-  const { replace } = useRouter();
-  const { id } = useParams() as { id?: string };
-  const dispatch = useAppDispatch();
+  const step = parseInt(searchParams.get("step") || "1");
 
-  const step = searchParams.get("step") || "1";
-  const { data, isLoading } = useFetchTaskById({ id: id ?? "" });
+  const { isLoading } = useTaskData();
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const currentUrl = new URL(window.location.href);
-      currentUrl.searchParams.set("step", step);
-      replace(currentUrl.toString());
-    }
-  }, [replace, step]);
-
-  // Populate form data when editing existing task
-  useEffect(() => {
-    if (!data?.data) return;
-
-    const task = data.data;
-    const allStates = State.getStatesOfCountry("NG") as IState[];
-    const state = allStates.find((el) => el.name === task.state);
-
-    const payload = {
-      name: task.name,
-      description: task.description,
-      category_id: task.category,
-      sub_category_id: task.sub_category,
-      location_type: task.location_type,
-      state: state ? { id: state.isoCode, name: state.name } : null,
-      // Convert string coordinates to numbers
-      location: Array.isArray(task.location)
-        ? task.location.map((coord) => Number(coord))
-        : [],
-      address: task.address,
-      time_frame: task.time_frame,
-      date: task.date,
-      time: task.time,
-      showTimeOfDay: !!task.date,
-      budget: String(task.budget),
-      images: task.images?.map((src) => ({ src, new: false })) || [],
-    };
-
-    dispatch(setTaskData(payload));
-  }, [data, dispatch]);
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
-    );
-  }
+  if (isLoading) return <PostTaskLoadingScreen />;
 
   return (
     <div className="min-h-screen bg-background">
@@ -83,5 +32,15 @@ const PostTaskLayout: React.FC<{ children: React.ReactNode }> = ({
     </div>
   );
 };
+
+// Extracted loading component for better reusability
+const PostTaskLoadingScreen = () => (
+  <div className="min-h-screen bg-background flex items-center justify-center">
+    <div className="text-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+      <p className="text-text-secondary">Loading task data...</p>
+    </div>
+  </div>
+);
 
 export default PostTaskLayout;

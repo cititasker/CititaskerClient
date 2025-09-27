@@ -17,6 +17,7 @@ import { ROLE, ROUTES } from "@/constant";
 import FormButton from "@/components/forms/FormButton";
 import { NavLink } from "./NavLink";
 import { ActionButton } from "./ActionButton";
+import SwitchRoleBtn from "../../../SwitchRoleBtn";
 
 interface UserProfileProps {
   user: Partial<IUser>;
@@ -87,9 +88,10 @@ export const UserProfile: React.FC<UserProfileProps> = ({
 
       {/* Role Switch */}
       <div className="px-4 mb-4">
-        <FormButton className="w-full btn-secondary h-11 text-sm font-medium">
-          Switch to {user.role === ROLE.tasker ? "Poster" : "Tasker"}
-        </FormButton>
+        <SwitchRoleBtn
+          user={user}
+          className="w-full btn-secondary h-11 text-sm font-medium"
+        />
       </div>
 
       {/* Navigation Menu */}
@@ -109,12 +111,18 @@ export const UserProfile: React.FC<UserProfileProps> = ({
           <span>Dashboard</span>
         </NavLink>
 
-        <NavLink href="/profile" onClick={onNavClick}>
+        <NavLink
+          href={`/${user.role}${ROUTES.DASHBOARD}/profile`}
+          onClick={onNavClick}
+        >
           <User className="w-5 h-5" />
           <span>Profile</span>
         </NavLink>
 
-        <NavLink href="/settings" onClick={onNavClick}>
+        <NavLink
+          href={`/${user.role}${ROUTES.DASHBOARD}/account`}
+          onClick={onNavClick}
+        >
           <Settings className="w-5 h-5" />
           <span>Settings</span>
         </NavLink>

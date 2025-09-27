@@ -49,3 +49,7 @@ export type UseGetAllTasksOptions = {
 export type UseFetchUserTaskByIdOptions = {
   id: string;
 } & UseCustomSuspenseQueryOptions<TaskApiResponse, Error, [string, string]>;
+
+export interface ITaskQuestionRes extends IResponse {
+  data: { data: CommentThreadT[] };
+}

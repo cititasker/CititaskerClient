@@ -31,7 +31,6 @@ export default function PaySurChargeModal({
             title="Success!"
             desc="Your payment was successful"
             className="justify-center"
-            contentClassName="mt-0"
           />
         );
       default:

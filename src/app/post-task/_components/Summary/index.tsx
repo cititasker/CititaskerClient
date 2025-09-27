@@ -1,13 +1,11 @@
 "use client";
-
 import React, { useMemo } from "react";
-import { useParams, useSearchParams } from "next/navigation";
-
+import { useParams, useSearchParams, useRouter } from "next/navigation";
 import { useAppSelector } from "@/store/hook";
 import { formatCurrency, formatDate } from "@/utils";
 import { imagesToFormData, SerializableImage } from "../../utils/fileHelpers";
 import { Badge } from "@/components/ui/badge";
-import PostTaskFormActions from "../PostTaskFormActions";
+import PostTaskFormActions from "../partials/PostTaskFormActions";
 import {
   Calendar,
   MapPin,
@@ -19,8 +17,10 @@ import {
   ImageIcon,
 } from "lucide-react";
 import { useTaskSubmission } from "../../hooks/useTaskSubmission";
+import { usePurgeData } from "@/utils/dataPurge";
 import SummaryField from "./SummaryField";
 import ImageGallery from "./ImageGallery";
+import { ROUTES } from "@/constant";
 
 const TIME_FRAMES = {
   morning: { value: "Morning", label: "Before 10 am" },
@@ -31,12 +31,13 @@ const TIME_FRAMES = {
 
 export default function Summary() {
   const { task } = useAppSelector((state) => state.task);
+  const { isAuth } = useAppSelector((state) => state.user);
   const { id } = useParams() as { id?: string };
   const searchParams = useSearchParams();
-  const action = searchParams.get("action");
-  const isReschedule = action === "reschedule";
-
+  const router = useRouter();
+  const isReschedule = searchParams.get("action") === "reschedule";
   const { submitTask, isLoading } = useTaskSubmission();
+  const { purgeTask } = usePurgeData();
 
   const timeFrameText = useMemo(() => {
     if (!task.showTimeOfDay || !task.time) return null;
@@ -49,26 +50,22 @@ export default function Summary() {
       task;
     const formData = new FormData();
 
-    // Add all other task data
     Object.entries(rest).forEach(([key, value]) => {
       if (key !== "showTimeOfDay" && value != null) {
         formData.append(key, String(value));
       }
     });
 
-    // Add structured data
     if (category_id?.id) formData.append("category_id", String(category_id.id));
     if (sub_category_id?.id)
       formData.append("sub_category_id", String(sub_category_id.id));
     if (state?.name) formData.append("state", String(state.name));
     if (id) formData.append("task_id", id);
 
-    // Add location array
+    // Add location and images
     if (Array.isArray(location)) {
       location.forEach((loc) => formData.append("location[]", String(loc)));
     }
-
-    // Add images
     if (images && Array.isArray(images)) {
       imagesToFormData(images as SerializableImage[], formData);
     }
@@ -80,8 +77,19 @@ export default function Summary() {
     e.preventDefault();
 
     try {
+      if (!isAuth) {
+        const currentUrl = window.location.href;
+        const redirect = encodeURIComponent(currentUrl);
+        router.push(`${ROUTES.LOGIN}?redirect=${redirect}`);
+        return;
+      }
+
+      // User is authenticated, proceed with submission
       const formData = buildFormData();
       await submitTask(formData, id);
+
+      // Only purge data after successful submission
+      await purgeTask();
     } catch (error) {
       console.error("Submission error:", error);
     }
@@ -95,6 +103,11 @@ export default function Summary() {
         </h2>
         <p className="text-text-muted">
           Please review the details before submitting
+          {!isAuth && (
+            <span className="block mt-2 text-sm text-amber-600">
+              You'll be asked to log in before submitting this task
+            </span>
+          )}
         </p>
       </div>
 
@@ -111,13 +124,11 @@ export default function Summary() {
               label="Task Title"
               value={task.name}
             />
-
             <SummaryField
               icon={<FileText className="w-4 h-4" />}
               label="Description"
               value={task.description}
             />
-
             <SummaryField
               icon={<Tag className="w-4 h-4" />}
               label="Category"
@@ -132,13 +143,11 @@ export default function Summary() {
             label="Location"
             value={task.address}
           />
-
           <SummaryField
             icon={<Calendar className="w-4 h-4" />}
             label="Date"
-            value={task.date ? formatDate(task.date, "DD - MM - YYYY") : null}
+            value={task.date ? formatDate(task.date) : null}
           />
-
           {timeFrameText && (
             <SummaryField
               icon={<Clock className="w-4 h-4" />}
@@ -146,13 +155,11 @@ export default function Summary() {
               value={timeFrameText}
             />
           )}
-
           <SummaryField
             icon={<DollarSign className="w-4 h-4" />}
             label="Budget"
             value={formatCurrency({ value: task.budget })}
           />
-
           <SummaryField
             icon={<Tag className="w-4 h-4" />}
             label="Location Type"
@@ -162,7 +169,6 @@ export default function Summary() {
               </Badge>
             }
           />
-
           {task.images && task.images.length > 0 && (
             <SummaryField
               icon={<ImageIcon className="w-4 h-4" />}
@@ -177,7 +183,9 @@ export default function Summary() {
         <PostTaskFormActions
           type="submit"
           loading={isLoading}
-          okText={id ? "Update Task" : "Create Task"}
+          okText={
+            !isAuth ? "Continue to Login" : id ? "Update Task" : "Create Task"
+          }
           backwardStep={isReschedule ? "3" : undefined}
         />
       </form>

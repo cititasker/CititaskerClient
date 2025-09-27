@@ -23,6 +23,7 @@ import { defaultProfile } from "@/constant/images";
 import { ROLE, ROUTES } from "@/constant";
 import { loggedInUser } from "@/utils";
 import FormButton from "@/components/forms/FormButton";
+import SwitchRoleBtn from "./SwitchRoleBtn";
 
 interface UserActionsProps {
   user: Partial<IUser>;
@@ -152,10 +153,7 @@ export function UserActions({ user, onLogout }: UserActionsProps) {
 
           {/* Role Switch */}
           <div className="p-4 border-b border-gray-100">
-            <FormButton className="w-full text-white text-sm font-medium">
-              {/* <Repeat className="w-4 h-4 mr-3" /> */}
-              Switch to {user.role === ROLE.tasker ? "Poster" : "Tasker"}
-            </FormButton>
+            <SwitchRoleBtn user={user} />
           </div>
 
           {/* Menu Items */}
