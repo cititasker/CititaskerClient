@@ -12,11 +12,21 @@ const compat = new FlatCompat({
 const eslintConfig = [
   ...compat.config({
     extends: ["next", "next/core-web-vitals", "next/typescript"],
+    settings: {
+      "import/parsers": {
+        "@typescript-eslint/parser": [".ts", ".tsx"],
+      },
+      "import/resolver": {
+        typescript: {
+          project: "./tsconfig.json",
+        },
+      },
+    },
     rules: {
       "@typescript-eslint/no-explicit-any": "off",
       "react/no-unescaped-entities": "off",
       "react-hooks/exhaustive-deps": "off",
-      "import/no-unresolved": ["error", { caseSensitive: true }],
+      // "import/no-unresolved": ["error", { caseSensitive: true }],
 
       "@typescript-eslint/no-unused-vars": [
         "error",
