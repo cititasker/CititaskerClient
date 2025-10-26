@@ -7,7 +7,7 @@ import BannerSection from "@/components/shared/components/BannerSection";
 import BannerLeftImage from "@/assets/images/how_it_works/banner_left_img.svg?url";
 import { accordionDataWithHTML } from "data";
 import FeatureShowcase from "@/components/shared/components/FeatureShowcase/FeatureShowcase";
-import FAQ from "@/components/shared/components/FAQ";
+import FAQ from "@/components/shared/FAQ";
 
 export default function Page() {
   return (

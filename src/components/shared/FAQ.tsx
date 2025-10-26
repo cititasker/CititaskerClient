@@ -71,7 +71,7 @@ const ContactCard = ({
 );
 
 // Main FAQ Component
-const FAQ: React.FC<FAQProps> = ({
+export default function FAQ({
   accordionData,
   // variant = "default",
   className,
@@ -79,7 +79,7 @@ const FAQ: React.FC<FAQProps> = ({
   contactButtonHref = "#contact",
   title = "Common Questions, Clear Answers",
   showContactCard = true,
-}) => {
+}: FAQProps) {
   return (
     <section className={cn("bg-secondary-50 relative", className)}>
       {/* Scroll anchor */}
@@ -129,6 +129,4 @@ const FAQ: React.FC<FAQProps> = ({
       </div>
     </section>
   );
-};
-
-export default FAQ;
+}

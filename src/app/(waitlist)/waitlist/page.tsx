@@ -6,7 +6,7 @@ import Hero from "@/components/waitlist/Hero/Hero";
 import Navbar from "@/components/waitlist/Navbar";
 import dynamic from "next/dynamic";
 import { accordionDataWithHTML } from "data";
-import FAQ from "@/components/shared/components/FAQ";
+import FAQ from "@/components/shared/FAQ";
 
 const CountDownTimer = dynamic(
   () => import("@/components/waitlist/CountDownTimer"),

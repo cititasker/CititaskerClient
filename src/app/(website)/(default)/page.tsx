@@ -3,7 +3,7 @@ import HowItWorks from "@/components/HowItWorks/HowItWorks";
 import LandingPageHero from "@/components/LandingPageHero";
 import PopularTasks from "@/components/PopularTasks/PopularTasks";
 import PosterTestimonies from "@/components/poster/landingPage/PosterTestimonies";
-import FAQ from "@/components/shared/components/FAQ";
+import FAQ from "@/components/shared/FAQ";
 import Stats from "@/components/Stats";
 import TaskCategories from "@/components/TaskCategories/TaskCategories";
 import Testimonies from "@/components/Testimonies/Testimonies";
