@@ -31,7 +31,6 @@ interface Props {
 
 const StepOne = ({
   nextStep,
-  title,
   budgetLabel,
   firstRowLabel = "Total offer",
   increasePrice = false,

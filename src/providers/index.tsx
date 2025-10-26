@@ -7,7 +7,7 @@ import { setUser } from "@/store/slices/user";
 import { useGetUser } from "@/services/user/user.hook";
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const dispatch = useAppDispatch();
 
   const { data } = useGetUser({

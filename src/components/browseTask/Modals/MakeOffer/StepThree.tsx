@@ -60,7 +60,7 @@ export default function StepThree({
     },
   });
 
-  const handleSubmit = (data: { accepted: boolean }) => {
+  const handleSubmit = () => {
     if (!session?.user) {
       router.push(
         `${ROUTES.LOGIN}?redirect=${encodeURIComponent(window.location.href)}`

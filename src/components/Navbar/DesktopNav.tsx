@@ -19,7 +19,7 @@ interface Props {
 export default function DesktopNav({ isAuth, path, user }: Props) {
   const isPoster = user?.role === "poster";
 
-  const { data = [], isPending } = useGetCategories();
+  const { data = [] } = useGetCategories();
 
   const navbarList = useMemo(
     () =>

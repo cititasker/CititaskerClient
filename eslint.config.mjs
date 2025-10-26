@@ -16,6 +16,23 @@ const eslintConfig = [
       "@typescript-eslint/no-explicit-any": "off",
       "react/no-unescaped-entities": "off",
       "react-hooks/exhaustive-deps": "off",
+      "import/no-unresolved": ["error", { caseSensitive: true }],
+
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_",
+        },
+      ],
+
+      "no-console": "warn",
+
+      // 3. Relax explicit types on exported functions/components
+      "@typescript-eslint/explicit-module-boundary-types": "off",
+
+      "prefer-const": "warn",
     },
   }),
 ];

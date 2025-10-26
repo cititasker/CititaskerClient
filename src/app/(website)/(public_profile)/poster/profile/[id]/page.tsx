@@ -3,7 +3,7 @@ import CustomTab from "@/components/reusables/CustomTab";
 import PublicProfile from "@/components/shared/dashboard/profile/public-view/components/PublicProfile";
 import { useParams } from "next/navigation";
 
-export default function page() {
+export default function Page() {
   const params = useParams();
   const id = params.id as string;
 

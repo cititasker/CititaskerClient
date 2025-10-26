@@ -49,7 +49,7 @@ interface FilterDrawerProps {
 
 export const FilterDrawer = ({
   filters = [],
-  onFiltersChange,
+  // onFiltersChange,
   title = "Filter Options",
   description = "Customize your search filters",
   triggerText = "Filters",

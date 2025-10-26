@@ -2,12 +2,11 @@
 
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { Check, CheckCheck } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { IConversation, IMessage } from "../types";
 import { useAppSelector } from "@/store/hook";
 
-import { formatDate, formatTime } from "../utils";
+import { formatDate } from "../utils";
 import ChatHeader from "./partials/ChatHeader";
 import ChatInput from "./partials/ChatInput/ChatInput";
 import ChatMessageBubble from "./partials/ChatMessageBubble";
@@ -26,7 +25,6 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
   const { user } = useAppSelector((state) => state.user);
   const router = useRouter();
   const [messageInput, setMessageInput] = useState("");
-  const [isTyping] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -58,18 +56,18 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
     adjustTextareaHeight();
   }, [messageInput, adjustTextareaHeight]);
 
-  const handleSend = () => {
-    if (!messageInput.trim()) return;
-    onSendMessage(messageInput);
-    setMessageInput("");
-  };
+  // const handleSend = () => {
+  //   if (!messageInput.trim()) return;
+  //   onSendMessage(messageInput);
+  //   setMessageInput("");
+  // };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      handleSend();
-    }
-  };
+  // const handleKeyPress = (e: React.KeyboardEvent) => {
+  //   if (e.key === "Enter" && !e.shiftKey) {
+  //     e.preventDefault();
+  //     handleSend();
+  //   }
+  // };
 
   const handleBackNavigation = () => {
     router.push(`/${user?.role}/dashboard/messages`);
@@ -86,24 +84,24 @@ const ChatConversation: React.FC<ChatConversationProps> = ({
     {}
   );
 
-  const renderMessageStatus = (message: IMessage, isUser: boolean) => {
-    if (!isUser) return null;
+  // const renderMessageStatus = (message: IMessage, isUser: boolean) => {
+  //   if (!isUser) return null;
 
-    return (
-      <div className="flex items-center mt-1 space-x-1">
-        <span className="text-xs text-primary-100">
-          {formatTime(message.timestamp)}
-        </span>
-        <div className="text-primary-100">
-          {message.status === "read" ? (
-            <CheckCheck size={14} className="text-blue-300" />
-          ) : (
-            <Check size={14} />
-          )}
-        </div>
-      </div>
-    );
-  };
+  //   return (
+  //     <div className="flex items-center mt-1 space-x-1">
+  //       <span className="text-xs text-primary-100">
+  //         {formatTime(message.timestamp)}
+  //       </span>
+  //       <div className="text-primary-100">
+  //         {message.status === "read" ? (
+  //           <CheckCheck size={14} className="text-blue-300" />
+  //         ) : (
+  //           <Check size={14} />
+  //         )}
+  //       </div>
+  //     </div>
+  //   );
+  // };
 
   return (
     <div className="h-full flex flex-col bg-gradient-to-br from-neutral-50 to-white relative">

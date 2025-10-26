@@ -15,9 +15,9 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
+  // eslint: {
+  //   ignoreDuringBuilds: true,
+  // },
   webpack(config, { isServer }) {
     if (!isServer) {
       // Don't resolve 'fs' module on the client to prevent this error

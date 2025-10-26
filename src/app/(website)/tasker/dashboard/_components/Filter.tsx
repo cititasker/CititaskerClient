@@ -13,13 +13,13 @@ interface IProps {
   resetAll: () => void;
 }
 
-function Filter({ setColumnFilters, resetAll }: IProps) {
+function Filter({ setColumnFilters: _, resetAll }: IProps) {
   const filterMethods = useForm<FilterFormValues>({
     resolver: zodResolver(filterSchema),
     defaultValues: {},
   });
 
-  const onFilterSubmit = (data: FilterFormValues) => {
+  const onFilterSubmit = () => {
     // Convert form data to TanStack Table filters
     // const filters = Object.entries(data)
     //   .filter(([_, value]) => value && value.trim() !== "")

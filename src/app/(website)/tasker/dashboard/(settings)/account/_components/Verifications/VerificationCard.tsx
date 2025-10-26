@@ -1,5 +1,4 @@
-import StatusBadge from "@/components/reusables/StatusBadge";
-import { CustomStatusBadge } from "../../../../../../../../components/reusables/CustomStatusBadge";
+import { CustomStatusBadge } from "@/components/reusables/CustomStatusBadge";
 
 const statuses = {
   verified: {

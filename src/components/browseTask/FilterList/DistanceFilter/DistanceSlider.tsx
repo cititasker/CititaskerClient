@@ -7,7 +7,7 @@ interface DistanceSliderProps {
   value: number;
 }
 
-export function DistanceSlider({ control, value }: DistanceSliderProps) {
+export function DistanceSlider({ value }: DistanceSliderProps) {
   return (
     <div>
       <p className="mb-2">Distance ({value} km)</p>

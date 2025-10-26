@@ -1,7 +1,6 @@
 "use client";
 import { useCallback, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ROUTES } from "@/constant";
 
 const TOTAL_STEPS = 5;
 const STEP_PARAM = "step";

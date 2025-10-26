@@ -110,4 +110,6 @@ const ImageGallery = React.memo(
   }
 );
 
+ImageGallery.displayName = "ImageGallery";
+
 export default ImageGallery;

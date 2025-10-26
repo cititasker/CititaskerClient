@@ -20,9 +20,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { defaultProfile } from "@/constant/images";
-import { ROLE, ROUTES } from "@/constant";
+import { ROUTES } from "@/constant";
 import { loggedInUser } from "@/utils";
-import FormButton from "@/components/forms/FormButton";
 import SwitchRoleBtn from "./SwitchRoleBtn";
 
 interface UserActionsProps {

@@ -1,6 +1,5 @@
 "use client";
 import * as React from "react";
-import Link from "next/link";
 import { useAppSelector } from "@/store/hook";
 import { initializeName } from "@/utils";
 import { ROUTES } from "@/constant";

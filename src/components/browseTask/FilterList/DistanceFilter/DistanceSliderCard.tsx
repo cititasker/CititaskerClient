@@ -1,15 +1,12 @@
 import React from "react";
 import { Ruler } from "lucide-react";
 import { RangeSlider } from "@/components/forms/RangeSlider";
-import { useFormContext } from "react-hook-form";
 
 interface DistanceSliderCardProps {
   value: number;
 }
 
 export function DistanceSliderCard({ value }: DistanceSliderCardProps) {
-  const { control } = useFormContext();
-
   const getDistanceLabel = (km: number) => {
     if (km === 0) return "Exact location";
     if (km <= 5) return `${km}km - Very close`;

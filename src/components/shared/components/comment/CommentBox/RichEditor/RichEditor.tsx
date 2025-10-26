@@ -128,4 +128,6 @@ const RichEditor = forwardRef<RichEditorRef, RichEditorProps>(
   }
 );
 
+RichEditor.displayName = "RichEditor";
+
 export default RichEditor;

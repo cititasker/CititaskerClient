@@ -11,7 +11,6 @@ import Section3MainBR from "@/assets/images/how_it_works/section_3_main_poster_b
 import ShapeBg1 from "@/../public/images/shape_bg/bg_shape_1.png";
 import ShapeBg2 from "@/../public/images/shape_bg/bg_shape_2.png";
 import ShapeBg3 from "@/../public/images/shape_bg/bg_shape_3.png";
-import Image from "next/image";
 
 export const steps = [
   {

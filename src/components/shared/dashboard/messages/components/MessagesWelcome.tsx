@@ -6,8 +6,6 @@ import { MessageCircle, Search, Clock, ShieldCheck } from "lucide-react";
 const MessagesWelcome: React.FC = () => {
   const [isMobile, setIsMobile] = useState(false);
 
-  if (isMobile) return null;
-
   // On large screens, we don't show this page (because conversation view appears)
   useEffect(() => {
     const checkMobile = () => {
@@ -18,6 +16,8 @@ const MessagesWelcome: React.FC = () => {
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
+
+  if (isMobile) return null;
 
   return (
     <div className="h-full flex items-center justify-center p-8">

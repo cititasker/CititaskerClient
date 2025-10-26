@@ -11,11 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { howItWorksItems } from "../constant";
 
-interface HowItWorksDropdownProps {
-  userRole?: string;
-}
-
-export function HowItWorksDropdown({ userRole }: HowItWorksDropdownProps) {
+export function HowItWorksDropdown() {
   const [isOpen, setIsOpen] = React.useState(false);
 
   return (

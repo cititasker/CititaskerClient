@@ -50,7 +50,7 @@ export const GooglePlacesAutocomplete = ({
   const { control, setValue } = useFormContext();
   const { input, setInput, options, isLoading } = useGooglePlacesAutocomplete();
 
-  const fetchPlaceDetails = async (placeId: string, description: string) => {
+  const fetchPlaceDetails = async (placeId: string) => {
     if (!window?.google?.maps?.places) return;
 
     setLoading(true);
@@ -183,7 +183,7 @@ export const GooglePlacesAutocomplete = ({
                     <CommandItem
                       key={option.place_id}
                       onSelect={() => {
-                        fetchPlaceDetails(option.place_id, option.description);
+                        fetchPlaceDetails(option.place_id);
                         setOpen(false);
                       }}
                       className={cn(

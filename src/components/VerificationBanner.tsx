@@ -3,16 +3,6 @@ import React from "react";
 import Icons from "./Icons";
 import FormButton from "./forms/FormButton";
 
-const style = {
-  container: {
-    svg: {
-      path: {
-        fill: "var(--primary)",
-      },
-    },
-  },
-};
-
 const VerificationBanner = () => {
   return (
     <div className="bg-light-primary-2 w-full h-[85px] px-5 flex justify-center items-center rounded-[10px] relative mb-[14px]">

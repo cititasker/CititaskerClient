@@ -54,15 +54,9 @@ export default function StepTwo({ nextStep, prevStep }: StepTwoProps) {
     resolver: zodResolver(schema),
   });
 
-  const {
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = methods;
+  const { handleSubmit, watch } = methods;
 
   const reason = watch("reason");
-  const description = watch("description");
-  const remainingChars = maxLengthChar - (description?.length || 0);
 
   React.useEffect(() => {
     if (taskersOffer) {

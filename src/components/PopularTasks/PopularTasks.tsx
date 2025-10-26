@@ -73,15 +73,6 @@ const PopularTasks: React.FC = () => {
     },
   };
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6, ease: "easeOut" },
-    },
-  };
-
   const cardVariants = {
     hidden: { opacity: 0, scale: 0.9 },
     visible: {
@@ -119,7 +110,7 @@ const PopularTasks: React.FC = () => {
           viewport={{ once: true, amount: 0.2 }}
           variants={containerVariants}
         >
-          {POPULAR_TASKS.map((task, index) => (
+          {POPULAR_TASKS.map((task) => (
             <motion.div
               key={task.id}
               variants={cardVariants}

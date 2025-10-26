@@ -33,7 +33,7 @@ const schema = baseSchema
   });
 type SchemaType = z.infer<typeof schema>;
 
-export default function StepTwo({ nextStep, prevStep, isEdit }: StepTwoProps) {
+export default function StepTwo({ nextStep, prevStep }: StepTwoProps) {
   const dispatch = useAppDispatch();
   const { offer, taskersOffer } = useAppSelector((state) => state.task);
 
@@ -44,17 +44,7 @@ export default function StepTwo({ nextStep, prevStep, isEdit }: StepTwoProps) {
     resolver: zodResolver(schema),
   });
 
-  const {
-    handleSubmit,
-    watch,
-    setValue,
-    formState: { errors },
-  } = methods;
-
-  console.log(555, errors);
-
-  const description = watch("description");
-  const remainingChars = maxLengthChar - (description?.length || 0);
+  const { handleSubmit, setValue } = methods;
 
   React.useEffect(() => {
     if (taskersOffer?.description) {

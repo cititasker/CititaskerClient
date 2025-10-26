@@ -9,7 +9,7 @@ interface PriceInputProps {
   value: number;
 }
 
-export function PriceInput({ name, label, value }: PriceInputProps) {
+export function PriceInput({ name, label }: PriceInputProps) {
   const { control } = useFormContext();
   return (
     <div className="flex-1">

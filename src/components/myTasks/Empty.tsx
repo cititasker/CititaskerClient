@@ -22,7 +22,7 @@ const Empty: React.FC<EmptyProps> = ({
   btnText,
   onAction,
   showButton = false,
-  icon = "empty",
+  // icon = "empty",
   size = "md",
   className,
 }) => {

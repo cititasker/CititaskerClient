@@ -16,8 +16,8 @@ const CommentsThread: React.FC<CommentsThreadProps> = ({
   comments,
   onReplySubmit,
   isReplyLoading,
-  onLoadMoreReplies,
-  loadingStates,
+  // onLoadMoreReplies,
+  // loadingStates,
   submissionId,
   level = 0,
 }) => {

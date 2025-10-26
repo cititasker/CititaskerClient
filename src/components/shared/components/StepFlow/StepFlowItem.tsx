@@ -20,7 +20,7 @@ const StepFlowItem = ({
   index: number;
   totalItems: number;
 }) => {
-  const { id, title, text, icon: Icon } = data;
+  const { title, text, icon: Icon } = data;
   const isLastItem = index === totalItems - 1;
 
   return (

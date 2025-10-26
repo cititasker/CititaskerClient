@@ -1,6 +1,5 @@
 import React from "react";
 import UserOffer from "../browseTask/Offer/UserOffer";
-import Empty from "./Empty";
 import EmptyState from "../reusables/EmptyState";
 import { ReceiptText } from "lucide-react";
 

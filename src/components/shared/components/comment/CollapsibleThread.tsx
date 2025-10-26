@@ -1,5 +1,4 @@
 import React, { useState, useMemo } from "react";
-import { cn } from "@/lib/utils";
 import { CommentBoxSchemaType } from "./CommentBox";
 import { ThreadHeader } from "./partials/ThreadHeader";
 import { SingleComment } from "./SingleComment";

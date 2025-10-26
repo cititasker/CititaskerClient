@@ -4,6 +4,7 @@ import { CldImage, CldImageProps } from "next-cloudinary";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { ImageIcon, AlertCircle } from "lucide-react";
+import Image from "next/image";
 
 interface CloudinaryImageProps extends Omit<CldImageProps, "src"> {
   publicId: string;
@@ -52,7 +53,7 @@ export function CloudinaryImage({
         )}
       >
         {fallbackSrc ? (
-          <img
+          <Image
             src={fallbackSrc}
             alt={alt}
             className={className}

@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const MAX_IMAGE_COUNT = 3;
-const MAX_IMAGE_SIZE = 3 * 1024 * 1024; // 2MB
+// const MAX_IMAGE_SIZE = 3 * 1024 * 1024; // 2MB
 
 export const postTaskSchema = z.object({
   name: z

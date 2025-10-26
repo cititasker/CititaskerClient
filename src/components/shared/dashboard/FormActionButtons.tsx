@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Save, X, Loader2 } from "lucide-react";
+import { Save, X } from "lucide-react";
 import clsx from "clsx";
 import FormButton from "@/components/forms/FormButton";
 

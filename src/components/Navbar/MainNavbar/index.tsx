@@ -43,7 +43,7 @@ export default function MainNavbar() {
       dispatch(logout());
       await logoutUser();
       window.location.href = ROUTES.LOGIN;
-    } catch (error) {
+    } catch {
       window.location.href = ROUTES.LOGIN;
     }
   };
@@ -80,7 +80,7 @@ export default function MainNavbar() {
                   categoryGroups={categoryGroups}
                   isLoading={isLoading}
                 />
-                <HowItWorksDropdown userRole={user?.role} />
+                <HowItWorksDropdown />
 
                 {isAuth && user?.role && (
                   <Button

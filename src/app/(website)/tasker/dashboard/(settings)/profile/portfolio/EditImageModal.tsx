@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import Cropper from "react-easy-crop";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
-import { Move, Crop, ZoomIn, X, Info, RotateCw, Download } from "lucide-react";
+import { Move, Crop, ZoomIn, X, Info } from "lucide-react";
 import CustomModal from "@/components/reusables/CustomModal";
 import SaveButton from "@/components/reusables/SaveButton.tsx";
 

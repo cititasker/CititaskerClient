@@ -1,6 +1,5 @@
 import React from "react";
-import { Badge } from "@/components/ui/badge";
-import { MessageSquare, Users, Clock } from "lucide-react";
+import { MessageSquare, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ThreadStatsProps {

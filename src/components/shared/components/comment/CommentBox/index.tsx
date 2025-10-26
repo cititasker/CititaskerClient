@@ -17,6 +17,7 @@ import {
   ModerationResult,
 } from "@/lib/contentModeration";
 import { ModerationWarning } from "./ModerationWarning";
+import Image from "next/image";
 
 // Define your default schema
 const defaultSchema = z.object({
@@ -63,9 +64,9 @@ const CommentBox: React.FC<CommentBoxProps> = ({
   isLoading = false,
   onSuccess,
   onError,
-  autoFocus = false,
+  // autoFocus = false,
   showAvatar = true,
-  className,
+  // className,
   moderationConfig = MODERATION_PRESETS.NONE,
   onModerationViolation,
 }) => {
@@ -210,7 +211,8 @@ const CommentBox: React.FC<CommentBoxProps> = ({
                 className="object-cover"
               />
               <AvatarFallback>
-                <img
+                <Image
+                  fill
                   src={defaultProfile.src}
                   alt="Fallback"
                   className="object-cover w-full h-full rounded-full"

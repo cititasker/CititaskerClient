@@ -71,10 +71,10 @@ const Badge: React.FC<{ badge: string }> = ({ badge }) => {
 };
 
 // Star rating component with your brand colors
-const StarRating: React.FC<{ rating: string | number; size?: "sm" | "md" }> = ({
-  rating,
-  size = "sm",
-}) => {
+export const StarRating: React.FC<{
+  rating: string | number;
+  size?: "sm" | "md";
+}> = ({ rating, size = "sm" }) => {
   const sizeClass = size === "sm" ? "w-3 h-3" : "w-4 h-4";
   const numRating = typeof rating === "string" ? parseFloat(rating) : rating;
   const fullStars = Math.floor(numRating);

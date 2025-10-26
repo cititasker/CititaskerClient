@@ -16,7 +16,7 @@ export function createSuspenseQueryHook<
   TData,
   TError = unknown,
   TQueryKey extends readonly unknown[] = readonly unknown[],
-  TArgs extends Record<string, any> = {}
+  TArgs extends Record<string, any> = Record<string, any>
 >({
   getKey,
   queryFn,

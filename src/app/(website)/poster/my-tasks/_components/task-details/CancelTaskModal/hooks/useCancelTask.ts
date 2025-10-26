@@ -81,7 +81,7 @@ export const useCancelTask = () => {
     setCurrentStep((prev) => Math.max(1, prev - 1));
   };
 
-  const handleSubmit = async (data: CancelTaskFormData) => {
+  const handleSubmit = async () => {
     setIsSubmitting(true);
     try {
       // API call here

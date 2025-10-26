@@ -19,12 +19,6 @@ const RescheduleTaskModal = ({ rescheduleModal }: IProps) => {
 
   const [step, setStep] = useState(1);
 
-  const handleOptionClick = (action: string) => {
-    if (action === "reschedule") {
-      rescheduleModal.openModal();
-    }
-  };
-
   const resetModal = () => {
     rescheduleModal.closeModal();
     setStep(1);

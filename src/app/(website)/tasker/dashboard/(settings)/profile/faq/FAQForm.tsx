@@ -241,9 +241,10 @@ export default function FAQForm({
     reset,
   } = methods;
 
-  const fieldArray = isMultiple
-    ? useFieldArray({ name: "faqs", control })
-    : null;
+  const fieldArray = useFieldArray({
+    name: "faqs",
+    control,
+  });
 
   // Mutations
   const createMutation = useMutation({
@@ -332,7 +333,7 @@ export default function FAQForm({
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           {/* Form Fields */}
           <div className="space-y-4">
-            {isMultiple && fieldArray ? (
+            {isMultiple ? (
               fieldArray.fields.map((field, index) => (
                 <FAQField
                   key={field.id}

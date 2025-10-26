@@ -6,10 +6,7 @@ import { Card } from "@/components/ui/card";
 import PriceFilter from "./PriceFilter";
 import DistanceFilter from "./DistanceFilter";
 
-interface IProps {
-  searchTerm?: string;
-}
-const FilterList = ({ searchTerm }: IProps) => {
+const FilterList = () => {
   const items = [
     {
       id: "category",

@@ -1,4 +1,3 @@
-import { auth } from "@/auth";
 import BrowseCategories from "@/components/poster/landingPage/BrowseCategories/BrowseCategories";
 import PromotionBanner from "@/components/poster/landingPage/PromotionBanner";
 import Recommended from "@/components/poster/landingPage/Recommended";

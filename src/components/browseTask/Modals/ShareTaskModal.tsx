@@ -94,8 +94,7 @@ const ShareTaskModal: React.FC<ShareTaskModalProps> = ({
     try {
       await navigator.clipboard.writeText(taskUrl);
       showSnackbar("Link copied to clipboard!", "success");
-    } catch (error) {
-      // Fallback for older browsers
+    } catch {
       const textArea = document.createElement("textarea");
       textArea.value = taskUrl;
       document.body.appendChild(textArea);
@@ -116,6 +115,7 @@ const ShareTaskModal: React.FC<ShareTaskModalProps> = ({
         });
       } catch (error) {
         // User cancelled or error occurred
+        console.log(error);
       }
     }
   };

@@ -1,6 +1,5 @@
 "use client";
 import { DashboardCard } from "@/components/dashboard/DashboardCard";
-import { CustomTable } from "@/components/reusables/table/CustomTable";
 import { useAppSelector } from "@/store/hook";
 import { columns, RecentTask } from "./_components/column";
 import { DoughnutChart } from "@/components/shared/doughnut-chart";

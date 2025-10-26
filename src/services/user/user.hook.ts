@@ -12,7 +12,6 @@ import {
   getUserPorfolio,
   getUserProfileDetails,
   loginUser,
-  postReview,
   switchRoles,
 } from "./users.api";
 import { loginSchemaType } from "@/schema/auth";

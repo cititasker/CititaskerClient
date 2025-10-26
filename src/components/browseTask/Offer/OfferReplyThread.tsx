@@ -63,7 +63,7 @@ const OfferReplyThread: React.FC<ReplyOfferProps> = ({
   };
 
   const replyQuestion = (id: number) => {
-    router.push(`/browse-task/47?tab=questions&user=${38}`);
+    router.push(`/browse-task/47?tab=questions&user=${id}`);
   };
 
   if (!comment) return null;

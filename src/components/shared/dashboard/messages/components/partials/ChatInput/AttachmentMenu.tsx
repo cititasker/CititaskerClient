@@ -1,5 +1,5 @@
 import React from "react";
-import { Plus, X, Image, FileText } from "lucide-react";
+import { Plus, X, Image as ImageIcon, FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { IconDropdown } from "@/components/reusables/CustomDropdown";
 import { AttachmentOption } from "../../../types";
@@ -8,7 +8,7 @@ const attachmentOptions: AttachmentOption[] = [
   {
     id: "gallery",
     label: "Photos & Videos",
-    icon: <Image className="w-5 h-5" />,
+    icon: <ImageIcon className="w-5 h-5" />,
     accept: "image/*,video/*",
     type: "image",
     color: "bg-purple-500 hover:bg-purple-600",

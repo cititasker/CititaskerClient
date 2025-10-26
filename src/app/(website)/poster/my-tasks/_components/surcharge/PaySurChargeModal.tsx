@@ -16,8 +16,7 @@ export default function PaySurChargeModal({
   onClose,
   acceptedOffer,
 }: IProps) {
-  const { currentStep, direction, nextStep, prevStep } =
-    useStepFormAction(isOpen);
+  const { currentStep, nextStep } = useStepFormAction(isOpen);
 
   const renderStepContent = () => {
     switch (currentStep) {

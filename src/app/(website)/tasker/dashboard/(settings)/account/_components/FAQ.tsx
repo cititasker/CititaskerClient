@@ -41,11 +41,6 @@ const FAQ = () => {
     setShowForm(false);
   };
 
-  const accordionData = faqs.map((faq) => ({
-    question: faq.question,
-    answer: faq.answer,
-  }));
-
   return (
     <div className="mx-auto max-w-[776px] mb-10">
       {/* Empty State */}

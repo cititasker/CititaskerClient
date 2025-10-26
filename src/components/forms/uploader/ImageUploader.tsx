@@ -87,37 +87,35 @@ export default function ImageUploader({
   const currentImages: NormalizedImage[] = watch(name) || [];
 
   // Cloudinary hook (only when needed)
-  const cloudinaryUpload = useCloudinary
-    ? useCloudinaryUpload({
-        folder,
-        tags,
-        onSuccess: (result: CloudinaryUploadResult) => {
-          // Get current images and add the new one
-          const currentImagesData = watch(name) || [];
-          const cloudinaryData = {
-            id: result.public_id,
-            url: result.secure_url,
-            publicId: result.public_id,
-            size: result.bytes,
-            type: `${result.resource_type}/${result.format}`,
-            name: result.original_filename,
-            isUploaded: true,
-          };
-          const updatedImages = [...currentImagesData, cloudinaryData];
+  const cloudinaryUpload = useCloudinaryUpload({
+    folder,
+    tags,
+    onSuccess: (result: CloudinaryUploadResult) => {
+      // Get current images and add the new one
+      const currentImagesData = watch(name) || [];
+      const cloudinaryData = {
+        id: result.public_id,
+        url: result.secure_url,
+        publicId: result.public_id,
+        size: result.bytes,
+        type: `${result.resource_type}/${result.format}`,
+        name: result.original_filename,
+        isUploaded: true,
+      };
+      const updatedImages = [...currentImagesData, cloudinaryData];
 
-          setValue(name, updatedImages, {
-            shouldValidate: true,
-            shouldDirty: true,
-          });
-        },
-        onBatchComplete: (results) => {
-          // This gets called when all files in a batch are done
-          console.log("All files uploaded:", results);
-          onUploadComplete?.(watch(name) || []);
-        },
-        onError: onUploadError,
-      })
-    : null;
+      setValue(name, updatedImages, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    },
+    onBatchComplete: (results) => {
+      // This gets called when all files in a batch are done
+      console.log("All files uploaded:", results);
+      onUploadComplete?.(watch(name) || []);
+    },
+    onError: onUploadError,
+  });
 
   // Local file processing
   const processLocalFiles = async (files: File[]) => {
@@ -176,9 +174,9 @@ export default function ImageUploader({
     if (useCloudinary) {
       try {
         if (filesToProcess.length === 1) {
-          await cloudinaryUpload?.uploadFile(filesToProcess[0]);
+          await cloudinaryUpload.uploadFile(filesToProcess[0]);
         } else {
-          await cloudinaryUpload?.uploadMultiple(filesToProcess);
+          await cloudinaryUpload.uploadMultiple(filesToProcess);
         }
       } catch (error) {
         console.error("Cloudinary upload failed:", error);
@@ -234,11 +232,13 @@ export default function ImageUploader({
 
   // Determine current state
   const isUploading = useCloudinary
-    ? cloudinaryUpload?.isUploading
+    ? cloudinaryUpload.isUploading
     : isLocalProcessing;
-  const uploadProgress = useCloudinary ? cloudinaryUpload?.progress || 0 : 0;
+
+  const uploadProgress = useCloudinary ? cloudinaryUpload.progress || 0 : 0;
+
   const uploadError = useCloudinary
-    ? cloudinaryUpload?.error
+    ? cloudinaryUpload.error
     : localError
     ? { message: localError }
     : null;

@@ -15,7 +15,7 @@ export const useMobileNav = (
       await onLogout();
       toggleMobileNav();
       window.location.href = ROUTES.LOGIN;
-    } catch (error) {
+    } catch {
       toggleMobileNav();
       window.location.href = ROUTES.LOGIN;
     }

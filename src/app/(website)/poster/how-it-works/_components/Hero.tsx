@@ -1,22 +1,10 @@
 "use client";
 import React from "react";
-import HeroImage1 from "@/../public/images/tasker_hero.svg?url";
-import HeroImage2 from "@/../public/images/tasker_hero2.svg?url";
 import FormButton from "@/components/forms/FormButton";
 import Chef from "@/assets/images/chef.png";
 import BgShape from "@/../public/images/shape_bg/bg_shape_4.png";
 import Image from "next/image";
-import TaskerStats from "@/components/TaskerStats";
 import { ROUTES } from "@/constant";
-
-const imagesData = [
-  {
-    img: HeroImage1,
-  },
-  {
-    img: HeroImage2,
-  },
-];
 
 const Hero = () => {
   return (
@@ -59,9 +47,6 @@ const Hero = () => {
             </div>
           </div>
         </div>
-        {/* <div className="max-w-[38.125rem] w-full">
-          <HeroCarousel images={imagesData} extraClass="mx-auto" />
-        </div> */}
         <span className="w-[7.625rem] h-[7.625rem] rounded-full bg-red-light-1 absolute -bottom-[60px] left-[25%]"></span>
       </div>
     </div>

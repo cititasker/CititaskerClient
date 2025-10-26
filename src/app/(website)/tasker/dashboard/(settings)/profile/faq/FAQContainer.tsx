@@ -102,10 +102,10 @@ export default function FAQContainer() {
   const userId = String(user.id);
 
   const {
-    reorderedFaqs,
+    // reorderedFaqs,
     setReorderedFaqs,
     handleSaveReorder,
-    resetReorderedFaqs,
+    // resetReorderedFaqs,
     isSaving,
   } = useReorderFaqs(userId);
 

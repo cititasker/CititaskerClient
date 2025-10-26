@@ -50,8 +50,8 @@ const CertificateCard = ({
   index,
   name,
   onRemove,
-  isLast,
-}: {
+}: // isLast,
+{
   index: number;
   name: string;
   onRemove: () => void;

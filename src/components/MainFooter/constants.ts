@@ -1,4 +1,4 @@
-import { ContactInfo, FooterSection } from "./types";
+import { ContactInfo } from "./types";
 
 export const allowedCategoryNames = [
   "Building And Construction",

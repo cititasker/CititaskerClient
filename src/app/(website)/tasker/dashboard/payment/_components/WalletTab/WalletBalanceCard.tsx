@@ -17,7 +17,7 @@ export const WalletBalanceCard: React.FC<WalletBalanceCardProps> = ({
   showBalance = true,
   onToggleVisibility,
   className,
-  previousBalance,
+  // previousBalance,
   percentageChange = 12.5,
 }) => {
   return (

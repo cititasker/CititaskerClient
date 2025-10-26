@@ -93,7 +93,7 @@ const EditPortfolio = () => {
       const src = await convertToBase64(file);
       setSelectedImage({ src, file });
       setOpenCropModal(true);
-    } catch (error) {
+    } catch {
       showSnackbar("Failed to process image", "error");
     }
   };

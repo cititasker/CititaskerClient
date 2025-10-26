@@ -125,7 +125,6 @@ export const CommentContent: React.FC<CommentContentProps> = ({
             <div className="flex flex-wrap gap-2">
               {comment.files.map((fileUrl, index) => {
                 const fileName = getFileName(fileUrl);
-                const isImage = isImageFile(fileUrl);
 
                 return (
                   <div

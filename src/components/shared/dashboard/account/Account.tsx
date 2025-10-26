@@ -199,7 +199,7 @@ export default function Account() {
     },
   });
 
-  const { handleSubmit, setValue, reset } = methods;
+  const { handleSubmit, reset } = methods;
 
   // Initialize form with user data
   useEffect(() => {
@@ -235,7 +235,7 @@ export default function Account() {
         : Promise.resolve();
       const uploadPromise = uploadFile(editedImage.file);
 
-      const [_, result] = await Promise.all([deletePromise, uploadPromise]);
+      const [, result] = await Promise.all([deletePromise, uploadPromise]);
 
       if (result?.secure_url) {
         const formData = new FormData();
@@ -258,7 +258,7 @@ export default function Account() {
   };
 
   const onSubmit: SubmitHandler<accountSchemaType> = (values) => {
-    const { profile_image, ...rest } = values;
+    const { profile_image: _ignore, ...rest } = values;
     profileUpdate.mutate(rest);
   };
 

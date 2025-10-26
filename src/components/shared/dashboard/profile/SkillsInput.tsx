@@ -26,8 +26,8 @@ interface SkillsInputProps {
 const SkillBadge = ({
   skill,
   onRemove,
-  index,
-}: {
+}: // index,
+{
   skill: string;
   onRemove: () => void;
   index: number;

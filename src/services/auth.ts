@@ -8,7 +8,6 @@ import {
 } from "@/schema/auth";
 import api from "./apiService";
 import { AxiosError } from "axios";
-import { API_ROUTES } from "@/constant";
 import signupApi from "./signupApi";
 
 export function registerApi(data: loginSchemaType) {

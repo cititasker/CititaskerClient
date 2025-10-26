@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import FormButton from "@/components/forms/FormButton";
 import SectionHeader from "@/components/reusables/SectionHeader";
 import AccordionWithHTML from "@/components/Accordion/AccordionWithHTML";
+import Image from "next/image";
 
 interface FAQProps {
   accordionData: FAQItem[];
@@ -25,7 +26,7 @@ const UserAvatarStack = ({ count = 5 }: { count?: number }) => (
         className="w-12 h-12 rounded-full border-2 border-white shadow-sm absolute bg-neutral-200 overflow-hidden"
         style={{ left: `${32 * index}px`, zIndex: count - index }}
       >
-        <img
+        <Image
           src="/images/user.svg"
           alt={`User ${index + 1}`}
           width={48}
@@ -72,7 +73,7 @@ const ContactCard = ({
 // Main FAQ Component
 const FAQ: React.FC<FAQProps> = ({
   accordionData,
-  variant = "default",
+  // variant = "default",
   className,
   contactButtonText = "Contact Us",
   contactButtonHref = "#contact",

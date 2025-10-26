@@ -42,3 +42,5 @@ const CustomAccordion = ({
     ))}
   </Accordion>
 );
+
+export default CustomAccordion;

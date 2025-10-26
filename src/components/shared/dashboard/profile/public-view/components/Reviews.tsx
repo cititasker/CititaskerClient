@@ -5,7 +5,6 @@ import RatingCard from "@/components/reusables/RatingCard";
 import FormButton from "@/components/forms/FormButton";
 import ReviewModal from "./ReviewModal";
 import Rating from "@/components/reusables/Rating";
-import { initializeName } from "@/utils";
 
 export type ReviewItem = {
   image: string;

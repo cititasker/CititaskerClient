@@ -27,8 +27,8 @@ export const useRichEditor = ({
   onSubmit,
   moderationConfig,
   onModerationWarning,
-  compact = false,
-}: UseRichEditorProps) => {
+}: // compact = false,
+UseRichEditorProps) => {
   const [showToolbar, setShowToolbar] = useState(false);
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);

@@ -62,80 +62,79 @@ export interface SelectProps
 }
 
 const Select = React.forwardRef<unknown, SelectProps>(
-  (
+  ({
+    variant,
+    size,
+    // className,
+    leftComp,
+    value,
+    label,
+    isLoading,
+    contentPosition = "bottom",
+    // onSelect,
+    containerClassName,
+    // onChange,
+    options,
+    required,
+    onValueChange = () => {},
+    ...props
+  }) =>
+    // ref
     {
-      variant,
-      size,
-      className,
-      leftComp,
-      value,
-      label,
-      isLoading,
-      contentPosition = "bottom",
-      onSelect,
-      containerClassName,
-      onChange,
-      options,
-      required,
-      onValueChange = () => {},
-      ...props
-    },
-    ref
-  ) => {
-    return (
-      <ShadSelect
-        open={props.disabled ? false : undefined}
-        value={value as string}
-        onValueChange={(value) => {
-          onValueChange(
-            value,
-            options?.find((opt) => opt.value === value) || ({} as TOption),
-            options || []
-          );
-        }}
-      >
-        <SelectTrigger
-          className={cn(
-            selectVariants({ variant, size, className: containerClassName }),
-            label && value && "pt-6 font-medium"
-          )}
+      return (
+        <ShadSelect
+          open={props.disabled ? false : undefined}
+          value={value as string}
+          onValueChange={(value) => {
+            onValueChange(
+              value,
+              options?.find((opt) => opt.value === value) || ({} as TOption),
+              options || []
+            );
+          }}
         >
-          <div className="flex-1 flex items-center gap-2">
-            {isLoading ? (
-              <LoaderCircle className="animate-spin duration-200" />
-            ) : (
-              leftComp
+          <SelectTrigger
+            className={cn(
+              selectVariants({ variant, size, className: containerClassName }),
+              label && value && "pt-6 font-medium"
             )}
-            {label && (
-              <label
-                htmlFor={props.name}
-                className={cn(
-                  "duration-300 text-muted-foreground font-medium",
-                  value ? "absolute top-[2px] text-sm" : "text-base"
-                )}
-              >
-                {label}{" "}
-                <span className="text-red-600">{required ? "*" : null}</span>
-              </label>
-            )}
-            {value && (
-              <SelectValue
-                placeholder="Select a fruit"
-                className="font-medium"
-              />
-            )}
-          </div>
-        </SelectTrigger>
-        <SelectContent className="" side={contentPosition}>
-          {options?.map((opt) => (
-            <SelectItem key={opt.value} value={opt.value}>
-              {opt.label}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </ShadSelect>
-    );
-  }
+          >
+            <div className="flex-1 flex items-center gap-2">
+              {isLoading ? (
+                <LoaderCircle className="animate-spin duration-200" />
+              ) : (
+                leftComp
+              )}
+              {label && (
+                <label
+                  htmlFor={props.name}
+                  className={cn(
+                    "duration-300 text-muted-foreground font-medium",
+                    value ? "absolute top-[2px] text-sm" : "text-base"
+                  )}
+                >
+                  {label}{" "}
+                  <span className="text-red-600">{required ? "*" : null}</span>
+                </label>
+              )}
+              {value && (
+                <SelectValue
+                  placeholder="Select a fruit"
+                  className="font-medium"
+                />
+              )}
+            </div>
+          </SelectTrigger>
+          <SelectContent className="" side={contentPosition}>
+            {options?.map((opt) => (
+              <SelectItem key={opt.value} value={opt.value}>
+                {opt.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </ShadSelect>
+      );
+    }
 );
 
 Select.displayName = "Select";

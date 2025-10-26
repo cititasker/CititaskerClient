@@ -11,7 +11,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
-import { DollarSign } from "lucide-react";
 
 interface CurrencyInputProps {
   name: string;

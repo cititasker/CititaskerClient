@@ -38,7 +38,6 @@ export default function CustomDateTimePicker({
   name,
   label,
   showTimePicker = false,
-  className,
   labelClassName,
   placeholder = "Pick a date",
   minDate,

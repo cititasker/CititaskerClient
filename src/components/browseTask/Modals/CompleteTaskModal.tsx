@@ -50,7 +50,7 @@ export default function CompleteTaskModal({ isOpen, onClose }: IModal) {
   });
   const { handleSubmit, reset } = methods;
 
-  const onSubmit = (values: schemaType) => {
+  const onSubmit = () => {
     requestPaymentMutation.mutate(
       { task_id: id },
       {

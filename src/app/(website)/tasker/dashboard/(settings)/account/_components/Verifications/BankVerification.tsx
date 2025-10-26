@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { FormProvider, UseFormReturn } from "react-hook-form";
 import { CreditCard, Building2, Loader } from "lucide-react";
 
@@ -64,8 +64,6 @@ const BankVerificationModal: React.FC<BankVerificationModalProps> = ({
   name,
   isSubmitting,
 }) => {
-  const [isValidating, setIsValidating] = useState(false);
-
   // Watch form values to show validation state
   const accountNumber = methods.watch("account_number");
   const selectedBank = methods.watch("bank");
@@ -121,7 +119,7 @@ const BankVerificationModal: React.FC<BankVerificationModalProps> = ({
           </div>
 
           {/* Account Name Display */}
-          <AccountNameDisplay name={name} isLoading={isValidating} />
+          <AccountNameDisplay name={name} isLoading={false} />
 
           {/* Security Notice */}
           <ExtraInfo type="info" compact>

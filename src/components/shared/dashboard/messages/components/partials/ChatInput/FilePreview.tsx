@@ -1,6 +1,7 @@
 import React from "react";
 import { X, Play, User, FileText, Mic } from "lucide-react";
 import type { FilePreview as FilePreviewType } from "../../../types";
+import Image from "next/image";
 
 interface FilePreviewProps {
   preview: FilePreviewType;
@@ -28,8 +29,9 @@ export const FilePreview: React.FC<FilePreviewProps> = ({
   if (preview.type === "image" && preview.url) {
     return (
       <div className="relative flex-shrink-0">
-        <div className="w-20 h-20 rounded-lg overflow-hidden bg-neutral-200">
-          <img
+        <div className="relative w-20 h-20 rounded-lg overflow-hidden bg-neutral-200">
+          <Image
+            fill
             src={preview.url}
             alt={preview.name}
             className="w-full h-full object-cover"
