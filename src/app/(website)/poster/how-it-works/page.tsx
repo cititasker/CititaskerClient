@@ -1,14 +1,13 @@
 "use client";
 import React from "react";
 import Hero from "./_components/Hero";
-import WeLoveTodos from "./_components/WeLoveTodos";
-import FAQ from "../../../../components/shared/components/FAQ";
 import StepFlow from "@/components/shared/components/StepFlow";
 import { posterFeatures, sections, steps } from "./constants/data";
 import BannerSection from "@/components/shared/components/BannerSection";
 import BannerLeftImage from "@/assets/images/how_it_works/banner_left_img.svg?url";
 import { accordionDataWithHTML } from "data";
 import FeatureShowcase from "@/components/shared/components/FeatureShowcase/FeatureShowcase";
+import FAQ from "@/components/shared/components/FAQ";
 
 export default function Page() {
   return (
