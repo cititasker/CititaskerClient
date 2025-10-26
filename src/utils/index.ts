@@ -41,7 +41,7 @@ export const errorHandler = (error: any) => {
 
 export const formatDate = (
   date: Date | string | undefined,
-  outputFormat = "Do MMM YYYY",
+  outputFormat = "D MMM YYYY",
   inputFormat = "DD-MM-YYYY"
 ) => {
   if (!date) return "";
@@ -258,3 +258,9 @@ export const formatFileSize = (bytes: number): string => {
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + " " + sizes[i];
 };
+
+export function extractPublicIdFromUrl(url?: any): string | undefined {
+  if (!url) return undefined;
+  const afterUpload = url.split("/upload/")[1] || url;
+  return afterUpload.replace(/^v\d+\//, "").replace(/\.[^.]+$/, "");
+}

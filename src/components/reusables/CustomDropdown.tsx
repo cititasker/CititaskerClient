@@ -82,7 +82,7 @@ export const IconDropdown = ({
     <div
       className={cn(
         "h-8 w-8 p-0 rounded-md hover:bg-neutral-100 transition-colors flex items-center justify-center cursor-pointer",
-        "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1",
+        "focus:outline-none focus:ring-0 focus:ring-primary focus:ring-offset-1",
         disabled && "opacity-50 cursor-not-allowed",
         className
       )}

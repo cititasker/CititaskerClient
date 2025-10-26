@@ -1,5 +1,8 @@
 import { z } from "zod";
 
+const MAX_IMAGE_COUNT = 3;
+const MAX_IMAGE_SIZE = 3 * 1024 * 1024; // 2MB
+
 export const postTaskSchema = z.object({
   name: z
     .string()
@@ -22,7 +25,19 @@ export const postTaskSchema = z.object({
     })
     .nullable()
     .refine((value) => value, { message: "Please select a category" }),
-  images: z.array(z.any()),
+  images: z
+    .array(z.any()) // If you're using File objects, you can also use z.custom<File>()
+    .max(MAX_IMAGE_COUNT, `You can upload up to ${MAX_IMAGE_COUNT} images`)
+    // .refine(
+    //   (files) =>
+    //     files.every((file) =>
+    //       typeof file === "string" ? true : file.size <= MAX_IMAGE_SIZE
+    //     ),
+    //   {
+    //     message: "Each image must be less than 2MB",
+    //   }
+    // )
+    .optional(),
   location_type: z
     .enum(["in_person", "online"], {
       required_error: "Location type is required",

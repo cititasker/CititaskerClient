@@ -3,7 +3,6 @@ import React, { useMemo } from "react";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
 import { useAppSelector } from "@/store/hook";
 import { formatCurrency, formatDate } from "@/utils";
-import { imagesToFormData, SerializableImage } from "../../utils/fileHelpers";
 import { Badge } from "@/components/ui/badge";
 import PostTaskFormActions from "../partials/PostTaskFormActions";
 import {
@@ -21,6 +20,7 @@ import { usePurgeData } from "@/utils/dataPurge";
 import SummaryField from "./SummaryField";
 import ImageGallery from "./ImageGallery";
 import { ROUTES } from "@/constant";
+import { NormalizedImage } from "@/lib/image-uploader-utils";
 
 const TIME_FRAMES = {
   morning: { value: "Morning", label: "Before 10 am" },
@@ -62,12 +62,11 @@ export default function Summary() {
     if (state?.name) formData.append("state", String(state.name));
     if (id) formData.append("task_id", id);
 
-    // Add location and images
     if (Array.isArray(location)) {
       location.forEach((loc) => formData.append("location[]", String(loc)));
     }
     if (images && Array.isArray(images)) {
-      imagesToFormData(images as SerializableImage[], formData);
+      images.forEach((img) => formData.append("images[]", img.url));
     }
 
     return formData;
@@ -114,7 +113,7 @@ export default function Summary() {
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <ImageGallery
-            images={(task.images as SerializableImage[]) || []}
+            images={(task.images as NormalizedImage[]) || []}
             taskName={task.name}
           />
 
@@ -184,7 +183,7 @@ export default function Summary() {
           type="submit"
           loading={isLoading}
           okText={
-            !isAuth ? "Continue to Login" : id ? "Update Task" : "Create Task"
+            !isAuth ? "Continue to Login" : id ? "Update Task" : "Post Task"
           }
           backwardStep={isReschedule ? "3" : undefined}
         />

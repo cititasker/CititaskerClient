@@ -1,7 +1,7 @@
 import TaskList from "@/components/myTasks/TaskList";
 import { TaskFilter } from "../myTasks/TaskFilter";
 
-export default function MyTasksLayout({
+export default async function MyTasksLayout({
   children,
 }: {
   children: React.ReactNode;

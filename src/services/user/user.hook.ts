@@ -12,9 +12,11 @@ import {
   getUserPorfolio,
   getUserProfileDetails,
   loginUser,
+  postReview,
   switchRoles,
 } from "./users.api";
 import { loginSchemaType } from "@/schema/auth";
+import { useBaseQuery } from "@/hooks/useBaseQuery";
 
 type GetUserResponse = { data: IUser };
 
@@ -77,15 +79,22 @@ export const useGetFaq = (
 };
 
 export const useGetReviews = (
-  data: { id: string | number },
-  options?: UseQueryOptions<GetReviewsResponse, Error>
+  id: number,
+  options?: {
+    enabled?: boolean;
+    onSuccess?: (data: GetReviewsResponse) => void;
+    onError?: (error: Error) => void;
+  }
 ) => {
-  return useQuery<GetReviewsResponse, Error>({
-    queryKey: [API_ROUTES.GET_REVIEWS, data.id],
-    queryFn: () => getReviews(data.id),
-    enabled: !!data.id,
-    ...options,
-  });
+  return useBaseQuery<GetReviewsResponse, Error>(
+    [API_ROUTES.GET_REVIEWS, id],
+    () => getReviews(id),
+    {
+      enabled: options?.enabled ?? !!id,
+      onSuccess: options?.onSuccess,
+      onError: options?.onError,
+    }
+  );
 };
 
 export const useSwitchRole = (

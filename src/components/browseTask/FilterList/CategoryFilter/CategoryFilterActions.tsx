@@ -1,6 +1,6 @@
 import React from "react";
 import FormButton from "@/components/forms/FormButton";
-import { Check, RotateCcw, Filter } from "lucide-react";
+import { Check, RotateCcw } from "lucide-react";
 
 interface CategoryFilterActionsProps {
   onApply: () => void;
@@ -23,7 +23,7 @@ export function CategoryFilterActions({
         className="
           flex-1 bg-primary hover:bg-primary/90 text-white font-medium py-3 px-6 rounded-lg
           transition-all duration-200 ease-in-out
-          focus:ring-2 focus:ring-primary/20 focus:ring-offset-2
+          focus:ring-0 focus:ring-primary/20 focus:ring-offset-2
           shadow-sm hover:shadow-md
           flex items-center justify-center gap-2
         "
@@ -45,7 +45,7 @@ export function CategoryFilterActions({
           onClick={onClear}
           className="
             transition-all duration-200 ease-in-out
-            focus:ring-2 focus:ring-gray-200 focus:ring-offset-2
+            focus:ring-0 focus:ring-gray-200 focus:ring-offset-2
             flex items-center gap-2 font-medium
           "
         />

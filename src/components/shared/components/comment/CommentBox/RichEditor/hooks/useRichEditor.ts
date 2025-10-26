@@ -6,6 +6,7 @@ import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import Link from "@tiptap/extension-link";
 import useModal from "@/hooks/useModal";
+import { moderateContent } from "@/lib/contentModeration";
 
 interface UseRichEditorProps {
   placeholder: string;
@@ -14,6 +15,8 @@ interface UseRichEditorProps {
   isLoading: boolean;
   onSubmit: () => void;
   compact?: boolean;
+  moderationConfig?: any;
+  onModerationWarning?: any;
 }
 
 export const useRichEditor = ({
@@ -22,6 +25,8 @@ export const useRichEditor = ({
   onFocusChange,
   isLoading,
   onSubmit,
+  moderationConfig,
+  onModerationWarning,
   compact = false,
 }: UseRichEditorProps) => {
   const [showToolbar, setShowToolbar] = useState(false);
@@ -47,6 +52,14 @@ export const useRichEditor = ({
       const html = editor.getHTML();
       const isEmpty = editor.isEmpty;
       onContentUpdate(html, isEmpty);
+
+      // Real-time moderation check (optional)
+      if (moderationConfig?.enabled && !isEmpty) {
+        const result = moderateContent(html, moderationConfig);
+        if (result.warnings.length > 0) {
+          onModerationWarning?.(result.warnings);
+        }
+      }
     },
     onFocus: () => {
       onFocusChange(true);

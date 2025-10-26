@@ -2,12 +2,15 @@ import React from "react";
 import { Input } from "@/components/ui/input";
 import { ISearch } from "@/constant/icons";
 import { X } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface SearchBarProps {
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
   isSearching?: boolean;
+  autoFocus?: boolean;
+  className?: string;
 }
 
 export function SearchBar({
@@ -15,19 +18,22 @@ export function SearchBar({
   onChange,
   placeholder = "search for a task...",
   isSearching = false,
+  autoFocus = false,
+  className,
 }: SearchBarProps) {
   const handleClear = () => {
     onChange("");
   };
 
   return (
-    <div className="relative flex-1">
+    <div className={cn("relative flex-1", className)}>
       <ISearch className="absolute top-0 bottom-0 my-auto ml-3 shrink-0" />
       <Input
         className="pl-10 bg-white w-full pr-20"
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        autoFocus={autoFocus}
       />
 
       <div className="absolute right-3 top-0 bottom-0 my-auto flex items-center gap-2">

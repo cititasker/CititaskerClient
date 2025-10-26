@@ -15,6 +15,7 @@ interface EditImageModalProps {
   aspectRatio?: number;
   title?: string;
   description?: string;
+  loading?: boolean;
 }
 
 type CropMode = "reposition" | "crop";
@@ -228,6 +229,7 @@ const EditImageModal: React.FC<EditImageModalProps> = ({
   aspectRatio = 1,
   title = "Edit Image",
   description = "Position and crop your image to look its best",
+  loading,
 }) => {
   const [mode, setMode] = useState<CropMode>("reposition");
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -319,7 +321,7 @@ const EditImageModal: React.FC<EditImageModalProps> = ({
           </Button>
           <SaveButton
             onClick={handleSave}
-            isLoading={isSaving}
+            isLoading={isSaving || loading}
             label="Save Image"
             className="flex-1 sm:flex-none"
           />

@@ -5,14 +5,14 @@ import Image from "next/image";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { BiLoader } from "react-icons/bi";
-import { Camera, Edit3 } from "lucide-react";
+import { Camera } from "lucide-react";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateProfile, uploadProfile } from "@/services/user/users.api";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import { profileSchema, profileSchemaType, accountSchemaType } from "@/schema";
 import { useAppSelector } from "@/store/hook";
-import { errorHandler, getMaxDate } from "@/utils";
+import { errorHandler, extractPublicIdFromUrl, getMaxDate } from "@/utils";
 import { defaultProfile } from "@/constant/images";
 
 import FormInput from "@/components/forms/FormInput";
@@ -22,6 +22,8 @@ import FormButton from "@/components/forms/FormButton";
 import { API_ROUTES } from "@/constant";
 import { Button } from "@/components/ui/button";
 import EditImageModal from "@/app/(website)/tasker/dashboard/(settings)/profile/portfolio/EditImageModal";
+import { useCloudinaryUpload } from "@/hooks/useCloudinaryUpload";
+import { useCloudinaryDelete } from "@/hooks/useCloudinaryDelete";
 
 const genderOptions = [
   { id: "male", name: "Male" },
@@ -144,12 +146,23 @@ export default function Account() {
   const { showSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
 
-  // Image editing state
   const [selectedImage, setSelectedImage] = useState<{
     src: string;
     file: File;
   } | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  const { uploadFile, isUploading: isCloudinaryUploading } =
+    useCloudinaryUpload({
+      folder: "user-profiles",
+      onError: (error) => showSnackbar(error.message, "error"),
+    });
+
+  const { deleteImage, isDeleting: isCloudinaryDeleting } = useCloudinaryDelete(
+    {
+      // onError: (msg) => showSnackbar(msg, "error"),
+    }
+  );
 
   const profileUpload = useMutation({
     mutationFn: uploadProfile,
@@ -209,12 +222,31 @@ export default function Account() {
     setIsEditModalOpen(true);
   };
 
-  const handleSaveEditedImage = (editedImage: { src: string; file: File }) => {
-    const formData = new FormData();
-    formData.append("profile_image", editedImage.file);
-    profileUpload.mutate(formData);
-    setIsEditModalOpen(false);
-    setSelectedImage(null);
+  const handleSaveEditedImage = async (editedImage: {
+    src: string;
+    file: File;
+  }) => {
+    try {
+      const currentPublicId = extractPublicIdFromUrl(user?.profile_image);
+      const deletePromise = currentPublicId
+        ? deleteImage(currentPublicId).catch((e) => {
+            console.error("Delete failed:", e);
+          })
+        : Promise.resolve();
+      const uploadPromise = uploadFile(editedImage.file);
+
+      const [_, result] = await Promise.all([deletePromise, uploadPromise]);
+
+      if (result?.secure_url) {
+        const formData = new FormData();
+        formData.append("profile_image", result.secure_url);
+        profileUpload.mutate(formData);
+      }
+      setIsEditModalOpen(false);
+      setSelectedImage(null);
+    } catch (error) {
+      console.error("Upload failed", error);
+    }
   };
 
   const handleCloseEditModal = () => {
@@ -327,6 +359,7 @@ export default function Account() {
         aspectRatio={1}
         title="Edit Profile Photo"
         description="Crop and position your profile photo perfectly"
+        loading={isCloudinaryUploading || isCloudinaryDeleting}
       />
     </>
   );

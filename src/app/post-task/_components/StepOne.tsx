@@ -8,16 +8,25 @@ import FormInput from "@/components/forms/FormInput";
 import FormTextArea from "@/components/forms/FormTextArea";
 import { FormAutoComplete } from "@/components/forms/FormAutoComplete";
 import PostTaskFormActions from "./partials/PostTaskFormActions";
-import ImageUploader from "./partials/ImageUploader";
+import ImageUploader from "../../../components/forms/uploader/ImageUploader";
 import { useUrlParams } from "../hooks/useUrlParams";
 import { useStepForm } from "../hooks/useStepForm";
+import { toast } from "sonner";
 
 export default function StepOne() {
   const urlParams = useUrlParams();
   const [categoryId, setCategoryId] = useState<number | null>(null);
 
+  const stepOneSchema = postTaskSchema.pick({
+    name: true,
+    description: true,
+    category_id: true,
+    sub_category_id: true,
+    images: true,
+  });
+
   const { methods, onSubmit } = useStepForm({
-    schema: postTaskSchema,
+    schema: stepOneSchema,
     pickFields: [
       "name",
       "description",
@@ -79,6 +88,15 @@ export default function StepOne() {
     return () => subscription.unsubscribe();
   }, [watch, setValue, categoryId]);
 
+  const handleImageUploadComplete = (images: any[]) => {
+    console.log("Images uploaded to Cloudinary:", images);
+    // The images are already set in the form by the ImageUploader component
+  };
+
+  const handleImageUploadError = (error: any) => {
+    toast.error(`Image upload failed: ${error.message}`);
+  };
+
   return (
     <div className="space-y-6">
       <FormProvider {...methods}>
@@ -121,7 +139,26 @@ export default function StepOne() {
             />
           </div>
 
-          <ImageUploader name="images" />
+          <ImageUploader
+            name="images"
+            useCloudinary={true}
+            folder="task-images"
+            tags={["task", "user-upload"]}
+            limit={3}
+            maxFileSize={3} // 3MB max per file
+            showFileDetails={true}
+            transformations={{
+              width: 800,
+              height: 600,
+              crop: "limit",
+              quality: "auto",
+              format: "auto",
+            }}
+            onUploadComplete={handleImageUploadComplete}
+            onUploadError={handleImageUploadError}
+            description="Upload images to help describe your task"
+          />
+
           <PostTaskFormActions />
         </form>
       </FormProvider>

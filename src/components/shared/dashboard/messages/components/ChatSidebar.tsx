@@ -6,6 +6,7 @@ import { Search } from "lucide-react";
 import { IConversation } from "../types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getInitials } from "@/utils";
+import { SearchBar } from "@/components/browseTask/SearchBar";
 
 interface ChatSidebarProps {
   conversations: IConversation[];
@@ -143,21 +144,13 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
         <h2 className="text-xl font-semibold text-neutral-800 mb-4">Chats</h2>
 
         {/* Search */}
-        <div className="relative">
-          <Search
-            size={18}
-            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400"
-          />
-          <input
-            type="text"
-            placeholder="Search conversations..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl 
-                     focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-primary-300
-                     transition-colors text-sm placeholder:text-neutral-500"
-          />
-        </div>
+        <SearchBar
+          value={searchTerm}
+          onChange={setSearchTerm}
+          autoFocus
+          className="mb-4"
+          placeholder="Search conversations..."
+        />
       </div>
 
       {/* Tabs */}

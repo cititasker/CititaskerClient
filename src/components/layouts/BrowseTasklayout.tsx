@@ -2,7 +2,11 @@ import React from "react";
 import FilterList from "../browseTask/FilterList";
 import TaskList from "../browseTask/Tasklist";
 
-const BrowseTasklayout = ({ children }: { children: React.ReactNode }) => {
+export default function BrowseTasklayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <div className="h-dvh pt-[90px] bg-[#F3F5F6]">
       <div className="container-w py-0 flex flex-row gap-3 relative overflow-y-auto">
@@ -20,6 +24,4 @@ const BrowseTasklayout = ({ children }: { children: React.ReactNode }) => {
       </div>
     </div>
   );
-};
-
-export default BrowseTasklayout;
+}

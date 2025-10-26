@@ -5,6 +5,7 @@ import { setTaskData } from "@/store/slices/task";
 import { useFetchTaskById } from "@/services/tasks/tasks.hook";
 import { IState, State } from "country-state-city";
 import { usePurgeData } from "@/utils/dataPurge";
+import { normalizeFromCloudinaryUrl } from "@/lib/image-uploader-utils";
 
 export const useTaskData = () => {
   const { id } = useParams() as { id?: string };
@@ -42,7 +43,7 @@ export const useTaskData = () => {
       time: task.time,
       showTimeOfDay: !!task.date,
       budget: String(task.budget),
-      images: task.images?.map((src) => ({ src, new: false })) || [],
+      images: task.images?.map((src) => normalizeFromCloudinaryUrl(src)) || [],
     };
   }, [data?.data]);
 

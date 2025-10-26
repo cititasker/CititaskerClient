@@ -54,7 +54,7 @@ export default function BrowseTasksPage() {
         open={showFilter.isOpen}
         onOpenChange={showFilter.setIsOpen}
         title="Filter"
-        titleClassName="text-left"
+        titleClassName="p-0 text-left"
       >
         <FilterList />
       </CustomSheet>

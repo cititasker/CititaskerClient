@@ -134,7 +134,7 @@ export const EmptyTasks = (props: Omit<EmptyProps, "text" | "btnText">) => (
   <Empty
     text="No tasks yet"
     description="Create your first task to get started"
-    btnText="Create Task"
+    btnText="Post Task"
     {...props}
   />
 );

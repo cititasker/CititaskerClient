@@ -17,7 +17,7 @@ export const CategorySearch = ({
       placeholder="Search categories..."
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="w-full pl-10 pr-10 py-3 bg-background border border-border-light rounded-xl focus:ring-2 focus:ring-primary-400 focus:border-primary-500 outline-none transition-all"
+      className="w-full pl-10 pr-10 py-3 bg-background border border-border-light rounded-xl focus:ring-0 focus:ring-primary-400 focus:border-primary-500 outline-none transition-all"
     />
     {value && (
       <button

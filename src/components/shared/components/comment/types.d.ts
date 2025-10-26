@@ -19,4 +19,5 @@ interface CommentActionsProps {
   isLoading?: boolean;
   onReply: (commentId: number) => void;
   showReplyBox: boolean;
+  replyQuestion?: (id: number) => void;
 }

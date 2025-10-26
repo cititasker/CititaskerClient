@@ -9,18 +9,33 @@ import { useSnackbar } from "@/providers/SnackbarProvider";
 import { API_ROUTES } from "@/constant";
 import { CommentContent } from "@/components/shared/components/comment/partials/CommentContent";
 import { CommentActions } from "@/components/shared/components/comment/partials/CommentActions";
-import CommentsThread from "@/components/shared/components/comment/partials/CommentsThread";
+// import CommentsThread from "@/components/shared/components/comment/partials/CommentsThread";
 import { useReplyOffer } from "@/services/offers/offers.hook";
+import CommentsThread from "@/components/shared/components/comment/CommentsThread";
+import { useFetchTaskQuestion } from "@/services/tasks/tasks.hook";
+import { useParams, useRouter } from "next/navigation";
 
 interface ReplyOfferProps {
   comment: CommentThreadT | undefined;
-  isOwner: boolean;
+  isOwner?: boolean;
 }
 
-const OfferReplyThread: React.FC<ReplyOfferProps> = ({ comment, isOwner }) => {
+const OfferReplyThread: React.FC<ReplyOfferProps> = ({
+  comment,
+  isOwner = false,
+}) => {
   const [showReplyBox, setShowReplyBox] = useState(false);
   const queryClient = useQueryClient();
   const { showSnackbar } = useSnackbar();
+  const router = useRouter();
+
+  const { id } = useParams();
+
+  const { data } = useFetchTaskQuestion(id);
+  const questions = data?.data?.data || [];
+
+  console.log(8, questions);
+  console.log(9, comment);
 
   const replyMutation = useReplyOffer();
 
@@ -47,6 +62,10 @@ const OfferReplyThread: React.FC<ReplyOfferProps> = ({ comment, isOwner }) => {
     });
   };
 
+  const replyQuestion = (id: number) => {
+    router.push(`/browse-task/47?tab=questions&user=${38}`);
+  };
+
   if (!comment) return null;
 
   return (
@@ -59,6 +78,7 @@ const OfferReplyThread: React.FC<ReplyOfferProps> = ({ comment, isOwner }) => {
           isLoading={replyMutation.isPending}
           onReply={handleReplyToggle}
           showReplyBox={showReplyBox}
+          replyQuestion={replyQuestion}
         />
         {showReplyBox && (
           <div className="mt-4">

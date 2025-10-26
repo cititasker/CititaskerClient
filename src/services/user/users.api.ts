@@ -148,12 +148,16 @@ export const getReviews = (
     });
 };
 
-export const postReview = (data: any): Promise<GetReviewsResponse> => {
+export const postReview = ({
+  role,
+  ...data
+}: {
+  role: TRole;
+  [key: string]: any;
+}): Promise<GetReviewsResponse> => {
   return api
-    .post(`${API_ROUTES.POST_REVIEW}`, data)
-    .then((data) => {
-      return data.data;
-    })
+    .post(`${API_ROUTES.POST_REVIEW}/${role}`, data)
+    .then((res) => res.data)
     .catch((error: AxiosError) => {
       throw error.response?.data;
     });

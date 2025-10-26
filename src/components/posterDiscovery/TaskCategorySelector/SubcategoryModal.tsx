@@ -127,7 +127,7 @@ export const SubcategoryModal = ({
 
         {/* Create task button */}
         <FormButton
-          text="Create Task"
+          text="Post Task"
           onClick={handleCreateTask}
           className="w-full btn-primary h-12"
         />

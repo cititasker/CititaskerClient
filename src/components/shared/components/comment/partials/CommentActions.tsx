@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { formatTime } from "@/utils";
-import { MessageCircle } from "lucide-react";
+import { LucideMessageCircleQuestion, MessageCircle } from "lucide-react";
 import { canReply } from "../utils";
+import FormButton from "@/components/forms/FormButton";
 
 export const CommentActions: React.FC<CommentActionsProps> = ({
   comment,
@@ -9,6 +10,7 @@ export const CommentActions: React.FC<CommentActionsProps> = ({
   isLoading,
   onReply,
   showReplyBox,
+  replyQuestion,
 }) => {
   const showReplyButton = canReply(level);
 
@@ -46,6 +48,24 @@ export const CommentActions: React.FC<CommentActionsProps> = ({
         >
           Report
         </Button>
+      )}
+      {replyQuestion && (
+        <FormButton
+          variant="ghost"
+          size="sm"
+          onClick={() => replyQuestion(comment.user.id)}
+          disabled={isLoading}
+          icon={<LucideMessageCircleQuestion className="w-3 h-3" />}
+          text="View Question"
+          className={`
+            h-7 px-2 text-xs transition-all duration-200
+            ${
+              showReplyBox
+                ? "text-primary bg-primary-50 shadow-sm"
+                : "text-text-muted hover:text-primary hover:bg-primary-50"
+            }
+          `}
+        />
       )}
     </div>
   );

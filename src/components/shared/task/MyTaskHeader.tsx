@@ -27,9 +27,7 @@ export function MyTaskHeader({
 
       <FormButton
         icon={<Funnel />}
-        className="
-          !px-4 py-3 xl:hidden
-        "
+        className="!px-4 xl:hidden"
         text="Filters"
         onClick={onOpenFilter}
       />

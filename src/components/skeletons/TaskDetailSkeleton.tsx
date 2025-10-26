@@ -1,14 +1,13 @@
 "use client";
 
 import Loading from "@/app/loading";
-import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import React from "react";
 
 const TaskDetailSkeleton = () => {
   return (
     <>
-      <div className="hidden md:block h-full px-[52px] py-5 rounded-[25px] mt-3 bg-white">
+      <div className="hidden md:block h-full px-[52px] py-5 rounded-[25px] bg-white">
         {/* Header Row */}
         <div className="w-full h-[48px] flex items-center justify-between mb-8">
           <Skeleton className="w-[92px] h-[20px]" />

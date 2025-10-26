@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { EMOJI_DATA } from "./attachment-preview/constants";
+import { SearchBar } from "@/components/browseTask/SearchBar";
 
 interface EmojiPickerProps {
   onSelect: (emoji: { native: string }) => void;
@@ -41,18 +41,13 @@ const EmojiPicker: React.FC<EmojiPickerProps> = ({ onSelect }) => {
     <div className="w-80 bg-white border border-neutral-200 rounded-xl shadow-xl">
       <div className="p-4">
         {/* Search */}
-        <div className="relative mb-4">
-          <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-text-muted" />
-          <input
-            type="text"
-            placeholder="Search emojis..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 text-sm border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-            autoFocus
-          />
-        </div>
-
+        <SearchBar
+          value={searchTerm}
+          onChange={setSearchTerm}
+          autoFocus
+          className="mb-4"
+          placeholder="Search emojis..."
+        />
         {/* Categories */}
         {!searchTerm && (
           <div className="flex gap-1 mb-4 overflow-x-auto pb-2 no-scrollbar">

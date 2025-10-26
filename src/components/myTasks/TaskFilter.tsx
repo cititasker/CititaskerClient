@@ -56,7 +56,7 @@ export function TaskFilter({ onClose }: TaskFilterProps) {
               w-full px-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-600 
               hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800
               transition-all duration-200 ease-in-out
-              focus:ring-2 focus:ring-gray-200 focus:ring-offset-2
+              focus:ring-0 focus:ring-gray-200 focus:ring-offset-2
               flex items-center justify-center gap-2 font-medium
             "
           >

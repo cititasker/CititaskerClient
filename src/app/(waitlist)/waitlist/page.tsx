@@ -1,11 +1,12 @@
 "use client";
-import Faq from "@/components/Faq";
 import Footer from "@/components/waitlist/Footer";
 import TaskerBanner from "@/components/waitlist/TaskerBanner";
 import WhyCitiTasker from "@/components/waitlist/why/WhyCitiTasker";
 import Hero from "@/components/waitlist/Hero/Hero";
 import Navbar from "@/components/waitlist/Navbar";
 import dynamic from "next/dynamic";
+import { accordionDataWithHTML } from "data";
+import FAQ from "@/components/shared/components/FAQ";
 
 const CountDownTimer = dynamic(
   () => import("@/components/waitlist/CountDownTimer"),
@@ -19,7 +20,7 @@ export default function Home() {
       <Hero />
       <WhyCitiTasker />
       <CountDownTimer />
-      <Faq />
+      <FAQ accordionData={accordionDataWithHTML} />
       <TaskerBanner />
       <Footer />
     </main>

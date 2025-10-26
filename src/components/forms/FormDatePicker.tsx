@@ -73,7 +73,7 @@ export default function FormDatePicker({
                     // Base styles
                     "w-full h-12 px-4 shadow-none rounded-xl border justify-start font-normal transition-all duration-200",
                     "bg-background hover:bg-background",
-                    "focus:ring-2 focus:ring-ring ring-offset-1",
+                    "focus:ring-0 focus:ring-ring ring-offset-1",
 
                     // Border states
                     error && "border-error focus:border-error",

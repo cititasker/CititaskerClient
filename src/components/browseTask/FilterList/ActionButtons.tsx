@@ -23,7 +23,7 @@ export function ActionButtons({
         className={`
           flex-1
           transition-all duration-200 ease-in-out
-          focus:ring-2 focus:ring-offset-2
+          focus:ring-0 focus:ring-offset-2
           shadow-sm hover:shadow-md
         `}
       />
@@ -34,7 +34,7 @@ export function ActionButtons({
           icon={<RotateCcw size={16} />}
           text="Reset"
           onClick={onReset}
-          className="flex-1 transition-all duration-200 ease-in-out focus:ring-2 focus:ring-gray-200 focus:ring-offset-2"
+          className="flex-1 transition-all duration-200 ease-in-out focus:ring-0 focus:ring-gray-200 focus:ring-offset-2"
         />
       )}
     </div>

@@ -7,14 +7,29 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: process.env.API_BASE_URL || "staging-api.cititasker.com",
+        hostname: "res.cloudinary.com",
+      },
+      {
+        protocol: "http",
+        hostname: "res.cloudinary.com",
       },
     ],
   },
   eslint: {
     ignoreDuringBuilds: true,
   },
-  webpack(config) {
+  webpack(config, { isServer }) {
+    if (!isServer) {
+      // Don't resolve 'fs' module on the client to prevent this error
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        path: false,
+        os: false,
+        crypto: false,
+      };
+    }
+
     config.resolve.alias = {
       ...(config.resolve.alias || {}),
       "@": path.resolve(__dirname, "src"),

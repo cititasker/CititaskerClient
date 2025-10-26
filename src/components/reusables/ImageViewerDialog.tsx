@@ -131,7 +131,7 @@ export default function ImageViewerDialog({
                 variant="ghost"
                 size="sm"
                 onClick={() => setIsZoomed((prev) => !prev)}
-                className="bg-black/50 hover:bg-black/70 text-white rounded-full p-2 h-10 w-10"
+                className="bg-black/50 text-white rounded-full p-2 h-10 w-10"
                 title={isZoomed ? "Zoom out (Space)" : "Zoom in (Space)"}
               >
                 {isZoomed ? (
@@ -146,7 +146,7 @@ export default function ImageViewerDialog({
                 variant="ghost"
                 size="sm"
                 onClick={() => onOpenChange(false)}
-                className="bg-black/50 hover:bg-black/70 text-white rounded-full p-2 h-10 w-10"
+                className="bg-black/50 text-white rounded-full p-2 h-10 w-10"
                 title="Close (Escape)"
               >
                 <X className="w-5 h-5" />

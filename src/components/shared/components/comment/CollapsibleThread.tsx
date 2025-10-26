@@ -14,6 +14,7 @@ interface CollapsibleThreadProps {
   loadingStates?: Record<number, boolean>;
   submissionId?: number;
   defaultCollapsed?: boolean;
+  replyQuestion?: () => void;
 }
 
 export const CollapsibleThread: React.FC<CollapsibleThreadProps> = ({
@@ -25,6 +26,7 @@ export const CollapsibleThread: React.FC<CollapsibleThreadProps> = ({
   loadingStates,
   submissionId,
   defaultCollapsed = false,
+  replyQuestion,
 }) => {
   const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
 
@@ -61,6 +63,7 @@ export const CollapsibleThread: React.FC<CollapsibleThreadProps> = ({
         // onLoadMoreReplies={onLoadMoreReplies}
         // loadingStates={loadingStates}
         submissionId={submissionId}
+        replyQuestion={replyQuestion}
       />
 
       {/* Replies */}

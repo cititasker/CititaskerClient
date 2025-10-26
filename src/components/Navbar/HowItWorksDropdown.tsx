@@ -28,7 +28,7 @@ export default function HowItWorksDropdown() {
             asChild
             className="py-2.5 px-3 hover:text-primary font-normal rounded-none"
           >
-            <Link href={`${ROUTES.HOW_IT_WORKS}/${ROLE.poster}`}>
+            <Link href={`/${ROLE.poster}${ROUTES.HOW_IT_WORKS}`}>
               For Poster
             </Link>
           </DropdownMenuItem>
@@ -36,7 +36,7 @@ export default function HowItWorksDropdown() {
             asChild
             className="py-2.5 px-3 hover:text-primary font-normal rounded-none"
           >
-            <Link href={`${ROUTES.HOW_IT_WORKS}/${ROLE.tasker}`}>
+            <Link href={`/${ROLE.tasker}${ROUTES.HOW_IT_WORKS}`}>
               For Tasker
             </Link>
           </DropdownMenuItem>

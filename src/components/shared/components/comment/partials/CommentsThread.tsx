@@ -23,7 +23,7 @@ const CommentsThread: React.FC<CommentsThreadProps> = ({
 }) => {
   return (
     <div className="space-y-6">
-      {/* {comments.map((comment) => (
+      {comments.map((comment) => (
         <SingleComment
           key={comment.id}
           comment={comment}
@@ -34,7 +34,7 @@ const CommentsThread: React.FC<CommentsThreadProps> = ({
           // loadingStates={loadingStates}
           submissionId={submissionId}
         />
-      ))} */}
+      ))}
     </div>
   );
 };

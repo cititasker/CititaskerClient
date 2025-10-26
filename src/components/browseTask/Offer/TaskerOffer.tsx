@@ -118,6 +118,8 @@ const TaskerOffer: React.FC<TaskerOfferProps> = ({
     };
   }, [replies]);
 
+  console.log(12, comment);
+
   if (isLoading || loadingReplies) return <p>Loading...</p>;
 
   return (
@@ -154,7 +156,7 @@ const TaskerOffer: React.FC<TaskerOfferProps> = ({
         </div>
 
         {/* Comment Thread */}
-        <OfferReplyThread comment={comment} isOwner={isOwner} />
+        <OfferReplyThread comment={comment} />
       </div>
     </div>
   );

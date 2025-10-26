@@ -11,6 +11,8 @@ import { API_ROUTES } from "@/constant";
 import EmptyState from "../../../reusables/EmptyState";
 import { MessageCircle } from "lucide-react";
 import CommentsThread from "./CommentsThread";
+import { MODERATION_PRESETS } from "@/lib/contentModeration";
+import { toast } from "sonner";
 
 interface QuestionsProps {
   questions: CommentThreadT[];
@@ -81,8 +83,6 @@ const Questions: React.FC<QuestionsProps> = ({ questions, taskId }) => {
     }
   };
 
-  console.log(12, questions);
-
   return (
     <section className="w-full max-w-4xl mx-auto space-y-6">
       {/* New Comment Input */}
@@ -91,6 +91,10 @@ const Questions: React.FC<QuestionsProps> = ({ questions, taskId }) => {
           onSubmit={handleSend}
           isLoading={mutation.isPending}
           placeholder="Ask a question or leave a comment..."
+          moderationConfig={MODERATION_PRESETS.STRICT}
+          onModerationViolation={(violations) => {
+            toast.error(`Content violation: ${violations[0]}`);
+          }}
         />
       </div>
 

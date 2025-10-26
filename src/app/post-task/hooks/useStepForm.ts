@@ -19,21 +19,13 @@ export const useStepForm = ({
   step,
   customSchema,
 }: UseStepFormProps) => {
-  const { task, isDataLoaded } = useAppSelector((s) => s.task);
+  const { task } = useAppSelector((s) => s.task);
   const dispatch = useAppDispatch();
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialized = useRef(false);
 
   const currentStep = step || Number(searchParams.get("step")) || 1;
-
-  // Detect if we're in edit mode by checking for task ID in URL
-  const hasTaskId = Boolean(
-    searchParams.get("id") ||
-      (typeof window !== "undefined" &&
-        window.location.pathname.includes("/post-task/") &&
-        window.location.pathname.split("/").pop() !== "post-task")
-  );
 
   // Memoize pickFields to prevent infinite loop
   const memoizedPickFields = useMemo(() => pickFields, [pickFields.join(",")]);
@@ -116,6 +108,7 @@ export const useStepForm = ({
 
   // Fixed onSubmit with proper typing - persists data for both modes
   const onSubmit = handleSubmit((data: FieldValues) => {
+    console.log(data);
     // Always persist data to Redux (and therefore to localStorage via redux-persist)
     dispatch(setTaskData(data as Partial<postTaskSchemaType>));
     navigateToNextStep(currentStep);

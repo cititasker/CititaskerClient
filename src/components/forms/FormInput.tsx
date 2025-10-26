@@ -3,7 +3,12 @@ import { useFormContext } from "react-hook-form";
 import { useState, useMemo } from "react";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
-import { FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import {
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 
 interface FormInputProps {
   name: string;

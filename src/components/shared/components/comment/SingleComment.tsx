@@ -12,6 +12,8 @@ import {
   formatCommentTime,
 } from "./utils";
 import { CommentActions } from "./partials/CommentActions";
+import { MODERATION_PRESETS } from "@/lib/contentModeration";
+import { toast } from "sonner";
 
 interface ImprovedSingleCommentProps {
   comment: CommentThreadT;
@@ -20,6 +22,7 @@ interface ImprovedSingleCommentProps {
   isLoading?: boolean;
   submissionId?: number;
   showReplyButton?: boolean;
+  replyQuestion?: () => void;
 }
 
 export const SingleComment: React.FC<ImprovedSingleCommentProps> = ({
@@ -29,6 +32,7 @@ export const SingleComment: React.FC<ImprovedSingleCommentProps> = ({
   isLoading = false,
   submissionId,
   showReplyButton = true,
+  replyQuestion,
 }) => {
   const [showReplyBox, setShowReplyBox] = useState(false);
 
@@ -102,6 +106,7 @@ export const SingleComment: React.FC<ImprovedSingleCommentProps> = ({
               isLoading={isLoading}
               onReply={handleReplyToggle}
               showReplyBox={showReplyBox}
+              replyQuestion={replyQuestion}
             />
 
             {/* Reply Count Indicator */}
@@ -128,6 +133,10 @@ export const SingleComment: React.FC<ImprovedSingleCommentProps> = ({
                 onSuccess={() => setShowReplyBox(false)}
                 placeholder={`Reply to ${displayName.split(" ")[0]}...`}
                 isLoading={isLoading}
+                moderationConfig={MODERATION_PRESETS.STRICT}
+                onModerationViolation={(violations) => {
+                  toast.error(`Content violation: ${violations[0]}`);
+                }}
               />
             </div>
           )}

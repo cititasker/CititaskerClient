@@ -64,7 +64,7 @@ export default function FormSwitch({
               className={cn(
                 "transition-all duration-200",
                 "data-[state=checked]:bg-primary",
-                "focus:ring-2 focus:ring-primary/20",
+                "focus:ring-0 focus:ring-primary/20",
                 error && "data-[state=checked]:bg-error",
                 disabled && "opacity-50 cursor-not-allowed"
               )}

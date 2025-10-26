@@ -17,152 +17,153 @@ export default {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
         "gradient-primary":
-          "linear-gradient(135deg, var(--primary) 0%, var(--accent-purple) 100%)",
+          "linear-gradient(135deg, rgb(var(--primary)) 0%, rgb(var(--accent-purple)) 100%)",
         "gradient-secondary":
-          "linear-gradient(135deg, var(--secondary) 0%, var(--accent-orange) 100%)",
+          "linear-gradient(135deg, rgb(var(--secondary)) 0%, rgb(var(--accent-orange)) 100%)",
         "gradient-accent":
-          "linear-gradient(135deg, var(--accent-purple) 0%, var(--accent-pink) 100%)",
+          "linear-gradient(135deg, rgb(var(--accent-purple)) 0%, rgb(var(--accent-pink)) 100%)",
       },
       colors: {
-        // Modern Primary Palette
+        // Modern Primary Palette with opacity support
         primary: {
-          DEFAULT: "var(--primary)",
-          50: "var(--primary-50)",
-          100: "var(--primary-100)",
-          200: "var(--primary-200)",
-          300: "var(--primary-300)",
-          400: "var(--primary-400)",
-          500: "var(--primary-500)",
-          600: "var(--primary-600)",
-          700: "var(--primary-700)",
-          800: "var(--primary-800)",
-          900: "var(--primary-900)",
-          foreground: "var(--primary-foreground)",
+          DEFAULT: "rgb(var(--primary) / <alpha-value>)",
+          50: "rgb(var(--primary-50) / <alpha-value>)",
+          100: "rgb(var(--primary-100) / <alpha-value>)",
+          200: "rgb(var(--primary-200) / <alpha-value>)",
+          300: "rgb(var(--primary-300) / <alpha-value>)",
+          400: "rgb(var(--primary-400) / <alpha-value>)",
+          500: "rgb(var(--primary-500) / <alpha-value>)",
+          600: "rgb(var(--primary-600) / <alpha-value>)",
+          700: "rgb(var(--primary-700) / <alpha-value>)",
+          800: "rgb(var(--primary-800) / <alpha-value>)",
+          900: "rgb(var(--primary-900) / <alpha-value>)",
+          foreground: "rgb(var(--primary-foreground) / <alpha-value>)",
         },
-        // Modern Secondary Palette
+        // Modern Secondary Palette with opacity support
         secondary: {
-          DEFAULT: "var(--secondary)",
-          50: "var(--secondary-50)",
-          100: "var(--secondary-100)",
-          200: "var(--secondary-200)",
-          300: "var(--secondary-300)",
-          400: "var(--secondary-400)",
-          500: "var(--secondary-500)",
-          600: "var(--secondary-600)",
-          700: "var(--secondary-700)",
-          800: "var(--secondary-800)",
-          900: "var(--secondary-900)",
-          foreground: "var(--secondary-foreground)",
+          DEFAULT: "rgb(var(--secondary) / <alpha-value>)",
+          50: "rgb(var(--secondary-50) / <alpha-value>)",
+          100: "rgb(var(--secondary-100) / <alpha-value>)",
+          200: "rgb(var(--secondary-200) / <alpha-value>)",
+          300: "rgb(var(--secondary-300) / <alpha-value>)",
+          400: "rgb(var(--secondary-400) / <alpha-value>)",
+          500: "rgb(var(--secondary-500) / <alpha-value>)",
+          600: "rgb(var(--secondary-600) / <alpha-value>)",
+          700: "rgb(var(--secondary-700) / <alpha-value>)",
+          800: "rgb(var(--secondary-800) / <alpha-value>)",
+          900: "rgb(var(--secondary-900) / <alpha-value>)",
+          foreground: "rgb(var(--secondary-foreground) / <alpha-value>)",
         },
-        // Accent Colors
+        // Accent Colors with opacity support
         accent: {
-          DEFAULT: "var(--accent)",
-          purple: "var(--accent-purple)",
-          "purple-light": "var(--accent-purple-light)",
-          pink: "var(--accent-pink)",
-          "pink-light": "var(--accent-pink-light)",
-          orange: "var(--accent-orange)",
-          "orange-light": "var(--accent-orange-light)",
-          foreground: "var(--accent-foreground)",
+          DEFAULT: "hsl(var(--accent) / <alpha-value>)",
+          purple: "rgb(var(--accent-purple) / <alpha-value>)",
+          "purple-light": "rgb(var(--accent-purple-light) / <alpha-value>)",
+          pink: "rgb(var(--accent-pink) / <alpha-value>)",
+          "pink-light": "rgb(var(--accent-pink-light) / <alpha-value>)",
+          orange: "rgb(var(--accent-orange) / <alpha-value>)",
+          "orange-light": "rgb(var(--accent-orange-light) / <alpha-value>)",
+          foreground: "hsl(var(--accent-foreground) / <alpha-value>)",
         },
-        // Modern Neutral Palette
+        // Modern Neutral Palette with opacity support
         neutral: {
-          50: "var(--neutral-50)",
-          100: "var(--neutral-100)",
-          200: "var(--neutral-200)",
-          300: "var(--neutral-300)",
-          400: "var(--neutral-400)",
-          500: "var(--neutral-500)",
-          600: "var(--neutral-600)",
-          700: "var(--neutral-700)",
-          800: "var(--neutral-800)",
-          900: "var(--neutral-900)",
+          50: "rgb(var(--neutral-50) / <alpha-value>)",
+          100: "rgb(var(--neutral-100) / <alpha-value>)",
+          200: "rgb(var(--neutral-200) / <alpha-value>)",
+          300: "rgb(var(--neutral-300) / <alpha-value>)",
+          400: "rgb(var(--neutral-400) / <alpha-value>)",
+          500: "rgb(var(--neutral-500) / <alpha-value>)",
+          600: "rgb(var(--neutral-600) / <alpha-value>)",
+          700: "rgb(var(--neutral-700) / <alpha-value>)",
+          800: "rgb(var(--neutral-800) / <alpha-value>)",
+          900: "rgb(var(--neutral-900) / <alpha-value>)",
         },
-        // State Colors
+        // State Colors with opacity support
         success: {
-          DEFAULT: "var(--success)",
-          light: "var(--success-light)",
+          DEFAULT: "rgb(var(--success) / <alpha-value>)",
+          light: "rgb(var(--success-light) / <alpha-value>)",
         },
         warning: {
-          DEFAULT: "var(--warning)",
-          light: "var(--warning-light)",
+          DEFAULT: "rgb(var(--warning) / <alpha-value>)",
+          light: "rgb(var(--warning-light) / <alpha-value>)",
         },
         error: {
-          DEFAULT: "var(--error)",
-          light: "var(--error-light)",
+          DEFAULT: "rgb(var(--error) / <alpha-value>)",
+          light: "rgb(var(--error-light) / <alpha-value>)",
         },
         info: {
-          DEFAULT: "var(--info)",
-          light: "var(--info-light)",
+          DEFAULT: "rgb(var(--info) / <alpha-value>)",
+          light: "rgb(var(--info-light) / <alpha-value>)",
         },
-        // Semantic Colors
+        // Semantic Colors with opacity support
         text: {
-          primary: "var(--text-primary)",
-          secondary: "var(--text-secondary)",
-          muted: "var(--text-muted)",
-          disabled: "var(--text-disabled)",
+          primary: "rgb(var(--text-primary) / <alpha-value>)",
+          secondary: "rgb(var(--text-secondary) / <alpha-value>)",
+          muted: "rgb(var(--text-muted) / <alpha-value>)",
+          disabled: "rgb(var(--text-disabled) / <alpha-value>)",
         },
         border: {
-          DEFAULT: "var(--border)",
-          light: "var(--border-light)",
-          medium: "var(--border-medium)",
-          strong: "var(--border-strong)",
+          DEFAULT: "hsl(var(--border) / <alpha-value>)",
+          light: "rgb(var(--border-light) / <alpha-value>)",
+          medium: "rgb(var(--border-medium) / <alpha-value>)",
+          strong: "rgb(var(--border-strong) / <alpha-value>)",
         },
         background: {
-          DEFAULT: "var(--background)",
-          secondary: "var(--background-secondary)",
-          tertiary: "var(--background-tertiary)",
+          DEFAULT: "rgb(var(--background) / <alpha-value>)",
+          secondary: "rgb(var(--background-secondary) / <alpha-value>)",
+          tertiary: "rgb(var(--background-tertiary) / <alpha-value>)",
         },
 
-        // Legacy Colors (for backward compatibility)
-        "light-primary-1": "var(--light-primary-1)",
-        "light-primary-2": "var(--light-primary-2)",
-        black: "var(--black)",
-        "black-2": "var(--black-2)",
-        "light-grey": "var(--light-grey)",
-        "dark-grey": "var(--dark-grey)",
-        "dark-grey-1": "var(--dark-grey-1)",
-        "dark-grey-2": "var(--dark-grey-2)",
-        "dark-secondary": "var(--dark-secondary)",
-        "red-light-1": "var(--red-light-1)",
-        "red-state-color": "var(--red-state-color)",
-        "green-state-color": "var(--green-state-color)",
-        "yellow-state-color": "var(--yellow-state-color)",
-        "light-blue": "var(--light-blue)",
-        "text-black": "var(--text-black)",
-        lapis: "var(--Lapis-Blue-Primary-Light-2)",
-        "cs-dark-4": "var(--Cultured-Secondary-Dark-4)",
-        "cs-dark-5": "var(--Cultured-Secondary-Dark-5)",
-        F9F9F9: "var(--F9F9F9)",
+        // Legacy Colors (for backward compatibility) with opacity support
+        "light-primary-1": "rgb(var(--light-primary-1) / <alpha-value>)",
+        "light-primary-2": "rgb(var(--light-primary-2) / <alpha-value>)",
+        black: "rgb(var(--black) / <alpha-value>)",
+        "black-2": "rgb(var(--black-2) / <alpha-value>)",
+        "light-grey": "rgb(var(--light-grey) / <alpha-value>)",
+        "dark-grey": "rgb(var(--dark-grey) / <alpha-value>)",
+        "dark-grey-1": "rgb(var(--dark-grey-1) / <alpha-value>)",
+        "dark-grey-2": "rgb(var(--dark-grey-2) / <alpha-value>)",
+        "dark-secondary": "rgb(var(--dark-secondary) / <alpha-value>)",
+        "red-light-1": "rgb(var(--red-light-1) / <alpha-value>)",
+        "red-state-color": "rgb(var(--red-state-color) / <alpha-value>)",
+        "green-state-color": "rgb(var(--green-state-color) / <alpha-value>)",
+        "yellow-state-color": "rgb(var(--yellow-state-color) / <alpha-value>)",
+        "light-blue": "rgb(var(--light-blue) / <alpha-value>)",
+        lapis: "rgb(var(--Lapis-Blue-Primary-Light-2) / <alpha-value>)",
+        "cs-dark-4": "rgb(var(--Cultured-Secondary-Dark-4) / <alpha-value>)",
+        "cs-dark-5": "rgb(var(--Cultured-Secondary-Dark-5) / <alpha-value>)",
+        F9F9F9: "rgb(var(--F9F9F9) / <alpha-value>)",
         "table-stroke": "#F3F5F6",
-        "red-state-color-fill": "var(--bg-red-state-color-fill)",
+        "red-state-color-fill":
+          "rgb(var(--bg-red-state-color-fill) / <alpha-value>)",
+        "text-black": "rgb(var(--text-black) / <alpha-value>)",
 
         // Shadcn/UI Colors
-        foreground: "var(--foreground)",
+        foreground: "hsl(var(--foreground) / <alpha-value>)",
         card: {
-          DEFAULT: "var(--card)",
-          foreground: "var(--card-foreground)",
+          DEFAULT: "hsl(var(--card) / <alpha-value>)",
+          foreground: "hsl(var(--card-foreground) / <alpha-value>)",
         },
         popover: {
-          DEFAULT: "var(--popover)",
-          foreground: "var(--popover-foreground)",
+          DEFAULT: "hsl(var(--popover) / <alpha-value>)",
+          foreground: "hsl(var(--popover-foreground) / <alpha-value>)",
         },
         muted: {
-          DEFAULT: "var(--muted)",
-          foreground: "var(--muted-foreground)",
+          DEFAULT: "hsl(var(--muted) / <alpha-value>)",
+          foreground: "hsl(var(--muted-foreground) / <alpha-value>)",
         },
         destructive: {
-          DEFAULT: "var(--destructive)",
-          foreground: "var(--destructive-foreground)",
+          DEFAULT: "hsl(var(--destructive) / <alpha-value>)",
+          foreground: "hsl(var(--destructive-foreground) / <alpha-value>)",
         },
-        input: "var(--input)",
-        ring: "var(--primary-200)",
+        input: "hsl(var(--input) / <alpha-value>)",
+        ring: "hsl(var(--ring) / <alpha-value>)",
         chart: {
-          "1": "var(--chart-1)",
-          "2": "var(--chart-2)",
-          "3": "var(--chart-3)",
-          "4": "var(--chart-4)",
-          "5": "var(--chart-5)",
+          "1": "rgb(var(--chart-1) / <alpha-value>)",
+          "2": "rgb(var(--chart-2) / <alpha-value>)",
+          "3": "rgb(var(--chart-3) / <alpha-value>)",
+          "4": "rgb(var(--chart-4) / <alpha-value>)",
+          "5": "rgb(var(--chart-5) / <alpha-value>)",
         },
       },
       borderRadius: {
@@ -191,8 +192,8 @@ export default {
         md: "var(--shadow-md)",
         lg: "var(--shadow-lg)",
         xl: "var(--shadow-xl)",
-        "glow-primary": "0 0 20px rgba(29, 78, 216, 0.3)",
-        "glow-secondary": "0 0 20px rgba(22, 163, 74, 0.3)",
+        "glow-primary": "0 0 20px rgba(35, 111, 142, 0.3)",
+        "glow-secondary": "0 0 20px rgba(19, 181, 234, 0.3)",
         "glow-accent": "0 0 20px rgba(139, 92, 246, 0.3)",
       },
       backdropBlur: {
@@ -299,9 +300,9 @@ export default {
     function ({ addBase, theme, addUtilities }: any) {
       const newUtilities = {
         ".no-scrollbar": {
-          "scrollbar-width": "none", // Firefox
+          "scrollbar-width": "none",
           "&::-webkit-scrollbar": {
-            display: "none", // Chrome, Safari
+            display: "none",
           },
         },
         ".glass-effect": {
@@ -316,22 +317,21 @@ export default {
         },
         ".text-gradient-primary": {
           background:
-            // "linear-gradient(135deg, var(--primary) 0%, var(--accent-purple) 100%)",
-            "linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%)",
+            "linear-gradient(135deg, rgb(var(--primary)) 0%, rgb(var(--secondary)) 100%)",
           "background-clip": "text",
           "-webkit-background-clip": "text",
           "-webkit-text-fill-color": "transparent",
         },
         ".text-gradient-secondary": {
           background:
-            "linear-gradient(135deg, var(--secondary) 0%, var(--accent-orange) 100%)",
+            "linear-gradient(135deg, rgb(var(--secondary)) 0%, rgb(var(--accent-orange)) 100%)",
           "background-clip": "text",
           "-webkit-background-clip": "text",
           "-webkit-text-fill-color": "transparent",
         },
         ".text-gradient-accent": {
           background:
-            "linear-gradient(135deg, var(--accent-purple) 0%, var(--accent-pink) 100%)",
+            "linear-gradient(135deg, rgb(var(--accent-purple)) 0%, rgb(var(--accent-pink)) 100%)",
           "background-clip": "text",
           "-webkit-background-clip": "text",
           "-webkit-text-fill-color": "transparent",
@@ -358,17 +358,9 @@ export default {
           "line-height": "1.25rem",
           color: "white",
           background:
-            "linear-gradient(135deg, var(--primary) 0%, var(--primary-600) 100%)",
+            "linear-gradient(135deg, rgb(var(--primary)) 0%, rgb(var(--primary-600)) 100%)",
           "box-shadow": "var(--shadow-md)",
           transition: "all 300ms ease",
-          // transform: "translateY(0)",
-          // "&:hover": {
-          //   transform: "translateY(-1px) scale(1.02)",
-          //   "box-shadow": "var(--shadow-lg)",
-          // },
-          // "&:active": {
-          //   transform: "translateY(0) scale(0.98)",
-          // },
         },
         ".btn-secondary": {
           display: "inline-flex",
@@ -381,68 +373,48 @@ export default {
           "line-height": "1.25rem",
           color: "white",
           background:
-            "linear-gradient(135deg, var(--secondary) 0%, var(--secondary-600) 100%)",
+            "linear-gradient(135deg, rgb(var(--secondary)) 0%, rgb(var(--secondary-600)) 100%)",
           "box-shadow": "var(--shadow-md)",
           transition: "all 300ms ease",
-          // transform: "translateY(0)",
-          // "&:hover": {
-          //   transform: "translateY(-1px) scale(1.02)",
-          //   "box-shadow": "var(--shadow-lg)",
-          // },
-          // "&:active": {
-          //   transform: "translateY(0) scale(0.98)",
-          // },
         },
         ".card-modern": {
           padding: "1.5rem",
           "border-radius": "1rem",
-          background: "var(--background)",
-          border: "1px solid var(--border-light)",
+          background: "rgb(var(--background))",
+          border: "1px solid rgb(var(--border-light))",
           "box-shadow": "var(--shadow-md)",
           transition: "all 300ms ease",
           "&:hover": {
-            "border-color": "var(--border-medium)",
+            "border-color": "rgb(var(--border-medium))",
           },
         },
-        // Mobile-first card component
         ".card-auth": {
-          // Mobile (default)
           padding: "1rem",
           borderRadius: "0.75rem",
-
-          // Small screens and up
           "@screen sm": {
             padding: "2rem",
             borderRadius: "1rem",
           },
-
-          // Large screens and up
           "@screen lg": {
             padding: "2.5rem",
             borderRadius: "1.5rem",
           },
         },
-
-        // Mobile form spacing
         ".form-mobile": {
           "& > *": {
             marginBottom: "1rem",
           },
-
           "@screen sm": {
             "& > *": {
               marginBottom: "1.5rem",
             },
           },
         },
-
-        // Mobile button heights
         ".btn-mobile": {
-          height: "3rem", // 48px - good for mobile touch
+          height: "3rem",
           fontSize: "1rem",
-
           "@screen sm": {
-            height: "3rem", // 48px
+            height: "3rem",
             fontSize: "1rem",
           },
         },
@@ -451,18 +423,15 @@ export default {
       addBase({
         body: {
           "font-family": theme("fontFamily.articulat"),
-          "background-color": "var(--background)",
-          color: "var(--text-primary)",
+          "background-color": "rgb(var(--background))",
+          color: "rgb(var(--text-primary))",
         },
         "h1,h2,h3,h4,h5,h6": {
-          // color: "var(--text-primary)",
           "font-family": theme("fontFamily.articulat"),
         },
       });
     },
     require("tailwindcss-animate"),
     require("@tailwindcss/typography"),
-    // require("@tailwindcss/line-clamp"),
   ],
-  // safelist: ["line-clamp-1", "line-clamp-2", "line-clamp-3"],
 } satisfies Config;

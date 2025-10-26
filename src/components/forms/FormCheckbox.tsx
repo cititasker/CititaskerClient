@@ -40,7 +40,7 @@ export default function FormCheckbox({
               className={cn(
                 "mt-0.5 transition-all duration-200",
                 "data-[state=checked]:bg-primary data-[state=checked]:border-primary",
-                "focus:ring-2 focus:ring-primary/20",
+                "focus:ring-0 focus:ring-primary/20",
                 error && "border-error",
                 disabled && "opacity-50 cursor-not-allowed"
               )}

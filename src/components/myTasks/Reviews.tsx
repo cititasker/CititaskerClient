@@ -1,139 +1,179 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState, useMemo } from "react";
+import { MessageSquare } from "lucide-react";
 import ReviewCard from "./ReviewCard";
 import Rating from "../reusables/Rating";
 import RatingModal from "./RatingModal";
+import EmptyState from "../reusables/EmptyState";
 import { initializeName } from "@/utils";
 import useModal from "@/hooks/useModal";
 import useToggle from "@/hooks/useToggle";
-import { useMutation } from "@tanstack/react-query";
 import { postReview } from "@/services/user/users.api";
-import { useSnackbar } from "@/providers/SnackbarProvider";
 import { useGetReviews } from "@/services/user/user.hook";
 import { useAppSelector } from "@/store/hook";
 import { defaultProfile } from "@/constant/images";
-import { useScreenBreakpoints } from "@/hooks/useScreenBreakpoints";
-import EmptyState from "../reusables/EmptyState";
-import { MessageSquare } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useBaseMutation } from "@/hooks/useBaseMutation";
+import { API_ROUTES } from "@/constant";
 
-interface IProps {
+interface ReviewsProps {
   task: ITask;
 }
 
-const Reviews = ({ task }: IProps) => {
+export default function Reviews({ task }: ReviewsProps) {
   const { user } = useAppSelector((state) => state.user);
-  const [posterReview, setPosterReview] = useState<TaskerReview | null>(null);
-  const [rating, setRating] = useState(0);
+  const [selectedRating, setSelectedRating] = useState(0);
 
-  const posterModal = useModal();
-  const success = useToggle();
-  const { showSnackbar } = useSnackbar();
+  const ratingModal = useModal();
+  const successModal = useToggle();
 
-  const { isSmallScreen } = useScreenBreakpoints();
-
-  const { data: reviews } = useGetReviews({ id: task.id });
+  const { data: reviews } = useGetReviews(task.id);
   const reviewList = reviews?.data || [];
 
-  console.log(87, reviews);
+  // Extract poster and tasker reviews
+  const { posterReview, taskerReview } = useMemo(
+    () => ({
+      posterReview: reviewList[0] || null,
+      taskerReview: reviewList[1] || null,
+    }),
+    [reviewList]
+  );
 
-  useEffect(() => {
-    if (reviewList.length) setPosterReview(reviewList[0]);
-  }, [reviewList]);
-
-  const isAssigned = task?.status === "assigned";
+  // Task and tasker info
+  const isCompleted = task?.status === "completed";
   const tasker = task.tasker?.profile;
-  const taskerName = initializeName({
-    first_name: tasker?.first_name,
-    last_name: tasker?.last_name,
+  const taskerName = tasker
+    ? initializeName({
+        first_name: tasker.first_name,
+        last_name: tasker.last_name,
+      })
+    : "";
+
+  // Submit review mutation
+  const postReviewMutation = useBaseMutation(postReview, {
+    invalidateQueryKeys: [[API_ROUTES.POST_REVIEW, task.id]],
   });
 
-  const postReviewMutation = useMutation({
-    mutationFn: postReview,
-    onSuccess: () => success.handleOpen(),
-    onError: (error) => showSnackbar(error.message, "error"),
-  });
-
-  const onSubmit = (data: any) => {
-    postReviewMutation.mutate({ ...data, task_id: task.id });
+  const handleSubmitReview = (data: any) => {
+    postReviewMutation.mutate({ ...data, task_id: task.id, role: "poster" });
   };
 
-  const handleRatingClose = () => {
-    posterModal.closeModal();
-    success.handleClose();
-    setRating(0);
+  const handleModalClose = () => {
+    ratingModal.closeModal();
+    successModal.handleClose();
+    setSelectedRating(0);
   };
 
-  if (!isAssigned || !tasker) {
+  const handleEditReview = () => {
+    if (posterReview) {
+      setSelectedRating(posterReview.rating);
+      ratingModal.openModal();
+    }
+  };
+
+  // Show empty state if task is not completed
+  if (!isCompleted) {
     return (
-      <EmptyState
-        title="No review has been made yet."
-        message="You will be notified when you get a review."
-        icon={<MessageSquare className="w-8 h-8 text-neutral-400" />}
-      />
+      <div className="px-4 sm:px-6 py-8">
+        <EmptyState
+          title="No Reviews Yet"
+          message="Reviews will appear once the task is assigned and completed."
+          icon={<MessageSquare className="w-12 h-12 text-neutral-400" />}
+        />
+      </div>
     );
   }
 
   return (
-    <div className="space-y-10 sm:space-y-12 px-5 sm:px-6 md:px-10 bg-white pb-28 pt-6">
+    <div className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8 sm:space-y-10 bg-white min-h-screen">
       {/* My Review Section */}
-      {!posterReview ? (
-        <div onClick={posterModal.openModal} className="cursor-pointer">
-          <p className="font-bold">My review</p>
-          <p className="text-[#000]">
-            How would you rate your experience with{" "}
-            {`${tasker.first_name} ${tasker.last_name}`}?
-          </p>
-          <div className="flex justify-center mt-6">
+      <section>
+        <h2 className="text-lg sm:text-xl font-semibold text-neutral-900 mb-4">
+          My Review
+        </h2>
+
+        {!posterReview ? (
+          <button
+            onClick={ratingModal.openModal}
+            className={cn(
+              "w-full p-6 sm:p-8 rounded-2xl border-2 border-dashed",
+              "border-neutral-200 hover:border-primary/50",
+              "bg-neutral-50 hover:bg-primary/5",
+              "transition-all duration-200",
+              "focus:outline-none focus:ring-2 focus:ring-primary/20"
+            )}
+          >
+            <p className="text-sm sm:text-base text-neutral-700 mb-4">
+              How would you rate your experience with{" "}
+              <span className="font-medium text-neutral-900">
+                {tasker.first_name} {tasker.last_name}
+              </span>
+              ?
+            </p>
             <Rating
-              value={rating}
-              size={isSmallScreen ? 25 : 30}
-              className="gap-6"
-              onChange={setRating}
+              value={selectedRating}
+              onChange={setSelectedRating}
+              size={window.innerWidth < 640 ? 28 : 32}
+              className="justify-center gap-2 sm:gap-3"
+            />
+          </button>
+        ) : (
+          <div className="border border-neutral-200 rounded-2xl p-4 sm:p-6">
+            <ReviewCard
+              label="My Review"
+              name={posterReview.reviewer}
+              date={posterReview.created_at}
+              rating={posterReview.rating}
+              comment={posterReview.comment}
+              avatar={user.profile_image ?? defaultProfile}
+              onEdit={handleEditReview}
             />
           </div>
-        </div>
-      ) : (
-        <div className="relative border rounded-20 space-y-10 p-5">
-          <ReviewCard
-            label="My Review"
-            name={posterReview.reviewer}
-            date={posterReview.created_at}
-            rating={posterReview.rating}
-            comment={posterReview.comment}
-            avatar={user.profile_image ?? defaultProfile}
-            onEdit={() => {
-              setRating(posterReview.rating);
-              posterModal.openModal();
-            }}
-          />
-        </div>
-      )}
+        )}
+      </section>
 
       {/* Tasker's Review Section */}
-      {!reviewList[1] && (
-        <div className="cursor-pointer">
-          <p className="font-bold mb-3">Tasker’s review</p>
-          <div className="flex flex-col items-center justify-center rounded-20 py-10 sm:py-12 bg-[#F3F5F6]">
-            <Rating value={0} readOnly size={isSmallScreen ? 25 : 30} />
-            <p className="text-sm text-black mt-4 sm:mt-[22px] text-center">
-              No reviews yet.
+      <section>
+        <h2 className="text-lg sm:text-xl font-semibold text-neutral-900 mb-4">
+          Tasker's Review
+        </h2>
+
+        {taskerReview ? (
+          <div className="border border-neutral-200 rounded-2xl p-4 sm:p-6">
+            <ReviewCard
+              name={taskerReview.reviewer}
+              date={taskerReview.created_at}
+              rating={taskerReview.rating}
+              comment={taskerReview.comment}
+              avatar={tasker.profile_image || defaultProfile}
+            />
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center p-8 sm:p-12 rounded-2xl bg-neutral-50">
+            <Rating
+              value={0}
+              readOnly
+              size={window.innerWidth < 640 ? 24 : 28}
+              className="gap-2"
+            />
+            <p className="text-sm sm:text-base text-neutral-600 mt-4">
+              No review from tasker yet.
             </p>
           </div>
-        </div>
-      )}
+        )}
+      </section>
 
+      {/* Rating Modal */}
       <RatingModal
-        isOpen={posterModal.isOpen}
-        onClose={handleRatingClose}
-        name={taskerName}
-        rating={rating}
-        onSubmit={onSubmit}
-        success={success.isOpen}
-        loading={postReviewMutation.isPending}
+        isOpen={ratingModal.isOpen}
+        onClose={handleModalClose}
+        taskerName={taskerName}
+        initialRating={selectedRating}
+        onSubmit={handleSubmitReview}
+        showSuccess={successModal.isOpen}
+        isLoading={postReviewMutation.isPending}
       />
     </div>
   );
-};
-
-export default Reviews;
+}

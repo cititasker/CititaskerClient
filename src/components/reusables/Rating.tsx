@@ -2,9 +2,9 @@
 
 import { Star } from "lucide-react";
 import { cn } from "@/lib/utils";
-import React, { useState } from "react";
+import { useState } from "react";
 
-type Props = {
+interface RatingProps {
   value?: number;
   onChange?: (value: number) => void;
   max?: number;
@@ -14,13 +14,12 @@ type Props = {
   starClassName?: string;
   enableHoverPreview?: boolean;
   labels?: string[];
-  showlabel?: boolean;
-  starOuterClassName?: string;
-};
+  showLabel?: boolean;
+}
 
-const defaultLabels = ["Poor", "Fair", "Good", "Very Good", "Excellent"];
+const DEFAULT_LABELS = ["Poor", "Fair", "Good", "Very Good", "Excellent"];
 
-const Rating = ({
+export default function Rating({
   value = 0,
   onChange,
   max = 5,
@@ -29,79 +28,59 @@ const Rating = ({
   className,
   starClassName,
   enableHoverPreview = true,
-  labels = defaultLabels,
-  showlabel = true,
-  starOuterClassName,
-}: Props) => {
+  labels = DEFAULT_LABELS,
+  showLabel = true,
+}: RatingProps) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const handleClick = (index: number) => {
-    if (!readOnly && onChange) onChange(index + 1);
+    if (!readOnly && onChange) {
+      onChange(index + 1);
+    }
   };
 
-  const handleMouseEnter = (index: number) => {
-    if (!readOnly && enableHoverPreview) setHoveredIndex(index);
-  };
-
-  const handleMouseLeave = () => {
-    if (!readOnly && enableHoverPreview) setHoveredIndex(null);
-  };
+  const displayValue =
+    enableHoverPreview && hoveredIndex !== null ? hoveredIndex + 1 : value;
+  const shouldShowLabel = !readOnly && showLabel && hoveredIndex !== null;
 
   return (
     <div
-      className={cn("flex gap-3 items-start", className)}
-      onMouseLeave={handleMouseLeave}
+      className={cn("flex items-center gap-1.5 sm:gap-2", className)}
+      onMouseLeave={() => !readOnly && setHoveredIndex(null)}
     >
-      {Array.from({ length: max }).map((_, index) => {
-        const isFilled =
-          enableHoverPreview && hoveredIndex !== null
-            ? index <= hoveredIndex
-            : index < value;
-
-        const shouldShowLabel =
-          !readOnly &&
-          showlabel &&
-          ((hoveredIndex !== null && index === hoveredIndex) ||
-            (hoveredIndex === null && value === index + 1));
+      {Array.from({ length: max }, (_, index) => {
+        const isFilled = index < displayValue;
+        const isHovered = hoveredIndex === index;
 
         return (
-          <div
-            key={index}
-            className={cn(
-              "relative flex flex-col items-center",
-              showlabel && !readOnly && "mb-5",
-              starOuterClassName
-            )}
-          >
+          <div key={index} className="relative">
             <Star
               size={size}
               onClick={() => handleClick(index)}
-              onMouseEnter={() => handleMouseEnter(index)}
+              onMouseEnter={() =>
+                !readOnly && enableHoverPreview && setHoveredIndex(index)
+              }
               className={cn(
-                "transition-color stroke-transparent stroke-[0.8px]",
+                "transition-all duration-200",
                 isFilled
-                  ? "fill-yellow-state-color stroke-yellow-state-color"
-                  : "fill-transparent stroke-black",
-                !readOnly && "cursor-pointer hover:scale-110",
-                readOnly &&
-                  !isFilled &&
-                  "cursor-default fill-[#D5D5D5] stroke-[#D5D5D5]",
+                  ? "fill-warning stroke-warning"
+                  : readOnly
+                  ? "fill-neutral-300 stroke-neutral-300"
+                  : "fill-transparent stroke-neutral-900",
+                !readOnly && "cursor-pointer hover:scale-110 active:scale-95",
                 starClassName
               )}
+              aria-label={`${index + 1} star${index === 0 ? "" : "s"}`}
             />
-            <div
-              className={cn(
-                "absolute top-full text-xs mt-1 transition-opacity duration-200 w-0 whitespace-nowrap flex justify-center",
-                shouldShowLabel ? "opacity-100" : "opacity-0 h-0"
-              )}
-            >
-              {labels[index] || ""}
-            </div>
+
+            {shouldShowLabel && isHovered && labels[index] && (
+              <span className="absolute top-full left-1/2 -translate-x-1/2 mt-2 text-xs font-medium text-neutral-700 whitespace-nowrap animate-in fade-in slide-in-from-top-1 duration-200">
+                {labels[index]}
+              </span>
+            )}
           </div>
         );
       })}
     </div>
   );
-};
-
-export default Rating;
+}

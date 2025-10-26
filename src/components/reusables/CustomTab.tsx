@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface TabItem {
   label: string;
@@ -29,12 +30,16 @@ export default function CustomTab({
   contentClassName,
   queryKey = "tab",
 }: CustomTabProps) {
-  const [selectedTab, setSelectedTab] = useState(
-    defaultValue ?? items[0]?.value
-  );
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const selectedTab =
+    searchParams.get(queryKey) ?? defaultValue ?? items[0]?.value;
 
   const handleTabChange = (value: string) => {
-    setSelectedTab(value);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set(queryKey, value);
+    router.replace(`?${params.toString()}`, { scroll: false });
   };
 
   if (!items.length) return null;

@@ -6,10 +6,27 @@ import { TaskData } from "./tasks.types";
 export const getAllTasks = async (
   queryParams?: Record<string, any>
 ): Promise<TaskData> => {
-  const query = new URLSearchParams(queryParams).toString();
+  const params = new URLSearchParams();
+
+  if (queryParams) {
+    Object.entries(queryParams).forEach(([key, value]) => {
+      if (value === null || value === undefined) return;
+
+      // Handle arrays - append each value separately
+      if (Array.isArray(value)) {
+        value.forEach((item) => {
+          params.append(`${key}[]`, String(item));
+        });
+      } else {
+        params.set(key, String(value));
+      }
+    });
+  }
+
+  const query = params.toString();
 
   return api
-    .get(`${API_ROUTES.TASKS}?${query}`)
+    .get(`${API_ROUTES.TASKS}${query ? `?${query}` : ""}`)
     .then((data) => data.data)
     .catch((error: AxiosError) => {
       throw error.response?.data;

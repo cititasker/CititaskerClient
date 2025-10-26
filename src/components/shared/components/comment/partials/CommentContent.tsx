@@ -14,7 +14,6 @@ export const CommentContent: React.FC<CommentContentProps> = ({
 }) => {
   const getFileTypeFromUrl = (url: string) => {
     const extension = url.split(".").pop()?.toLowerCase();
-    const urlLower = url.toLowerCase();
 
     if (!extension) return "file";
 

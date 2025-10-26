@@ -8,6 +8,16 @@ interface IModal {
   children?: React.ReactNode;
 }
 
+interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+interface AccordionHTMLItem {
+  question: string;
+  answer: string;
+}
+
 interface IResponse {
   meta: {
     current_page: number;
@@ -153,6 +163,30 @@ interface ITaskCategory {
   id: number;
   name: string;
   subcategories: { id: number; name: string }[];
+}
+
+interface ICloudinary {
+  asset_folder: string;
+  asset_id: string;
+  bytes: number;
+  created_at: string;
+  display_name: string;
+  etag: string;
+  format: string;
+  height: number;
+  isCloudinary: boolean;
+  original_filename: string;
+  placeholder: boolean;
+  public_id: string;
+  resource_type: string;
+  secure_url: string;
+  signature: string;
+  tags: string[];
+  type: "upload";
+  url: string;
+  version: number;
+  version_id: string;
+  width: number;
 }
 
 interface ICategory {

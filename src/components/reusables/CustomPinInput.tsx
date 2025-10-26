@@ -38,7 +38,7 @@ const CustomPinInput: React.FC<CustomPinInputProps> = ({
               index={i}
               className={cn(
                 "w-12 h-12 sm:w-14 sm:h-14 text-lg sm:text-xl font-semibold rounded-lg border-2 transition-all duration-200",
-                "focus:ring-2 focus:ring-primary-400 focus:border-primary-500",
+                "focus:ring-0 focus:ring-primary-400 focus:border-primary-500",
                 error
                   ? "border-error bg-error-light"
                   : "border-border-medium hover:border-border-strong",

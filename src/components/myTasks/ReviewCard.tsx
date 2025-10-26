@@ -1,23 +1,24 @@
 "use client";
 
-import React from "react";
 import Image, { StaticImageData } from "next/image";
 import Rating from "../reusables/Rating";
 import { formatDateAgo } from "@/utils";
 import { DropdownMenuItem } from "../ui/dropdown-menu";
 import CustomDropdown from "../reusables/CustomDropdown";
+import { Pencil, Trash2 } from "lucide-react";
 
-export interface ReviewCardProps {
-  label: string;
+interface ReviewCardProps {
+  label?: string;
   name: string;
   rating: number;
   date: string;
   comment: string;
   avatar?: string | StaticImageData;
   onEdit?: () => void;
+  onDelete?: () => void;
 }
 
-const ReviewCard = ({
+export default function ReviewCard({
   label,
   name,
   rating,
@@ -25,42 +26,66 @@ const ReviewCard = ({
   comment,
   avatar = "/images/avatar.svg",
   onEdit,
-}: ReviewCardProps) => {
-  return (
-    <main className="bg-white">
-      <div>
-        {label && <h3 className="font-bold text-[#000] mb-1">{label}</h3>}
+  onDelete,
+}: ReviewCardProps) {
+  const isEditable = onEdit || onDelete;
 
-        <div className="flex items-center gap-3 mb-1">
+  return (
+    <div className="space-y-4">
+      {label && (
+        <h3 className="text-base sm:text-lg font-semibold text-neutral-900">
+          {label}
+        </h3>
+      )}
+
+      {/* User Info */}
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex items-center gap-3 min-w-0">
           <Image
             src={avatar}
-            alt="avatar"
-            width={42}
-            height={42}
-            className="rounded-full object-cover shrink-0 w-[42px] h-[42px]"
+            alt={`${name}'s avatar`}
+            width={48}
+            height={48}
+            className="rounded-full object-cover shrink-0 w-10 h-10 sm:w-12 sm:h-12 ring-2 ring-neutral-100"
           />
-          <div>
-            <p className="font-medium text-black-2">{name}</p>
-            <p className="text-sm text-dark-grey-2">{formatDateAgo(date)}</p>
+          <div className="min-w-0">
+            <p className="font-medium text-neutral-900 truncate">{name}</p>
+            <p className="text-xs sm:text-sm text-neutral-500">
+              {formatDateAgo(date)}
+            </p>
           </div>
         </div>
 
-        <Rating value={rating} readOnly className="gap-2" />
-
-        <div className="w-full flex items-start gap-1 mt-2.5 bg-light-grey rounded-20 rounded-tl-none p-5 relative">
-          <p className="text-sm text-black-2 flex-1">{comment}</p>
-          {onEdit && (
-            <CustomDropdown align="center" contentClassName="p-0">
-              <DropdownMenuItem onClick={onEdit} className="px-4 py-2">
-                Edit
+        {isEditable && (
+          <CustomDropdown align="end" contentClassName="w-40">
+            {onEdit && (
+              <DropdownMenuItem onClick={onEdit} className="gap-2">
+                <Pencil className="w-4 h-4" />
+                Edit Review
               </DropdownMenuItem>
-              <DropdownMenuItem className="px-4 py-2">Delete</DropdownMenuItem>
-            </CustomDropdown>
-          )}
-        </div>
+            )}
+            {onDelete && (
+              <DropdownMenuItem
+                onClick={onDelete}
+                className="gap-2 text-error focus:text-error"
+              >
+                <Trash2 className="w-4 h-4" />
+                Delete Review
+              </DropdownMenuItem>
+            )}
+          </CustomDropdown>
+        )}
       </div>
-    </main>
-  );
-};
 
-export default ReviewCard;
+      {/* Rating */}
+      <Rating value={rating} readOnly size={18} className="gap-1" />
+
+      {/* Comment */}
+      <div className="bg-neutral-50 rounded-2xl rounded-tl-none p-4 sm:p-5">
+        <p className="text-sm sm:text-base text-neutral-700 leading-relaxed">
+          {comment}
+        </p>
+      </div>
+    </div>
+  );
+}

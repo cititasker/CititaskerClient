@@ -54,3 +54,10 @@ interface TaskerReview {
 }
 
 type GetReviewsResponse = { data: TaskerReview[] };
+
+type PostReviewInput = {
+  role: TRole;
+  task_id: string;
+  rating: number;
+  comment: string;
+};

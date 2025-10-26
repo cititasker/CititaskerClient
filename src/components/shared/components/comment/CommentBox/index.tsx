@@ -10,7 +10,13 @@ import { defaultProfile } from "@/constant/images";
 import RichEditor, { RichEditorRef } from "./RichEditor/RichEditor";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
-import FormButton from "@/components/forms/FormButton";
+import {
+  moderateContent,
+  ModerationConfig,
+  MODERATION_PRESETS,
+  ModerationResult,
+} from "@/lib/contentModeration";
+import { ModerationWarning } from "./ModerationWarning";
 
 // Define your default schema
 const defaultSchema = z.object({
@@ -30,7 +36,7 @@ export type CommentBoxSchemaType = z.infer<typeof defaultSchema>;
 
 interface CommentBoxProps {
   id?: number;
-  schema?: ZodSchema<CommentBoxSchemaType>; // <- This fixes your type error
+  schema?: ZodSchema<CommentBoxSchemaType>;
   onSubmit: (values: CommentBoxSchemaType) => Promise<void>;
   placeholder?: string;
   compact?: boolean;
@@ -42,6 +48,8 @@ interface CommentBoxProps {
   autoFocus?: boolean;
   showAvatar?: boolean;
   className?: string;
+  moderationConfig?: ModerationConfig;
+  onModerationViolation?: (violations: string[]) => void;
 }
 
 const CommentBox: React.FC<CommentBoxProps> = ({
@@ -58,12 +66,20 @@ const CommentBox: React.FC<CommentBoxProps> = ({
   autoFocus = false,
   showAvatar = true,
   className,
+  moderationConfig = MODERATION_PRESETS.NONE,
+  onModerationViolation,
 }) => {
   const { user } = useAppSelector((state) => state.user);
   const richEditorRef = useRef<RichEditorRef>(null);
 
   const [isFocused, setIsFocused] = useState(false);
   const [isEmpty, setIsEmpty] = useState(true);
+  const [moderationResult, setModerationResult] = useState<ModerationResult>({
+    valid: true,
+    violations: [],
+    warnings: [],
+    hasIssues: false,
+  });
 
   const methods = useForm<CommentBoxSchemaType>({
     defaultValues: {
@@ -78,10 +94,51 @@ const CommentBox: React.FC<CommentBoxProps> = ({
 
   const onContentUpdate = useCallback(
     (html: string, isEmpty: boolean) => {
+      console.log(
+        "Content updated, isEmpty:",
+        isEmpty,
+        "html length:",
+        html.length
+      );
       setValue("content", html);
       setIsEmpty(isEmpty);
+
+      // Real-time moderation check
+      if (moderationConfig.enabled && moderationConfig.realTime) {
+        if (isEmpty) {
+          // Clear moderation when empty
+          setModerationResult({
+            valid: true,
+            violations: [],
+            warnings: [],
+            hasIssues: false,
+          });
+          if (methods.formState.errors.content) {
+            methods.clearErrors("content");
+          }
+        } else {
+          // Check content for violations
+          console.log("Running moderation check...");
+          const result = moderateContent(html, moderationConfig);
+          console.log("Moderation result:", result);
+          setModerationResult(result);
+
+          // Clear form errors if content becomes valid
+          if (result.valid && methods.formState.errors.content) {
+            methods.clearErrors("content");
+          }
+        }
+      } else {
+        // Clear moderation result when moderation disabled
+        setModerationResult({
+          valid: true,
+          violations: [],
+          warnings: [],
+          hasIssues: false,
+        });
+      }
     },
-    [setValue]
+    [setValue, moderationConfig, methods]
   );
 
   const onFocusChange = useCallback((focused: boolean) => {
@@ -93,10 +150,42 @@ const CommentBox: React.FC<CommentBoxProps> = ({
     richEditorRef.current?.reset();
     setIsEmpty(true);
     setIsFocused(false);
+    setModerationResult({
+      valid: true,
+      violations: [],
+      warnings: [],
+      hasIssues: false,
+    });
   }, [reset]);
 
   const onInternalSubmit = handleSubmit(async (values) => {
     if (isEmpty || !values.content.trim()) return;
+
+    // Perform content moderation on submit
+    if (moderationConfig.enabled) {
+      const result = moderateContent(values.content, moderationConfig);
+
+      if (!result.valid) {
+        // Handle violations
+        const errorMessage = result.violations.join(". ");
+        methods.setError("content", {
+          type: "moderation",
+          message: errorMessage,
+        });
+
+        setModerationResult(result);
+        onModerationViolation?.(result.violations);
+        onError?.(errorMessage);
+        return; // Stop submission
+      }
+
+      // Show warnings but allow submission
+      if (result.warnings.length > 0) {
+        console.warn("Content warnings:", result.warnings);
+        setModerationResult(result);
+      }
+    }
+
     try {
       await onSubmit(values);
       onSuccess?.();
@@ -112,32 +201,36 @@ const CommentBox: React.FC<CommentBoxProps> = ({
     <FormProvider {...methods}>
       <div className="flex gap-3">
         {/* Avatar */}
-        <div className="flex-shrink-0 hidden sm:inline-block">
-          <Avatar className={cn(avatarSize, "border border-neutral-200")}>
-            <AvatarImage
-              src={user.profile_image ?? undefined}
-              alt="Your avatar"
-              className="object-cover"
-            />
-            <AvatarFallback>
-              <img
-                src={defaultProfile.src}
-                alt="Fallback"
-                className="object-cover w-full h-full rounded-full"
+        {showAvatar && (
+          <div className="flex-shrink-0 hidden sm:inline-block">
+            <Avatar className={cn(avatarSize, "border border-neutral-200")}>
+              <AvatarImage
+                src={user.profile_image ?? undefined}
+                alt="Your avatar"
+                className="object-cover"
               />
-            </AvatarFallback>
-          </Avatar>
-        </div>
+              <AvatarFallback>
+                <img
+                  src={defaultProfile.src}
+                  alt="Fallback"
+                  className="object-cover w-full h-full rounded-full"
+                />
+              </AvatarFallback>
+            </Avatar>
+          </div>
+        )}
 
         {/* Comment Input */}
         <div className="flex-1 min-w-0">
           <form onSubmit={onInternalSubmit} className="space-y-2">
             <div
-              className={`border rounded-2xl transition-all duration-200 ${
+              className={cn(
+                "border rounded-2xl transition-all duration-200",
                 isFocused
                   ? "border-primary shadow-sm bg-background"
-                  : "border-neutral-200 bg-neutral-50 hover:bg-background hover:border-neutral-300"
-              }`}
+                  : "border-neutral-200 bg-neutral-50 hover:bg-background hover:border-neutral-300",
+                moderationResult.violations.length > 0 && "border-error"
+              )}
             >
               <RichEditor
                 ref={richEditorRef}
@@ -153,12 +246,21 @@ const CommentBox: React.FC<CommentBoxProps> = ({
                 showLinkButton={showLinkButton}
               />
             </div>
-            {/* Error Display */}
-            {methods.formState.errors.content && (
-              <p className="text-xs text-error mt-1 px-3">
-                {methods.formState.errors.content.message}
-              </p>
-            )}
+
+            {/* Moderation Warnings/Violations */}
+            <ModerationWarning
+              violations={moderationResult.violations}
+              warnings={moderationResult.warnings}
+              className="mt-2"
+            />
+
+            {/* Form Validation Error Display */}
+            {methods.formState.errors.content &&
+              methods.formState.errors.content.type !== "moderation" && (
+                <p className="text-xs text-error mt-1 px-3">
+                  {methods.formState.errors.content.message}
+                </p>
+              )}
           </form>
         </div>
       </div>

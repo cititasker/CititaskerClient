@@ -48,7 +48,7 @@ export default function MainNavbar() {
     }
   };
 
-  const homeRoute = isAuth ? `${ROUTES.DISCOVERY}/${user?.role}` : ROUTES.HOME;
+  const homeRoute = isAuth ? `/${user?.role}${ROUTES.DISCOVERY}` : ROUTES.HOME;
 
   return (
     <>
@@ -83,12 +83,15 @@ export default function MainNavbar() {
                 <HowItWorksDropdown userRole={user?.role} />
 
                 {isAuth && user?.role && (
-                  <Link
-                    href={`/${user.role}${ROUTES.MY_TASKS}`}
-                    className="px-3 py-2 text-sm font-medium rounded-lg hover:bg-primary/10 hover:text-primary transition-colors"
+                  <Button
+                    asChild
+                    variant="ghost"
+                    className="flex items-center gap-2 hover:bg-primary/10 hover:text-primary"
                   >
-                    My Tasks
-                  </Link>
+                    <Link href={`/${user.role}${ROUTES.MY_TASKS}`}>
+                      My Tasks
+                    </Link>
+                  </Button>
                 )}
               </nav>
             </div>

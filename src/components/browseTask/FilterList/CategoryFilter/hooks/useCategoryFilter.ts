@@ -19,22 +19,26 @@ export function useCategoryFilter(categories: CategoryData[]) {
 
   // Initialize from URL parameters
   useEffect(() => {
-    const categoryParam = searchParams.get("categories");
-    const subcategoryParam = searchParams.get("subcategories");
+    const categoryParam = searchParams.get("category_id");
+    const subcategoryParam = searchParams.get("sub_category_id");
 
     if (categoryParam) {
       const categoryIds = categoryParam.split(",").map(Number).filter(Boolean);
       setSelectedCategories(new Set(categoryIds));
-    }
 
-    if (subcategoryParam) {
+      // When categories are selected, select all their subcategories internally
+      const allSubcategoryIds = categories
+        .filter((cat) => categoryIds.includes(cat.id))
+        .flatMap((cat) => cat.subcategories.map((sub) => sub.id));
+      setSelectedSubcategories(new Set(allSubcategoryIds));
+    } else if (subcategoryParam) {
       const subcategoryIds = subcategoryParam
         .split(",")
         .map(Number)
         .filter(Boolean);
       setSelectedSubcategories(new Set(subcategoryIds));
     }
-  }, [searchParams]);
+  }, [searchParams, categories]);
 
   const toggleCategory = (categoryId: number) => {
     const category = categories.find((c) => c.id === categoryId);
@@ -67,6 +71,7 @@ export function useCategoryFilter(categories: CategoryData[]) {
     if (newSubcategories.has(subcategoryId)) {
       // Unselect subcategory
       newSubcategories.delete(subcategoryId);
+      // Always unselect parent category when deselecting a subcategory
       newCategories.delete(categoryId);
     } else {
       // Select subcategory
@@ -86,22 +91,53 @@ export function useCategoryFilter(categories: CategoryData[]) {
     setSelectedSubcategories(newSubcategories);
   };
 
+  // Compute what should actually be sent to the API
+  const getFilterParams = useMemo(() => {
+    const categoriesToSend: number[] = [];
+    const subcategoriesToSend: number[] = [];
+
+    // For each category, check if all subcategories are selected
+    categories.forEach((category) => {
+      const allSubsSelected = category.subcategories.every((sub) =>
+        selectedSubcategories.has(sub.id)
+      );
+
+      if (allSubsSelected && category.subcategories.length > 0) {
+        // Send category ID only
+        categoriesToSend.push(category.id);
+      } else {
+        // Send only selected subcategories for this category
+        category.subcategories.forEach((sub) => {
+          if (selectedSubcategories.has(sub.id)) {
+            subcategoriesToSend.push(sub.id);
+          }
+        });
+      }
+    });
+
+    return { categoriesToSend, subcategoriesToSend };
+  }, [categories, selectedSubcategories]);
+
   const updateUrl = () => {
     const current = new URLSearchParams(searchParams.toString());
+    const { categoriesToSend, subcategoriesToSend } = getFilterParams;
 
-    if (selectedCategories.size > 0) {
-      current.set("categories", Array.from(selectedCategories).join(","));
-    } else {
-      current.delete("categories");
+    // Clear existing category filters
+    current.delete("category_id");
+    current.delete("sub_category_id");
+
+    // Add category_id if we have full categories selected
+    if (categoriesToSend.length > 0) {
+      current.set("category_id", categoriesToSend.join(","));
     }
 
-    if (selectedSubcategories.size > 0) {
-      current.set("subcategories", Array.from(selectedSubcategories).join(","));
-    } else {
-      current.delete("subcategories");
+    // Add sub_category_id if we have partial selections
+    if (subcategoriesToSend.length > 0) {
+      current.set("sub_category_id", subcategoriesToSend.join(","));
     }
 
-    router.push(`?${current.toString()}`);
+    // Preserve other query params
+    router.push(`?${current.toString()}`, { scroll: false });
   };
 
   const clearFilters = () => {
@@ -109,17 +145,18 @@ export function useCategoryFilter(categories: CategoryData[]) {
     setSelectedSubcategories(new Set());
 
     const current = new URLSearchParams(searchParams.toString());
-    current.delete("categories");
-    current.delete("subcategories");
-    router.push(`?${current.toString()}`);
+    current.delete("category_id");
+    current.delete("sub_category_id");
+    router.push(`?${current.toString()}`, { scroll: false });
   };
 
-  const hasSelection =
-    selectedCategories.size > 0 || selectedSubcategories.size > 0;
+  const hasSelection = selectedSubcategories.size > 0;
 
   const selectedCount = useMemo(() => {
-    return selectedCategories.size + selectedSubcategories.size;
-  }, [selectedCategories.size, selectedSubcategories.size]);
+    // Count unique selections: full categories + partial subcategories
+    const { categoriesToSend, subcategoriesToSend } = getFilterParams;
+    return categoriesToSend.length + subcategoriesToSend.length;
+  }, [getFilterParams]);
 
   return {
     selectedCategories,

@@ -5,13 +5,13 @@ import StatusChip from "../../reusables/StatusChip";
 import Icons from "../../Icons";
 import FormButton from "../../forms/FormButton";
 import { FaStar } from "react-icons/fa";
-import React from "react";
+import React, { useMemo } from "react";
 import Link from "next/link";
 import { API_ROUTES } from "@/constant";
 import { getOfferReplies } from "@/services/offers/offers.api";
 import { useQuery } from "@tanstack/react-query";
 import { Card } from "@/components/ui/card";
-import CommentsThread from "@/components/shared/components/comment/partials/CommentsThread";
+import OfferReplyThread from "./OfferReplyThread";
 
 interface IProps {
   offer: IOffer;
@@ -113,7 +113,7 @@ const OfferActions = ({
         text="Message"
         size="lg"
         className="btn-primary min-w-[120px]"
-        href="/poster/dashboard/message"
+        href="/poster/dashboard/messages"
       />
     );
   }
@@ -126,6 +126,20 @@ const UserOffer = ({ offer, task, toggleModal }: IProps) => {
     queryKey: [API_ROUTES.OFFER_REPLIES, offer.id],
     queryFn: () => getOfferReplies(`${offer.id}`),
   });
+
+  const replies = data?.data;
+
+  const comment = useMemo(() => {
+    if (!replies) return undefined;
+    return {
+      id: replies.id,
+      files: [],
+      replies: replies.replies,
+      user: replies.tasker,
+      created_at: replies.created_at,
+      content: replies.description,
+    };
+  }, [replies]);
 
   return (
     <Card className="p-6 border border-border-light hover:border-border-medium mb-6 last:mb-0 animate-fade-in">
@@ -157,7 +171,7 @@ const UserOffer = ({ offer, task, toggleModal }: IProps) => {
       {/* Comments Thread */}
       {data?.data && (
         <div className="border-t border-border-light pt-4 mt-4">
-          {/* <CommentsThread comments={data.data} /> */}
+          <OfferReplyThread comment={comment} />
         </div>
       )}
     </Card>

@@ -21,6 +21,7 @@ import CustomDropdown from "@/components/reusables/CustomDropdown";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import Questions from "@/components/shared/components/comment/Questions";
+import TaskDetailSkeleton from "@/components/skeletons/TaskDetailSkeleton";
 
 interface TaskDetailsProps {
   back: string;
@@ -153,7 +154,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ back }) => {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.user);
 
-  const { data } = useFetchTaskById({ id });
+  const { data, isLoading } = useFetchTaskById({ id });
   const task = data?.data as ITask;
 
   const shareModal = useModal();
@@ -178,19 +179,8 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ back }) => {
     console.log("Bookmark task");
   };
 
-  if (!task) {
-    return (
-      <Card className="animate-pulse">
-        <div className="h-16 bg-neutral-100 rounded-t-xl" />
-        <div className="p-8 space-y-6">
-          <div className="h-8 bg-neutral-100 rounded w-3/4" />
-          <div className="space-y-3">
-            <div className="h-4 bg-neutral-100 rounded" />
-            <div className="h-4 bg-neutral-100 rounded w-2/3" />
-          </div>
-        </div>
-      </Card>
-    );
+  if (isLoading) {
+    return <TaskDetailSkeleton />;
   }
 
   return (

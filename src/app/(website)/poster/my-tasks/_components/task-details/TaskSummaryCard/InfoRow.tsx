@@ -48,7 +48,6 @@ export default function InfoRow({
             size="sm"
             onClick={onEdit}
             className={cn(
-              "opacity-0 group-hover:opacity-100 transition-all duration-200",
               "text-primary hover:text-primary/80 hover:bg-primary/10",
               "h-8 px-2 text-xs"
             )}

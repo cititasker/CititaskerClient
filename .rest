@@ -17,7 +17,7 @@ Content-Type: application/json
 Accept: application/json
 
 {
-    "email":"taiwokelvin+1@gmail.com",
+    "email":"juliet_tasker@gmail.com",
     "password": "123456"
 }
 
@@ -47,3 +47,10 @@ Content-Type: image/png
 GET https://staging-api.cititasker.com/api/v1/utility/categories
 Content-Type: application/json
 Accept: application/json
+
+###
+GET https://staging-api.cititasker.com/api/v1/tasks?sub_categories[]=1
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3N0YWdpbmctYXBpLmNpdGl0YXNrZXIuY29tL2FwaS92MS9hdXRoL2xvZ2luIiwiaWF0IjoxNzYwNzc5MjYwLCJleHAiOjE3NjEzODQwNjAsIm5iZiI6MTc2MDc3OTI2MCwianRpIjoiTjlLRmhkZkxhSHo2U2RtdCIsInN1YiI6IjE2IiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.6Tr2caYE1USoiG5CcBkROoIDOQioMU1RYlUoNnf9RhQ
+Accept: application/json
+

@@ -1,4 +1,4 @@
-import ImageUploader from "@/app/post-task/_components/partials/ImageUploader";
+import ImageUploader from "@/components/forms/uploader/ImageUploader";
 import FormButton from "@/components/forms/FormButton";
 import FormCheckbox from "@/components/forms/FormCheckbox";
 import CustomModal from "@/components/reusables/CustomModal";

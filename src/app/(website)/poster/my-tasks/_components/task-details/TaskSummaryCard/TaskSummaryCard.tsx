@@ -33,9 +33,11 @@ export default function TaskSummaryCard({
   const cancelTask = useModal();
   const helpers = useTaskHelpers(task);
 
+  console.log(89, task);
+
   return (
     <>
-      <Card className="shadow-sm border-border-light hover:shadow-lg transition-all duration-300 overflow-hidden">
+      <Card className="shadow-sm border-border-light overflow-hidden">
         <CardContent className="p-0">
           <div className="p-6 pb-4">
             <TaskHeader task={task} statusBadge={helpers.getStatusBadge()} />

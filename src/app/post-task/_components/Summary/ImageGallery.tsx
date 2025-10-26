@@ -1,18 +1,12 @@
 import Image from "next/image";
-import { SerializableImage } from "../../utils/fileHelpers";
 import React from "react";
 import { Card } from "@/components/ui/card";
 import { ChevronLeft, ChevronRight, ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { NormalizedImage } from "@/lib/image-uploader-utils";
 
 const ImageGallery = React.memo(
-  ({
-    images,
-    taskName,
-  }: {
-    images: SerializableImage[];
-    taskName?: string;
-  }) => {
+  ({ images, taskName }: { images: NormalizedImage[]; taskName?: string }) => {
     const [selectedImageIndex, setSelectedImageIndex] = React.useState(0);
 
     if (!images?.length) {
@@ -47,7 +41,7 @@ const ImageGallery = React.memo(
       <Card className="p-0 overflow-hidden">
         <div className="aspect-[4/3] relative bg-background-secondary group">
           <Image
-            src={selectedImage.src}
+            src={selectedImage.url}
             alt={taskName || `Task image ${selectedImageIndex + 1}`}
             fill
             className="object-cover transition-opacity duration-300"
@@ -100,7 +94,7 @@ const ImageGallery = React.memo(
                   onClick={() => setSelectedImageIndex(index)}
                 >
                   <Image
-                    src={image.src}
+                    src={image.url}
                     alt={`Thumbnail ${index + 1}`}
                     fill
                     className="object-cover"
@@ -115,7 +109,5 @@ const ImageGallery = React.memo(
     );
   }
 );
-
-ImageGallery.displayName = "ImageGallery";
 
 export default ImageGallery;

@@ -11,20 +11,33 @@ export function useTasksQuery() {
       max: "max_amount",
       lat: "latitude",
       lng: "longitude",
-      subcategories: "sub_category_id",
+      category_id: "categories",
+      sub_category_id: "sub_categories",
     };
 
     const params: Record<string, any> = {};
 
     searchParams.forEach((value, key) => {
       const mappedKey = paramMap[key] || key;
-      // Convert distance from km to meters, parse numbers appropriately
-      if (key === "distance") {
-        params[mappedKey] = parseFloat(value) * 1000;
-      } else if (key === "min" || key === "max") {
-        params[mappedKey] = parseFloat(value);
+      // Handle category_id and sub_category_id as arrays
+      if (key === "category_id" || key === "sub_category_id") {
+        const ids = value.split(",").map(Number).filter(Boolean);
+        if (ids.length > 0) {
+          params[mappedKey] = ids;
+        }
       } else {
-        params[mappedKey] = value;
+        // Convert distance from km to meters
+        if (key === "distance") {
+          params[mappedKey] = parseFloat(value) * 1000;
+        }
+        // Parse min/max as numbers
+        else if (key === "min" || key === "max") {
+          params[mappedKey] = parseFloat(value);
+        }
+        // Keep other params as-is
+        else {
+          params[mappedKey] = value;
+        }
       }
     });
 

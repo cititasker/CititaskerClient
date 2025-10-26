@@ -15,6 +15,7 @@ interface CommentsThreadProps {
   level?: number;
   showStats?: boolean;
   className?: string;
+  replyQuestion?: () => void;
 }
 
 const CommentsThread: React.FC<CommentsThreadProps> = ({
@@ -27,6 +28,7 @@ const CommentsThread: React.FC<CommentsThreadProps> = ({
   level = 0,
   showStats = true,
   className,
+  replyQuestion,
 }) => {
   // Calculate thread statistics
   const threadStats = useMemo(() => {
@@ -93,6 +95,7 @@ const CommentsThread: React.FC<CommentsThreadProps> = ({
               loadingStates={loadingStates}
               submissionId={submissionId}
               defaultCollapsed={level >= 2} // Auto-collapse deep threads
+              replyQuestion={replyQuestion}
             />
 
             {/* Separator between root comments */}
