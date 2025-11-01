@@ -103,8 +103,6 @@ const CancelTaskModal: React.FC<CancelTaskModalProps> = ({
           <div className="flex-1 overflow-y-auto no-scrollbar">
             {renderStepContent()}
           </div>
-
-          {/* ✅ Move the footer *inside* the form */}
           {currentStep < 3 && (
             <ActionsButtons
               type={currentStep === 2 ? "submit" : "button"}

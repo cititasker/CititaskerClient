@@ -29,7 +29,10 @@ export function SearchBar({
     <div className={cn("relative flex-1", className)}>
       <ISearch className="absolute top-0 bottom-0 my-auto ml-3 shrink-0" />
       <Input
-        className="pl-10 bg-white w-full pr-20"
+        className={cn(
+          "pl-10 bg-white w-full",
+          `${value || isSearching ? "pr-10" : "pr-5"}`
+        )}
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}

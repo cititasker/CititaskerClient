@@ -18,7 +18,7 @@ const StatusChip: React.FC<StatusChipProps> = ({
         "inline-flex w-fit h-[22px] items-center rounded-full border px-2 text-[10px] font-medium capitalize transition-colors",
         isActive
           ? "bg-primary text-white border-primary"
-          : "bg-[hsl(var(--light-primary-1))] text-primary border-primary"
+          : "bg-primary-50 text-primary border-primary"
       )}
     >
       {status}

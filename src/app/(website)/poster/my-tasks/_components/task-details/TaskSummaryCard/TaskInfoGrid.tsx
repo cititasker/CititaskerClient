@@ -24,7 +24,7 @@ export default function TaskInfoGrid({
 }: Props) {
   return (
     <div className="px-6 pb-6">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-6 sm:gap-y-10">
         <InfoRow
           label="Due Date"
           value={formattedDate}
