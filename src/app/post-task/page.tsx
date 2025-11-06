@@ -1,21 +1,13 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { AnimatePresence, motion } from "framer-motion";
 import React from "react";
 import StepOne from "./_components/StepOne";
 import StepTwo from "./_components/StepTwo";
 import StepThree from "./_components/StepThree";
 import StepFour from "./_components/StepFour";
 import Summary from "./_components/Summary";
-
-const animationVariants = {
-  enterFromLeft: { x: 100, opacity: 0 },
-  enterFromRight: { x: -100, opacity: 0 },
-  center: { x: 0, opacity: 1 },
-  exitToLeft: { x: -100, opacity: 0 },
-  exitToRight: { x: 100, opacity: 0 },
-} as const;
+import AnimatedStep from "@/components/reusables/AnimatedStep";
 
 const steps = [
   { component: StepOne, title: "Task Details" },
@@ -35,24 +27,9 @@ export default function PostTaskPage() {
 
   return (
     <div className="min-h-[600px] relative">
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.div
-          key={`step-${stepIndex}`}
-          initial="enterFromLeft"
-          animate="center"
-          exit="exitToLeft"
-          variants={animationVariants}
-          transition={{
-            type: "spring",
-            stiffness: 300,
-            damping: 30,
-            mass: 1,
-          }}
-          className="w-full"
-        >
-          <StepComponent />
-        </motion.div>
-      </AnimatePresence>
+      <AnimatedStep currentStep={stepIndex}>
+        <StepComponent />
+      </AnimatedStep>
     </div>
   );
 }

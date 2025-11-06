@@ -117,7 +117,7 @@ const CustomModal = ({
         {hasHeader && (
           <DialogHeader
             className={cn(
-              "flex-shrink-0 border-b border-border-light bg-background/95 backdrop-blur-sm",
+              "flex-shrink-0 border-b border-light-grey backdrop-blur-3xl",
               stickyHeader && "sticky top-0 z-20",
               "px-4 sm:px-6 py-4 sm:py-5",
               headerClassName
@@ -157,7 +157,7 @@ const CustomModal = ({
         {hasFooter && (
           <div
             className={cn(
-              "flex-shrink-0 border-t border-border-light bg-background/95 backdrop-blur-sm",
+              "flex-shrink-0 border-t border-light-grey backdrop-blur-sm",
               stickyFooter && "sticky bottom-0 z-20",
               "px-4 sm:px-6 py-4",
               footerClassName

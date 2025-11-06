@@ -3,15 +3,14 @@
 import React from "react";
 import { useAppSelector } from "@/store/hook";
 import CustomModal from "@/components/reusables/CustomModal";
-import { AnimatePresence, motion } from "framer-motion";
 import StepOne from "../shared/StepOne";
 import StepTwo from "./StepTwo";
 import StepThree from "./StepThree";
 import Success from "@/components/reusables/Success";
 import { initializeName } from "@/utils";
 import { useStepFormAction } from "@/hooks/useStepFormAction";
-import { animationVariant } from "@/constant";
 import { usePurgeData } from "@/utils/dataPurge";
+import AnimatedStep from "@/components/reusables/AnimatedStep";
 
 interface Props {
   open: boolean;
@@ -38,7 +37,7 @@ const steps = [
     ),
   },
   {
-    title: "Preview price",
+    title: "Preview",
     content: (nextStep: () => void, prevStep: () => void) => (
       <StepThree nextStep={nextStep} prevStep={prevStep} />
     ),
@@ -72,31 +71,18 @@ const IncreasePriceModal: React.FC<Props> = ({ open, handleClose }) => {
         !isFinalStep ? steps[currentStep - 1]?.description : undefined
       }
     >
-      <div className="relative min-h-[300px]">
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.div
-            key={currentStep}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            variants={animationVariant}
-            transition={{
-              duration: 0.25,
-              ease: [0.4, 0.0, 0.2, 1], // Custom easing curve for smooth feel
-            }}
-            className="w-full"
-          >
-            {isFinalStep ? (
-              <Success
-                title="Success"
-                desc={`Your request was successfully sent to ${posterName}`}
-                className="justify-center"
-              />
-            ) : (
-              steps[currentStep - 1]?.content(nextStep, prevStep)
-            )}
-          </motion.div>
-        </AnimatePresence>
+      <div className="relative">
+        <AnimatedStep currentStep={currentStep}>
+          {isFinalStep ? (
+            <Success
+              title="Success"
+              desc={`Your request was successfully sent to ${posterName}`}
+              className="justify-center py-8"
+            />
+          ) : (
+            steps[currentStep - 1]?.content(nextStep, prevStep)
+          )}
+        </AnimatedStep>
       </div>
     </CustomModal>
   );

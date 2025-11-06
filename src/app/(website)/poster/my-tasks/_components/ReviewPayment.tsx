@@ -29,7 +29,7 @@ export default function ReviewPayment({
   loading,
   selectedOffer,
 }: ReviewPaymentProps) {
-  const { task } = useAppSelector((state) => state.task);
+  const { taskDetails } = useAppSelector((state) => state.task);
   const fullName = initializeName({
     first_name: selectedOffer?.tasker.first_name,
     last_name: selectedOffer?.tasker.last_name,
@@ -50,7 +50,7 @@ export default function ReviewPayment({
           <h2 className="text-xl font-semibold text-black-2 mb-1">
             {fullName}
           </h2>
-          <p className="text-base text-dark-grey-2">{task.name}</p>
+          <p className="text-base text-dark-grey-2">{taskDetails.name}</p>
         </div>
       </div>
 

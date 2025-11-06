@@ -21,7 +21,7 @@ export const useTaskState = (task: ITask, user: any): TaskState => {
     return {
       canMakeOffer: isOpen && !hasMadeOffer,
       canUpdateOffer: isOpen && hasMadeOffer,
-      canCompleteTask: isAssigned && hasMadeOffer && !hasCompletedTask,
+      canCompleteTask: hasMadeOffer && isTaskAssignedToYou && !hasCompletedTask,
       canReschedule: isTaskAssignedToYou,
       hasCompletedTask,
       hasMadeOffer,

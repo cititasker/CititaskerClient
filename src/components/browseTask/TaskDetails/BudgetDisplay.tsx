@@ -28,7 +28,7 @@ const BudgetDisplay: React.FC<BudgetDisplayProps> = ({
     </p>
     <div className="space-y-2 sm:space-y-3">
       <div className="text-3xl sm:text-4xl font-bold text-primary-900">
-        {formatCurrency({ value: budget, noFraction: true })}
+        {formatCurrency({ value: budget })}
       </div>
       {canIncreaseOffer && (
         <Button

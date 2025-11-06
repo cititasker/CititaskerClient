@@ -12,7 +12,7 @@ const DashboardLayout = async ({ children }: IChildren) => {
         <div className="relative p-top w-full h-full flex flex-col md:flex-row gap-3 md:gap-5 overflow-y-auto">
           <DashboardSidebar role={user?.role} />
           <main className="flex-1 min-w-0 overflow-hidden">
-            <div className="h-full sm:overflow-y-auto no-scrollbar">
+            <div className="h-full overflow-y-auto no-scrollbar">
               {children}
             </div>
           </main>

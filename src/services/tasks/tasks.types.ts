@@ -2,7 +2,8 @@ import { UseSuspenseQueryOptions } from "@tanstack/react-query";
 
 export type IntentPayload = {
   task_id: number;
-  offer_id: number;
+  payable_id: number;
+  intent: "accept_offer" | "surcharge_payment";
 };
 
 export type IntentResponse = {

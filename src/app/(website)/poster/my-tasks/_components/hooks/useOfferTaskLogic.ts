@@ -8,6 +8,10 @@ import { API_ROUTES } from "@/constant";
 import useModal from "@/hooks/useModal";
 import { usePurgeData } from "@/utils/dataPurge";
 import { useQueryClient } from "@tanstack/react-query";
+import {
+  useRejectSurchargeRequest,
+  useSurchargeList,
+} from "@/services/offers/offers.hook";
 
 export const useOfferTaskLogic = (task: ITask) => {
   const router = useRouter();
@@ -19,11 +23,19 @@ export const useOfferTaskLogic = (task: ITask) => {
   const [selectedOffer, setSelectedOffer] = useState<IOffer | null>(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const surchargeModal = useModal();
+  const rejectSurchargeModal = useModal();
 
   const acceptedOffer = useMemo(
     () => task.offers.find((offer) => offer.status == "accepted"),
     [task.offers]
   );
+
+  const { data: surcharges } = useSurchargeList(
+    `${task.id}`,
+    task.has_surcharge_requests
+  );
+
+  const rejectSurchargeRequest = useRejectSurchargeRequest();
 
   const paymentMutation = useCreateIntent({
     onSuccess: (data) => {
@@ -48,6 +60,9 @@ export const useOfferTaskLogic = (task: ITask) => {
 
   const handleSuccess = () => {
     queryClient.invalidateQueries({
+      queryKey: [API_ROUTES.GET_TASK_BY_ID, task.id],
+    });
+    queryClient.invalidateQueries({
       queryKey: [API_ROUTES.GET_USER_TASK, task.id],
     });
     toggleSuccessModal();
@@ -56,8 +71,9 @@ export const useOfferTaskLogic = (task: ITask) => {
   const onSubmit = async () => {
     if (selectedOffer) {
       await paymentMutation.mutateAsync({
-        offer_id: selectedOffer.id,
+        payable_id: selectedOffer.id,
         task_id: task.id,
+        intent: "accept_offer",
       });
     }
   };
@@ -88,5 +104,8 @@ export const useOfferTaskLogic = (task: ITask) => {
     surchargeModal,
     paymentMutation,
     selectedOffer,
+    rejectSurchargeModal,
+    rejectSurcharge: rejectSurchargeRequest,
+    surcharges,
   };
 };

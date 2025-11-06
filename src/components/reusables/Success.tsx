@@ -17,7 +17,7 @@ export default function Success({
   className,
 }: IProps) {
   return (
-    <div className={cn("text-center space-y-6 py-8", className)}>
+    <div className={cn("text-center space-y-6 pt-8", className)}>
       <div className="mx-auto w-20 h-20 bg-success-light rounded-full flex items-center justify-center">
         <CheckCircle className="w-10 h-10 text-success" />
       </div>

@@ -47,22 +47,22 @@ const StepOne = ({
     defaultValues: {
       task_id,
       offer_id: undefined,
-      offer_amount: offer.offer_amount || "",
+      offer_amount: offer?.offer_amount || "",
     },
   });
 
   useEffect(() => {
     const id = taskersOffer?.id;
-    const amount = increasePrice
-      ? taskersOffer?.offer_amount
-      : taskDetails.budget;
+
+    const amount =
+      offer?.offer_amount || (increasePrice ? "" : taskDetails.budget);
 
     form.reset({
       task_id,
       offer_id: id,
       offer_amount: `${amount}`,
     });
-  }, [taskersOffer, taskDetails]);
+  }, [taskersOffer, taskDetails, offer]);
 
   const handleSubmit = (data: any) => {
     dispatch(setOfferData({ ...offer, ...data }));
@@ -102,7 +102,11 @@ const StepOne = ({
               </FormItem>
             )}
           />
-          <OfferBreakdown firstRowLabel={firstRowLabel} />
+          <OfferBreakdown
+            firstRowLabel={firstRowLabel}
+            initialOffer={taskersOffer?.offer_amount || 0}
+            increasePrice={increasePrice}
+          />
         </div>
 
         <ActionsButtons

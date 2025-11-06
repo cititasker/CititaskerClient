@@ -1,6 +1,6 @@
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { capitalize, formatCurrency, loggedInUser } from "@/utils";
+import { capitalize, formatCurrency, initializeName } from "@/utils";
 import StatusChip from "../../reusables/StatusChip";
 import Icons from "../../Icons";
 import FormButton from "../../forms/FormButton";
@@ -40,7 +40,10 @@ const TaskerInfo = ({
     <div className="flex-1 min-w-0">
       <div className="flex flex-wrap items-center gap-2 mb-2">
         <h3 className="font-semibold text-text-primary truncate">
-          {loggedInUser(tasker.first_name, tasker.last_name)}
+          {initializeName({
+            first_name: tasker.first_name,
+            last_name: tasker.last_name,
+          })}
         </h3>
 
         <div className="flex items-center gap-1 text-sm">

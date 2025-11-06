@@ -5,7 +5,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 export interface TaskState {
   taskId: number | null;
   task: Partial<postTaskSchemaType>;
-  offer: Partial<offerSchemaType>;
+  offer: Partial<offerSchemaType> & { payable_id?: number };
   taskDetails: Partial<ITask>;
   taskersOffer: IOffer | null;
   isDataLoaded: boolean;

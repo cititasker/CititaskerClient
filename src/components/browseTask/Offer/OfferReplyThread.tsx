@@ -12,8 +12,8 @@ import { CommentActions } from "@/components/shared/components/comment/partials/
 // import CommentsThread from "@/components/shared/components/comment/partials/CommentsThread";
 import { useReplyOffer } from "@/services/offers/offers.hook";
 import CommentsThread from "@/components/shared/components/comment/CommentsThread";
-import { useFetchTaskQuestion } from "@/services/tasks/tasks.hook";
-import { useParams, useRouter } from "next/navigation";
+// import { useFetchTaskQuestion } from "@/services/tasks/tasks.hook";
+import { useRouter } from "next/navigation";
 
 interface ReplyOfferProps {
   comment: CommentThreadT | undefined;
@@ -29,13 +29,9 @@ const OfferReplyThread: React.FC<ReplyOfferProps> = ({
   const { showSnackbar } = useSnackbar();
   const router = useRouter();
 
-  const { id } = useParams();
-
-  const { data } = useFetchTaskQuestion(id);
-  const questions = data?.data?.data || [];
-
-  console.log(8, questions);
-  console.log(9, comment);
+  // const { id } = useParams();
+  // const { data } = useFetchTaskQuestion(id);
+  // const questions = data?.data?.data || [];
 
   const replyMutation = useReplyOffer();
 

@@ -11,17 +11,23 @@ export const useTaskData = () => {
   const { id } = useParams() as { id?: string };
   const dispatch = useAppDispatch();
   const pathname = usePathname();
-  const { data, isLoading, error } = useFetchTaskById({ id: id ?? "" });
+
   const { purgeTask } = usePurgeData();
   const searchParams = useSearchParams();
 
   const currentStep = Number(searchParams.get("step")) || 1;
+  const similarId = searchParams.get("similar");
 
   const isEditMode = Boolean(id);
-  const isCreateMode = !id;
+  const isSimilarMode = Boolean(similarId);
+  const isCreateMode = !id && !similarId;
+
+  const fetchId = id || similarId || "";
+
+  const { data, isLoading, error } = useFetchTaskById({ id: fetchId });
 
   const transformedTaskData = useMemo(() => {
-    if (!data?.data || isCreateMode) return null;
+    if (!data?.data) return null;
 
     const task = data.data;
     const allStates = State.getStatesOfCountry("NG") as IState[];
@@ -48,16 +54,16 @@ export const useTaskData = () => {
   }, [data?.data]);
 
   useEffect(() => {
-    if (isCreateMode && currentStep == 1) {
+    if (isCreateMode && currentStep === 1) {
       purgeTask().catch(console.error);
     }
-  }, []);
+  }, [isCreateMode, currentStep, purgeTask]);
 
   useEffect(() => {
-    if (isEditMode && transformedTaskData) {
+    if ((isEditMode || isSimilarMode) && transformedTaskData) {
       dispatch(setTaskData(transformedTaskData));
     }
-  }, [transformedTaskData, dispatch, isEditMode]);
+  }, [isEditMode, isSimilarMode, transformedTaskData, dispatch]);
 
   useEffect(() => {
     const handleBeforeUnload = () => {
@@ -87,10 +93,11 @@ export const useTaskData = () => {
 
   return {
     taskData: transformedTaskData,
-    isLoading: isEditMode ? isLoading : false,
-    error: isEditMode ? error : null,
-    hasData: isEditMode ? !!transformedTaskData : false,
+    isLoading: isEditMode || isSimilarMode ? isLoading : false,
+    error: isEditMode || isSimilarMode ? error : null,
+    hasData: isEditMode || isSimilarMode ? !!transformedTaskData : false,
     isEditMode,
     isCreateMode,
+    isSimilarMode,
   };
 };

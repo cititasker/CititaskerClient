@@ -122,14 +122,14 @@ export const formatCurrency = ({
   value,
   locale = "en-US",
   currencySymbol = "₦",
-  noFraction = false,
+  noFraction = true,
 }: {
   value: number | string | undefined;
   locale?: string;
   currencySymbol?: string;
   noFraction?: boolean;
 }): string => {
-  if (!value || isNaN(Number(value))) {
+  if (value === null || value === undefined || isNaN(Number(value))) {
     return "";
   }
 
@@ -186,14 +186,14 @@ export function initializeName({
   const firstName = first_name?.trim();
   const lastName = last_name?.trim();
 
-  if (firstName && lastName) return `${firstName} ${getInitials(lastName)}`;
+  if (firstName && lastName) return `${firstName} ${getInitials(lastName)}.`;
   if (firstName) return firstName;
   if (lastName) return lastName;
 
   if (full_name?.trim()) {
     const parts = full_name.trim().split(/\s+/);
     if (parts.length === 1) return parts[0];
-    return `${parts[0]} ${getInitials(parts[parts.length - 1])}`;
+    return `${parts[0]} ${getInitials(parts[parts.length - 1])}.`;
   }
 
   return "Anonymous";

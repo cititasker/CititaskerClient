@@ -17,46 +17,60 @@ export default function TaskStatusCard({
   date,
 }: TaskStatusCardProps) {
   const getStatusConfig = () => {
-    switch (status) {
-      case "assigned":
-        return {
-          title: "Task Assigned",
-          content: `Wait for your task to be completed. Completion date: ${formatDate(
-            date
-          )}`,
-          badge: "In Progress",
-          badgeColor: "bg-info text-info-light",
-        };
-      case "completed":
-        return {
-          title: "Release Payment",
-          content:
-            "Task completed successfully. Please release payment to the tasker.",
-          badge: "Completed",
-          badgeColor: "bg-success text-success-light",
-        };
-      default:
-        return {
-          title: `You have ${offerCount || 0} offer${
-            offerCount !== 1 ? "s" : ""
-          }`,
-          content:
-            "Discuss details with Taskers and accept an offer when you're ready.",
-          badge: "New Offers!",
-          badgeColor: "bg-accent-orange text-white",
-        };
+    // handle the open case with internal branching
+    if (status === "open") {
+      const hasOffers = offerCount > 0;
+      return hasOffers
+        ? {
+            title: `You have ${offerCount} offer${offerCount !== 1 ? "s" : ""}`,
+            content:
+              "Discuss details with Taskers and accept an offer when you're ready.",
+            badge: "New offers!",
+          }
+        : {
+            title: "Wait for Offers",
+            content: "Relax while offers roll in.",
+            badge: "Task posted",
+          };
     }
+
+    // other statuses stay the same
+    const configs: Record<
+      string,
+      { title: string; content: string; badge: string }
+    > = {
+      assigned: {
+        title: "Task assigned",
+        content: `Wait for your task to be completed. Completion date: ${formatDate(
+          date
+        )}`,
+        badge: "In progress",
+      },
+      completed: {
+        title: "Release payment",
+        content:
+          "Task completed successfully. Please release payment to the tasker.",
+        badge: "Completed",
+      },
+    };
+
+    return (
+      configs[status] ?? {
+        title: "Task status unknown",
+        content: "Something went wrong. Please refresh the page.",
+        badge: "Unknown",
+      }
+    );
   };
 
-  const { title, content, badge, badgeColor } = getStatusConfig();
+  const { title, content, badge } = getStatusConfig();
 
   return (
-    <Card className="overflow-hidden bg-gradient-to-br from-neutral-900 to-neutral-800 text-white border-none shadow-xl">
+    <Card className="overflow-hidden bg-primary text-white border-none shadow-md">
       <CardContent className="p-6 sm:p-8">
         <Badge
           className={cn(
-            "mb-4 px-4 py-2 rounded-full text-sm font-medium",
-            badgeColor
+            "mb-4 px-4 py-2 rounded-md text-sm font-medium text-black-2 !bg-light-primary-1"
           )}
         >
           {badge}

@@ -157,6 +157,7 @@ interface ITask {
   status: string;
   address: string;
   payment_requested: boolean;
+  has_surcharge_requests: boolean;
 }
 
 interface ITaskCategory {

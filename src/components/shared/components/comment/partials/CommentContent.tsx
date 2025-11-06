@@ -1,7 +1,7 @@
 import React from "react";
 import DOMPurify from "dompurify";
 import { cn } from "@/lib/utils";
-import { Paperclip, ExternalLink, Image, Download } from "lucide-react";
+import { Paperclip, ExternalLink, ImageIcon, Download } from "lucide-react";
 
 interface CommentContentProps {
   comment: CommentThreadT; // Your existing comment type
@@ -42,7 +42,7 @@ export const CommentContent: React.FC<CommentContentProps> = ({
 
     switch (type) {
       case "image":
-        return <Image className="w-4 h-4" />;
+        return <ImageIcon className="w-4 h-4" />;
       case "video":
         return <span className="text-sm">🎥</span>;
       case "audio":

@@ -86,7 +86,7 @@ export default function StepTwo({ nextStep, prevStep }: StepTwoProps) {
           type="submit"
           cancelText="Back"
           okText="Next"
-          className="mt-auto"
+          className="mt-6"
           handleCancel={prevStep}
         />
       </form>

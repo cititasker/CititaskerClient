@@ -30,7 +30,7 @@ export default function FormCheckbox({
       name={name}
       control={control}
       render={({ field }) => (
-        <FormItem className={cn("space-y-2", className)}>
+        <FormItem className={cn("space-y-1", className)}>
           <div className="flex items-start gap-3 group">
             <Checkbox
               id={name}
@@ -57,7 +57,7 @@ export default function FormCheckbox({
               {label}
             </Label>
           </div>
-          <FormMessage className="text-error text-sm ml-6" />
+          <FormMessage className="text-error text-sm" />
         </FormItem>
       )}
     />

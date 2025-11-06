@@ -33,8 +33,6 @@ export default function TaskSummaryCard({
   const cancelTask = useModal();
   const helpers = useTaskHelpers(task);
 
-  console.log(89, task);
-
   return (
     <>
       <Card className="shadow-sm border-border-light overflow-hidden">

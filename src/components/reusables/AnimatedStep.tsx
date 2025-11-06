@@ -1,6 +1,6 @@
 import React from "react";
 import { AnimatePresence, motion, Variants } from "framer-motion";
-import { animationVariant } from "@/constant";
+import { animationVariants as variants } from "@/constant";
 
 // Type for the props that the component will receive
 interface AnimatedStepProps {
@@ -12,23 +12,25 @@ interface AnimatedStepProps {
 
 const AnimatedStep: React.FC<AnimatedStepProps> = ({
   currentStep,
-  animationVariants = animationVariant,
+  animationVariants = variants,
   renderStepContent,
   children,
 }) => {
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence mode="wait" initial={false}>
       <motion.div
         key={currentStep}
-        initial="enter"
+        initial="enterFromLeft"
         animate="center"
-        exit="exit"
+        exit="exitToLeft"
         variants={animationVariants}
         transition={{
-          duration: 0.25,
-          ease: [0.4, 0.0, 0.2, 1], // Custom easing curve for smooth feel
+          type: "spring",
+          stiffness: 300,
+          damping: 30,
+          mass: 1,
         }}
-        className="h-full min-h-[350px] flex flex-col"
+        className="h-full flex flex-col"
       >
         {children ?? renderStepContent?.()}
       </motion.div>

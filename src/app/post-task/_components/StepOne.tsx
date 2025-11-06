@@ -88,11 +88,6 @@ export default function StepOne() {
     return () => subscription.unsubscribe();
   }, [watch, setValue, categoryId]);
 
-  const handleImageUploadComplete = (images: any[]) => {
-    console.log("Images uploaded to Cloudinary:", images);
-    // The images are already set in the form by the ImageUploader component
-  };
-
   const handleImageUploadError = (error: any) => {
     toast.error(`Image upload failed: ${error.message}`);
   };
@@ -154,7 +149,6 @@ export default function StepOne() {
               quality: "auto",
               format: "auto",
             }}
-            onUploadComplete={handleImageUploadComplete}
             onUploadError={handleImageUploadError}
             description="Upload images to help describe your task"
           />

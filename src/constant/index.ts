@@ -73,6 +73,8 @@ export const API_ROUTES = {
   POST_QUESTION: "/tasks/post-question",
   REPLY_QUESTION: "/tasks/reply-question",
   REPLY_OFFER: "/tasks/reply-offer",
+  SURCHARGE_REQUEST: "tasks/surcharge/request",
+  SURCHARGE_REQUEST_LIST: "tasks/surcharge/list",
 } as const;
 
 const isProd = process.env.NEXT_PUBLIC_NODE_ENV === "production";
@@ -169,3 +171,19 @@ export const LOCATION_TYPE: Record<LocationTypeT, string> = {
   in_person: "In Person",
   online: "Remote",
 };
+
+export const rejectionReasonOptions = [
+  { name: "The offer was too small for the job", id: "1" },
+  { name: "The poster changed scope of work", id: "2" },
+  { name: "The offer didn't match the workload.", id: "3" },
+  { name: "The poster added a new task", id: "4" },
+  { name: "Other reasons", id: "5" },
+];
+
+export const surchargeReasons = {
+  "1": "The offer was too small for the job",
+  "2": "The poster changed scope of work",
+  "3": "The offer didn't match the workload.",
+  "4": "The poster added a new task",
+  "5": "Other reasons",
+} as Record<string, string>;

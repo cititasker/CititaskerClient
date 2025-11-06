@@ -3,12 +3,19 @@ import {
   UseMutationResult,
   useQuery,
 } from "@tanstack/react-query";
-import { OfferResponse, UseMakeOrUpdateOfferArgs } from "./offers.types";
+import {
+  ISurchargeRequestPayload,
+  OfferResponse,
+  UseMakeOrUpdateOfferArgs,
+} from "./offers.types";
 import { offerSchemaType } from "@/schema/offer";
 import {
   getOfferReplies,
   makeOffer,
+  rejectSurchargeRequest,
   replyOffer,
+  surchargeList,
+  surchargeRequest,
   updateOffer,
 } from "./offers.api";
 import { API_ROUTES } from "@/constant";
@@ -37,5 +44,25 @@ export const useGetOfferReplies = (offerId: number) => {
 export const useReplyOffer = () => {
   return useMutation<any, Error, any>({
     mutationFn: replyOffer,
+  });
+};
+
+export const useSurchargeRequest = () => {
+  return useMutation<any, Error, ISurchargeRequestPayload>({
+    mutationFn: surchargeRequest,
+  });
+};
+
+export const useRejectSurchargeRequest = () => {
+  return useMutation<any, Error, { surcharge_id: string }>({
+    mutationFn: rejectSurchargeRequest,
+  });
+};
+
+export const useSurchargeList = (id: string, enabled: boolean) => {
+  return useQuery({
+    queryKey: [API_ROUTES.SURCHARGE_REQUEST_LIST, id],
+    queryFn: () => surchargeList(id),
+    enabled,
   });
 };
