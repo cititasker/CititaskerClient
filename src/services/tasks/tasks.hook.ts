@@ -7,15 +7,20 @@ import {
   useInfiniteQuery,
 } from "@tanstack/react-query";
 import {
+  acceptReschedule,
+  completeTask,
   createTask,
+  createTaskReschedule,
   getAllTasks,
+  getReschedules,
   getTaskQuestion,
   getUserTaskById,
   getUserTasks,
   paymentReference,
   postQuestion,
+  releasePayment,
   replyQuestion,
-  requestPayment,
+  rescheduleTask,
   updateTask,
 } from "./tasks.api";
 import {
@@ -31,7 +36,7 @@ import {
 
 export const useGetAllTasks = (queryParams?: Record<string, any>) =>
   useInfiniteQuery<TaskData, TaskError>({
-    queryKey: [API_ROUTES.TASKS, queryParams], // make queryKey dependent on params
+    queryKey: [API_ROUTES.TASKS, JSON.stringify(queryParams)],
     queryFn: async ({ pageParam = 1 }) =>
       getAllTasks({ page: pageParam, ...queryParams }),
     initialPageParam: 1,
@@ -49,7 +54,7 @@ export const useFetchTaskById = ({
   ...options
 }: UseFetchUserTaskByIdOptions) => {
   return useQuery<TaskApiResponse, Error, TaskApiResponse, [string, string]>({
-    queryKey: [API_ROUTES.GET_TASK_BY_ID, id],
+    queryKey: [API_ROUTES.GET_TASK_BY_ID, String(id)],
     queryFn: () => getUserTaskById(id),
     enabled: !!id,
     ...options,
@@ -58,7 +63,7 @@ export const useFetchTaskById = ({
 
 export const useGetMyTasks = (queryParams?: Record<string, any>) =>
   useInfiniteQuery<TaskData, TaskError>({
-    queryKey: [API_ROUTES.USER_TASKS, queryParams],
+    queryKey: [API_ROUTES.USER_TASKS, JSON.stringify(queryParams)],
     queryFn: async ({ pageParam = 1 }) =>
       getUserTasks({ page: pageParam, ...queryParams }),
     initialPageParam: 1,
@@ -81,7 +86,7 @@ export const useFetchUserTaskById = ({
     TaskApiResponse,
     [string, string]
   >({
-    queryKey: [API_ROUTES.GET_USER_TASK, id],
+    queryKey: [API_ROUTES.GET_USER_TASK, String(id)],
     queryFn: () => getUserTaskById(id),
     ...options,
   });
@@ -121,12 +126,9 @@ export const usePostTask = (
   });
 };
 
-export const useRequestPayment = (
-  opt?: UseMutationOptions<any, Error, any>
-) => {
-  return useMutation<any, Error, any>({
-    mutationFn: requestPayment,
-    ...opt,
+export const useCompleteTask = () => {
+  return useMutation<any, Error, FormData>({
+    mutationFn: completeTask,
   });
 };
 
@@ -146,16 +148,42 @@ export const useReplyQuestion = (opt?: UseMutationOptions<any, Error, any>) => {
   });
 };
 
-// export const useFetchItemByIdMutation = () => {
-//   return useMutation<Item, Error, string>({
-//     mutationFn: fetchItemById,
-//   });
-// };
-
 export const useFetchTaskQuestion = (id: any) => {
   return useQuery<ITaskQuestionRes, Error>({
     queryKey: [API_ROUTES.GET_QUESTIONS, id],
     queryFn: () => getTaskQuestion(id),
     enabled: !!id,
+  });
+};
+
+export const useCreateReschedule = () => {
+  return useMutation<any, Error, any>({
+    mutationFn: createTaskReschedule,
+  });
+};
+
+export const useFetchReschedules = (id: string) => {
+  return useQuery({
+    queryKey: [API_ROUTES.GET_RESCHEDULES(id)],
+    queryFn: () => getReschedules(id),
+    enabled: !!id,
+  });
+};
+
+export const useAcceptReschedule = () => {
+  return useMutation<any, Error, { data: any; role: TRole }>({
+    mutationFn: acceptReschedule,
+  });
+};
+
+export const useRescheduleTask = () => {
+  return useMutation<any, Error, { data: any; rejectWithCounter: boolean }>({
+    mutationFn: rescheduleTask,
+  });
+};
+
+export const useReleasePayment = () => {
+  return useMutation<any, Error, { task_id: number }>({
+    mutationFn: releasePayment,
   });
 };

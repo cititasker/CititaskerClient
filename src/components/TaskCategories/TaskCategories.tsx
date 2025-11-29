@@ -1,14 +1,17 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import TaskCategoriesCarousel from "./TaskCategoriesCarousel";
 import { useGetCategories } from "@/services/general/index.hook";
 import { capitalize } from "@/utils";
 import { motion, AnimatePresence } from "framer-motion";
+import { cn } from "@/lib/utils";
+import dynamic from "next/dynamic";
 
-// Utility function for conditional classes
-const cn = (...classes: (string | undefined | null | false)[]) => {
-  return classes.filter(Boolean).join(" ");
-};
+const TaskCategoriesCarousel = dynamic(
+  () => import("./TaskCategoriesCarousel"),
+  {
+    ssr: false,
+  }
+);
 
 // Enhanced Constants with your custom colors
 const STYLES = {

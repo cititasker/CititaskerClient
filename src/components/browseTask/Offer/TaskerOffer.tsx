@@ -35,7 +35,9 @@ const TaskerStats = ({
 
     <div className="flex items-center gap-1.5">
       <TrendingUp className="w-4 h-4 text-success" />
-      <span className="font-semibold text-text-primary">{completionRate}%</span>
+      <span className="font-semibold text-text-primary">
+        {Math.round(completionRate)}%
+      </span>
       <span className="text-text-muted">completion</span>
     </div>
   </div>
@@ -118,7 +120,7 @@ const TaskerOffer: React.FC<TaskerOfferProps> = ({
     };
   }, [replies]);
 
-  console.log(12, comment);
+  // console.log(12, comment);
 
   if (isLoading || loadingReplies) return <p>Loading...</p>;
 

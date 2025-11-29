@@ -6,13 +6,21 @@ import {
 } from "@/services/tasks/tasks.hook";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import CommentBox, { CommentBoxSchemaType } from "./CommentBox";
+import dynamic from "next/dynamic";
 import { API_ROUTES } from "@/constant";
 import EmptyState from "../../../reusables/EmptyState";
 import { MessageCircle } from "lucide-react";
 import CommentsThread from "./CommentsThread";
 import { MODERATION_PRESETS } from "@/lib/contentModeration";
 import { toast } from "sonner";
+import type { CommentBoxSchemaType } from "./CommentBox";
+
+const CommentBox = dynamic(() => import("./CommentBox"), {
+  loading: () => (
+    <div className="h-32 bg-neutral-50 border border-neutral-200 rounded-lg animate-pulse" />
+  ),
+  ssr: false,
+});
 
 interface QuestionsProps {
   questions: CommentThreadT[];
@@ -77,7 +85,7 @@ const Questions: React.FC<QuestionsProps> = ({ questions, taskId }) => {
     setLoadingStates((prev) => ({ ...prev, [commentId]: true }));
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 500));
     } finally {
       setLoadingStates((prev) => ({ ...prev, [commentId]: false }));
     }

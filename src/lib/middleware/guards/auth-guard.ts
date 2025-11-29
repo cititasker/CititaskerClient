@@ -15,8 +15,13 @@ export function handleAuthRedirection(
 ): NextResponse | null {
   const currentRoute = req.nextUrl.pathname;
 
+  // ✅ Early return for non-auth routes
+  if (!AUTH_ROUTES.includes(currentRoute as any)) {
+    return null;
+  }
+
   // Redirect authenticated users away from auth pages
-  if (user && AUTH_ROUTES.includes(currentRoute as any)) {
+  if (user) {
     const redirectTo = ROUTES.getDashboard(user.role);
     const absoluteURL = new URL(redirectTo, req.url);
     return NextResponse.redirect(absoluteURL);
@@ -31,12 +36,18 @@ export function handleRoleBasedAuthentication(
 ): NextResponse | null {
   const currentRoute = req.nextUrl.pathname;
 
-  // Check if route starts with a role-based prefix
+  // ✅ Early check - only process if it starts with role-based prefix
   const isRoleBasedRoute = ROLE_BASED_ROUTES.some((prefix) =>
     currentRoute.startsWith(prefix)
   );
 
-  if (isRoleBasedRoute && !user) {
+  // ✅ Quick return if not a protected route
+  if (!isRoleBasedRoute) {
+    return null;
+  }
+
+  // Require authentication for role-based routes
+  if (!user) {
     const absoluteURL = new URL(ROUTES.LOGIN, req.url);
     return NextResponse.redirect(absoluteURL);
   }

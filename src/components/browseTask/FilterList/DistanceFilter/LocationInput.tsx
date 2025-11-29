@@ -5,15 +5,10 @@ import { MapPin } from "lucide-react";
 
 interface LocationInputProps {
   address: string;
-  onLocationSelect: (coords: [number, number]) => void;
   onClear: () => void;
 }
 
-export function LocationInput({
-  address,
-  onLocationSelect,
-  onClear,
-}: LocationInputProps) {
+export function LocationInput({ address, onClear }: LocationInputProps) {
   return (
     <div className="space-y-2">
       <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
@@ -29,10 +24,7 @@ export function LocationInput({
           className="bg-white border-gray-200 rounded-lg"
         />
       ) : (
-        <GooglePlacesAutocomplete
-          name="location"
-          onCoordinatesSelected={onLocationSelect}
-        />
+        <GooglePlacesAutocomplete name="location" />
       )}
 
       <p className="text-xs text-gray-500">

@@ -1,10 +1,12 @@
 import { Form } from "@/components/ui/form";
-import Image from "next/image";
 import { UseFormReturn } from "react-hook-form";
 import { formatCurrency } from "@/utils";
 import ActionsButtons from "@/components/reusables/ActionButtons";
 import FormCheckbox from "@/components/forms/FormCheckbox";
 import AcceptTermsCheckboxLabel from "@/components/reusables/AcceptTermsCheckboxLabel";
+import SummaryItem from "@/components/reusables/SummaryItem";
+import IconTooltipButton from "@/components/reusables/IconTooltipButton";
+import { IInfoCircle } from "@/constant/icons";
 
 interface Props {
   form: UseFormReturn<{ accepted: boolean }>;
@@ -28,7 +30,7 @@ export default function StepThreeForm({
   return (
     <Form {...form}>
       <form onSubmit={onSubmit} className="flex flex-col h-full">
-        <div className="space-y-8 mb-5">
+        <div className="mb-5">
           <div>
             <p className="text-center text-dark-grey-2">Your Offer</p>
 
@@ -39,27 +41,29 @@ export default function StepThreeForm({
             </div>
           </div>
 
-          <div className="space-y-6 mt-10">
-            <div className="flex justify-between">
-              <p className="text-base text-black-2">Connection Fee</p>
-              <p className="text-base text-black-2">
-                - {formatCurrency({ value: feeInfo.fee })}
-              </p>
-            </div>
-            <div className="flex justify-between items-center">
-              <div className="flex items-center gap-1">
-                <p className="text-base text-black-2">You’ll Receive</p>
-                <Image
-                  src="/icons/circle_notice.svg"
-                  alt="info"
-                  width={14}
-                  height={14}
+          <div className="grid mt-10">
+            <SummaryItem
+              label="Service fee"
+              value={formatCurrency({ value: feeInfo.fee })}
+              isNegative
+            />
+            <SummaryItem
+              label="You’ll Receive"
+              value={formatCurrency({ value: feeInfo.receive })}
+              isStrong
+              icon={
+                <IconTooltipButton
+                  side="top"
+                  label="This is the amount you will receive"
+                  icon={<IInfoCircle />}
+                  tooltipStyle={{
+                    width: "214px",
+                    background: "#7C8698",
+                    color: "white",
+                  }}
                 />
-              </div>
-              <p className="text-base text-black-2">
-                {formatCurrency({ value: feeInfo.receive })}
-              </p>
-            </div>
+              }
+            />
           </div>
 
           <FormCheckbox name="accepted" label={<AcceptTermsCheckboxLabel />} />

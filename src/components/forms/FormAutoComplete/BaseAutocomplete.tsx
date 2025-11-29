@@ -113,16 +113,16 @@ export function BaseAutocomplete<TOption>({
           side="bottom"
           align="start"
           className={cn(
-            "w-[var(--radix-popover-trigger-width)] p-0 z-50",
+            "w-[var(--radix-popover-trigger-width)] p-0 z-50 overflow-hidden",
             "bg-background border border-neutral-200 shadow-xl rounded-xl"
           )}
         >
-          <Command className="rounded-xl">
+          <Command>
             <AutocompleteSearch
               searchable={searchable}
               searchQuery={searchQuery}
               onSearchQueryChange={setSearchQuery}
-              label={label}
+              placeholder={label}
               size={size}
             />
 

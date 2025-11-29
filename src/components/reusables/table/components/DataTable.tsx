@@ -1,149 +1,187 @@
 "use client";
 
-import React from "react";
+import React, { forwardRef, useImperativeHandle, useMemo } from "react";
 import {
   ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
+  ColumnFiltersState,
+  SortingState,
+  VisibilityState,
 } from "@tanstack/react-table";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table } from "@/components/ui/table";
 import { Card } from "@/components/ui/card";
-import { ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { TablePagination } from "./TablePagination";
-import EmptyState from "@/components/reusables/EmptyState";
+import { DataTableBody } from "./DataTableBody";
+import { Checkbox } from "@/components/ui/checkbox";
+import { useDataTable } from "../hooks/useDataTable";
+import { TableHeader } from "./TableHeader";
 
-interface DataTableProps<TData> {
+interface DataTableProps<TData, TValue> {
   data: TData[];
-  columns: ColumnDef<TData>[];
+  columns: ColumnDef<TData, TValue>[];
   pageSize?: number;
   className?: string;
   isLoading?: boolean;
-  emptyMessage?: string;
+  onRowSelectionChange?: (rowSelection: Record<string, boolean>) => void;
+  initialSorting?: SortingState;
+  initialColumnVisibility?: VisibilityState;
+  initialColumnFilters?: ColumnFiltersState;
+  totalCount?: number;
+  pageCount?: number;
+  manualPagination?: boolean;
+  onPaginationChange?: (pagination: {
+    pageIndex: number;
+    pageSize: number;
+  }) => void;
+  empty?: {
+    title: string;
+    desc?: string;
+    icon?: any;
+  };
+  isSearch?: boolean;
+  showPagination?: boolean;
+  showTableCount?: boolean;
+  enableRowSelection?: boolean;
 }
 
-export function DataTable<TData>({
-  data,
-  columns,
-  pageSize = 10,
-  className,
-  isLoading = false,
-  emptyMessage = "No data found",
-}: DataTableProps<TData>) {
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    initialState: {
-      pagination: { pageSize },
-    },
-  });
+export interface DataTableRef {
+  resetSelection: () => void;
+}
 
-  const getSortIcon = (column: any) => {
-    if (!column.getCanSort())
-      return <ArrowUpDown className="w-4 h-4 opacity-50" />;
-    const sorted = column.getIsSorted();
-    if (sorted === "asc") return <ArrowUp className="w-4 h-4" />;
-    if (sorted === "desc") return <ArrowDown className="w-4 h-4" />;
-    return <ArrowUpDown className="w-4 h-4 opacity-50" />;
-  };
+export const DataTable = forwardRef<DataTableRef, DataTableProps<any, any>>(
+  function DataTableComponent<TData, TValue>(
+    {
+      data,
+      columns,
+      pageSize = 10,
+      className,
+      isLoading = false,
+      onRowSelectionChange,
+      initialSorting = [],
+      initialColumnVisibility = {},
+      initialColumnFilters = [],
+      totalCount,
+      pageCount,
+      manualPagination = false,
+      onPaginationChange,
+      empty,
+      isSearch = false,
+      showPagination = true,
+      showTableCount = true,
+      enableRowSelection = false,
+    }: DataTableProps<TData, TValue>,
+    ref: React.Ref<DataTableRef>
+  ) {
+    const tableColumns = useMemo(() => {
+      if (!enableRowSelection) return columns;
 
-  if (isLoading) {
+      // Check if select column already exists
+      const hasSelectColumn = columns.some(
+        (col) => "id" in col && col.id === "select"
+      );
+
+      if (hasSelectColumn) return columns;
+
+      const selectColumn: ColumnDef<TData, TValue> = {
+        id: "select",
+        header: ({ table }) => (
+          <IndeterminateCheckbox
+            checked={table.getIsAllPageRowsSelected()}
+            indeterminate={table.getIsSomePageRowsSelected()}
+            onChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          />
+        ),
+        cell: ({ row }) => (
+          <IndeterminateCheckbox
+            checked={row.getIsSelected()}
+            indeterminate={false}
+            onChange={(value) => row.toggleSelected(!!value)}
+          />
+        ),
+        enableSorting: false,
+        enableHiding: false,
+      };
+
+      return [selectColumn, ...columns];
+    }, [columns, enableRowSelection]);
+
+    const { table, pagination, resetRowSelection } = useDataTable({
+      columns: tableColumns,
+      data,
+      initialSorting,
+      initialColumnVisibility,
+      initialColumnFilters,
+      onRowSelectionChange,
+      onPaginationChange,
+      pageCount,
+      manualPagination,
+      enableRowSelection,
+      pageSize,
+    });
+
+    useImperativeHandle(
+      ref,
+      () => ({
+        resetSelection: resetRowSelection,
+      }),
+      [resetRowSelection]
+    );
+
+    const hasData = data.length > 0;
+
     return (
-      <Card className={cn("p-8 text-center", className)}>
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4" />
-        <p className="text-sm text-muted-foreground">Loading...</p>
-      </Card>
+      <div className={cn("space-y-4", className)}>
+        <Card>
+          <div className="min-h-0 w-full flex-shrink-0 overflow-x-auto">
+            <div className="min-w-max">
+              <Table>
+                <TableHeader table={table} />
+                <DataTableBody
+                  table={table}
+                  columns={tableColumns}
+                  isLoading={isLoading}
+                  pageSize={pagination.pageSize}
+                  empty={empty}
+                  isSearch={isSearch}
+                />
+              </Table>
+            </div>
+          </div>
+        </Card>
+
+        {hasData && showPagination && (
+          <TablePagination
+            table={table}
+            totalCount={totalCount}
+            isLoading={isLoading}
+            showTableCount={showTableCount}
+          />
+        )}
+      </div>
     );
   }
+);
 
-  if (!data.length) {
-    return (
-      <Card className={cn("p-8", className)}>
-        <EmptyState title={emptyMessage} />;
-      </Card>
-    );
-  }
-
+export function IndeterminateCheckbox({
+  checked,
+  indeterminate,
+  onChange,
+  disabled = false,
+}: {
+  checked: boolean;
+  indeterminate: boolean;
+  onChange: (checked: boolean) => void;
+  disabled?: boolean;
+}) {
   return (
-    <div className={cn("space-y-4", className)}>
-      <Card>
-        <div className="overflow-x-auto">
-          <Table>
-            <TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <TableHead
-                      key={header.id}
-                      className={cn(
-                        "font-semibold",
-                        header.column.getCanSort() &&
-                          "cursor-pointer select-none hover:bg-muted/50"
-                      )}
-                      onClick={header.column.getToggleSortingHandler()}
-                    >
-                      {header.isPlaceholder ? null : (
-                        <div className="flex items-center space-x-2">
-                          <span>
-                            {flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                          </span>
-                          {getSortIcon(header.column)}
-                        </div>
-                      )}
-                    </TableHead>
-                  ))}
-                </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    className="hover:bg-muted/30 transition-colors"
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-24 text-center"
-                  >
-                    <EmptyState title="No results found" />;
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </div>
-      </Card>
-
-      <TablePagination table={table} />
-    </div>
+    <Checkbox
+      checked={indeterminate ? "indeterminate" : checked}
+      onCheckedChange={(value) => {
+        if (value === "indeterminate") return;
+        onChange(value as boolean);
+      }}
+      disabled={disabled}
+      aria-label="Select row"
+    />
   );
 }

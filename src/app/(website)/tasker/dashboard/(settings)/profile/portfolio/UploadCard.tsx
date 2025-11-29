@@ -3,9 +3,11 @@ import { Plus } from "lucide-react";
 export const UploadCard = ({
   onUpload,
   disabled,
+  inputRef,
 }: {
   onUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
   disabled: boolean;
+  inputRef?: React.RefObject<HTMLInputElement | null>;
 }) => (
   <label
     className={`group relative aspect-square rounded-xl border-2 border-dashed transition-all duration-200 cursor-pointer flex flex-col items-center justify-center ${
@@ -44,6 +46,7 @@ export const UploadCard = ({
       </div>
     </div>
     <input
+      ref={inputRef}
       type="file"
       accept=".jpg,.jpeg,.png"
       hidden

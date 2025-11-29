@@ -1,10 +1,9 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import FormButton from "./forms/FormButton";
 import { ROLE, ROUTES } from "@/constant";
 import { useAppSelector } from "@/store/hook";
 
-// Constants for better maintainability
 const HERO_CONTENT = {
   title: "Get your to-dos done  just in minutes",
   subtitle: "Find the right help for your tasks, instantly",
@@ -26,6 +25,7 @@ const STYLES = {
   buttonGroup:
     "flex flex-col sm:flex-row items-center gap-4 w-fit mx-auto md:mx-0",
   video: "absolute inset-0 w-full h-full object-cover",
+  poster: "absolute inset-0 w-full h-full object-cover",
 } as const;
 
 const LandingPageHero: React.FC = () => {
@@ -33,6 +33,19 @@ const LandingPageHero: React.FC = () => {
     user: { role },
     isAuth,
   } = useAppSelector((state) => state.user);
+
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
+
+  // ✅ Only load video on desktop and after initial render
+  useEffect(() => {
+    const isDesktop = window.matchMedia("(min-width: 768px)").matches;
+    if (isDesktop) {
+      // Small delay to prioritize critical content
+      const timer = setTimeout(() => setShouldLoadVideo(true), 100);
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   const renderActionButtons = () => {
     if (isAuth) {
@@ -65,17 +78,39 @@ const LandingPageHero: React.FC = () => {
 
   return (
     <section className={STYLES.container}>
-      {/* Background Video */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        className={`${STYLES.video} hidden md:block`}
+      {/* ✅ Poster Image - Shows immediately while video loads */}
+      <img
+        src="/images/hero-poster.jpg"
+        alt=""
+        className={`${
+          STYLES.poster
+        } hidden md:block transition-opacity duration-500 ${
+          videoLoaded ? "opacity-0" : "opacity-100"
+        }`}
         aria-hidden="true"
-      >
-        <source src="/videos/hero-video.mp4" type="video/mp4" />
-      </video>
+      />
+
+      {/* ✅ Background Video - Loads after initial render */}
+      {shouldLoadVideo && (
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="none"
+          poster="/images/hero-poster.jpg"
+          className={`${
+            STYLES.video
+          } hidden md:block transition-opacity duration-500 ${
+            videoLoaded ? "opacity-100" : "opacity-0"
+          }`}
+          onLoadedData={() => setVideoLoaded(true)}
+          aria-hidden="true"
+        >
+          <source src="/videos/hero-video.mp4" type="video/mp4" />
+        </video>
+      )}
+
       {/* Gradient Overlay */}
       <div
         className="absolute inset-0"
@@ -84,6 +119,7 @@ const LandingPageHero: React.FC = () => {
             "linear-gradient(0deg, rgba(0, 0, 0, 0.49) 0%, rgba(0, 0, 0, 0.49) 100%)",
         }}
       />
+
       {/* Content Overlay */}
       <div className={STYLES.overlay}>
         <div className={STYLES.content}>

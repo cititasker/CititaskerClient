@@ -82,7 +82,7 @@ export default function FormTextArea({
             )}
           </div>
 
-          <FormMessage className="text-error text-sm" />
+          <FormMessage />
         </FormItem>
       )}
     />

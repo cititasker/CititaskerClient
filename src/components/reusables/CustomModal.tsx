@@ -25,8 +25,6 @@ interface CustomModalProps extends IModal {
   title?: string;
   description?: string;
   size?: "sm" | "md" | "lg" | "xl" | "full";
-  stickyHeader?: boolean;
-  stickyFooter?: boolean;
   hideClose?: boolean;
   confetti?: boolean;
   disableAutoFocus?: boolean;
@@ -40,9 +38,9 @@ interface CustomModalProps extends IModal {
 
   // Styling
   className?: string;
-  contentClassName?: string;
   headerClassName?: string;
   bodyClassName?: string;
+  contentClassName?: string;
   footerClassName?: string;
 }
 
@@ -53,8 +51,6 @@ const CustomModal = ({
   title,
   description,
   size = "md",
-  stickyHeader = true,
-  stickyFooter = true,
   hideClose = false,
   confetti = false,
   disableAutoFocus = true,
@@ -67,9 +63,9 @@ const CustomModal = ({
   customFooter,
 
   // Styling props
-  contentClassName,
-  headerClassName,
   bodyClassName,
+  headerClassName,
+  contentClassName,
   footerClassName,
   ...rest
 }: CustomModalProps) => {
@@ -91,22 +87,12 @@ const CustomModal = ({
 
       <DialogContent
         className={cn(
-          // Base styles
-          "w-[95vw] bg-background border border-border-light shadow-2xl",
-          "focus:outline-none overflow-hidden flex flex-col",
-
-          // Size
+          "w-[95vw] bg-background border border-border-light shadow-2xl z-50",
+          "focus:outline-none",
           sizeClasses[size],
-
-          // Mobile optimizations
           "rounded-xl sm:rounded-2xl",
-          "max-h-[90vh] sm:max-h-[85vh]",
-
-          // Conditional padding
-          (stickyHeader && hasHeader) || (stickyFooter && hasFooter)
-            ? "p-0"
-            : "p-4 sm:p-6",
-
+          "max-h-[90vh] sm:max-h-[85vh] min-h-0",
+          "flex flex-col p-0",
           contentClassName
         )}
         hideClose={hideClose}
@@ -117,36 +103,30 @@ const CustomModal = ({
         {hasHeader && (
           <DialogHeader
             className={cn(
-              "flex-shrink-0 border-b border-light-grey backdrop-blur-3xl",
-              stickyHeader && "sticky top-0 z-20",
-              "px-4 sm:px-6 py-4 sm:py-5",
+              "border-b border-light-grey",
+              "px-4 sm:px-6 py-4",
+              "shrink-0",
               headerClassName
             )}
           >
-            <div className="space-y-2">
-              {title && (
-                <DialogTitle className="text-lg sm:text-xl font-semibold text-text-primary leading-tight pr-8">
-                  {title}
-                </DialogTitle>
-              )}
+            <DialogTitle className="text-lg sm:text-xl font-semibold pr-8">
+              {title}
+            </DialogTitle>
 
-              {description && (
-                <DialogDescription className="text-sm sm:text-base text-text-secondary leading-relaxed">
-                  {description}
-                </DialogDescription>
-              )}
-            </div>
+            {description && (
+              <DialogDescription className="text-text-secondary">
+                {description}
+              </DialogDescription>
+            )}
           </DialogHeader>
         )}
 
-        {/* Content Body */}
+        {/* SCROLLABLE BODY */}
         <div
           className={cn(
-            "flex-1 overflow-y-auto",
-            hasHeader ? "px-4 sm:px-6 py-4 sm:py-6" : "",
-            hasFooter && !hasHeader ? "p-4 sm:p-6" : "",
-            hasFooter ? "pb-0" : "",
-            "scrollbar-thin scrollbar-thumb-border-medium scrollbar-track-transparent no-scrollbar",
+            "flex-1 min-h-0",
+            hasFooter ? "overflow-y-auto no-scrollbar" : "overflow-hidden",
+            "p-4 sm:p-6",
             bodyClassName
           )}
         >
@@ -157,15 +137,14 @@ const CustomModal = ({
         {hasFooter && (
           <div
             className={cn(
-              "flex-shrink-0 border-t border-light-grey backdrop-blur-sm",
-              stickyFooter && "sticky bottom-0 z-20",
+              "border-t border-light-grey",
               "px-4 sm:px-6 py-4",
+              "shrink-0",
               footerClassName
             )}
           >
             {customFooter || (
               <div className="flex flex-col-reverse sm:flex-row gap-3 sm:justify-end">
-                {/* Cancel Button */}
                 {showCancel && (
                   <FormButton
                     variant="outline"
@@ -179,7 +158,6 @@ const CustomModal = ({
                   </FormButton>
                 )}
 
-                {/* Secondary Action */}
                 {secondaryAction && (
                   <FormButton
                     variant={secondaryAction.variant || "outline"}
@@ -195,7 +173,6 @@ const CustomModal = ({
                   </FormButton>
                 )}
 
-                {/* Primary Action */}
                 {primaryAction && (
                   <FormButton
                     variant={primaryAction.variant || "default"}
@@ -214,7 +191,6 @@ const CustomModal = ({
             )}
           </div>
         )}
-
         {/* Hidden accessibility elements */}
         {!hasHeader && (
           <>
@@ -232,68 +208,3 @@ const CustomModal = ({
 };
 
 export default CustomModal;
-
-// Usage Examples
-export const ModalExamples = () => {
-  const [open, setOpen] = React.useState(false);
-
-  return (
-    <>
-      {/* Basic modal with actions */}
-      <CustomModal
-        isOpen={open}
-        onClose={() => setOpen(false)}
-        title="Confirm Action"
-        description="Are you sure you want to proceed?"
-        primaryAction={{
-          text: "Confirm",
-          onClick: () => setOpen(false),
-          variant: "default",
-        }}
-        secondaryAction={{
-          text: "Save Draft",
-          onClick: () => setOpen(false),
-          variant: "outline",
-        }}
-      >
-        <p>Modal content goes here...</p>
-      </CustomModal>
-
-      {/* Modal without cancel button */}
-      <CustomModal
-        isOpen={open}
-        onClose={() => setOpen(false)}
-        title="Processing"
-        showCancel={false}
-        primaryAction={{
-          text: "Processing...",
-          onClick: () => {},
-          loading: true,
-          disabled: true,
-        }}
-      >
-        <p>Please wait while we process your request...</p>
-      </CustomModal>
-
-      {/* Modal with custom footer */}
-      <CustomModal
-        isOpen={open}
-        onClose={() => setOpen(false)}
-        title="Custom Footer"
-        customFooter={
-          <div className="flex justify-between w-full">
-            <button className="text-text-muted text-sm">Need help?</button>
-            <div className="flex gap-2">
-              <FormButton variant="outline" onClick={() => setOpen(false)}>
-                Cancel
-              </FormButton>
-              <FormButton onClick={() => setOpen(false)}>Save</FormButton>
-            </div>
-          </div>
-        }
-      >
-        <p>Modal with completely custom footer...</p>
-      </CustomModal>
-    </>
-  );
-};

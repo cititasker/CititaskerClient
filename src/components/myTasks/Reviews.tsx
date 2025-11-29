@@ -1,14 +1,12 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { MessageSquare } from "lucide-react";
 import ReviewCard from "./ReviewCard";
 import Rating from "../reusables/Rating";
 import RatingModal from "./RatingModal";
 import EmptyState from "../reusables/EmptyState";
 import { initializeName } from "@/utils";
-import useModal from "@/hooks/useModal";
-import useToggle from "@/hooks/useToggle";
 import { postReview } from "@/services/user/users.api";
 import { useGetReviews } from "@/services/user/user.hook";
 import { useAppSelector } from "@/store/hook";
@@ -24,23 +22,12 @@ interface ReviewsProps {
 export default function Reviews({ task }: ReviewsProps) {
   const { user } = useAppSelector((state) => state.user);
   const [selectedRating, setSelectedRating] = useState(0);
-
-  const ratingModal = useModal();
-  const successModal = useToggle();
+  const [showModal, setShowModal] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const { data: reviews } = useGetReviews(task.id);
-  const reviewList = reviews?.data || [];
+  const [posterReview, taskerReview] = reviews?.data || [];
 
-  // Extract poster and tasker reviews
-  const { posterReview, taskerReview } = useMemo(
-    () => ({
-      posterReview: reviewList[0] || null,
-      taskerReview: reviewList[1] || null,
-    }),
-    [reviewList]
-  );
-
-  // Task and tasker info
   const isCompleted = task?.status === "completed";
   const tasker = task.tasker?.profile;
   const taskerName = tasker
@@ -50,29 +37,32 @@ export default function Reviews({ task }: ReviewsProps) {
       })
     : "";
 
-  // Submit review mutation
   const postReviewMutation = useBaseMutation(postReview, {
     invalidateQueryKeys: [[API_ROUTES.POST_REVIEW, task.id]],
+    onSuccess: () => setShowSuccess(true),
   });
 
   const handleSubmitReview = (data: any) => {
-    postReviewMutation.mutate({ ...data, task_id: task.id, role: "poster" });
+    const payload = {
+      ...data,
+      task_id: task.id,
+    };
+    postReviewMutation.mutate({ data: payload, role: user?.role });
   };
 
   const handleModalClose = () => {
-    ratingModal.closeModal();
-    successModal.handleClose();
+    setShowModal(false);
+    setShowSuccess(false);
     setSelectedRating(0);
   };
 
   const handleEditReview = () => {
     if (posterReview) {
       setSelectedRating(posterReview.rating);
-      ratingModal.openModal();
+      setShowModal(true);
     }
   };
 
-  // Show empty state if task is not completed
   if (!isCompleted) {
     return (
       <div className="px-4 sm:px-6 py-8">
@@ -87,7 +77,6 @@ export default function Reviews({ task }: ReviewsProps) {
 
   return (
     <div className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8 sm:space-y-10 bg-white min-h-screen">
-      {/* My Review Section */}
       <section>
         <h2 className="text-lg sm:text-xl font-semibold text-neutral-900 mb-4">
           My Review
@@ -95,7 +84,7 @@ export default function Reviews({ task }: ReviewsProps) {
 
         {!posterReview ? (
           <button
-            onClick={ratingModal.openModal}
+            onClick={() => setShowModal(true)}
             className={cn(
               "w-full p-6 sm:p-8 rounded-2xl border-2 border-dashed",
               "border-neutral-200 hover:border-primary/50",
@@ -133,7 +122,6 @@ export default function Reviews({ task }: ReviewsProps) {
         )}
       </section>
 
-      {/* Tasker's Review Section */}
       <section>
         <h2 className="text-lg sm:text-xl font-semibold text-neutral-900 mb-4">
           Tasker's Review
@@ -164,14 +152,14 @@ export default function Reviews({ task }: ReviewsProps) {
         )}
       </section>
 
-      {/* Rating Modal */}
       <RatingModal
-        isOpen={ratingModal.isOpen}
+        isOpen={showModal}
         onClose={handleModalClose}
         taskerName={taskerName}
+        userName={`${user.first_name} ${user.last_name}`}
         initialRating={selectedRating}
         onSubmit={handleSubmitReview}
-        showSuccess={successModal.isOpen}
+        showSuccess={showSuccess}
         isLoading={postReviewMutation.isPending}
       />
     </div>

@@ -120,13 +120,13 @@ const MainFooter: React.FC = () => {
 
             <div className="flex items-center gap-6">
               <Link
-                href="/privacy"
+                href="/legal/privacy-policy"
                 className="text-text-disabled hover:text-white transition-colors duration-300 text-sm"
               >
                 Privacy Policy
               </Link>
               <Link
-                href="/terms"
+                href="/legal/terms-and-conditions"
                 className="text-text-disabled hover:text-white transition-colors duration-300 text-sm"
               >
                 Terms of Service

@@ -49,7 +49,6 @@ interface CustomTableProps<TData extends RowData> {
   compact?: boolean;
 
   // Empty states
-  emptyTitle?: string;
   emptyDescription?: string;
 }
 
@@ -68,7 +67,6 @@ export function CustomTable<TData extends RowData>({
   error = null,
   className,
   compact = false,
-  emptyTitle,
 }: CustomTableProps<TData>) {
   // Use our custom hook for URL-persistent state management
   const {
@@ -145,12 +143,7 @@ export function CustomTable<TData extends RowData>({
       />
 
       {/* Data Table */}
-      <DataTable
-        data={data}
-        columns={columns}
-        isLoading={isLoading}
-        emptyMessage={emptyTitle}
-      />
+      <DataTable data={data} columns={columns} isLoading={isLoading} />
     </div>
   );
 }

@@ -8,28 +8,32 @@ import BudgetDisplay from "./BudgetDisplay";
 import IncreasePriceModal from "../Modals/IncreasePrice";
 import CompleteTaskModal from "../Modals/CompleteTaskModal";
 import MoreOptionsMenu from "@/components/reusables/MoreOptionMenu";
-import RescheduleTaskModal from "./RescheduleTaskModal";
 import { useTaskState } from "./hooks/useTaskState";
 import { useVerifications } from "./hooks/useVerifications";
 import { useMoreOptions } from "./hooks/useMoreOptions";
+import { useTaskActions } from "@/components/task/hooks";
 
 interface TaskBudgetProps {
   task: ITask;
+  handleOptionSelect: (action: MoreOptionItem) => void;
 }
 
-const TaskBudget: React.FC<TaskBudgetProps> = ({ task }) => {
+const TaskBudget: React.FC<TaskBudgetProps> = ({
+  task,
+  handleOptionSelect,
+}) => {
   const [verifyModalOpen, setVerifyModalOpen] = useState(false);
   const increaseBudget = useModal();
   const completeTask = useModal();
-  const rescheduleModal = useModal();
-
   const offerModal = useModal();
 
   const { isAuth, user } = useAppSelector((state) => state.user);
 
-  const state = useTaskState(task, user);
+  const state = useTaskState(task);
   const verifications = useVerifications(user);
   const moreOptions = useMoreOptions(state);
+
+  const { updatedBudget } = useTaskActions({ task });
 
   const buttonConfig = useMemo(() => {
     if (state.canMakeOffer) return { text: "Make offer", action: "offer" };
@@ -62,22 +66,18 @@ const TaskBudget: React.FC<TaskBudgetProps> = ({ task }) => {
     }
   };
 
-  const handleOptionSelect = (action: MoreOptionItem) => {
-    if (action.name === "reschedule") {
-      rescheduleModal.openModal();
-    }
-  };
-
   return (
     <>
       <div>
         <BudgetDisplay
-          budget={task.budget}
+          budget={updatedBudget}
           buttonText={buttonConfig.text}
           onIncrease={increaseBudget.openModal}
           handleButtonClick={handleMainAction}
           isButtonDisabled={isButtonDisabled}
-          canIncreaseOffer={state.canCompleteTask}
+          canIncreaseOffer={
+            state.canCompleteTask && !task.has_surcharge_requests
+          }
         />
         {isAuth && moreOptions.length > 0 && (
           <div className="mt-1">
@@ -106,11 +106,11 @@ const TaskBudget: React.FC<TaskBudgetProps> = ({ task }) => {
         open={increaseBudget.isOpen}
         handleClose={increaseBudget.closeModal}
       />
+
       <CompleteTaskModal
         isOpen={completeTask.isOpen}
         onClose={completeTask.closeModal}
       />
-      <RescheduleTaskModal rescheduleModal={rescheduleModal} />
     </>
   );
 };

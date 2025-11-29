@@ -48,6 +48,15 @@ export const formatDate = (
   return dayjs(date, inputFormat).format(outputFormat);
 };
 
+export const formatISODate = (
+  date: Date | string | undefined,
+  outputFormat = "DD-MM-YYYY",
+  inputFormat = "YYYY-MM-DD"
+) => {
+  if (!date) return "";
+  return dayjs(date, inputFormat).format(outputFormat);
+};
+
 export const formatDateAgo = (date: Date | string) => {
   return dayjs(date).fromNow();
 };
@@ -198,6 +207,21 @@ export function initializeName({
 
   return "Anonymous";
 }
+
+export const getPartialInitials = (
+  name?:
+    | {
+        first_name?: string;
+        last_name?: string;
+      }
+    | IUser
+) => {
+  if (!name) return;
+  return initializeName({
+    first_name: name.first_name,
+    last_name: name.last_name,
+  });
+};
 
 export function loggedInUser(first_name: any, last_name: any) {
   if (first_name && last_name) {

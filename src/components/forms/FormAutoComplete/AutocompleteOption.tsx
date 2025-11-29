@@ -44,7 +44,7 @@ export function AutocompleteOption<TOption>({
       value={optionLabel}
       onSelect={() => onSelect(option)}
       className={cn(
-        "flex items-center justify-between cursor-pointer transition-colors duration-150",
+        "flex items-center justify-between cursor-pointer transition-colors duration-150 rounded-none",
         "hover:bg-neutral-50 text-text-primary",
         sizeConfig.option,
         isSelected && "bg-primary-50 text-primary-700 hover:bg-primary-50"

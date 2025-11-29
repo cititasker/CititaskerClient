@@ -35,7 +35,6 @@ export interface ISurcharge {
   status: "pending" | "completed" | "failed" | string;
   payment_status: "unpaid" | "paid" | "refunded" | string;
   created_at: string;
-  payable_id?: number;
 }
 
 export interface ISurchargeRequestResponse {

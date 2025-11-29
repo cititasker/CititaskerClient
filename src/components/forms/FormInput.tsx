@@ -226,7 +226,7 @@ export default function FormInput({
               )}
             </div>
 
-            <FormMessage className="text-error text-sm" />
+            <FormMessage />
           </FormItem>
         );
       }}

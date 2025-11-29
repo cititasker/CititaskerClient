@@ -11,6 +11,15 @@ export const AUTH_ROUTES = [
 
 export const ROLE_BASED_ROUTES = ["/poster", "/tasker"] as const;
 
+export const PUBLIC_ROUTES = [
+  "/",
+  "/about",
+  "/waitlist",
+  "/legal/privacy-policy",
+  "/legal/terms-and-conditions",
+  "/legal/community-guidelines",
+] as const;
+
 export const MIDDLEWARE_CONFIG = {
   validRoles: ["poster", "tasker"] as const,
 

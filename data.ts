@@ -284,11 +284,15 @@ export const explore = [
 export const legal = [
   {
     name: "Privacy Policy",
-    href: "#",
+    href: "/legal/privacy-policy",
   },
   {
-    name: "T & C",
-    href: "#",
+    name: "Terms & Conditions",
+    href: "/legal/terms-and-conditions",
+  },
+  {
+    name: "Community Guidelines",
+    href: "/legal/community-guidelines",
   },
 ];
 

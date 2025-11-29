@@ -8,13 +8,10 @@ export const portfolioSchema = z.object({
     .array(
       z.object({
         src: z.string().min(1, "Image source is required"),
+        url: z.string().optional(),
+        publicId: z.string().optional(),
         key: z.string().optional(),
-        file: z
-          .instanceof(File)
-          .refine((file) => file.size <= MAX_FILE_SIZE, {
-            message: "File must be 2MB or smaller",
-          })
-          .optional(),
+        file: z.instanceof(File).optional(),
       })
     )
     .max(MAX_IMAGES, `Maximum ${MAX_IMAGES} images allowed`)

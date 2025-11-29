@@ -38,7 +38,7 @@ export default function FormCheckbox({
               onCheckedChange={field.onChange}
               disabled={disabled}
               className={cn(
-                "mt-0.5 transition-all duration-200",
+                "mt-1 transition-all duration-200",
                 "data-[state=checked]:bg-primary data-[state=checked]:border-primary",
                 "focus:ring-0 focus:ring-primary/20",
                 error && "border-error",
@@ -48,7 +48,7 @@ export default function FormCheckbox({
             <Label
               htmlFor={name}
               className={cn(
-                "text-sm leading-relaxed cursor-pointer text-text-primary",
+                "text-sm leading-relaxed cursor-pointer text-text-primary font-normal",
                 "group-hover:text-text-secondary transition-colors duration-200",
                 disabled && "opacity-50 cursor-not-allowed",
                 required && "after:content-['*'] after:text-error after:ml-1"
@@ -57,7 +57,7 @@ export default function FormCheckbox({
               {label}
             </Label>
           </div>
-          <FormMessage className="text-error text-sm" />
+          <FormMessage className="pl-7" />
         </FormItem>
       )}
     />

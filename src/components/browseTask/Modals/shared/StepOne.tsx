@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,6 +27,8 @@ interface Props {
   budgetLabel: string;
   firstRowLabel?: string;
   increasePrice?: boolean;
+  isEdit?: boolean;
+  // actionType?: "update" | "increase" | "create" | undefined;
 }
 
 const StepOne = ({
@@ -34,6 +36,7 @@ const StepOne = ({
   budgetLabel,
   firstRowLabel = "Total offer",
   increasePrice = false,
+  isEdit = false,
 }: Props) => {
   const { id } = useParams();
   const task_id = Number(id);
@@ -52,22 +55,38 @@ const StepOne = ({
   });
 
   useEffect(() => {
-    const id = taskersOffer?.id;
-
-    const amount =
-      offer?.offer_amount || (increasePrice ? "" : taskDetails.budget);
+    const offerId = taskersOffer?.id;
+    const computedAmount =
+      offer?.offer_amount ||
+      (increasePrice
+        ? ""
+        : isEdit
+        ? taskersOffer?.offer_amount
+        : taskDetails?.budget);
 
     form.reset({
       task_id,
-      offer_id: id,
-      offer_amount: `${amount}`,
+      offer_id: offerId,
+      offer_amount: `${computedAmount ?? ""}`,
     });
-  }, [taskersOffer, taskDetails, offer]);
+  }, [
+    form,
+    task_id,
+    taskersOffer?.id,
+    taskersOffer?.offer_amount,
+    taskDetails?.budget,
+    offer?.offer_amount,
+    increasePrice,
+    isEdit,
+  ]);
 
-  const handleSubmit = (data: any) => {
-    dispatch(setOfferData({ ...offer, ...data }));
-    nextStep();
-  };
+  const handleSubmit = useCallback(
+    (data: SchemaType) => {
+      dispatch(setOfferData({ ...offer, ...data }));
+      nextStep();
+    },
+    [dispatch, offer, nextStep]
+  );
 
   return (
     <Form {...form}>

@@ -1,11 +1,24 @@
 "use client";
 
 import { forwardRef, useImperativeHandle } from "react";
-import LinkModal from "../LinkModal";
-import EditorInputArea from "./components/EditorInputArea";
-import EditorToolbar from "./components/EditorToolbar";
-import FileInputHandler from "./components/FileInputHandler";
+import dynamic from "next/dynamic";
 import { useRichEditor } from "./hooks/useRichEditor";
+import EditorInputArea from "./components/EditorInputArea";
+
+const EditorToolbar = dynamic(() => import("./components/EditorToolbar"), {
+  ssr: false,
+});
+
+const LinkModal = dynamic(() => import("../LinkModal"), {
+  ssr: false,
+});
+
+const FileInputHandler = dynamic(
+  () => import("./components/FileInputHandler"),
+  {
+    ssr: false,
+  }
+);
 
 interface RichEditorProps {
   onContentUpdate: (html: string, isEmpty: boolean) => void;
@@ -118,11 +131,13 @@ const RichEditor = forwardRef<RichEditorRef, RichEditorProps>(
           acceptTypes={acceptTypes}
         />
 
-        <LinkModal
-          open={linkModal.isOpen}
-          onClose={linkModal.closeModal}
-          editor={editor}
-        />
+        {linkModal.isOpen && (
+          <LinkModal
+            open={linkModal.isOpen}
+            onClose={linkModal.closeModal}
+            editor={editor}
+          />
+        )}
       </div>
     );
   }

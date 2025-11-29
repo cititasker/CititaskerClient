@@ -12,7 +12,6 @@ import { calculateFees } from "@/utils";
 import { API_ROUTES, ROUTES } from "@/constant";
 import { useMakeOrUpdateOffer } from "@/services/offers/offers.hook";
 import { z } from "zod";
-import { usePurgeData } from "@/utils/dataPurge";
 import { useQueryClient } from "@tanstack/react-query";
 
 const schema = baseSchema.pick({ accepted: true });
@@ -33,7 +32,6 @@ export default function StepThree({
   const { data: session } = useSession();
   const router = useRouter();
   const { showSnackbar } = useSnackbar();
-  const { purgeOffer } = usePurgeData();
   const queryClient = useQueryClient();
 
   const { offer, taskersOffer } = useAppSelector((state) => state.task);
@@ -52,7 +50,6 @@ export default function StepThree({
       queryClient.invalidateQueries({
         queryKey: [API_ROUTES.TASKS],
       });
-      await purgeOffer();
       nextStep();
     },
     onError: (error) => {

@@ -8,13 +8,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { baseSchema } from "@/schema/offer";
 import AcceptTermsCheckboxLabel from "@/components/reusables/AcceptTermsCheckboxLabel";
-import OfferBreakdownRow from "@/components/reusables/OfferBreakdownRow";
+import SummaryItem from "@/components/reusables/SummaryItem";
 import { IInfoCircle } from "@/constant/icons";
 import { API_ROUTES, connectionFee } from "@/constant";
 import { useSurchargeRequest } from "@/services/offers/offers.hook";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { setOfferData } from "@/store/slices/task";
+import IconTooltipButton from "@/components/reusables/IconTooltipButton";
 
 interface Props {
   prevStep: () => void;
@@ -57,10 +58,10 @@ export default function StepThree({ prevStep, nextStep }: Props) {
           data.message || "Surcharge request submitted successfully"
         );
         queryClient.invalidateQueries({
-          queryKey: [API_ROUTES.GET_TASK_BY_ID, offer?.task_id],
+          queryKey: [API_ROUTES.GET_TASK_BY_ID, String(offer?.task_id)],
         });
         queryClient.invalidateQueries({
-          queryKey: [API_ROUTES.GET_USER_TASK, offer?.task_id],
+          queryKey: [API_ROUTES.GET_USER_TASK, String(offer?.task_id)],
         });
       },
       onError(error) {
@@ -91,23 +92,35 @@ export default function StepThree({ prevStep, nextStep }: Props) {
           </div>
 
           <div className="grid mt-8">
-            <OfferBreakdownRow
-              label="Previous price for the task"
+            <SummaryItem
+              label="Previous offer for the task"
               value={formatCurrency({ value: taskerAmount })}
             />
 
-            <OfferBreakdownRow
+            <SummaryItem
               label="Total offer amount"
               subLabel="Note: This is the amount you will receive."
               value={formatCurrency({ value: total })}
             />
-            <OfferBreakdownRow
+            <SummaryItem
               label="Service fee"
               value={formatCurrency({ value: fee })}
               isNegative
-              icon={<IInfoCircle />}
+              icon={
+                <IconTooltipButton
+                  side="top"
+                  label="This helps us operate our platform and offer 24/7 customer support for your tasks."
+                  icon={<IInfoCircle />}
+                  tooltipStyle={{
+                    width: "214px",
+                    background: "#7C8698",
+                    color: "white",
+                  }}
+                />
+              }
             />
-            <OfferBreakdownRow
+
+            <SummaryItem
               label="You’ll Receive"
               value={formatCurrency({ value: received })}
               isStrong

@@ -71,7 +71,7 @@ export default function FormSwitch({
             />
           </div>
 
-          <FormMessage className="text-error text-sm" />
+          <FormMessage />
         </FormItem>
       )}
     />

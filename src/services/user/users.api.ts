@@ -80,9 +80,9 @@ export function updateUserPorfolio(data: any) {
     });
 }
 
-export function deleteUserPorfolio(id: any) {
+export function deleteUserPorfolio(key: string) {
   return api
-    .delete(`${API_ROUTES.UPDATE_PORTFOLIO}/${id}`)
+    .delete(API_ROUTES.DELETE_PORTFOLIO(key))
     .then((data) => {
       return data.data;
     })
@@ -149,11 +149,11 @@ export const getReviews = (
 };
 
 export const postReview = ({
+  data,
   role,
-  ...data
 }: {
-  role: TRole;
-  [key: string]: any;
+  data: any;
+  role: TRole | undefined;
 }): Promise<GetReviewsResponse> => {
   return api
     .post(`${API_ROUTES.POST_REVIEW}/${role}`, data)

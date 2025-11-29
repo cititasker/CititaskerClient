@@ -8,6 +8,7 @@ interface UploadProgressProps {
   error: { message: string } | null | undefined;
   onRetry: () => void;
   useCloudinary?: boolean;
+  className?: string;
 }
 
 export function UploadProgress({

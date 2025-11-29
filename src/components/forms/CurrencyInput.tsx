@@ -79,7 +79,7 @@ export default function CurrencyInput({
             />
           </div>
 
-          <FormMessage className="text-error text-sm" />
+          <FormMessage />
         </FormItem>
       )}
     />

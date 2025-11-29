@@ -1,8 +1,7 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { FormProvider } from "react-hook-form";
 import { postTaskSchema } from "@/schema/task";
-import { reverseGeocode } from "@/services";
 import { z } from "zod";
 
 import FormInput from "@/components/forms/FormInput";
@@ -43,40 +42,10 @@ export default function StepTwo() {
   const { watch, setValue } = methods;
 
   // Fixed watch usage - use individual field names
-  const location = watch("location");
   const address = watch("address");
 
-  // Auto-fill address from coordinates
-  useEffect(() => {
-    if (
-      Array.isArray(location) &&
-      location.length === 2 &&
-      !address &&
-      !autoFilledAddress.current
-    ) {
-      reverseGeocode(location[0], location[1]).then((addr) => {
-        if (addr) {
-          setValue("address", addr);
-          autoFilledAddress.current = true;
-        }
-      });
-    }
-  }, [location, address, setValue]);
-
-  const handleLocationSelect = (coords: [number, number]) => {
-    const numericCoords = coords.map(Number) as [number, number];
-    setValue("location", numericCoords);
-
-    reverseGeocode(numericCoords[0], numericCoords[1]).then((addr) => {
-      if (addr) {
-        setValue("address", addr);
-        autoFilledAddress.current = true;
-      }
-    });
-  };
-
   const handleClearLocation = () => {
-    setValue("address", null);
+    setValue("address", undefined);
     setValue("location", []);
     autoFilledAddress.current = false;
   };
@@ -102,11 +71,7 @@ export default function StepTwo() {
                   onClear={handleClearLocation}
                 />
               ) : (
-                <GooglePlacesAutocomplete
-                  name="location"
-                  label="Location"
-                  onCoordinatesSelected={handleLocationSelect}
-                />
+                <GooglePlacesAutocomplete name="location" label="Location" />
               )}
             </div>
           </div>

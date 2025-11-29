@@ -19,6 +19,8 @@ export type StatusType =
   | "active"
   | "inactive";
 
+type StatusVariant = "success" | "warning" | "error" | "info";
+
 interface StatusBadgeProps {
   status: StatusType;
   className?: string;
@@ -27,149 +29,50 @@ interface StatusBadgeProps {
   variant?: "default" | "outline" | "filled";
 }
 
-const STATUS_CONFIG: Record<
+const STATUS_MAP: Record<
   StatusType,
-  {
-    colors: {
-      bg: string;
-      text: string;
-      border: string;
-      dot: string;
-    };
-    label?: string;
-  }
+  { variant: StatusVariant; label?: string }
 > = {
-  // Success states
-  completed: {
-    colors: {
-      bg: "bg-success-light",
-      text: "text-success-dark",
-      border: "border-success/30",
-      dot: "bg-success",
-    },
-  },
-  successful: {
-    colors: {
-      bg: "bg-success-light",
-      text: "text-success-dark",
-      border: "border-success/30",
-      dot: "bg-success",
-    },
-  },
-  verified: {
-    colors: {
-      bg: "bg-success-light",
-      text: "text-success-dark",
-      border: "border-success/30",
-      dot: "bg-success",
-    },
-  },
-  active: {
-    colors: {
-      bg: "bg-success-light",
-      text: "text-success-dark",
-      border: "border-success/30",
-      dot: "bg-success",
-    },
-  },
-
-  // Warning states
-  assigned: {
-    colors: {
-      bg: "bg-warning-light",
-      text: "text-warning-dark",
-      border: "border-warning/30",
-      dot: "bg-warning",
-    },
-  },
-  on_hold: {
-    colors: {
-      bg: "bg-warning-light",
-      text: "text-warning-dark",
-      border: "border-warning/30",
-      dot: "bg-warning",
-    },
-    label: "on hold",
-  },
-  unverified: {
-    colors: {
-      bg: "bg-warning-light",
-      text: "text-warning-dark",
-      border: "border-warning/30",
-      dot: "bg-warning",
-    },
-  },
-  pending: {
-    colors: {
-      bg: "bg-warning-light",
-      text: "text-warning-dark",
-      border: "border-warning/30",
-      dot: "bg-warning",
-    },
-  },
-  processing: {
-    colors: {
-      bg: "bg-warning-light",
-      text: "text-warning-dark",
-      border: "border-warning/30",
-      dot: "bg-warning",
-    },
-  },
-
-  // Error states
-  cancelled: {
-    colors: {
-      bg: "bg-error-light",
-      text: "text-error-dark",
-      border: "border-error/30",
-      dot: "bg-error",
-    },
-  },
-  failed: {
-    colors: {
-      bg: "bg-error-light",
-      text: "text-error-dark",
-      border: "border-error/30",
-      dot: "bg-error",
-    },
-  },
-  inactive: {
-    colors: {
-      bg: "bg-error-light",
-      text: "text-error-dark",
-      border: "border-error/30",
-      dot: "bg-error",
-    },
-  },
-
-  // Info states
-  open: {
-    colors: {
-      bg: "bg-primary-50",
-      text: "text-primary-700",
-      border: "border-primary/30",
-      dot: "bg-primary",
-    },
-  },
+  completed: { variant: "success" },
+  successful: { variant: "success" },
+  verified: { variant: "success" },
+  active: { variant: "success" },
+  assigned: { variant: "warning" },
+  on_hold: { variant: "warning", label: "on hold" },
+  unverified: { variant: "warning" },
+  pending: { variant: "warning" },
+  processing: { variant: "warning" },
+  cancelled: { variant: "error" },
+  failed: { variant: "error" },
+  inactive: { variant: "error" },
+  open: { variant: "info" },
 };
 
-const SIZE_CONFIG = {
-  sm: {
-    badge: "text-xs px-2 py-0.5 h-5",
-    dot: "w-1.5 h-1.5",
-    gap: "gap-1",
-  },
-  md: {
-    badge: "text-xs px-2.5 py-1 h-6",
-    dot: "w-2 h-2",
-    gap: "gap-1.5",
-  },
-  lg: {
-    badge: "text-sm px-3 py-1.5 h-7",
-    dot: "w-2.5 h-2.5",
-    gap: "gap-2",
-  },
-} as const;
+const COLORS: Record<StatusVariant, string> = {
+  success: "bg-success-light text-success border-success/20",
+  warning: "bg-warning-light text-warning border-warning/20",
+  error: "bg-error-light text-error border-error/20",
+  info: "bg-primary-50 text-primary border-primary/20",
+};
+
+const DOT_COLORS: Record<StatusVariant, string> = {
+  success: "bg-success",
+  warning: "bg-warning",
+  error: "bg-error",
+  info: "bg-primary",
+};
+
+const SIZES = {
+  sm: "text-xs px-2 py-0.5 h-5",
+  md: "text-xs px-2.5 py-1 h-6",
+  lg: "text-sm px-3 py-1.5 h-7",
+};
+
+const DOT_SIZES = {
+  sm: "w-1.5 h-1.5",
+  md: "w-2 h-2",
+  lg: "w-2.5 h-2.5",
+};
 
 const StatusBadge: React.FC<StatusBadgeProps> = ({
   status,
@@ -178,72 +81,32 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({
   size = "md",
   variant = "default",
 }) => {
-  const config = STATUS_CONFIG[status];
-  const sizeConfig = SIZE_CONFIG[size];
+  const config = STATUS_MAP[status];
+  if (!config) return null;
 
-  if (!config) {
-    console.warn(`Unknown status: ${status}`);
-    return null;
-  }
-
-  const displayLabel = config.label || status.replace(/_/g, " ");
-  const { colors } = config;
-
-  const badgeStyles = cn(
-    // Base styles
-    "inline-flex items-center font-medium rounded-full transition-colors cursor-default",
-    sizeConfig.badge,
-    sizeConfig.gap,
-
-    // Variant styles
-    variant === "outline" && "bg-transparent border",
-    variant === "filled" && "border-0",
-    variant === "default" && "border",
-
-    // Color styles
-    colors.bg,
-    colors.text,
-    colors.border,
-
-    className
-  );
+  const label = config.label || status.replace(/_/g, " ");
+  const colors = COLORS[config.variant];
+  const dotColor = DOT_COLORS[config.variant];
 
   return (
-    <Badge variant="outline" className={badgeStyles}>
-      {showDot && (
-        <span
-          className={cn(
-            "rounded-full flex-shrink-0",
-            sizeConfig.dot,
-            colors.dot
-          )}
-        />
+    <Badge
+      variant="outline"
+      className={cn(
+        "inline-flex items-center gap-1.5 font-medium rounded-md cursor-default",
+        SIZES[size],
+        variant === "outline" && "bg-transparent border",
+        variant === "filled" && "border-0",
+        variant === "default" && "border",
+        colors,
+        className
       )}
-      <span className="capitalize truncate">{displayLabel}</span>
+    >
+      {showDot && (
+        <span className={cn("rounded-full", DOT_SIZES[size], dotColor)} />
+      )}
+      <span className="capitalize">{label}</span>
     </Badge>
   );
 };
 
 export default StatusBadge;
-
-// LoadingSpinner.tsx - Bonus component for better loading states
-export const LoadingSpinner: React.FC<{
-  size?: "sm" | "md" | "lg";
-  className?: string;
-}> = ({ size = "md", className }) => {
-  const sizeClasses = {
-    sm: "w-4 h-4",
-    md: "w-6 h-6",
-    lg: "w-8 h-8",
-  };
-
-  return (
-    <div
-      className={cn(
-        "animate-spin rounded-full border-2 border-current border-t-transparent",
-        sizeClasses[size],
-        className
-      )}
-    />
-  );
-};

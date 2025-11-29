@@ -1,16 +1,26 @@
 import { useMemo } from "react";
 import { TaskState } from "../types";
+import { useAppSelector } from "@/store/hook";
 
-export const useTaskState = (task: ITask, user: any): TaskState => {
+export const useTaskState = (task?: ITask | null): TaskState => {
+  const { taskDetails } = useAppSelector((s) => s.task);
+  const { user } = useAppSelector((state) => state.user);
+
+  const effectiveTask = task ?? taskDetails;
+
   return useMemo(() => {
-    const status = task.status;
+    const status = effectiveTask?.status;
     const isOpen = status === "open";
-    const isAssigned = status === "assigned";
-    const isTaskAssignedToYou = isAssigned && task.tasker?.id === user?.id;
-    const hasCompletedTask = task.payment_requested && isTaskAssignedToYou;
-    const hasMadeOffer = task.offers.some(
-      (offer) => offer.tasker.id === user?.id
-    );
+    // const isAssigned = status === "assigned";
+    const isCompleted = status === "completed";
+
+    const isTaskAssignedToYou = effectiveTask?.tasker?.id === user?.id;
+
+    const hasMadeOffer =
+      effectiveTask?.offers?.some((offer) => offer.tasker.id === user?.id) ??
+      false;
+
+    const hasCompletedTask = !!(isCompleted && isTaskAssignedToYou);
 
     const hasCompletedKyc = user?.kyc_stage
       ? Object.entries(user.kyc_stage)
@@ -22,10 +32,10 @@ export const useTaskState = (task: ITask, user: any): TaskState => {
       canMakeOffer: isOpen && !hasMadeOffer,
       canUpdateOffer: isOpen && hasMadeOffer,
       canCompleteTask: hasMadeOffer && isTaskAssignedToYou && !hasCompletedTask,
-      canReschedule: isTaskAssignedToYou,
+      canReschedule: isTaskAssignedToYou && !task?.reschedule,
       hasCompletedTask,
       hasMadeOffer,
       hasCompletedKyc,
     };
-  }, [task, user]);
+  }, [effectiveTask, user]);
 };

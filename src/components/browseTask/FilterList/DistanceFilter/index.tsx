@@ -35,12 +35,9 @@ export default function DistanceFilter() {
     setValue("userLocation", { lat: coords[0], lng: coords[1] });
   });
 
-  const {
-    handleLocationSelect,
-    handleClear,
-    hasValidLocation,
-    getLocationParams,
-  } = useDistanceForm({ form });
+  const { handleClear, hasValidLocation, getLocationParams } = useDistanceForm({
+    form,
+  });
 
   const hasCoordinates = hasValidLocation({
     location,
@@ -99,11 +96,7 @@ export default function DistanceFilter() {
           />
 
           {/* Location Input */}
-          <LocationInput
-            address={address}
-            onLocationSelect={handleLocationSelect}
-            onClear={handleClear}
-          />
+          <LocationInput address={address} onClear={handleClear} />
 
           {/* Distance Slider */}
           <DistanceSliderCard value={distance} />

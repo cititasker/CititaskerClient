@@ -7,7 +7,61 @@ import {
 } from "@/lib/middleware/guards/auth-guard";
 import { handleRoleAccess } from "@/lib/middleware/guards/role-guard";
 
+// ✅ Define routes that don't need auth checks
+const PUBLIC_ROUTES = [
+  "/",
+  "/login",
+  "/signup",
+  "/about",
+  "/forgot-password",
+  "/reset-password",
+  "/otp",
+  "/create-account",
+  "/waitlist",
+  "/poster/how-it-works",
+  "/tasker/how-it-works",
+  "/poster/discovery",
+  "/tasker/discovery",
+  "/legal/privacy-policy",
+  "/legal/terms-and-conditions",
+  "/legal/community-guidelines",
+];
+
+const PUBLIC_PREFIXES = ["/legal"];
+
+// ✅ Routes that need minimal checks
+const STATIC_ROUTES = [
+  "/browse-task", // Public task browsing
+];
+
+function isPublicRoute(pathname: string): boolean {
+  // Check exact matches
+  if (PUBLIC_ROUTES.includes(pathname)) return true;
+
+  // Check prefixes
+  if (PUBLIC_PREFIXES.some((prefix) => pathname.startsWith(prefix)))
+    return true;
+
+  return false;
+}
+
+function isStaticRoute(pathname: string): boolean {
+  return STATIC_ROUTES.some((route) => pathname === route);
+}
+
 export default auth(async (req) => {
+  const { pathname } = req.nextUrl;
+
+  // ✅ CRITICAL: Skip auth checks for public routes (no session call needed)
+  if (isPublicRoute(pathname)) {
+    return NextResponse.next();
+  }
+
+  // ✅ For static routes, allow access but don't redirect
+  if (isStaticRoute(pathname)) {
+    return NextResponse.next();
+  }
+
   const user = req.auth?.user;
 
   // 1. Handle authentication redirections
@@ -30,13 +84,13 @@ export default auth(async (req) => {
 export const config = {
   matcher: [
     /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
+     * Match all request paths except:
+     * - api/auth routes (NextAuth endpoints)
      * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public folder and common static files
+     * - _next/image (image optimization)
+     * - favicon, sitemap, robots
+     * - public assets
      */
-    "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|.*\\.png$|.*\\.jpg$|.*\\.jpeg$|.*\\.gif$|.*\\.svg$|.*\\.ico$).*)",
+    "/((?!api/auth|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|images|videos).*)",
   ],
 };

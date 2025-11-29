@@ -2,7 +2,7 @@
 
 import { useFormContext } from "react-hook-form";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useState, ReactNode } from "react";
 import { useCloudinaryUpload } from "@/hooks/useCloudinaryUpload";
 import {
   FormControl,
@@ -18,7 +18,6 @@ import {
   normalizeFromFile,
   validateFile,
 } from "@/lib/image-uploader-utils";
-import { UploadZone } from "./UploadZone/UploadZone";
 import { ImageGrid } from "./UploadZone/ImageGrid";
 import { UploadProgress } from "./UploadZone/UploadProgress";
 import { CloudinaryUploadResult } from "@/lib/cloudinary-upload";
@@ -48,12 +47,76 @@ interface ImageUploaderProps {
 
   // Display options
   showFileDetails?: boolean;
+
+  // Grid Customization
+  gridClassName?: string;
+  gridCols?: {
+    base?: number;
+    sm?: number;
+    md?: number;
+    lg?: number;
+    xl?: number;
+    "2xl"?: number;
+  };
+  gap?: "sm" | "md" | "lg" | "xl";
+  aspectRatio?: "square" | "video" | "portrait" | "landscape" | "auto";
+
+  // Upload Box Customization
+  uploadBoxClassName?: string;
+  uploadBoxContent?: ReactNode;
+  uploadBoxIcon?: ReactNode;
+  uploadBoxText?: string;
+  uploadBoxBorderStyle?: "dashed" | "solid" | "dotted";
+  uploadBoxBorderColor?: string;
+  uploadBoxBgColor?: string;
+  uploadBoxHoverBgColor?: string;
+  uploadBoxIconSize?: "sm" | "md" | "lg";
+  showUploadBox?: boolean;
+
+  // Image Item Customization
+  imageClassName?: string;
+  imageContainerClassName?: string;
+  imageBorderRadius?: "none" | "sm" | "md" | "lg" | "xl" | "2xl" | "full";
+  imageBorderWidth?: "0" | "1" | "2" | "4";
+  imageBorderColor?: string;
+  imageHoverEffect?: "scale" | "zoom" | "brightness" | "none";
+  imageOverlayOnHover?: boolean;
+
+  // Remove Button Customization
+  removeButtonClassName?: string;
+  removeButtonPosition?:
+    | "top-left"
+    | "top-right"
+    | "bottom-left"
+    | "bottom-right";
+  removeButtonSize?: "sm" | "md" | "lg";
+  removeButtonIcon?: ReactNode;
+  removeButtonBgColor?: string;
+  removeButtonHoverBgColor?: string;
+  removeButtonShape?: "circle" | "square" | "rounded";
+  showRemoveButton?: boolean;
+  removeButtonVisibility?: "always" | "hover";
+
+  // Loading State Customization
+  loadingClassName?: string;
+  loadingIcon?: ReactNode;
+  loadingText?: string;
+
+  // Stats Customization
+  showStats?: boolean;
+  statsClassName?: string;
+  statsPosition?: "top" | "bottom";
+  customStats?: (images: NormalizedImage[], maxFiles: number) => ReactNode;
+
+  // Progress Customization
+  showProgress?: boolean;
+  progressClassName?: string;
 }
 
 export default function ImageUploader({
   name,
   label = "Add Photos",
-  description = "Upload images to help describe your task better",
+  description,
   multiple = true,
   limit = 5,
   className,
@@ -75,9 +138,61 @@ export default function ImageUploader({
 
   // Display options
   showFileDetails = false,
+
+  // Grid Customization (with responsive defaults)
+  gridClassName,
+  gridCols = { base: 2, sm: 3, md: 4, lg: 5, xl: 6, "2xl": 7 },
+  gap = "md",
+  aspectRatio = "square",
+
+  // Upload Box Customization
+  uploadBoxClassName,
+  uploadBoxContent,
+  uploadBoxIcon,
+  uploadBoxText = "Add Photo",
+  uploadBoxBorderStyle = "dashed",
+  uploadBoxBorderColor = "border-primary/30",
+  uploadBoxBgColor = "bg-primary/5",
+  uploadBoxHoverBgColor = "hover:bg-primary/10",
+  uploadBoxIconSize = "md",
+  showUploadBox = true,
+
+  // Image Item Customization
+  imageClassName,
+  imageContainerClassName,
+  imageBorderRadius = "xl",
+  imageBorderWidth = "1",
+  imageBorderColor = "border-border-light",
+  imageHoverEffect = "scale",
+  imageOverlayOnHover = true,
+
+  // Remove Button Customization
+  removeButtonClassName,
+  removeButtonPosition = "top-right",
+  removeButtonSize = "md",
+  removeButtonIcon,
+  removeButtonBgColor = "bg-black/60",
+  removeButtonHoverBgColor = "hover:bg-black/80",
+  removeButtonShape = "circle",
+  showRemoveButton = true,
+  removeButtonVisibility = "hover",
+
+  // Loading State Customization
+  loadingClassName,
+  loadingIcon,
+  loadingText,
+
+  // Stats Customization
+  showStats = true,
+  statsClassName,
+  statsPosition = "bottom",
+  customStats,
+
+  // Progress Customization
+  showProgress = false,
+  progressClassName,
 }: ImageUploaderProps) {
   const { control, setValue, watch } = useFormContext();
-  const [dragActive, setDragActive] = useState(false);
   const [localError, setLocalError] = useState<string | null>(null);
   const [isLocalProcessing, setIsLocalProcessing] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
@@ -86,12 +201,11 @@ export default function ImageUploader({
   const maxFileSizeBytes = maxFileSize * 1024 * 1024;
   const currentImages: NormalizedImage[] = watch(name) || [];
 
-  // Cloudinary hook (only when needed)
+  // Cloudinary hook
   const cloudinaryUpload = useCloudinaryUpload({
     folder,
     tags,
     onSuccess: (result: CloudinaryUploadResult) => {
-      // Get current images and add the new one
       const currentImagesData = watch(name) || [];
       const cloudinaryData = {
         id: result.public_id,
@@ -110,7 +224,6 @@ export default function ImageUploader({
       });
     },
     onBatchComplete: (results) => {
-      // This gets called when all files in a batch are done
       console.log("All files uploaded:", results);
       onUploadComplete?.(watch(name) || []);
     },
@@ -193,32 +306,6 @@ export default function ImageUploader({
     e.target.value = "";
   };
 
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    setDragActive(false);
-    const files = Array.from(e.dataTransfer.files).filter((file) =>
-      acceptedFileTypes.some((type) => {
-        if (type.includes("*")) {
-          return file.type.startsWith(type.replace("*", ""));
-        }
-        return file.type === type;
-      })
-    );
-    handleFiles(files);
-  };
-
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    setDragActive(true);
-  };
-
-  const handleDragLeave = (e: React.DragEvent) => {
-    e.preventDefault();
-    if (!e.currentTarget.contains(e.relatedTarget as Node)) {
-      setDragActive(false);
-    }
-  };
-
   const handleRemove = (index: number) => {
     const updated = currentImages.filter((_, i) => i !== index);
     setValue(name, updated, { shouldValidate: true, shouldDirty: true });
@@ -248,8 +335,8 @@ export default function ImageUploader({
       control={control}
       name={name}
       render={() => (
-        <FormItem className={cn("space-y-3", className)}>
-          <FormLabel>{label}</FormLabel>
+        <FormItem className={cn("space-y-1", className)}>
+          {label && <FormLabel>{label}</FormLabel>}
 
           {description && (
             <FormDescription className="text-sm text-muted-foreground">
@@ -259,36 +346,25 @@ export default function ImageUploader({
 
           <FormControl>
             <div className="space-y-4">
-              {/* Upload Zone */}
-              {currentImages.length < maxFiles && !isUploading && (
-                <UploadZone
-                  dragActive={dragActive}
-                  onDragOver={handleDragOver}
-                  onDragLeave={handleDragLeave}
-                  onDrop={handleDrop}
-                  onFileSelect={handleUpload}
-                  acceptedFileTypes={acceptedFileTypes}
-                  multiple={multiple}
-                  maxFiles={maxFiles}
-                  maxFileSize={maxFileSize}
+              {/* Progress & Error Display */}
+              {showProgress && (
+                <UploadProgress
+                  isUploading={!!isUploading}
+                  progress={uploadProgress}
+                  error={
+                    uploadError ||
+                    (deleteError ? { message: deleteError } : null)
+                  }
+                  onRetry={() => {
+                    clearError();
+                    setDeleteError(null);
+                  }}
+                  useCloudinary={useCloudinary}
+                  className={progressClassName}
                 />
               )}
 
-              {/* Progress & Error Display */}
-              <UploadProgress
-                isUploading={!!isUploading}
-                progress={uploadProgress}
-                error={
-                  uploadError || (deleteError ? { message: deleteError } : null)
-                }
-                onRetry={() => {
-                  clearError();
-                  setDeleteError(null);
-                }}
-                useCloudinary={useCloudinary}
-              />
-
-              {/* Image Grid */}
+              {/* Image Grid with Upload Box */}
               <ImageGrid
                 images={currentImages}
                 onRemove={handleRemove}
@@ -297,6 +373,53 @@ export default function ImageUploader({
                 transformations={transformations}
                 useCloudinary={useCloudinary}
                 onDeleteError={setDeleteError}
+                onFileSelect={handleUpload}
+                acceptedFileTypes={acceptedFileTypes}
+                multiple={multiple}
+                isUploading={isUploading}
+                // Grid props
+                gridClassName={gridClassName}
+                gridCols={gridCols}
+                gap={gap}
+                aspectRatio={aspectRatio}
+                // Upload box props
+                uploadBoxClassName={uploadBoxClassName}
+                uploadBoxContent={uploadBoxContent}
+                uploadBoxIcon={uploadBoxIcon}
+                uploadBoxText={uploadBoxText}
+                uploadBoxBorderStyle={uploadBoxBorderStyle}
+                uploadBoxBorderColor={uploadBoxBorderColor}
+                uploadBoxBgColor={uploadBoxBgColor}
+                uploadBoxHoverBgColor={uploadBoxHoverBgColor}
+                uploadBoxIconSize={uploadBoxIconSize}
+                showUploadBox={showUploadBox}
+                // Image props
+                imageClassName={imageClassName}
+                imageContainerClassName={imageContainerClassName}
+                imageBorderRadius={imageBorderRadius}
+                imageBorderWidth={imageBorderWidth}
+                imageBorderColor={imageBorderColor}
+                imageHoverEffect={imageHoverEffect}
+                imageOverlayOnHover={imageOverlayOnHover}
+                // Remove button props
+                removeButtonClassName={removeButtonClassName}
+                removeButtonPosition={removeButtonPosition}
+                removeButtonSize={removeButtonSize}
+                removeButtonIcon={removeButtonIcon}
+                removeButtonBgColor={removeButtonBgColor}
+                removeButtonHoverBgColor={removeButtonHoverBgColor}
+                removeButtonShape={removeButtonShape}
+                showRemoveButton={showRemoveButton}
+                removeButtonVisibility={removeButtonVisibility}
+                // Loading props
+                loadingClassName={loadingClassName}
+                loadingIcon={loadingIcon}
+                loadingText={loadingText}
+                // Stats props
+                showStats={showStats}
+                statsClassName={statsClassName}
+                statsPosition={statsPosition}
+                customStats={customStats}
               />
             </div>
           </FormControl>
@@ -307,49 +430,3 @@ export default function ImageUploader({
     />
   );
 }
-
-// Usage Examples:
-/*
-// Basic usage with form
-<ImageUploader
-  name="taskImages"
-  label="Task Images"
-  description="Upload images that show what needs to be done"
-  multiple={true}
-  limit={5}
-/>
-
-// Advanced usage with Cloudinary features
-<ImageUploader
-  name="profileImages"
-  label="Profile Photos"
-  multiple={false}
-  limit={1}
-  folder="user-profiles"
-  tags={["profile", "avatar"]}
-  transformations={{ width: 400, height: 400, crop: "fill", gravity: "face" }}
-  maxFileSize={2}
-  showFileDetails={true}
-  onUploadComplete={(results) => {
-    console.log("Upload completed:", results);
-  }}
-  onUploadError={(error) => {
-    toast.error(`Upload failed: ${error.message}`);
-  }}
-/>
-
-// Gallery uploader
-<ImageUploader
-  name="galleryImages"
-  label="Gallery Images"
-  description="Upload multiple images for your gallery"
-  multiple={true}
-  limit={10}
-  folder="gallery"
-  tags={["gallery", "showcase"]}
-  acceptedFileTypes={["image/jpeg", "image/png", "image/webp"]}
-  imagePreview="cloudinary"
-  showProgress={true}
-  showFileDetails={true}
-/>
-*/

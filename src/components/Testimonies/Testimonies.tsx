@@ -1,9 +1,11 @@
 "use client";
 import Image from "next/image";
 import React from "react";
-import TestimonialCarousel from "./TestimonialCarousel";
 import { motion } from "framer-motion";
 import SectionHeader from "../reusables/SectionHeader";
+import dynamic from "next/dynamic";
+
+const TestimonialCarousel = dynamic(() => import("./TestimonialCarousel"));
 
 const STYLES = {
   container: "mx-auto px-4 md:px-8 py-8 md:py-20",

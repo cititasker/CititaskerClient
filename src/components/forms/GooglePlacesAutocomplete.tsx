@@ -8,7 +8,6 @@ import {
 import {
   Command,
   CommandEmpty,
-  CommandInput,
   CommandList,
   CommandItem,
 } from "@/components/ui/command";
@@ -16,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { useFormContext } from "react-hook-form";
 import { useGooglePlacesAutocomplete } from "@/hooks/useGooglePlacesAutocomplete";
 import { useState } from "react";
-import { MapPin, Search, Loader2 } from "lucide-react";
+import { MapPin, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   FormField,
@@ -24,6 +23,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { AutocompleteSearch } from "./FormAutoComplete";
 
 interface GooglePlacesAutocompleteProps {
   name: string;
@@ -32,7 +32,6 @@ interface GooglePlacesAutocompleteProps {
   className?: string;
   required?: boolean;
   disabled?: boolean;
-  onCoordinatesSelected?: (coords: [number, number]) => void;
 }
 
 export const GooglePlacesAutocomplete = ({
@@ -42,7 +41,6 @@ export const GooglePlacesAutocomplete = ({
   className,
   required = false,
   disabled = false,
-  onCoordinatesSelected,
 }: GooglePlacesAutocompleteProps) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -50,7 +48,7 @@ export const GooglePlacesAutocomplete = ({
   const { control, setValue } = useFormContext();
   const { input, setInput, options, isLoading } = useGooglePlacesAutocomplete();
 
-  const fetchPlaceDetails = async (placeId: string) => {
+  const fetchPlaceDetails = async (placeId: string, label: string) => {
     if (!window?.google?.maps?.places) return;
 
     setLoading(true);
@@ -68,12 +66,14 @@ export const GooglePlacesAutocomplete = ({
         setLoading(false);
 
         if (status === "OK" && place?.geometry?.location) {
-          const lat = place.geometry.location.lat();
-          const lng = place.geometry.location.lng();
+          const lat = place?.geometry.location.lat();
+          const lng = place?.geometry.location.lng();
+
           setValue(name, [lat, lng]);
-          onCoordinatesSelected?.([lat, lng]);
+          setValue("address", label);
         } else {
           setValue(name, undefined);
+          setValue("address", undefined);
         }
       }
     );
@@ -124,43 +124,39 @@ export const GooglePlacesAutocomplete = ({
                 aria-expanded={open}
                 aria-invalid={!!fieldState.error}
                 className={cn(
-                  "w-full h-12 px-4 rounded-xl border justify-start font-normal",
+                  "w-full h-12 px-4 rounded-xl border border-border-medium shadow-none justify-start font-normal",
                   "bg-background hover:bg-background-secondary transition-colors duration-200",
                   fieldState.error
                     ? "border-error focus:border-error"
                     : "border-border-light focus:border-primary hover:border-border-medium",
-                  !hasValidCoordinates(field.value) && "text-text-muted",
+                  !hasValidCoordinates(field.value) && "text-text-primary",
                   (disabled || loading) && "cursor-wait opacity-50"
                 )}
               >
                 <div className="flex items-center gap-3 w-full">
-                  {loading ? (
+                  {loading && (
                     <Loader2 className="h-4 w-4 animate-spin text-text-muted" />
-                  ) : (
-                    <Search className="h-4 w-4 text-text-muted" />
                   )}
                   <span className="truncate">
                     {loading
                       ? "Getting location..."
-                      : hasValidCoordinates(field.value)
-                      ? "Location selected"
-                      : placeholder}
+                      : field.value?.label || placeholder}
                   </span>
                 </div>
               </Button>
             </PopoverTrigger>
 
             <PopoverContent
-              className="w-[var(--radix-popover-trigger-width)] p-0 bg-background border-border-light rounded-xl shadow-lg"
+              className="w-[var(--radix-popover-trigger-width)] overflow-hidden p-0 bg-background border-border-light rounded-xl shadow-lg"
               align="start"
               sideOffset={4}
             >
               <Command shouldFilter={false}>
-                <CommandInput
+                <AutocompleteSearch
+                  searchable
+                  searchQuery={input}
+                  onSearchQueryChange={handleInputChange}
                   placeholder="Type to search addresses..."
-                  value={input}
-                  onValueChange={handleInputChange}
-                  className="border-none focus:ring-0"
                 />
 
                 {isLoading && (
@@ -183,7 +179,19 @@ export const GooglePlacesAutocomplete = ({
                     <CommandItem
                       key={option.place_id}
                       onSelect={() => {
-                        fetchPlaceDetails(option.place_id);
+                        const label = `${
+                          option.structured_formatting.main_text
+                        }${
+                          option.structured_formatting.secondary_text
+                            ? ", " + option.structured_formatting.secondary_text
+                            : ""
+                        }`;
+                        // Set address label immediately
+                        setValue("address", label);
+
+                        // Fetch coordinates
+                        fetchPlaceDetails(option.place_id, label);
+
                         setOpen(false);
                       }}
                       className={cn(
@@ -209,7 +217,7 @@ export const GooglePlacesAutocomplete = ({
             </PopoverContent>
           </Popover>
 
-          <FormMessage className="text-error text-sm" />
+          <FormMessage />
         </FormItem>
       )}
     />

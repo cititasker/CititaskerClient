@@ -19,6 +19,8 @@ interface FormSelectProps {
   placeholder?: string;
   className?: string;
   disabled?: boolean;
+  triggerClassName?: string;
+  renderOption?: (option: SelectOption) => React.ReactNode;
 }
 
 export default function FormSelect({
@@ -29,6 +31,8 @@ export default function FormSelect({
   placeholder = "Select an option",
   className,
   disabled = false,
+  renderOption,
+  triggerClassName,
 }: FormSelectProps) {
   const { control, formState } = useFormContext();
   const error = formState.errors[name];
@@ -56,45 +60,43 @@ export default function FormSelect({
           >
             <SelectTrigger
               className={cn(
-                // Base styles
                 "w-full h-12 px-4 rounded-xl border transition-all duration-200",
                 "bg-background text-text-primary",
-                "focus:outline-none",
-
-                // Border states
-                error
-                  ? "border-error focus:border-error"
-                  : "border-border-light focus:border-primary hover:border-border-medium",
-
-                // State styles
-                disabled &&
-                  "opacity-50 cursor-not-allowed bg-background-secondary",
-                !field.value && "text-text-muted"
+                "border-border-light hover:border-border-medium",
+                "focus:outline-none focus:border-ring",
+                "data-[state=open]:border-ring data-[state=open]:ring-0 data-[state=open]:ring-ring/30",
+                error && "border-error focus:border-error",
+                disabled && "cursor-not-allowed",
+                !field.value && "text-text-muted",
+                triggerClassName
               )}
             >
               <SelectValue placeholder={placeholder} />
-              {/* <ChevronDown className="h-4 w-4 opacity-50" /> */}
             </SelectTrigger>
 
             <SelectContent className="bg-background border-border-light rounded-xl shadow-lg max-h-60">
-              {options.map((option) => (
-                <SelectItem
-                  key={option.id}
-                  value={String(option.id)}
-                  disabled={option.disabled}
-                  className={cn(
-                    "px-4 py-2.5 text-sm text-text-primary cursor-pointer",
-                    "hover:bg-background-secondary focus:bg-primary-50 focus:text-primary",
-                    "disabled:opacity-50 disabled:cursor-not-allowed"
-                  )}
-                >
-                  {option.name}
-                </SelectItem>
-              ))}
+              {options.map((option) =>
+                renderOption ? (
+                  renderOption(option)
+                ) : (
+                  <SelectItem
+                    key={option.id}
+                    value={String(option.id)}
+                    disabled={option.disabled}
+                    className={cn(
+                      "px-4 py-2.5 text-sm text-text-primary cursor-pointer",
+                      "hover:bg-background-secondary focus:bg-primary-50 focus:text-primary",
+                      "disabled:opacity-50 disabled:cursor-not-allowed"
+                    )}
+                  >
+                    {option.name}
+                  </SelectItem>
+                )
+              )}
             </SelectContent>
           </Select>
 
-          <FormMessage className="text-error text-sm" />
+          <FormMessage />
         </FormItem>
       )}
     />

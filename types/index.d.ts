@@ -18,6 +18,20 @@ interface AccordionHTMLItem {
   answer: string;
 }
 
+interface ApiResponse<T> {
+  message: string;
+  success: boolean;
+  data: T;
+  from: number;
+  last_page: number;
+  per_page: number;
+  to: number;
+  total: number;
+  current_page: number;
+}
+
+type ApiResponsePromise<T> = Promise<ApiResponse<T>>;
+
 interface IResponse {
   meta: {
     current_page: number;
@@ -82,11 +96,22 @@ interface IUser {
     bank_code: string;
     bank_name: string;
   };
+  message_notifications_route: "email";
+  notifications: "true" | "false";
+  other_notifications_route: "email";
+  recipient_code: string;
+  reminder_notifications_route: "email";
+  skills: null;
+  transactional_notifications_route: "email";
 }
 
 type TRole = "tasker" | "poster";
 
 type LocationTypeT = "in_person" | "online";
+
+type TaskStatusT = "open" | "assigned" | "completed";
+
+type TaskTimeT = "morning" | "mid_day" | "afternoon" | "evening";
 
 interface ITasker {
   created_at: string;
@@ -119,6 +144,23 @@ interface IOffer {
   offer_amount: number;
   status: string;
   tasker: TaskerProfileT;
+}
+
+interface IReschedule {
+  id: number;
+  reschedule_id: number;
+  type: "request" | "counter_proposal";
+  status: "pending" | "rejected";
+  proposed_date: string;
+  proposed_time: "mid_day";
+  agreed_date: string | null;
+  agreed_time: string | null;
+  reason: string | null;
+  round: number;
+  expires_at: string;
+  created_at: string;
+  updated_at: string;
+  initiated_by: TRole;
 }
 
 interface ITask {
@@ -158,6 +200,8 @@ interface ITask {
   address: string;
   payment_requested: boolean;
   has_surcharge_requests: boolean;
+  reschedule: IReschedule;
+  updatedBudget: number;
 }
 
 interface ITaskCategory {
@@ -205,7 +249,8 @@ interface MoreOptionItem {
 }
 
 interface SelectOption {
-  id: string | number;
+  id: string;
   name: string;
   disabled?: boolean;
+  [key: string]: string | number | undefined;
 }

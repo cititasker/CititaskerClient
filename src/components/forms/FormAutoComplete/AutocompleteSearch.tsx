@@ -6,21 +6,21 @@ interface AutocompleteSearchProps {
   searchable?: boolean;
   searchQuery: string;
   onSearchQueryChange: (query: string) => void;
-  label?: string;
+  placeholder?: string;
   size?: "sm" | "md" | "lg";
 }
 
 const SIZE_CONFIG = {
-  sm: { input: "text-sm py-2" },
-  md: { input: "text-sm py-3" },
-  lg: { input: "text-base py-4" },
+  sm: { input: "text-sm" },
+  md: { input: "text-sm" },
+  lg: { input: "text-base" },
 } as const;
 
 export function AutocompleteSearch({
   searchable = true,
   searchQuery,
   onSearchQueryChange,
-  label,
+  placeholder = "Search options",
   size = "md",
 }: AutocompleteSearchProps) {
   const sizeConfig = SIZE_CONFIG[size];
@@ -28,14 +28,14 @@ export function AutocompleteSearch({
   if (!searchable) return null;
 
   return (
-    <div className="flex items-center border-b border-neutral-100 px-3">
+    <div className="flex items-center border-b border-neutral-100">
       <CommandInput
-        placeholder={`Search ${label?.toLowerCase() || "options"}...`}
+        placeholder={placeholder}
         value={searchQuery}
         onValueChange={onSearchQueryChange}
         className={cn(
-          "border-none focus:ring-0 bg-transparent placeholder:text-text-muted",
-          "text-text-primary px-0",
+          "border-none focus:ring-0 bg-transparent placeholder:text-text-muted w-full",
+          "text-text-primary p-0",
           sizeConfig.input
         )}
       />

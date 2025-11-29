@@ -4,6 +4,8 @@ import { useFormContext } from "react-hook-form";
 import FormError from "@/components/reusables/FormError";
 import Icons from "@/components/Icons";
 import { OptionCardSelector } from "@/components/reusables/OptionCardSelector";
+import { cn } from "@/lib/utils";
+import { Label } from "@/components/ui/label";
 
 const timeOptions = [
   {
@@ -32,7 +34,21 @@ const timeOptions = [
   },
 ];
 
-export const TimeOfDaySelector = () => {
+interface IProps {
+  className?: string;
+  itemClassName?: string;
+  containerClassName?: string;
+  name?: string;
+  label?: string;
+}
+
+export const TimeOfDaySelector = ({
+  className,
+  itemClassName,
+  containerClassName,
+  name = "time",
+  label,
+}: IProps) => {
   const { watch } = useFormContext();
   const show = watch("showTimeOfDay");
 
@@ -52,14 +68,19 @@ export const TimeOfDaySelector = () => {
   );
 
   return (
-    <div className="mb-6">
+    <div className={cn("mb-6", containerClassName)}>
+      {label && <Label>{label}</Label>}
       <OptionCardSelector
-        name="time"
+        name={name}
         options={options}
-        className="grid-cols-[repeat(auto-fill,minmax(100px,1fr))]"
-        itemClassName="h-[100px]"
+        columns="auto"
+        className={cn(
+          "grid-cols-[repeat(auto-fill,minmax(100px,1fr))]",
+          className
+        )}
+        itemClassName={cn("h-[100px]", itemClassName)}
       />
-      <FormError name="time" />
+      <FormError name={name} />
     </div>
   );
 };

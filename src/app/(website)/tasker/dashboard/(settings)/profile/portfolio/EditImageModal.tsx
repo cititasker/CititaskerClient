@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import Cropper from "react-easy-crop";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
-import { Move, Crop, ZoomIn, X, Info } from "lucide-react";
+import { Move, Crop, ZoomIn, X } from "lucide-react";
 import CustomModal from "@/components/reusables/CustomModal";
 import SaveButton from "@/components/reusables/SaveButton.tsx";
 
@@ -11,11 +11,14 @@ interface EditImageModalProps {
   onClose: () => void;
   selectedImage: { src: string; file: File } | null;
   onSaveImage: (croppedImage: { src: string; file: File }) => void;
+  saveButtonLabel?: string;
+  saveButtonIcon?: any;
   cropShape?: "rect" | "round";
   aspectRatio?: number;
   title?: string;
   description?: string;
   loading?: boolean;
+  inputRef?: React.RefObject<HTMLInputElement | null>;
 }
 
 type CropMode = "reposition" | "crop";
@@ -164,6 +167,7 @@ const CropPreview = ({
       showGrid={mode === "crop"}
       objectFit="cover"
       restrictPosition={false}
+      zoomWithScroll={false}
       style={{
         cropAreaStyle: {
           pointerEvents: mode === "crop" ? "auto" : "none",
@@ -174,7 +178,6 @@ const CropPreview = ({
       }}
     />
 
-    {/* Mode indicator */}
     <div className="absolute top-3 left-3 z-10">
       <div className="bg-neutral-900/80 backdrop-blur-sm rounded-lg px-3 py-1.5 border border-white/10">
         <span className="text-xs text-white font-medium flex items-center gap-1.5">
@@ -197,25 +200,20 @@ const CropPreview = ({
 
 const HelpTips = ({ cropShape }: { cropShape: "rect" | "round" }) => (
   <div className="bg-neutral-50 p-4 rounded-xl border border-neutral-200">
-    <div className="flex items-start gap-3">
-      <div className="p-1 bg-info-light rounded-lg">
-        <Info className="w-4 h-4 text-info flex-shrink-0" />
-      </div>
-      <div className="text-xs text-text-muted space-y-2">
-        <p className="font-semibold text-text-secondary">Quick Tips:</p>
-        <ul className="space-y-1 leading-relaxed">
-          <li>
-            • Use <strong>Position</strong> mode to move and zoom the image
-          </li>
-          <li>
-            • Use <strong>Crop</strong> mode to adjust the selection area
-          </li>
-          <li>• Drag the zoom slider for precise control</li>
-          {cropShape === "round" && (
-            <li>• Perfect for profile pictures and avatars</li>
-          )}
-        </ul>
-      </div>
+    <div className="text-xs text-text-muted space-y-2">
+      <p className="font-semibold text-text-secondary">Quick Tips:</p>
+      <ul className="space-y-1 leading-relaxed">
+        <li>
+          • Use <strong>Position</strong> mode to move and zoom the image
+        </li>
+        <li>
+          • Use <strong>Crop</strong> mode to adjust the selection area
+        </li>
+        <li>• Drag the zoom slider for precise control</li>
+        {cropShape === "round" && (
+          <li>• Perfect for profile pictures and avatars</li>
+        )}
+      </ul>
     </div>
   </div>
 );
@@ -225,11 +223,14 @@ const EditImageModal: React.FC<EditImageModalProps> = ({
   onClose,
   selectedImage,
   onSaveImage,
+  saveButtonLabel = "Save Image",
+  saveButtonIcon,
   cropShape = "rect",
   aspectRatio = 1,
   title = "Edit Image",
   description = "Position and crop your image to look its best",
   loading,
+  inputRef,
 }) => {
   const [mode, setMode] = useState<CropMode>("reposition");
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -253,24 +254,28 @@ const EditImageModal: React.FC<EditImageModalProps> = ({
         selectedImage.file.name
       );
 
-      onSaveImage({ src: base64, file });
+      await onSaveImage({ src: base64, file });
       handleClose();
     } catch (error) {
       console.error("Failed to crop image:", error);
-    } finally {
       setIsSaving(false);
     }
   };
 
   const handleClose = () => {
-    if (isSaving) return;
+    if (isSaving || loading) return;
+
+    // Reset file input
+    if (inputRef?.current) {
+      inputRef.current.value = "";
+    }
 
     onClose();
-    // Reset state
     setMode("reposition");
     setCrop({ x: 0, y: 0 });
     setZoom(1);
     setCroppedAreaPixels(null);
+    setIsSaving(false);
   };
 
   if (!selectedImage) return null;
@@ -279,36 +284,34 @@ const EditImageModal: React.FC<EditImageModalProps> = ({
     <CustomModal
       isOpen={open}
       onClose={handleClose}
-      contentClassName="max-w-md mx-auto"
+      contentClassName="max-w-md mx-auto min-h-0 h-full"
     >
-      <div className="space-y-6 p-1">
-        {/* Header */}
+      <div className="p-1 h-full flex flex-col min-h-0">
         <div className="text-center space-y-1">
           <h2 className="text-xl font-semibold text-text-primary">{title}</h2>
           <p className="text-sm text-text-muted">{description}</p>
         </div>
 
-        {/* Crop Preview */}
-        <CropPreview
-          image={selectedImage.src}
-          crop={crop}
-          zoom={zoom}
-          mode={mode}
-          cropShape={cropShape}
-          aspectRatio={aspectRatio}
-          onCropChange={setCrop}
-          onZoomChange={setZoom}
-          onCropComplete={onCropComplete}
-        />
+        <div className="overflow-y-auto flex-1 no-scrollbar mt-4">
+          <CropPreview
+            image={selectedImage.src}
+            crop={crop}
+            zoom={zoom}
+            mode={mode}
+            cropShape={cropShape}
+            aspectRatio={aspectRatio}
+            onCropChange={setCrop}
+            onZoomChange={setZoom}
+            onCropComplete={onCropComplete}
+          />
 
-        {/* Controls */}
-        <div className="space-y-4">
-          <ModeToggle mode={mode} onModeChange={setMode} />
-          <ZoomControl zoom={zoom} onZoomChange={setZoom} />
-          <HelpTips cropShape={cropShape} />
+          <div className="space-y-4">
+            <ModeToggle mode={mode} onModeChange={setMode} />
+            <ZoomControl zoom={zoom} onZoomChange={setZoom} />
+            <HelpTips cropShape={cropShape} />
+          </div>
         </div>
 
-        {/* Action Buttons */}
         <div className="flex flex-col-reverse sm:flex-row gap-3 pt-2">
           <Button
             variant="ghost"
@@ -320,9 +323,10 @@ const EditImageModal: React.FC<EditImageModalProps> = ({
             Cancel
           </Button>
           <SaveButton
+            icon={saveButtonIcon}
             onClick={handleSave}
             isLoading={isSaving || loading}
-            label="Save Image"
+            label={saveButtonLabel}
             className="flex-1 sm:flex-none"
           />
         </div>

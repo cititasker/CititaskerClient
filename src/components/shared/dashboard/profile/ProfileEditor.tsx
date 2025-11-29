@@ -1,98 +1,56 @@
 "use client";
 
-import React, { useState } from "react";
-import { FormProvider } from "react-hook-form";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ROLE } from "@/constant";
-import { useAppSelector } from "@/store/hook";
-import { SkillsInput } from "./SkillsInput";
-import { CertificatesInput } from "./CertificatesInput";
+import React from "react";
+import { useForm, FormProvider } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import FormInput from "@/components/forms/FormInput";
+import { Button } from "@/components/ui/button";
 import FormTextEditor from "@/components/reusables/FormTextEditor";
-import { useProfileForm } from "./hooks/useProfileForm";
-import LoadingMessage from "../LoadingMessage";
-import PublicProfile from "./public-view/components/PublicProfile";
-import { FormActionButtons } from "../FormActionButtons";
 
-const ProfileEditor = () => {
-  const [isEditing, setIsEditing] = useState(false);
-  const { user } = useAppSelector((state) => state.user);
-  const { methods, data, isLoading, mutation, onSubmit } = useProfileForm();
+const profileSchema = z.object({
+  bio: z.string().min(10, "Bio must be at least 10 characters"),
+  // Add other profile fields
+  name: z.string().min(1, "Name is required"),
+  // ... other fields
+});
 
-  const handleSubmit = async (formData: any) => {
-    try {
-      await onSubmit(formData);
-      if (!mutation.isError) {
-        setIsEditing(false);
-      }
-    } catch (error) {
-      console.error("Submit error:", error);
-    }
+type ProfileFormData = z.infer<typeof profileSchema>;
+
+export default function ProfileEditor() {
+  const methods = useForm<ProfileFormData>({
+    resolver: zodResolver(profileSchema),
+    defaultValues: {
+      bio: "",
+      name: "",
+    },
+  });
+
+  const onSubmit = (data: ProfileFormData) => {
+    console.log("Profile data:", data);
+    // Handle profile update
   };
-
-  const handleCancel = () => {
-    methods.reset();
-    setIsEditing(false);
-  };
-
-  if (isLoading) {
-    return <LoadingMessage message="Loading profile..." />;
-  }
-
-  if (!isEditing) {
-    return (
-      <PublicProfile
-        id={user?.id || ""}
-        data={data}
-        onEdit={() => setIsEditing(true)}
-        isEdit={true}
-        canShare={true}
-      />
-    );
-  }
 
   return (
-    <Card className="w-full shadow-none space-y-8">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 p-0">
-        <CardTitle className="text-xl font-semibold text-gray-900">
-          Edit Profile
-        </CardTitle>
-        <FormActionButtons
-          onCancel={handleCancel}
-          isDisabled={mutation.isPending}
-          formId="profile-form"
-          isLoading={isLoading}
+    <FormProvider {...methods}>
+      <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-6">
+        <FormInput name="name" label="Name" placeholder="Enter your name" />
+
+        <FormTextEditor
+          name="bio"
+          label="Bio"
+          placeholder="Tell us about yourself..."
         />
-      </CardHeader>
 
-      <CardContent className="space-y-8 p-0">
-        <FormProvider {...methods}>
-          <form
-            id="profile-form"
-            onSubmit={methods.handleSubmit(handleSubmit)}
-            className="space-y-8"
-          >
-            <FormTextEditor
-              name="bio"
-              label="About Me"
-              placeholder="Share your experience, skills, and what makes you unique. Help clients understand why they should choose you for their projects."
-            />
+        {/* Add other form fields */}
 
-            {user.role === ROLE.tasker && (
-              <>
-                <SkillsInput
-                  name="skills"
-                  label="Skills & Expertise"
-                  placeholder="e.g., React Development, Graphic Design, Content Writing"
-                />
-
-                <CertificatesInput name="certificates" label="Certifications" />
-              </>
-            )}
-          </form>
-        </FormProvider>
-      </CardContent>
-    </Card>
+        <div className="flex justify-end gap-4">
+          <Button type="button" variant="outline">
+            Cancel
+          </Button>
+          <Button type="submit">Save Profile</Button>
+        </div>
+      </form>
+    </FormProvider>
   );
-};
-
-export default ProfileEditor;
+}

@@ -1,8 +1,9 @@
 "use client";
 
 import React from "react";
-import { Info, AlertTriangle, CheckCircle, XCircle } from "lucide-react";
+import { AlertTriangle, CheckCircle, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { IInfoPrimary } from "@/constant/icons";
 
 type InfoType = "info" | "success" | "warning" | "error";
 
@@ -16,9 +17,9 @@ interface ExtraInfoProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const INFO_CONFIG = {
   info: {
-    icon: Info,
-    bgColor: "bg-info-light",
-    borderColor: "border-info/20",
+    icon: IInfoPrimary,
+    bgColor: "bg-primary-100",
+    borderColor: "border-primary-200",
     iconColor: "text-info",
     textColor: "text-info-dark",
   },
@@ -51,7 +52,7 @@ const ExtraInfo: React.FC<ExtraInfoProps> = ({
   type = "info",
   icon: customIcon,
   showIcon = true,
-  compact = false,
+  compact = true,
   ...props
 }) => {
   const config = INFO_CONFIG[type];
@@ -84,7 +85,7 @@ const ExtraInfo: React.FC<ExtraInfoProps> = ({
 
         <div
           className={cn(
-            "text-text-primary leading-relaxed",
+            "text-text-primary leading-relaxed text-left",
             compact ? "text-sm" : "text-sm sm:text-base",
             !showIcon && "text-center"
           )}

@@ -70,7 +70,6 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
       isOpen={open}
       onClose={onClose}
       size="sm"
-      stickyHeader={false}
       contentClassName="max-w-sm sm:max-w-md"
     >
       <div className="text-center space-y-6">

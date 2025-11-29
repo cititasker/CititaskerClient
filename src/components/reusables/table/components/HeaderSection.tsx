@@ -1,4 +1,3 @@
-// components/ui/HeaderSection.tsx - Reusable header section component
 "use client";
 
 import React from "react";
@@ -11,35 +10,28 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
+import { DEFAULT_TIME_OPTIONS } from "@/constant";
 
 interface HeaderSectionProps {
   title: string;
   subtitle?: string;
-
-  // Time period selector
   showTimeSelector?: boolean;
   timeValue?: string;
   onTimeChange?: (value: string) => void;
   timeOptions?: Array<{ value: string; label: string }>;
-
-  // Additional actions
   actions?: React.ReactNode[];
-
-  // Layout customization
   className?: string;
   titleClassName?: string;
   subtitleClassName?: string;
-
-  // Responsive behavior
   stackOnMobile?: boolean;
 }
 
-const DEFAULT_TIME_OPTIONS = [
-  { value: "week", label: "This week" },
-  { value: "month", label: "This month" },
-  { value: "quarter", label: "This quarter" },
-  { value: "year", label: "This year" },
-];
+const getGreeting = () => {
+  const hour = new Date().getHours();
+  if (hour < 12) return "Good morning";
+  if (hour < 17) return "Good afternoon";
+  return "Good evening";
+};
 
 export const HeaderSection = ({
   title,
@@ -54,18 +46,7 @@ export const HeaderSection = ({
   subtitleClassName,
   stackOnMobile = true,
 }: HeaderSectionProps) => {
-  const getGreeting = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) return "Good morning";
-    if (hour < 17) return "Good afternoon";
-    return "Good evening";
-  };
-
-  // If title contains greeting placeholder, replace it
-  const processedTitle = title.includes("{greeting}")
-    ? title.replace("{greeting}", getGreeting())
-    : title;
-
+  const processedTitle = title.replace("{greeting}", getGreeting());
   const hasRightContent = showTimeSelector || actions.length > 0;
 
   return (
@@ -79,7 +60,6 @@ export const HeaderSection = ({
         className
       )}
     >
-      {/* Left content */}
       <div className="space-y-1 min-w-0 flex-1">
         <h1
           className={cn(
@@ -89,7 +69,6 @@ export const HeaderSection = ({
         >
           {processedTitle}
         </h1>
-
         {subtitle && (
           <p
             className={cn(
@@ -102,15 +81,9 @@ export const HeaderSection = ({
         )}
       </div>
 
-      {/* Right content */}
       {hasRightContent && (
         <div className="flex items-center gap-3 flex-shrink-0">
-          {/* Actions */}
-          {actions.map((action, index) => (
-            <React.Fragment key={index}>{action}</React.Fragment>
-          ))}
-
-          {/* Time period selector */}
+          {actions}
           {showTimeSelector && (
             <Select value={timeValue} onValueChange={onTimeChange}>
               <SelectTrigger className="w-40">

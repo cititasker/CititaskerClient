@@ -1,7 +1,7 @@
-import { API_ROUTES } from "@/constant";
+import { API_ROUTES, ROLE } from "@/constant";
 import api from "@/services/apiService";
 import { AxiosError } from "axios";
-import { TaskData } from "./tasks.types";
+import { IReschedule, TaskData } from "./tasks.types";
 
 export const getAllTasks = async (
   queryParams?: Record<string, any>
@@ -100,9 +100,9 @@ export function updateTask(data: any) {
     });
 }
 
-export function requestPayment(data: any) {
+export function completeTask(data: any) {
   return api
-    .post(`tasks/request-payment`, data)
+    .post(API_ROUTES.COMPLETE_TASK, data)
     .then((data) => {
       return data.data;
     })
@@ -136,6 +136,75 @@ export function replyQuestion(data: any) {
 export function getTaskQuestion(id: any) {
   return api
     .get(`${API_ROUTES.GET_QUESTIONS}?task_id=${id}`)
+    .then((data) => {
+      return data.data;
+    })
+    .catch((error: AxiosError) => {
+      throw error.response?.data;
+    });
+}
+
+export function createTaskReschedule(data: any) {
+  return api
+    .post(API_ROUTES.CREAT_TASK_RESCHEDULE, data)
+    .then((data) => {
+      return data.data;
+    })
+    .catch((error: AxiosError) => {
+      throw error.response?.data;
+    });
+}
+
+export function getReschedules(id: any): ApiResponsePromise<IReschedule[]> {
+  return api
+    .get(API_ROUTES.GET_RESCHEDULES(id))
+    .then((data) => {
+      return data.data;
+    })
+    .catch((error: AxiosError) => {
+      throw error.response?.data;
+    });
+}
+
+export function acceptReschedule({ data, role }: { data: any; role: TRole }) {
+  const url =
+    role === ROLE.poster
+      ? API_ROUTES.APPROVE_TASK_RESCHEDULE
+      : API_ROUTES.ACCEPT_TASK_RESCHEDULE;
+
+  return api
+    .post(url, data)
+    .then((data) => {
+      return data.data;
+    })
+    .catch((error: AxiosError) => {
+      throw error.response?.data;
+    });
+}
+
+export function rescheduleTask({
+  data,
+  rejectWithCounter,
+}: {
+  data: any;
+  rejectWithCounter: boolean;
+}) {
+  const url = rejectWithCounter
+    ? API_ROUTES.POSTER_RESCHEDULE_TASK
+    : API_ROUTES.TASKER_RESCHEDULE_TASK;
+  return api
+    .post(url, data)
+    .then((data) => {
+      return data.data;
+    })
+    .catch((error: AxiosError) => {
+      throw error.response?.data;
+    });
+}
+
+export function releasePayment(data: { task_id: number }) {
+  return api
+    .post(API_ROUTES.RELEASE_PAYMENT, data)
     .then((data) => {
       return data.data;
     })

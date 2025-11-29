@@ -17,6 +17,7 @@ import { Calendar, Clock, MapPin } from "lucide-react";
 
 interface PosterInfoProps {
   task: ITask;
+  handleOptionSelect: (action: MoreOptionItem) => void;
 }
 
 const PosterAvatar = ({
@@ -73,7 +74,7 @@ const TaskDetails = ({ task }: { task: ITask }) => {
         </h1>
         <p className="text-text-muted">Task ID: #{task.id}</p>
       </div>
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(140px,1fr))] gap-4">
+      <div className="grid grid-cols-1 gap-4">
         {infoItems.map(({ icon: Icon, label, value }, index) => (
           <div key={index} className="flex items-start gap-3">
             <div className="p-1 text-text-muted">
@@ -90,7 +91,10 @@ const TaskDetails = ({ task }: { task: ITask }) => {
   );
 };
 
-const PosterInfo: React.FC<PosterInfoProps> = ({ task }) => {
+const PosterInfo: React.FC<PosterInfoProps> = ({
+  task,
+  handleOptionSelect,
+}) => {
   const posterName = task.poster?.profile
     ? initializeName(task.poster?.profile)
     : "Anonymous User";
@@ -134,11 +138,11 @@ const PosterInfo: React.FC<PosterInfoProps> = ({ task }) => {
             />
 
             {/* Task details - visible based on screen size */}
-            <div className="max-w-[250px] hidden sm:inline-block">
+            <div className="w-fit hidden sm:inline-block">
               <TaskDetails task={task} />
             </div>
           </div>
-          <TaskBudget task={task} />
+          <TaskBudget task={task} handleOptionSelect={handleOptionSelect} />
         </div>
 
         {/* Task details for small screens */}

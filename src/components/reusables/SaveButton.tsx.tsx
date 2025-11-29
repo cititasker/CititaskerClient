@@ -1,15 +1,15 @@
 "use client";
 
 import React from "react";
-import { Button, ButtonProps } from "@/components/ui/button";
+import { ButtonProps } from "@/components/ui/button";
 import { Save } from "lucide-react";
+import FormButton from "../forms/FormButton";
 
 interface SaveButtonProps extends ButtonProps {
   hasChanges?: boolean;
   isLoading?: boolean;
   onClick: () => void;
   label?: string;
-  loadingLabel?: string;
   icon?: React.ReactNode;
   className?: string;
   sticky?: boolean;
@@ -20,33 +20,25 @@ const SaveButton: React.FC<SaveButtonProps> = ({
   isLoading = false,
   onClick,
   label = "Save",
-  loadingLabel = "Saving...",
   icon = <Save className="w-4 h-4 mr-2" />,
   className = "",
-  sticky = true,
+  sticky = false,
   ...rest
 }) => {
   if (!hasChanges) return null;
 
   return (
-    <div
-      className={`${sticky ? "sticky top-4 z-10" : ""} flex justify-end mb-6`}
-    >
-      <Button
+    <div className={`${sticky ? "sticky top-4 z-10" : ""} flex justify-end`}>
+      <FormButton
         onClick={onClick}
         disabled={isLoading}
         className={`btn-primary shadow-lg ${className}`}
         {...rest}
+        loading={isLoading}
+        icon={icon}
       >
-        {isLoading ? (
-          <span className="ml-2">{loadingLabel}</span>
-        ) : (
-          <>
-            {icon}
-            {label}
-          </>
-        )}
-      </Button>
+        {label}
+      </FormButton>
     </div>
   );
 };

@@ -7,9 +7,9 @@ import Success from "@/components/reusables/Success";
 import FormButton from "@/components/forms/FormButton";
 
 export default function StepFour() {
-  const {
-    taskDetails: { poster_profile },
-  } = useAppSelector((state) => state.task);
+  const { taskDetails } = useAppSelector((state) => state.task);
+
+  const poster_profile = taskDetails?.poster_profile;
 
   return (
     <div className="flex flex-col space-y-6 h-full">

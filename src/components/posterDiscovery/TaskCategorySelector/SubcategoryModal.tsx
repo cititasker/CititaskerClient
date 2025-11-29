@@ -44,10 +44,17 @@ export const SubcategoryModal = ({
       title={formatName(category.name)}
       description="Choose a specific service or create a general task"
       contentClassName="max-w-md"
+      bodyClassName="overflow-y-auto"
+      customFooter={
+        <FormButton
+          text="Post Task"
+          onClick={handleCreateTask}
+          className="w-full btn-primary h-12"
+        />
+      }
       size="md"
-      stickyHeader={true}
     >
-      <div className="space-y-6">
+      <div className="space-y-6 min-h-0">
         {/* Category header */}
         <div className="flex items-center gap-3 p-4 bg-primary-50 rounded-lg">
           <Icon className="w-8 h-8 text-primary-600" />
@@ -124,13 +131,6 @@ export const SubcategoryModal = ({
             </div>
           )}
         </div>
-
-        {/* Create task button */}
-        <FormButton
-          text="Post Task"
-          onClick={handleCreateTask}
-          className="w-full btn-primary h-12"
-        />
       </div>
     </CustomModal>
   );

@@ -1,14 +1,23 @@
 "use client";
 import React from "react";
+import dynamic from "next/dynamic";
 import CustomSheet from "@/components/reusables/CustomSheet";
 import useToggle from "@/hooks/useToggle";
-import FilterList from "@/components/browseTask/FilterList";
 import { ErrorState } from "@/components/browseTask/ErrorState";
 import { useSearch } from "@/components/browseTask/hooks/useSearch";
 import { useTasksQuery } from "@/components/browseTask/hooks/useTasksQuery";
 import { MyTaskHeader } from "@/components/shared/task/MyTaskHeader";
 import { MyTaskContent } from "@/components/shared/task/MyTaskContent";
 import { ROUTES } from "@/constant";
+
+const FilterList = dynamic(() => import("@/components/browseTask/FilterList"), {
+  loading: () => (
+    <div className="p-4 text-center text-muted-foreground">
+      Loading filters...
+    </div>
+  ),
+  ssr: false,
+});
 
 export default function BrowseTasksPage() {
   const showFilter = useToggle();
@@ -49,15 +58,17 @@ export default function BrowseTasksPage() {
         />
       </div>
 
-      {/* Filter Sheet */}
-      <CustomSheet
-        open={showFilter.isOpen}
-        onOpenChange={showFilter.setIsOpen}
-        title="Filter"
-        titleClassName="p-0 text-left"
-      >
-        <FilterList />
-      </CustomSheet>
+      {/* Filter Sheet - Only render when open */}
+      {showFilter.isOpen && (
+        <CustomSheet
+          open={showFilter.isOpen}
+          onOpenChange={showFilter.setIsOpen}
+          title="Filter"
+          titleClassName="p-0 text-left"
+        >
+          <FilterList />
+        </CustomSheet>
+      )}
     </div>
   );
 }

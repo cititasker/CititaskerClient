@@ -1,9 +1,13 @@
 "use client";
 import React from "react";
-import SlidingImageCarousel from "./SlidingImageCarousel";
 import HowItWorksListItem from "./HowItWorksListItem";
 import { motion } from "framer-motion";
 import SectionHeader from "../reusables/SectionHeader";
+import dynamic from "next/dynamic";
+
+const SlidingImageCarousel = dynamic(() => import("./SlidingImageCarousel"), {
+  ssr: false,
+});
 
 const data = [
   {

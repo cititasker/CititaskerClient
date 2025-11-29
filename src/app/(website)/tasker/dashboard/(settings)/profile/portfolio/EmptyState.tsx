@@ -3,8 +3,10 @@ import { MAX_IMAGES } from "./constant";
 
 export const EmptyState = ({
   onUpload,
+  inputRef,
 }: {
   onUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  inputRef?: React.RefObject<HTMLInputElement | null>;
 }) => (
   <div className="col-span-full">
     <div className="text-center py-12">
@@ -22,6 +24,7 @@ export const EmptyState = ({
         <Upload className="w-4 h-4 mr-2" />
         Upload First Image
         <input
+          ref={inputRef}
           type="file"
           accept=".jpg,.jpeg,.png"
           hidden

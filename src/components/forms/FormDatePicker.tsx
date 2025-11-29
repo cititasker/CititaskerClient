@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { format, parse, isValid } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import {
@@ -13,6 +12,11 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+
+// Enable custom parse format plugin
+dayjs.extend(customParseFormat);
 
 interface FormDatePickerProps {
   name: string;
@@ -23,7 +27,12 @@ interface FormDatePickerProps {
   placeholder?: string;
   disabled?: boolean;
   required?: boolean;
+  trigerClassName?: string;
+  displayFormat?: string;
 }
+
+const DATE_FORMAT = "DD-MM-YYYY";
+const DISPLAY_FORMAT = "DD/MM/YYYY";
 
 export default function FormDatePicker({
   name,
@@ -34,25 +43,48 @@ export default function FormDatePicker({
   placeholder = "Select a date",
   disabled = false,
   required = false,
+  trigerClassName,
+  displayFormat = DISPLAY_FORMAT,
 }: FormDatePickerProps) {
   const { control, formState } = useFormContext();
   const [isOpen, setIsOpen] = useState(false);
   const error = formState.errors[name];
+
+  const parseDate = (value: string) => {
+    if (!value) return null;
+    const parsed = dayjs(value, DATE_FORMAT, true); // strict parsing
+    return parsed.isValid() ? parsed.toDate() : null;
+  };
+
+  const isDateDisabled = (date: Date) => {
+    const currentDate = dayjs(date).startOf("day");
+
+    if (minDate && currentDate.isBefore(dayjs(minDate).startOf("day")))
+      return true;
+    if (maxDate && currentDate.isAfter(dayjs(maxDate).endOf("day")))
+      return true;
+    return false;
+  };
+
+  const handleDateSelect = (
+    date: Date | undefined,
+    onChange: (value: string) => void
+  ) => {
+    if (date) {
+      onChange(dayjs(date).format(DATE_FORMAT));
+      setIsOpen(false);
+    }
+  };
 
   return (
     <FormField
       name={name}
       control={control}
       render={({ field }) => {
-        // Parse the date value
-        const selectedDate = field.value
-          ? parse(field.value, "dd-MM-yyyy", new Date())
-          : null;
-
-        const isValidDate = selectedDate && isValid(selectedDate);
+        const selectedDate = parseDate(field.value);
 
         return (
-          <FormItem className={cn("space-y-2", className)}>
+          <FormItem className={className}>
             {label && (
               <FormLabel
                 htmlFor={name}
@@ -70,25 +102,18 @@ export default function FormDatePicker({
                   variant="outline"
                   disabled={disabled}
                   className={cn(
-                    // Base styles
                     "w-full h-12 px-4 shadow-none rounded-xl border justify-start font-normal transition-all duration-200",
-                    "bg-background hover:bg-background",
-                    "focus:ring-0 focus:ring-ring ring-offset-1",
-
-                    // Border states
+                    "bg-background hover:bg-background focus:ring-0 focus:ring-ring ring-offset-1",
                     error && "border-error focus:border-error",
-
-                    // Text states
                     !field.value && "text-text-muted",
                     field.value && "text-text-primary",
-
-                    // State styles
-                    disabled && "opacity-50 cursor-not-allowed"
+                    disabled && "cursor-not-allowed",
+                    trigerClassName
                   )}
                 >
-                  <CalendarIcon className="mr-3 h-4 w-4 text-text-muted" />
-                  {isValidDate
-                    ? format(selectedDate, "dd/MM/yyyy")
+                  <CalendarIcon className="h-4 w-4 text-text-muted" />
+                  {selectedDate
+                    ? dayjs(selectedDate).format(displayFormat)
                     : placeholder}
                 </Button>
               </PopoverTrigger>
@@ -96,23 +121,13 @@ export default function FormDatePicker({
               <PopoverContent
                 className="w-auto p-0 bg-background border-border-light rounded-xl shadow-lg"
                 align="start"
-                sideOffset={4}
+                sideOffset={2}
               >
                 <Calendar
                   mode="single"
-                  selected={isValidDate ? selectedDate : undefined}
-                  onSelect={(date) => {
-                    if (date) {
-                      const formatted = format(date, "dd-MM-yyyy");
-                      field.onChange(formatted);
-                    }
-                    setIsOpen(false);
-                  }}
-                  disabled={(date) => {
-                    if (minDate && date < minDate) return true;
-                    if (maxDate && date > maxDate) return true;
-                    return false;
-                  }}
+                  selected={selectedDate || undefined}
+                  onSelect={(date) => handleDateSelect(date, field.onChange)}
+                  disabled={isDateDisabled}
                   defaultMonth={!field.value && maxDate ? maxDate : undefined}
                   captionLayout="dropdown"
                   initialFocus
@@ -121,7 +136,7 @@ export default function FormDatePicker({
               </PopoverContent>
             </Popover>
 
-            <FormMessage className="text-error text-sm" />
+            <FormMessage />
           </FormItem>
         );
       }}

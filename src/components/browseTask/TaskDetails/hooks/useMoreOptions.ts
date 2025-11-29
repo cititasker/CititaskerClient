@@ -14,7 +14,7 @@ export const useMoreOptions = (state: TaskState) => {
       });
     }
 
-    if (state.hasCompletedTask) {
+    if (state.hasMadeOffer) {
       options.push({
         name: "add-to-alert",
         text: "Add task to alert",

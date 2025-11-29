@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-// import Profile from "@/components/shared/dashboard/profile";
 import ProfileEditor from "@/components/shared/dashboard/profile/ProfileEditor";
 import CustomTab from "@/components/reusables/CustomTab";
 

@@ -6,7 +6,7 @@ export interface TaskState {
   taskId: number | null;
   task: Partial<postTaskSchemaType>;
   offer: Partial<offerSchemaType> & { payable_id?: number };
-  taskDetails: Partial<ITask>;
+  taskDetails: ITask | null;
   taskersOffer: IOffer | null;
   isDataLoaded: boolean;
 }
@@ -15,7 +15,7 @@ const initialState: TaskState = {
   taskId: null,
   task: {},
   offer: {},
-  taskDetails: {},
+  taskDetails: null,
   taskersOffer: null,
   isDataLoaded: false,
 };
@@ -33,7 +33,7 @@ const taskDetailIdSlice = createSlice({
     setOfferData: (state, { payload }) => {
       state.offer = payload;
     },
-    setTaskDetails: (state, { payload }) => {
+    setTaskDetails: (state, { payload }: PayloadAction<ITask>) => {
       state.taskDetails = payload;
     },
     setUserTaskOffer: (state, { payload }) => {

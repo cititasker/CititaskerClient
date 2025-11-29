@@ -7,25 +7,32 @@ import { Label } from "@/components/ui/label";
 import { API_ROUTES } from "@/constant";
 import useToggle from "@/hooks/useToggle";
 import { useSnackbar } from "@/providers/SnackbarProvider";
-import { useRequestPayment } from "@/services/tasks/tasks.hook";
+import { useCompleteTask } from "@/services/tasks/tasks.hook";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
 import React from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
+import { useAppSelector } from "@/store/hook";
+import { initializeName } from "@/utils";
 
+// Define the image schema structure
+const uploadedImageSchema = z.object({
+  id: z.string(),
+  isUploaded: z.boolean(),
+  name: z.string(),
+  publicId: z.string(),
+  size: z.number(),
+  type: z.string(),
+  url: z.string().url(),
+});
+
+// Main form schema
 const schema = z.object({
   images: z
-    .array(
-      z.object({
-        file: z.instanceof(File),
-        src: z.string().min(1, "Image source is required"),
-        new: z.boolean().optional(),
-      })
-    )
-    .min(2, "You must upload at least 2 images"),
-
+    .array(uploadedImageSchema)
+    .min(2, "You must upload at least 2 images")
+    .max(4, "You can upload a maximum of 4 images"),
   agreed: z
     .boolean()
     .refine((v) => v === true, { message: "You must confirm task completion" }),
@@ -36,10 +43,16 @@ type schemaType = z.infer<typeof schema>;
 export default function CompleteTaskModal({ isOpen, onClose }: IModal) {
   const queryClient = useQueryClient();
   const { showSnackbar } = useSnackbar();
-  const { id } = useParams() as { id: string };
+  const { taskDetails } = useAppSelector((s) => s.task);
+  const id = taskDetails?.id;
   const success = useToggle();
 
-  const requestPaymentMutation = useRequestPayment();
+  const completeTask = useCompleteTask();
+
+  const posterName = initializeName({
+    first_name: taskDetails?.poster?.profile.first_name,
+    last_name: taskDetails?.poster?.profile.last_name,
+  });
 
   const methods = useForm<schemaType>({
     defaultValues: {
@@ -50,22 +63,28 @@ export default function CompleteTaskModal({ isOpen, onClose }: IModal) {
   });
   const { handleSubmit, reset } = methods;
 
-  const onSubmit = () => {
-    requestPaymentMutation.mutate(
-      { task_id: id },
-      {
-        onSuccess: (data) => {
-          success.handleOpen();
-          showSnackbar(data.message, "success");
-          queryClient.invalidateQueries({
-            queryKey: [API_ROUTES.GET_TASK_BY_ID, id],
-          });
-        },
-        onError: (error) => {
-          showSnackbar(error.message, "error");
-        },
-      }
-    );
+  const onSubmit = (data: schemaType) => {
+    console.log("Form data:", data);
+
+    const formData = new FormData();
+    formData.append("task_id", String(id));
+
+    data.images.forEach((image) => {
+      formData.append("completion_evidence[]", image.url);
+    });
+
+    completeTask.mutate(formData, {
+      onSuccess: (data) => {
+        success.handleOpen();
+        showSnackbar(data.message, "success");
+        queryClient.invalidateQueries({
+          queryKey: [API_ROUTES.GET_TASK_BY_ID, String(id)],
+        });
+      },
+      onError: (error) => {
+        showSnackbar(error.message, "error");
+      },
+    });
   };
 
   const handleClose = () => {
@@ -73,18 +92,18 @@ export default function CompleteTaskModal({ isOpen, onClose }: IModal) {
     success.handleClose();
     reset();
   };
+
   return (
     <CustomModal
       isOpen={isOpen}
       onClose={handleClose}
-      contentClassName="max-w-md"
       title={!success.isOpen ? "Complete task" : undefined}
     >
       {!success.isOpen ? (
         <div>
           <div className="mb-2.5">
             <p className="text-black-2 text-sm">
-              Please provide pictures/videos of the task completed
+              Please provide pictures of the task completed
             </p>
           </div>
           <FormProvider {...methods}>
@@ -92,9 +111,26 @@ export default function CompleteTaskModal({ isOpen, onClose }: IModal) {
               <div>
                 <Label className="text-xs text-black mb-4">
                   File supported: JPEG (.jpeg) PNG (.png)
-                  <br /> Maximum size: 5mb
+                  <br /> Maximum size: 3mb
                 </Label>
-                <ImageUploader name="images" multiple limit={4} />
+                <ImageUploader
+                  name="images"
+                  useCloudinary={true}
+                  folder="task-images"
+                  tags={["task"]}
+                  limit={4}
+                  maxFileSize={3}
+                  showFileDetails={true}
+                  gridCols={{
+                    base: 1,
+                    sm: 2,
+                    md: 3,
+                    lg: 4,
+                  }}
+                  uploadBoxIconSize="sm"
+                  removeButtonSize="sm"
+                  gap="sm"
+                />
               </div>
               <FormCheckbox
                 name="agreed"
@@ -104,7 +140,7 @@ export default function CompleteTaskModal({ isOpen, onClose }: IModal) {
                 type="submit"
                 size="lg"
                 className="mt-5 mx-auto px-10"
-                loading={requestPaymentMutation.isPending}
+                loading={completeTask.isPending}
               >
                 Send
               </FormButton>
@@ -114,8 +150,8 @@ export default function CompleteTaskModal({ isOpen, onClose }: IModal) {
       ) : (
         <Success
           title="Success!"
-          desc="Judith N. has been notified of the completed task for review and to release payment."
-          action={<FormButton text="Message" className="w-full" />}
+          desc={`${posterName} has been notified of the completed task for review and to release payment.`}
+          action={<FormButton text="Message" className="w-full" href="/" />}
         />
       )}
     </CustomModal>

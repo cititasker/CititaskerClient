@@ -1,5 +1,5 @@
 export const LoadingGrid = () => (
-  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
+  <div className="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4">
     {Array.from({ length: 8 }, (_, i) => (
       <div
         key={i}

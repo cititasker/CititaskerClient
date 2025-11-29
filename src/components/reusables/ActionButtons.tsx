@@ -12,7 +12,6 @@ interface IProps {
   cancelStyle?: string;
   className?: string;
   handleCancel?: any;
-  showCancelButton?: boolean;
   handleSubmit?: any;
   type?: "submit" | "button";
   disabled?: boolean;
@@ -24,7 +23,6 @@ const ActionsButtons = ({
   loading,
   className,
   handleCancel,
-  showCancelButton = true,
   handleSubmit,
   okStyle,
   cancelStyle,
@@ -43,7 +41,7 @@ const ActionsButtons = ({
         className
       )}
     >
-      {handleCancel && showCancelButton && (
+      {handleCancel && (
         <FormButton
           variant={cancelVariant}
           text={cancelText}

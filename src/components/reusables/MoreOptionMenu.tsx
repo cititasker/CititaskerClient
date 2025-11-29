@@ -62,7 +62,7 @@ export default function MoreOptionsMenu({
       key={option.name}
       onSelect={() => handleOptionSelect(option)}
       className={cn(
-        "flex items-center gap-3 px-3 py-2.5 cursor-pointer transition-colors duration-150",
+        "flex items-center gap-3 px-3 py-2 cursor-pointer transition-colors duration-150",
         "focus:outline-none focus:ring-0",
         getOptionStyle(option.type),
         option.disabled && "opacity-50 cursor-not-allowed pointer-events-none"
@@ -99,11 +99,11 @@ export default function MoreOptionsMenu({
 
       <DropdownMenuContent
         className={cn(
-          "min-w-[200px] bg-background border-border-light shadow-lg",
+          "w-[var(--radix-dropdown-menu-trigger-width)] bg-background border-border-light shadow-lg",
           "rounded-lg p-1 animate-in fade-in-0 zoom-in-95"
         )}
         align={align}
-        sideOffset={4}
+        sideOffset={2}
       >
         {groupedOptions.primary.map(renderMenuItem)}
 

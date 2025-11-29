@@ -4,7 +4,7 @@ import { animationVariants as variants } from "@/constant";
 
 // Type for the props that the component will receive
 interface AnimatedStepProps {
-  currentStep: number; // Current step number
+  currentStep: number | string | null | undefined; // Current step number
   animationVariants?: Variants; // Optional custom animation variants
   renderStepContent?: () => React.ReactNode; // Function that returns the content of the current step
   children?: React.ReactNode;
@@ -30,7 +30,7 @@ const AnimatedStep: React.FC<AnimatedStepProps> = ({
           damping: 30,
           mass: 1,
         }}
-        className="h-full flex flex-col"
+        className="flex flex-1 min-h-0 flex-col"
       >
         {children ?? renderStepContent?.()}
       </motion.div>

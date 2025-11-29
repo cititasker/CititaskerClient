@@ -7,10 +7,17 @@ import {
   Link as LinkIcon,
   Send,
 } from "lucide-react";
+import dynamic from "next/dynamic";
 import ToolbarButton from "./ToolbarButton";
-import EmojiDropdown from "./EmojiDropdown";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+
+const EmojiDropdown = dynamic(() => import("./EmojiDropdown"), {
+  loading: () => (
+    <div className="w-8 h-8 sm:w-9 sm:h-9 bg-neutral-100 rounded animate-pulse" />
+  ),
+  ssr: false,
+});
 
 interface EditorToolbarProps {
   editor: any;

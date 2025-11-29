@@ -26,7 +26,7 @@ export const postTaskSchema = z.object({
     .nullable()
     .refine((value) => value, { message: "Please select a category" }),
   images: z
-    .array(z.any()) // If you're using File objects, you can also use z.custom<File>()
+    .array(z.any())
     .max(MAX_IMAGE_COUNT, `You can upload up to ${MAX_IMAGE_COUNT} images`)
     // .refine(
     //   (files) =>
@@ -81,26 +81,18 @@ export type postTaskSchemaType = z.infer<typeof postTaskSchema>;
 
 export const rescheduleTaskSchema = z
   .object({
-    dateTime: z.object({
-      date: z.string(),
-      time: z.string(),
-    }),
+    date: z.string().min(1, "Date is required"),
+    time: z.string().optional(),
+    showTimeOfDay: z.boolean(),
   })
-  .superRefine(({ dateTime }, ctx) => {
-    const { date, time } = dateTime;
-    if (!date) {
-      ctx.addIssue({
-        path: ["dateTime"],
-        code: z.ZodIssueCode.custom,
-        message: "Date is required",
-      });
+  .refine(
+    (data) => {
+      return !data.showTimeOfDay || (data.time && data.time.trim() !== "");
+    },
+    {
+      path: ["time"],
+      message: "Time is required when selecting a time slot",
     }
-    if (date && !time) {
-      ctx.addIssue({
-        path: ["dateTime"],
-        code: z.ZodIssueCode.custom,
-        message: "Time is required",
-      });
-    }
-  });
+  );
+
 export type rescheduleTaskSchemaType = z.infer<typeof rescheduleTaskSchema>;

@@ -6,7 +6,7 @@ import { TaskListSkeleton } from "@/components/skeletons/TaskListSkeleton";
 import { LoadingIndicator } from "@/components/shared/task/LoadingIndicator";
 import TaskCardList from "@/components/shared/task/TaskList";
 import { EnhancedEmptyTasksState } from "@/components/shared/task/EnhancedEmptyTasksState";
-import { EmptyTasksState } from "@/components/shared/task/EnhancedEmptyTasksState"; // fallback
+import { EmptyTasksState } from "@/components/shared/task/EnhancedEmptyTasksState";
 
 interface InfiniteTaskListProps {
   tasks: ITask[];

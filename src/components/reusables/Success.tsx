@@ -23,7 +23,7 @@ export default function Success({
       </div>
 
       {children ?? (
-        <div className="space-y-3">
+        <div className="space-y-3 pb-8">
           <h3 className="text-2xl font-bold text-neutral-900">{title}</h3>
           <p className="text-neutral-600 max-w-md mx-auto">{desc}</p>
         </div>

@@ -1,3 +1,4 @@
+// auth.ts
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
@@ -26,10 +27,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   secret: process.env.AUTH_SECRET,
   session: {
     strategy: "jwt",
-    maxAge: 60 * 60 * 24 * 7, // 7 days session lifetime
+    maxAge: 60 * 60 * 24 * 7, // 7 days
+    updateAge: 60 * 60 * 24, // ✅ Update session every 24 hours instead of every request
   },
   jwt: {
-    maxAge: 60 * 60 * 24 * 7, // 7 days token lifetime
+    maxAge: 60 * 60 * 24 * 7, // 7 days
   },
   callbacks: {
     signIn: async ({ account }) => account?.provider !== "google",
@@ -68,4 +70,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   pages: {
     signIn: ROUTES.LOGIN,
   },
+  // ✅ Add these to reduce session checks
+  events: {
+    // Log for debugging (remove in production)
+    async session() {
+      if (process.env.NODE_ENV === "development") {
+        console.log("Session accessed:", new Date().toISOString());
+      }
+    },
+  },
+  debug: process.env.NODE_ENV === "development",
 });

@@ -55,7 +55,7 @@ const MakeOfferModal: React.FC<MakeOfferModalProps> = ({
             nextStep={nextStep}
             budgetLabel={`${edit ? "Update" : "Enter"} your offer amount`}
             firstRowLabel="Total offer"
-            increasePrice={edit}
+            isEdit={edit}
           />
         );
       case 2:
