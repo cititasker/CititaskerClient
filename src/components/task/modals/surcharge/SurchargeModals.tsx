@@ -1,14 +1,36 @@
+import { useEffect } from "react";
 import CustomModal from "@/components/reusables/CustomModal";
 import AnimatedStep from "@/components/reusables/AnimatedStep";
 import { DeleteConfirmModal } from "@/components/reusables/Modals/ConfirmModal";
 import dynamic from "next/dynamic";
+import Loader from "@/components/reusables/Loading";
 
-const Request = dynamic(() => import("./Request"), { ssr: false });
-const AcceptRequest = dynamic(() => import("./AcceptRequest"), { ssr: false });
-const RejectRequest = dynamic(() => import("./RejectRequest"), { ssr: false });
+const Request = dynamic(() => import("./Request"), {
+  ssr: false,
+  loading: () => <Loader />,
+});
+
+const AcceptRequest = dynamic(() => import("./AcceptRequest"), {
+  ssr: false,
+  loading: () => <Loader />,
+});
+
+const RejectRequest = dynamic(() => import("./RejectRequest"), {
+  ssr: false,
+  loading: () => <Loader />,
+});
+
 const PaymentSuccess = dynamic(() => import("./PaymentSuccess"), {
   ssr: false,
+  loading: () => <Loader />,
 });
+
+// Prefetch map for surcharge steps
+const prefetchMap = {
+  request: () => import("./AcceptRequest"),
+  accept: () => import("./PaymentSuccess"),
+  reject: () => import("./Request"),
+} as const;
 
 interface SurchargeModalsProps {
   task: ITask;
@@ -41,6 +63,20 @@ export default function SurchargeModals({
     reject: "Reason for rejection",
     success: undefined,
   };
+
+  // Prefetch next likely step
+  useEffect(() => {
+    if (!surchargeModal.isOpen) return;
+
+    const prefetchFn = prefetchMap[surchargeStep as keyof typeof prefetchMap];
+    if (prefetchFn) {
+      const timeoutId = setTimeout(() => {
+        prefetchFn().catch(console.error);
+      }, 100);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [surchargeStep, surchargeModal.isOpen]);
 
   const closeModal = () => {
     setSurchargeStep("request");

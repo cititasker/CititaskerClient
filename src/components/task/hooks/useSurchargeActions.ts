@@ -11,6 +11,7 @@ import useModal from "@/hooks/useModal";
 import Paystack from "@/utils/paystackSetup";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import { errorHandler } from "@/utils";
+import { useTaskAlert } from "@/providers/TaskAlertContext";
 
 type SurchargeStep = "request" | "accept" | "reject" | "success";
 
@@ -19,6 +20,7 @@ export const useSurchargeActions = (task: ITask) => {
   const queryClient = useQueryClient();
   const { showSnackbar } = useSnackbar();
   const { purgeOffer } = usePurgeData();
+  const { hideAlert } = useTaskAlert();
 
   const surchargeModal = useModal();
   const rejectSurchargeModal = useModal();
@@ -55,6 +57,7 @@ export const useSurchargeActions = (task: ITask) => {
         reference: hash_id,
         handleSuccess: () => {
           invalidateQueries();
+          hideAlert(`surcharge_${task.id}`);
           setSurchargeStep("success");
           surchargeModal.openModal();
         },

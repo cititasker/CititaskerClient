@@ -13,7 +13,6 @@ import { useAppDispatch } from "@/store/hook";
 import { setTaskDetails } from "@/store/slices/task";
 import { useTaskActions, useTaskAlerts } from "@/components/task/hooks";
 import { TaskModals } from "@/components/task/modals";
-import { TaskAlertBanner } from "@/components/task/alerts";
 import {
   useFetchTaskQuestion,
   useFetchUserTaskById,
@@ -36,7 +35,7 @@ export default function Offer() {
 
   const actions = useTaskActions({ task });
 
-  const { alerts } = useTaskAlerts({
+  useTaskAlerts({
     task,
     acceptedOffer: actions.acceptedOffer,
     role: "poster",
@@ -80,6 +79,7 @@ export default function Offer() {
       <div className="p-top bg-background-secondary h-full flex flex-col">
         <div className="container-w py-0 lg:flex-1 lg:min-h-0">
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:h-full">
+            {/* Left column */}
             <div className="lg:col-span-2 space-y-6 lg:overflow-y-auto no-scrollbar">
               <TaskStatusCard
                 date={task.date}
@@ -103,14 +103,8 @@ export default function Offer() {
                 }
               />
             </div>
-
+            {/* Right column */}
             <div className="lg:col-span-3 lg:min-h-0">
-              <div className="space-y-2 mb-2">
-                {alerts.map((alert) => (
-                  <TaskAlertBanner key={alert.id} alert={alert} />
-                ))}
-              </div>
-
               <CustomTab
                 items={tabs}
                 className="lg:h-full"

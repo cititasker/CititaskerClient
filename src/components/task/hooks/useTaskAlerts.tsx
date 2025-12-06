@@ -1,5 +1,6 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { getPartialInitials } from "@/utils";
+import { useTaskAlert } from "@/providers/TaskAlertContext";
 
 export interface TaskAlert {
   id: string;
@@ -27,72 +28,75 @@ export const useTaskAlerts = ({
   onRescheduleAction,
   onReleasePaymentAction,
 }: UseTaskAlertsProps) => {
+  const { showAlert } = useTaskAlert();
+  const shownAlertsRef = useRef<Set<string>>(new Set());
+
   const alerts = useMemo(() => {
     const alertList: TaskAlert[] = [];
 
-    // Release Payment alert (Highest Priority) - Poster only
-    if (
-      role === "poster" &&
-      task?.status === "completed" &&
-      task?.payment_requested
-    ) {
+    if (!task) return alertList;
+
+    const { status, payment_requested, has_surcharge_requests, reschedule } =
+      task;
+    const agreedDate = reschedule?.agreed_date;
+    const agreedTime = reschedule?.agreed_time;
+
+    // Release Payment alert
+    if (role === "poster" && status === "completed" && payment_requested) {
       const taskerName = getPartialInitials(task?.tasker?.profile);
       alertList.push({
-        id: "release_payment",
+        id: `release_payment_${task?.id}`,
         type: "release_payment",
         priority: 0,
         message: (
           <p>
             {taskerName} has completed the task
-            <span className="text-primary"> "{task?.name}"</span> and is
+            <span className="font-semibold"> "{task?.name}"</span> and is
             requesting payment release.
           </p>
         ),
-        actionText: "Release payment",
+        actionText: "Release Payment",
         onAction: onReleasePaymentAction,
       });
     }
 
-    // Surcharge alert - Poster only
-    if (role === "poster" && task?.has_surcharge_requests && acceptedOffer) {
+    // Surcharge alert
+    if (role === "poster" && has_surcharge_requests && acceptedOffer) {
       const taskerName = getPartialInitials(acceptedOffer.tasker);
       alertList.push({
-        id: "surcharge",
+        id: `surcharge_${task?.id}`,
         type: "surcharge",
         priority: 1,
         message: (
           <p>
             {taskerName} requested additional payment for
-            <span className="text-primary"> "{task?.name}"</span>
+            <span className="font-semibold"> "{task?.name}"</span>
           </p>
         ),
-        actionText: "Respond to request",
+        actionText: "Respond to Request",
         onAction: onSurchargeAction,
       });
     }
-
-    const agreedDate = task?.reschedule?.agreed_date;
-    const agreedTime = task?.reschedule?.agreed_time;
 
     // Reschedule alert - Poster
     if (
       !agreedDate &&
       !agreedTime &&
-      task?.reschedule?.initiated_by == "tasker" &&
+      reschedule?.initiated_by === "tasker" &&
       role === "poster"
     ) {
       const taskerName = getPartialInitials(task?.tasker?.profile);
       alertList.push({
-        id: "reschedule",
+        id: `reschedule_${task?.id}`,
         type: "reschedule",
         priority: 2,
         message: (
           <p>
             {taskerName} is requesting to reschedule the task
-            <span className="text-primary"> "{task?.name}"</span>
+            <span className="font-semibold"> "{task?.name}"</span>
           </p>
         ),
-        actionText: "Respond to request",
+        actionText: "Respond to Request",
         onAction: onRescheduleAction,
       });
     }
@@ -101,21 +105,21 @@ export const useTaskAlerts = ({
     if (
       !agreedDate &&
       !agreedTime &&
-      task?.reschedule?.initiated_by == "poster" &&
+      reschedule?.initiated_by === "poster" &&
       role === "tasker"
     ) {
-      const posterName = getPartialInitials(task.poster.profile);
+      const posterName = getPartialInitials(task?.poster.profile);
       alertList.push({
-        id: "reschedule",
+        id: `reschedule_${task?.id}`,
         type: "reschedule",
         priority: 2,
         message: (
           <p>
             {posterName} is requesting to reschedule the task
-            <span className="text-text-primary"> "{task.name}"</span>
+            <span className="font-semibold"> "{task?.name}"</span>
           </p>
         ),
-        actionText: "Respond to request",
+        actionText: "Respond to Request",
         onAction: onRescheduleAction,
       });
     }
@@ -129,6 +133,21 @@ export const useTaskAlerts = ({
     onRescheduleAction,
     onReleasePaymentAction,
   ]);
+
+  const alertsKey = useMemo(() => alerts.map((a) => a.id).join(","), [alerts]);
+
+  useEffect(() => {
+    if (shownAlertsRef.current.has(alertsKey)) return;
+
+    alerts.forEach((alert) => showAlert(alert));
+    shownAlertsRef.current.add(alertsKey);
+
+    // Cleanup
+    if (shownAlertsRef.current.size > 10) {
+      const entries = Array.from(shownAlertsRef.current);
+      shownAlertsRef.current = new Set(entries.slice(-5));
+    }
+  }, [alertsKey, alerts]);
 
   return {
     alerts,

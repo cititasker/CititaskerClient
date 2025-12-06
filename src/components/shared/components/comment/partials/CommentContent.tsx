@@ -81,15 +81,14 @@ export const CommentContent: React.FC<CommentContentProps> = ({
     <div
       className={cn(
         "group relative transition-all duration-300 ease-in-out",
-        "rounded-2xl rounded-tl-none shadow-sm",
-        "border border-transparent hover:border-primary/20",
+        "rounded-2xl rounded-l-none shadow-sm",
         isRootComment
-          ? "bg-gradient-to-br from-primary-50 to-primary-100/80 text-primary-900"
+          ? "bg-gradient-to-br from-primary-50 to-primary-100/80 text-primary-900 border-l-4 border-primary-600"
           : "bg-background hover:bg-gray-50/50 text-gray-800 border-gray-100"
       )}
     >
       {/* Content */}
-      <div className="p-4 sm:p-5">
+      <div className="p-4">
         {comment.content && (
           <div
             className={cn(
@@ -132,7 +131,6 @@ export const CommentContent: React.FC<CommentContentProps> = ({
                     className={cn(
                       "group/file flex items-center gap-2 px-3 py-2 rounded-lg",
                       "text-xs sm:text-sm font-medium transition-all duration-200",
-                      "border border-gray-200 hover:border-primary-300",
                       "bg-white hover:bg-primary-50",
                       "cursor-pointer hover:shadow-sm",
                       "min-w-0 max-w-full sm:max-w-xs"
@@ -223,11 +221,6 @@ export const CommentContent: React.FC<CommentContentProps> = ({
           </div>
         )}
       </div>
-
-      {/* Subtle accent line for root comments */}
-      {isRootComment && (
-        <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-primary-400 to-primary-600 rounded-l-2xl" />
-      )}
     </div>
   );
 };

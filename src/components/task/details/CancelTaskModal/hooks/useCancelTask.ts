@@ -35,7 +35,6 @@ export type CancelTaskFormData = z.infer<typeof schema>;
 
 export const useCancelTask = () => {
   const [currentStep, setCurrentStep] = useState(1);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const { taskDetails } = useAppSelector((state) => state.task);
 
   const methods = useForm<CancelTaskFormData>({
@@ -82,28 +81,18 @@ export const useCancelTask = () => {
   };
 
   const handleSubmit = async () => {
-    setIsSubmitting(true);
-    try {
-      // API call here
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Mock API call
-      setCurrentStep(3); // Success step
-    } catch (error) {
-      console.error("Cancellation failed:", error);
-    } finally {
-      setIsSubmitting(false);
-    }
+    setCurrentStep(3); // Success step
   };
 
   const resetForm = () => {
     reset();
     setCurrentStep(1);
-    setIsSubmitting(false);
   };
 
   return {
     methods,
     currentStep,
-    isSubmitting,
+    isSubmitting: false,
     selectedReason,
     amountPaid,
     feeBreakdown,

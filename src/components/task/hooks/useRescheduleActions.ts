@@ -11,6 +11,7 @@ import useModal from "@/hooks/useModal";
 import { rescheduleTaskSchemaType } from "@/components/task/modals/reschedule/schema";
 import { toast } from "sonner";
 import { RescheduleStep } from "../modals/reschedule/constants";
+import { useTaskAlert } from "@/providers/TaskAlertContext";
 
 interface UseRescheduleActionsProps {
   task: ITask;
@@ -20,6 +21,7 @@ export const useRescheduleActions = ({ task }: UseRescheduleActionsProps) => {
   const [step, setStep] = useState<RescheduleStep>("request");
   const queryClient = useQueryClient();
   const rescheduleModal = useModal();
+  const { hideAlert } = useTaskAlert();
 
   const rescheduleTask = useRescheduleTask();
   const createReschedule = useCreateReschedule();
@@ -97,6 +99,7 @@ export const useRescheduleActions = ({ task }: UseRescheduleActionsProps) => {
       {
         onSuccess: () => {
           invalidateQueries();
+          hideAlert(`reschedule_${task?.id}`);
           setStep("success");
         },
         onError: () => {

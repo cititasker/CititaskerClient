@@ -1,11 +1,9 @@
 import React from "react";
 import CustomModal from "@/components/reusables/CustomModal";
 import { FormProvider } from "react-hook-form";
-import { ArrowRight } from "lucide-react";
 import { useCancelTask } from "./hooks/useCancelTask";
 import { StepOne } from "./StepOne";
 import { StepTwo } from "./StepTwo";
-import FormButton from "@/components/forms/FormButton";
 import Success from "@/components/reusables/Success";
 import ActionsButtons from "@/components/reusables/ActionButtons";
 
@@ -14,20 +12,22 @@ interface CancelTaskModalProps {
   onClose: () => void;
 }
 
-const stepConfig = [
-  {
-    title: "Reason for Cancellation",
+const FORM_ID = "cancel-task-form";
+
+const stepConfig = {
+  1: {
+    title: "Reason for cancellation",
     description: "Help us understand why you want to cancel this task",
   },
-  {
-    title: "Cancellation Fee",
-    description: "Review the refund breakdown and confirm cancellation",
+  2: {
+    title: "Confirm cancellation",
+    description: "Review and confirm cancellation",
   },
-  {
-    title: "Confirmation",
+  3: {
+    title: "",
     description: "",
   },
-];
+} as const;
 
 const CancelTaskModal: React.FC<CancelTaskModalProps> = ({
   isOpen,
@@ -47,44 +47,19 @@ const CancelTaskModal: React.FC<CancelTaskModalProps> = ({
   } = useCancelTask();
 
   const handleClose = () => {
-    if (currentStep === 3) {
-      onClose();
-      resetForm();
-    } else {
-      onClose();
-      setTimeout(resetForm, 300); // Delay reset for smooth modal close
-    }
+    onClose();
+    setTimeout(resetForm, currentStep === 3 ? 0 : 300);
   };
 
-  const { title, description } = stepConfig[currentStep - 1];
+  const { title, description } =
+    stepConfig[currentStep as keyof typeof stepConfig];
 
-  const renderStepContent = () => {
-    switch (currentStep) {
-      case 1:
-        return (
-          <StepOne reasons={cancelReasons} selectedReason={selectedReason} />
-        );
-      case 2:
-        return <StepTwo amountPaid={amountPaid} />;
-      case 3:
-        return (
-          <Success
-            title="Task Cancelled Successfully"
-            desc="Your task has been cancelled and the refund will be processed within 3-5
-        business days. You'll receive an email confirmation with the refund
-        details shortly."
-            action={
-              <FormButton
-                text="Continue"
-                icon={<ArrowRight className="w-4 h-4 ml-2" />}
-                onClick={handleClose}
-              />
-            }
-          />
-        );
-      default:
-        return null;
-    }
+  const isSuccess = currentStep === 3;
+  const showFooter = !isSuccess;
+
+  const getButtonText = () => {
+    if (isSubmitting) return "Processing";
+    return currentStep === 2 ? "Cancel Task" : "Continue";
   };
 
   return (
@@ -94,28 +69,35 @@ const CancelTaskModal: React.FC<CancelTaskModalProps> = ({
       title={title}
       description={description}
       contentClassName="max-w-lg"
+      customFooter={
+        showFooter && (
+          <ActionsButtons
+            formId={FORM_ID}
+            type={currentStep === 2 ? "submit" : "button"}
+            cancelVariant="outline"
+            handleCancel={currentStep > 1 && handleBack}
+            handleSubmit={currentStep === 1 ? handleNext : undefined}
+            okText={getButtonText()}
+          />
+        )
+      }
     >
       <FormProvider {...methods}>
         <form
+          id={FORM_ID}
           onSubmit={methods.handleSubmit(handleSubmit)}
-          className="space-y-6 flex flex-col h-full"
+          className="space-y-6"
         >
-          <div className="flex-1 overflow-y-auto no-scrollbar">
-            {renderStepContent()}
-          </div>
-          {currentStep < 3 && (
-            <ActionsButtons
-              type={currentStep === 2 ? "submit" : "button"}
-              cancelVariant="outline"
-              handleCancel={currentStep > 1 && handleBack}
-              handleSubmit={currentStep === 1 ? handleNext : undefined}
-              okText={
-                isSubmitting
-                  ? "Processing"
-                  : currentStep === 2
-                  ? "Cancel Task"
-                  : "Continue"
-              }
+          {currentStep === 1 && (
+            <StepOne reasons={cancelReasons} selectedReason={selectedReason} />
+          )}
+
+          {currentStep === 2 && <StepTwo amountPaid={amountPaid} />}
+
+          {isSuccess && (
+            <Success
+              title="Task Cancelled Successfully"
+              desc="Your task has been cancelled and the refund will be processed into your wallet. You'll receive an email confirmation with the refund details shortly."
             />
           )}
         </form>

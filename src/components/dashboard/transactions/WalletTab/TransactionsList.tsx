@@ -1,6 +1,6 @@
 import React from "react";
 import { TransactionCard } from "./TransactionCard";
-import { WalletTransaction } from "../../../hooks/useWallet";
+import { WalletTransaction } from "../../hooks/useWallet";
 import { Wallet } from "lucide-react";
 
 interface TransactionsListProps {

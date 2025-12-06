@@ -12,6 +12,7 @@ import { API_ROUTES } from "@/constant";
 import { errorHandler } from "@/utils";
 import useModal from "@/hooks/useModal";
 import Paystack from "@/utils/paystackSetup";
+import { useTaskAlert } from "@/providers/TaskAlertContext";
 
 const paymentSchema = z.object({
   agreed: z.boolean().refine((v) => v, {
@@ -36,6 +37,7 @@ export const usePaymentActions = (task: ITask) => {
   const { showSnackbar } = useSnackbar();
   const [selectedOffer, setSelectedOffer] = useState<IOffer>();
   const [offerStep, setOfferStep] = useState<"review" | "success">("review");
+  const { hideAlert } = useTaskAlert();
 
   const offerModal = useModal();
   const releasePaymentModal = useModal();
@@ -105,6 +107,7 @@ export const usePaymentActions = (task: ITask) => {
       {
         onSuccess: () => {
           invalidateQueries();
+          hideAlert(`release_payment_${task.id}`);
           onSuccess();
         },
         onError: (err) => showSnackbar(errorHandler(err), "error"),

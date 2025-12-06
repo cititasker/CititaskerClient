@@ -147,7 +147,7 @@ const UserOffer = ({ offer, task, toggleModal }: IProps) => {
   return (
     <Card className="p-4 sm:p-6 border border-border-medium hover:border-border-medium mb-6 last:mb-0 animate-fade-in">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
         <TaskerInfo tasker={offer.tasker} task={task} />
 
         {/* Price - Always visible on desktop, mobile shows below */}

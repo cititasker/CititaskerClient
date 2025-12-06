@@ -77,7 +77,6 @@ const SignUpPage = () => {
   useEffect(() => {
     const prefetchFn = prefetchMap[currentStep as keyof typeof prefetchMap];
     if (prefetchFn) {
-      // Prefetch after a slight delay to not block current step rendering
       const timeoutId = setTimeout(() => {
         prefetchFn().catch(console.error);
       }, 100);

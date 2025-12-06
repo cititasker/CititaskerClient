@@ -10,7 +10,6 @@ import { useFetchTaskById } from "@/services/tasks/tasks.hook";
 import { Card } from "@/components/ui/card";
 import TaskDetailSkeleton from "@/components/skeletons/TaskDetailSkeleton";
 import { useTaskActions, useTaskAlerts } from "@/components/task/hooks";
-import { TaskAlertBanner } from "@/components/task/alerts";
 import { TaskHeader } from "./TaskHeader";
 import { TaskContent } from "./TaskContent";
 
@@ -46,7 +45,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ back }) => {
 
   const actions = useTaskActions({ task });
 
-  const { alerts } = useTaskAlerts({
+  useTaskAlerts({
     task,
     acceptedOffer: undefined,
     role: "tasker",
@@ -81,12 +80,6 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ back }) => {
 
   return (
     <>
-      <div className="space-y-2 mb-2">
-        {alerts.map((alert) => (
-          <TaskAlertBanner key={alert.id} alert={alert} />
-        ))}
-      </div>
-
       <Card className="overflow-hidden">
         <TaskHeader back={back} onAction={handleHeaderAction} />
         <TaskContent task={task} onOptionSelect={handleOptionSelect} />

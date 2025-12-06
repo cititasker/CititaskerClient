@@ -66,7 +66,7 @@ const OfferReplyThread: React.FC<ReplyOfferProps> = ({
 
   return (
     <div className="w-full">
-      <div className="mb-4">
+      <div>
         <CommentContent comment={comment} level={0} />
         <CommentActions
           comment={comment}

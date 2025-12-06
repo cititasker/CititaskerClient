@@ -3,11 +3,7 @@ import { paymentColumns } from "./columns";
 import { CustomTable } from "@/components/reusables/table/CustomTable";
 import { useTransaction } from "../hooks/useTransaction";
 
-interface IProps {
-  type: "credit" | "debit";
-}
-
-const PaymentTab = ({ type }: IProps) => {
+const PaymentTab = () => {
   const {
     searchTerm,
     handleSearch,
@@ -20,7 +16,7 @@ const PaymentTab = ({ type }: IProps) => {
     totalPages,
     tableData,
     isTransactionPending,
-  } = useTransaction({ type });
+  } = useTransaction();
 
   return (
     <CustomTable

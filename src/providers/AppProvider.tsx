@@ -6,6 +6,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import dynamic from "next/dynamic";
 import TanStackProvider from "./TanStackProvider";
 import Loader from "@/components/reusables/Loading";
+import { TaskAlertProvider } from "./TaskAlertContext";
 
 const PostHogProvider = dynamic(
   () =>
@@ -74,7 +75,9 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         <TanStackProvider>
           <Provider store={store}>
             <PersistGate loading={<Loader />} persistor={persistor}>
-              <PostHogProvider>{children}</PostHogProvider>
+              <PostHogProvider>
+                <TaskAlertProvider>{children}</TaskAlertProvider>
+              </PostHogProvider>
             </PersistGate>
           </Provider>
         </TanStackProvider>

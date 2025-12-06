@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { useWallet } from "../../../hooks/useWallet";
+import { useWallet } from "../../hooks/useWallet";
 import { WalletHeader } from "./WalletHeader";
 import { WalletBalanceCardGlass } from "./WalletBalanceCard";
 import { CustomTable } from "@/components/reusables/table/CustomTable";
@@ -14,7 +14,6 @@ import WithdrawalModal from "./WithdrawalModal";
 import ActionsButtons from "@/components/reusables/ActionButtons";
 import { formatCurrency } from "@/utils";
 
-// TODO: Replace with dynamic balance from API
 const AVAILABLE_BALANCE = 0;
 const MIN_WITHDRAWAL = 1000;
 
@@ -107,6 +106,7 @@ const WalletTab: React.FC = () => {
       {/* Header */}
       <WalletHeader
         greeting={greeting}
+        role={user?.role}
         userName={user.first_name || "User"}
         onTopUp={handleTopUp}
         onTransfer={withdrawalModal.openModal}

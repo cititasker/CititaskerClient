@@ -15,11 +15,7 @@ export interface WalletTransaction {
   status: "successful" | "pending" | "failed";
 }
 
-interface IPaymentType {
-  type: "credit" | "debit";
-}
-
-export const useTransaction = ({ type }: IPaymentType) => {
+export const useTransaction = () => {
   const {
     queryParams,
     pagination,
@@ -34,10 +30,8 @@ export const useTransaction = ({ type }: IPaymentType) => {
     resetPageOnChange: true,
   });
 
-  const { data, isPending: isTransactionPending } = useGetTransactionHistory({
-    ...queryParams,
-    type,
-  });
+  const { data, isPending: isTransactionPending } =
+    useGetTransactionHistory(queryParams);
 
   const totalPages = data?.meta.last_page || 1;
   const totalDocuments = data?.meta.total || 0;

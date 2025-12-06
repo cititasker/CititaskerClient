@@ -5,6 +5,7 @@ import FormButton from "@/components/forms/FormButton";
 interface WalletHeaderProps {
   greeting: string;
   userName: string;
+  role: TRole | undefined;
   onTopUp?: () => void;
   onTransfer: () => void;
 }
@@ -12,6 +13,7 @@ interface WalletHeaderProps {
 export const WalletHeader: React.FC<WalletHeaderProps> = ({
   greeting,
   userName,
+  role,
   // onTopUp,
   onTransfer,
 }) => (
@@ -33,13 +35,15 @@ export const WalletHeader: React.FC<WalletHeaderProps> = ({
       >
         Top Up
       </FormButton> */}
-      <FormButton
-        onClick={onTransfer}
-        className="flex-1 sm:flex-none btn-primary text-sm font-medium h-11"
-        icon={<ArrowUpRight className="w-4 h-4" />}
-      >
-        Transfer
-      </FormButton>
+      {role == "tasker" && (
+        <FormButton
+          onClick={onTransfer}
+          className="flex-1 sm:flex-none btn-primary text-sm font-medium h-11"
+          icon={<ArrowUpRight className="w-4 h-4" />}
+        >
+          Transfer
+        </FormButton>
+      )}
     </div>
   </div>
 );

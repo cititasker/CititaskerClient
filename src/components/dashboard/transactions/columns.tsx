@@ -12,6 +12,13 @@ export interface ITransactionData {
 
 export const paymentColumns: ColumnDef<ITransactionData>[] = [
   { accessorKey: "reference", header: "Reference" },
+  {
+    accessorKey: "type",
+    header: "Transaction Type",
+    cell({ row }) {
+      return <p className="capitalize">{row.original.type}</p>;
+    },
+  },
   { accessorKey: "amount", header: "Amount" },
   { accessorKey: "date", header: "Date" },
   {
