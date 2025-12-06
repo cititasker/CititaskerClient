@@ -32,7 +32,7 @@ export default function FormSwitch({
       name={name}
       control={control}
       render={({ field }) => (
-        <FormItem className={cn("space-y-2", className)}>
+        <FormItem className={cn("space-y-1", className)}>
           <div className="flex items-center justify-between group">
             <div className="space-y-1">
               {label && (

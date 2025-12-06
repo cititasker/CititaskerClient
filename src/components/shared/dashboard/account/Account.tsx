@@ -21,9 +21,9 @@ import FormDatePicker from "@/components/forms/FormDatePicker";
 import FormButton from "@/components/forms/FormButton";
 import { API_ROUTES } from "@/constant";
 import { Button } from "@/components/ui/button";
-import EditImageModal from "@/app/(website)/tasker/dashboard/(settings)/profile/portfolio/EditImageModal";
 import { useCloudinaryUpload } from "@/hooks/useCloudinaryUpload";
 import { useCloudinaryDelete } from "@/hooks/useCloudinaryDelete";
+import EditImageModal from "@/app/(protected)/(dashboard)/tasker/(settings)/profile/portfolio/EditImageModal";
 
 const genderOptions = [
   { id: "male", name: "Male" },

@@ -140,7 +140,7 @@ const TaskerOffer: React.FC<TaskerOfferProps> = ({
         <div className="flex items-start justify-between gap-4">
           <div className="space-y-1 sm:space-y- flex-1 min-w-0">
             <Link
-              href={`/tasker/profile/${offer.tasker.id}`}
+              href={`/${user?.role}-profile/${offer.tasker.id}`}
               className="text-lg font-semibold text-text-primary hover:text-primary transition-colors inline-block truncate"
             >
               {initializeName({ full_name: fullName })}

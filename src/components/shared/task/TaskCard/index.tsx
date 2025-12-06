@@ -1,10 +1,29 @@
 "use client";
-import React from "react";
+import React, { memo, useMemo } from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { useTaskCardUrl } from "./hooks/useTaskCardUrl";
-import { TaskCardHeader } from "./TaskCardHeader";
-import { TaskCardContent } from "./TaskCardContent";
-import { TaskCardDetails } from "./TaskCardDetails";
+
+// Lazy load heavy components
+const TaskCardHeader = dynamic(
+  () =>
+    import("./TaskCardHeader").then((mod) => ({ default: mod.TaskCardHeader })),
+  { ssr: true }
+);
+const TaskCardContent = dynamic(
+  () =>
+    import("./TaskCardContent").then((mod) => ({
+      default: mod.TaskCardContent,
+    })),
+  { ssr: true }
+);
+const TaskCardDetails = dynamic(
+  () =>
+    import("./TaskCardDetails").then((mod) => ({
+      default: mod.TaskCardDetails,
+    })),
+  { ssr: true }
+);
 
 interface TaskCardProps {
   item: ITask;
@@ -12,34 +31,42 @@ interface TaskCardProps {
   className?: string;
 }
 
-export default function TaskCard({
+const TaskCard = memo(function TaskCard({
   item,
   path,
   className = "",
 }: TaskCardProps) {
   const { href, isActive } = useTaskCardUrl(path, item.id);
 
-  // const { updatedBudget } = useTaskActions({ task: item });
+  const updatedBudget = useMemo(
+    () => item.accepted_offer?.offer_amount || item.budget,
+    [item.accepted_offer?.offer_amount, item.budget]
+  );
+
+  const cardClassName = useMemo(
+    () => `
+      relative block group cursor-pointer p-5 rounded-xl transition-all duration-200 border  
+      ${
+        isActive
+          ? "bg-light-primary-1 border-primary/50 shadow-lg"
+          : "bg-white border-gray-100 hover:border-gray-200 hover:shadow-lg hover:scale-[1.01]"
+      }
+      ${className}
+    `,
+    [isActive, className]
+  );
 
   return (
     <Link
       href={href}
       scroll={false}
-      className={`
-        relative block group cursor-pointer p-5 rounded-xl transition-all duration-200 border  
-        ${
-          isActive
-            ? "bg-light-primary-1 border-primary/50 shadow-lg"
-            : "bg-white border-gray-100 hover:border-gray-200 hover:shadow-lg hover:scale-[1.01]"
-        }
-        ${className}
-      `}
+      className={cardClassName}
       aria-current={isActive ? "page" : undefined}
     >
       {/* Header */}
       <TaskCardHeader
         posterImage={item.poster_profile_image}
-        budget={item.budget}
+        budget={updatedBudget}
         status={item.status}
         isActive={isActive}
       />
@@ -61,4 +88,6 @@ export default function TaskCard({
       )}
     </Link>
   );
-}
+});
+
+export default TaskCard;

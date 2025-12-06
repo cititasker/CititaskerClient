@@ -23,7 +23,7 @@ const UserProfile = ({ className, compact = false }: UserProfileProps) => {
       last_name: user.last_name,
     }) || "Anonymous";
 
-  const profilePath = user?.id ? `/${user.role}/profile/${user.id}` : "#";
+  const profilePath = user?.id ? `/${user.role}-profile/${user.id}` : "#";
 
   return (
     <div

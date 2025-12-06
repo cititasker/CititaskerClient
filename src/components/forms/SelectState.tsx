@@ -1,12 +1,12 @@
 "use client";
-import { useEffect, useState } from "react";
-import { State, IState } from "country-state-city";
+import { useMemo } from "react";
 import { FormAutoComplete } from "@/components/forms/FormAutoComplete";
+import { NIGERIA_STATES } from "@/lib/utils/nigeria-states";
 
 interface SelectStateProps {
   name: string;
   label?: string;
-  countryCode?: string;
+  countryCode?: string; // Keep for API compatibility, but we'll ignore it since we only have NG data
 }
 
 interface StateOption {
@@ -19,21 +19,18 @@ const SelectState = ({
   label = "State",
   countryCode = "NG",
 }: SelectStateProps) => {
-  const [states, setStates] = useState<StateOption[]>([]);
+  const states = useMemo<StateOption[]>(() => {
+    // Reorder to put Lagos first, then alphabetically sort the rest
+    const lagosState = NIGERIA_STATES.find((s) => s.name === "Lagos");
+    const otherStates = NIGERIA_STATES.filter((s) => s.name !== "Lagos");
 
-  useEffect(() => {
-    const allStates = State.getStatesOfCountry(countryCode) as IState[];
-    const reordered = [
-      ...allStates.filter((s) => s.name === "Lagos"),
-      ...allStates.filter((s) => s.name !== "Lagos"),
-    ];
-    setStates(
-      reordered.map((s) => ({
-        id: s.isoCode,
-        name: s.name,
-      }))
-    );
-  }, [countryCode]);
+    const reordered = lagosState ? [lagosState, ...otherStates] : otherStates;
+
+    return reordered.map((s) => ({
+      id: s.isoCode,
+      name: s.name,
+    }));
+  }, [countryCode]); // Keep countryCode in deps for future-proofing
 
   return (
     <FormAutoComplete

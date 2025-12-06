@@ -2,14 +2,20 @@
 import React from "react";
 import { useSearchParams } from "next/navigation";
 import BackTo from "../BackTo";
-import PostTaskHeader from "@/app/post-task/_components/partials/PostTaskHeader";
-import { useTaskData } from "@/app/post-task/hooks/useTaskData";
+import { useTaskData } from "../poster/post-task/hooks/useTaskData";
+import PostTaskHeader from "../poster/post-task/partials/PostTaskHeader";
+import { getDefaultRedirect } from "@/lib/middleware/guards/route-config";
+import { useAuth } from "@/hooks/useAuth";
+import { ROUTES } from "@/constant";
 
 const PostTaskLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const searchParams = useSearchParams();
   const step = parseInt(searchParams.get("step") || "1");
+  const { role } = useAuth();
+
+  const href = role ? getDefaultRedirect(role) : ROUTES.HOME;
 
   const { isLoading } = useTaskData();
 
@@ -20,7 +26,7 @@ const PostTaskLayout: React.FC<{ children: React.ReactNode }> = ({
       {/* Header with backdrop blur */}
       <header className="sticky top-0 z-10 bg-background/80 backdrop-blur-sm border-b border-border-light">
         <div className="px-4 sm:px-6 lg:px-8 py-4">
-          <BackTo href="/" />
+          <BackTo href={href} />
         </div>
       </header>
 

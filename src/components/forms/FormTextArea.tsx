@@ -34,7 +34,7 @@ export default function FormTextArea({
       name={name}
       control={control}
       render={({ field }) => (
-        <FormItem className={cn("space-y-2", className)}>
+        <FormItem className={cn("space-y-1", className)}>
           {label && (
             <FormLabel
               htmlFor={name}

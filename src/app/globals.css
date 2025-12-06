@@ -189,7 +189,8 @@ body {
     --destructive-foreground: 0 0% 98%;
     --border: 214 32% 89.8%;
     --input: 214 32% 84%;
-    --ring: 197 90% 80%;
+    --ring: var(--primary-500);
+    /* --ring: 197 90% 80%; */
     --chart-1: var(--primary);
     --chart-2: var(--secondary);
     --chart-3: var(--green-state-color);
@@ -411,6 +412,36 @@ body {
   100% {
     transform: translateX(100%);
   }
+}
+
+@keyframes progress {
+  0% {
+    width: 0%;
+    margin-left: 0%;
+  }
+  50% {
+    width: 50%;
+    margin-left: 25%;
+  }
+  100% {
+    width: 0%;
+    margin-left: 100%;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
 }
 
 .z-layer-dropdown {

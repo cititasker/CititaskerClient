@@ -84,7 +84,7 @@ export default function FormDatePicker({
         const selectedDate = parseDate(field.value);
 
         return (
-          <FormItem className={className}>
+          <FormItem className={cn("space-y-1", className)}>
             {label && (
               <FormLabel
                 htmlFor={name}

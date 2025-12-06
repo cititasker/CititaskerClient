@@ -12,6 +12,7 @@ interface UsePaginatedTableOptions {
   debounceMs?: number;
   resetPageOnChange?: boolean;
   persistInUrl?: boolean;
+  excludeFilterKeys?: string[];
 }
 
 interface QueryParams {
@@ -27,6 +28,7 @@ export const usePaginatedTable = (options: UsePaginatedTableOptions = {}) => {
     debounceMs = 500,
     resetPageOnChange = true,
     persistInUrl = true,
+    excludeFilterKeys = [],
   } = options;
 
   const router = useRouter();
@@ -40,7 +42,12 @@ export const usePaginatedTable = (options: UsePaginatedTableOptions = {}) => {
   const [filters, setFilters] = useState<Record<string, any>>(() => {
     const params: Record<string, any> = {};
     searchParams.forEach((value, key) => {
-      if (key !== "page" && key !== "limit" && key !== "search") {
+      if (
+        key !== "page" &&
+        key !== "limit" &&
+        key !== "search" &&
+        key !== "tab"
+      ) {
         params[key] = value;
       }
     });
@@ -67,7 +74,9 @@ export const usePaginatedTable = (options: UsePaginatedTableOptions = {}) => {
       params.search = debouncedSearch;
     }
 
-    return { ...params, ...filters };
+    const qp = { ...params, ...filters };
+    delete qp.tab;
+    return qp;
   }, [pagination.pageIndex, pagination.pageSize, debouncedSearch, filters]);
 
   const updateUrl = useCallback(
@@ -87,7 +96,6 @@ export const usePaginatedTable = (options: UsePaginatedTableOptions = {}) => {
       const newUrl = params.toString();
       const currentUrl = searchParams.toString();
 
-      // Only update if URL actually changed
       if (newUrl !== currentUrl) {
         router.replace(newUrl ? `${pathname}?${newUrl}` : pathname, {
           scroll: false,
@@ -97,6 +105,7 @@ export const usePaginatedTable = (options: UsePaginatedTableOptions = {}) => {
     [persistInUrl, pathname, router, searchParams]
   );
 
+  // ✅ FIX: Use the passed values directly, not the stale state
   const onPaginationChange = useCallback(
     ({ pageIndex, pageSize }: PaginationState) => {
       updateUrl({ page: pageIndex + 1, limit: pageSize });
@@ -123,20 +132,18 @@ export const usePaginatedTable = (options: UsePaginatedTableOptions = {}) => {
   const resetAll = useCallback(() => {
     setSearchTerm("");
     setFilters({});
-    updateUrl({ search: undefined, page: 1, limit: pagination.pageSize });
-  }, [updateUrl, pagination.pageSize]);
+    updateUrl({ search: undefined, page: 1, limit: defaultPageSize }); // ✅ Use defaultPageSize
+  }, [updateUrl, defaultPageSize]);
 
   const resetPage = useCallback(() => {
     updateUrl({ page: 1 });
   }, [updateUrl]);
 
-  // Track previous search to avoid infinite loops
   const prevSearchRef = useRef(searchParams.get("search") || "");
 
   useEffect(() => {
     const currentSearch = searchParams.get("search") || "";
 
-    // Only update if debounced search changed AND it's different from URL
     if (
       debouncedSearch !== currentSearch &&
       prevSearchRef.current !== debouncedSearch
@@ -152,12 +159,38 @@ export const usePaginatedTable = (options: UsePaginatedTableOptions = {}) => {
   }, [debouncedSearch, resetPageOnChange, searchParams, updateUrl]);
 
   const hasActiveFilters = useMemo(() => {
-    return Boolean(searchTerm) || Object.keys(filters).length > 0;
-  }, [searchTerm, filters]);
+    const defaultExcludes = ["page", "limit", "search", "tab"];
+    const allExcludes = new Set([...defaultExcludes, ...excludeFilterKeys]);
+
+    const activeFilters = Object.entries(filters).some(([key, value]) => {
+      if (allExcludes.has(key)) return false;
+      if (value === undefined || value === null || value === "") return false;
+      return true;
+    });
+
+    const hasSearch = Boolean(searchTerm) && !allExcludes.has("search");
+
+    return hasSearch || activeFilters;
+  }, [filters, searchTerm, excludeFilterKeys]);
 
   const appliedFilterCount = useMemo(() => {
-    return Object.keys(filters).length + (searchTerm ? 1 : 0);
-  }, [filters, searchTerm]);
+    const defaultExcludes = ["page", "limit", "search", "tab"];
+    const allExcludes = new Set([...defaultExcludes, ...excludeFilterKeys]);
+
+    let count = 0;
+
+    for (const [key, value] of Object.entries(filters)) {
+      if (allExcludes.has(key)) continue;
+      if (value === "" || value == null) continue;
+      count++;
+    }
+
+    if (searchTerm && !allExcludes.has("search")) {
+      count++;
+    }
+
+    return count;
+  }, [filters, searchTerm, excludeFilterKeys]);
 
   return {
     queryParams,

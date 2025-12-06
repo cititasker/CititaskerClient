@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import moment from "moment";
+import dayjs from "dayjs";
 import { CalendarIcon } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import {
@@ -23,7 +23,7 @@ import { cn } from "@/lib/utils";
 import useToggle from "@/hooks/useToggle";
 
 interface CustomDateTimePickerProps {
-  name: string; // e.g. "dateTime.date"
+  name: string;
   label?: string;
   showTimePicker?: boolean;
   className?: string;
@@ -52,9 +52,9 @@ export default function CustomDateTimePicker({
 
   const formattedValue = () => {
     if (!currentDate) return placeholder;
-    const date = moment(currentDate, "DD-MM-YYYY").format("DD/MM/YYYY");
+    const date = dayjs(currentDate, "DD-MM-YYYY").format("DD/MM/YYYY");
     const time = currentTime
-      ? moment(currentTime, "HH:mm:ss").format("hh:mm A")
+      ? dayjs(currentTime, "HH:mm:ss").format("hh:mm A")
       : "";
     return time ? `${date} - ${time}` : date;
   };
@@ -65,7 +65,7 @@ export default function CustomDateTimePicker({
       control={control}
       render={({ field }) => {
         const selectedDate = field.value?.date
-          ? moment(field.value.date, "DD-MM-YYYY").toDate()
+          ? dayjs(field.value.date, "DD-MM-YYYY").toDate()
           : null;
 
         return (
@@ -102,16 +102,16 @@ export default function CustomDateTimePicker({
                   selected={selectedDate ?? undefined}
                   onSelect={(date) => {
                     if (date) {
-                      const formatted = moment(date).format("DD-MM-YYYY");
+                      const formatted = dayjs(date).format("DD-MM-YYYY");
                       field.onChange({ ...field.value, date: formatted });
                     }
                   }}
                   autoFocus
                   disabled={(date) => {
                     const beforeMin =
-                      !!minDate && moment(date).isBefore(minDate, "day");
+                      !!minDate && dayjs(date).isBefore(dayjs(minDate), "day");
                     const afterMax =
-                      !!maxDate && moment(date).isAfter(maxDate, "day");
+                      !!maxDate && dayjs(date).isAfter(dayjs(maxDate), "day");
                     return beforeMin || afterMax;
                   }}
                 />
@@ -138,7 +138,6 @@ export default function CustomDateTimePicker({
               </DropdownMenuContent>
             </DropdownMenu>
             <FormMessage />
-            {/* <FormError name={`${name}.date`} /> */}
           </FormItem>
         );
       }}

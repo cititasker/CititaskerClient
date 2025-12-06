@@ -1,4 +1,4 @@
-import { API_ROUTES, ROLE } from "@/constant";
+import { API_ROUTES } from "@/constant";
 import api from "@/services/apiService";
 import { AxiosError } from "axios";
 import { IReschedule, TaskData } from "./tasks.types";
@@ -166,12 +166,8 @@ export function getReschedules(id: any): ApiResponsePromise<IReschedule[]> {
     });
 }
 
-export function acceptReschedule({ data, role }: { data: any; role: TRole }) {
-  const url =
-    role === ROLE.poster
-      ? API_ROUTES.APPROVE_TASK_RESCHEDULE
-      : API_ROUTES.ACCEPT_TASK_RESCHEDULE;
-
+export function acceptReschedule({ data }: { data: any }) {
+  const url = API_ROUTES.ACCEPT_TASK_RESCHEDULE;
   return api
     .post(url, data)
     .then((data) => {

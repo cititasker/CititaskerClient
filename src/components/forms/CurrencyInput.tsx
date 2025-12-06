@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { useFormContext } from "react-hook-form";
-import { NumericFormat } from "react-number-format";
 import { Input } from "@/components/ui/input";
 import {
   FormField,
@@ -11,6 +10,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
+import { LazyNumericFormat } from "./LazyNumericFormat";
 
 interface CurrencyInputProps {
   name: string;
@@ -41,7 +41,7 @@ export default function CurrencyInput({
       name={name}
       control={control}
       render={({ field }) => (
-        <FormItem className={cn("space-y-2", className)}>
+        <FormItem className={cn("space-y-1", className)}>
           {label && (
             <FormLabel
               htmlFor={name}
@@ -53,7 +53,7 @@ export default function CurrencyInput({
           )}
 
           <div className="relative">
-            <NumericFormat
+            <LazyNumericFormat
               value={field.value}
               onValueChange={({ value }) => field.onChange(value)}
               thousandSeparator=","
@@ -62,17 +62,12 @@ export default function CurrencyInput({
               prefix={`${currency} `}
               placeholder={`${currency} ${placeholder}`}
               disabled={disabled}
-              customInput={Input}
+              customInput={Input as any}
               className={cn(
-                // Base styles
                 "px-4 rounded-xl transition-all duration-200",
                 "bg-background text-text-primary placeholder:text-text-muted font-medium",
                 "focus:outline-none",
-
-                // Border states
                 error && "border-error focus:border-error",
-
-                // State styles
                 disabled &&
                   "opacity-50 cursor-not-allowed bg-background-secondary"
               )}

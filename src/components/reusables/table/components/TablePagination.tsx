@@ -44,7 +44,6 @@ export function TablePagination<TData>({
   const currentPage = pageIndex + 1;
   const totalPages = table.getPageCount();
 
-  // Use totalCount for manual pagination, fallback to filtered rows
   const totalRows = totalCount ?? table.getFilteredRowModel().rows.length;
   const startRow = totalRows > 0 ? pageIndex * pageSize + 1 : 0;
   const endRow = Math.min(currentPage * pageSize, totalRows);
@@ -101,8 +100,11 @@ export function TablePagination<TData>({
             <Select
               value={pageSize.toString()}
               onValueChange={(value) => {
-                table.setPageSize(Number(value));
-                table.setPageIndex(0);
+                const newSize = Number(value);
+                table.setPagination({
+                  pageIndex: 0,
+                  pageSize: newSize,
+                });
               }}
               disabled={isLoading}
             >

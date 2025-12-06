@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { NumericFormat } from "react-number-format";
 import { z } from "zod";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { setOfferData } from "@/store/slices/task";
@@ -16,6 +15,7 @@ import SummaryItem from "@/components/reusables/SummaryItem";
 import { formatCurrency } from "@/utils";
 import { connectionFee } from "@/constant";
 import { ISurcharge } from "@/services/offers/offers.types";
+import { LazyNumericFormat } from "@/components/forms/LazyNumericFormat";
 
 const schema = surchargeSchema.pick({
   task_id: true,
@@ -49,23 +49,28 @@ const StepOne = ({ nextStep, pendingSurcharge, edit = false }: Props) => {
   });
 
   const offerAmount = Number(form.watch("offer_amount") || 0);
-  const fee = (connectionFee / 100) * offerAmount;
-  const payable = offerAmount + fee;
+
+  // Memoize calculations to avoid unnecessary recalculations
+  const { fee, payable } = useMemo(() => {
+    const calculatedFee = (connectionFee / 100) * offerAmount;
+    const calculatedPayable = offerAmount + calculatedFee;
+    return { fee: calculatedFee, payable: calculatedPayable };
+  }, [offerAmount]);
 
   useEffect(() => {
     if (pendingSurcharge) {
       const { amount } = pendingSurcharge;
       form.reset({
         offer_amount: `${amount}`,
-        payable_id: pendingSurcharge?.id,
+        payable_id: pendingSurcharge.id,
         task_id,
         payable,
       });
     }
-  }, [pendingSurcharge, payable]);
+  }, [pendingSurcharge, payable, form, task_id]);
 
   const handleSubmit = (values: SchemaType) => {
-    dispatch(setOfferData({ ...offer, ...values }));
+    dispatch(setOfferData({ ...offer, ...values, payable })); // Include calculated payable
     nextStep();
   };
 
@@ -73,10 +78,10 @@ const StepOne = ({ nextStep, pendingSurcharge, edit = false }: Props) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="flex flex-col"
+        className="flex flex-col space-y-6"
       >
-        <div>
-          <p className="text-center text-muted-foreground text-base mb-2">
+        <div className="space-y-4">
+          <p className="text-center text-muted-foreground text-base">
             Enter additional amount
           </p>
 
@@ -86,11 +91,9 @@ const StepOne = ({ nextStep, pendingSurcharge, edit = false }: Props) => {
             render={({ field }) => (
               <FormItem>
                 <div className="relative bg-light-blue rounded-20 px-4 py-5 w-fit mx-auto max-w-[180px]">
-                  <NumericFormat
+                  <LazyNumericFormat
                     value={field.value}
-                    onValueChange={({ value }) => {
-                      field.onChange(value);
-                    }}
+                    onValueChange={({ value }) => field.onChange(value)}
                     thousandSeparator
                     prefix="₦"
                     allowNegative={false}
@@ -103,14 +106,19 @@ const StepOne = ({ nextStep, pendingSurcharge, edit = false }: Props) => {
               </FormItem>
             )}
           />
-          <div className="grid mt-[30px]">
+
+          <div className="grid gap-2 mt-8">
             <SummaryItem
               label="Surcharge for the task"
               value={formatCurrency({ value: offerAmount })}
             />
             <SummaryItem
+              label="Service fee"
+              value={formatCurrency({ value: fee })}
+            />
+            <SummaryItem
               label="Total"
-              value={formatCurrency({ value: offerAmount })}
+              value={formatCurrency({ value: payable })}
               isStrong
             />
           </div>

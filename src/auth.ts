@@ -1,4 +1,3 @@
-// auth.ts
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
@@ -11,11 +10,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       async authorize(credentials) {
         const token = credentials?.token as string | undefined;
         const role = credentials?.role as TRole | undefined;
+        const userData = credentials?.userData as any; // Pass user data from login
 
         if (token && role) {
           return {
             token,
             role,
+            ...userData,
           };
         }
 
@@ -28,7 +29,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   session: {
     strategy: "jwt",
     maxAge: 60 * 60 * 24 * 7, // 7 days
-    updateAge: 60 * 60 * 24, // ✅ Update session every 24 hours instead of every request
+    updateAge: 60 * 60 * 24, // Update session every 24 hours
   },
   jwt: {
     maxAge: 60 * 60 * 24 * 7, // 7 days
@@ -37,7 +38,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: async ({ account }) => account?.provider !== "google",
     authorized: ({ auth }) => !!auth,
     jwt: ({ token, user, account, trigger }) => {
-      // On sign-in
+      // On sign-in - store all user data in JWT
       if (account?.provider === "credentials" && user) {
         token.userData = {
           ...user,
@@ -45,10 +46,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           token: user.token,
         };
       }
+
       // On session update
       if (trigger === "update" && user) {
         token.userData = {
           ...(token.userData ?? {}),
+          ...user, // Merge updated user data
           token: user.token || token.userData?.token,
           role: user.role || token.userData?.role,
         };
@@ -60,6 +63,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (token.userData) {
         session.user = {
           ...session.user,
+          ...token.userData,
           authToken: token.userData.token,
           role: token.userData.role,
         };
@@ -70,9 +74,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   pages: {
     signIn: ROUTES.LOGIN,
   },
-  // ✅ Add these to reduce session checks
   events: {
-    // Log for debugging (remove in production)
     async session() {
       if (process.env.NODE_ENV === "development") {
         console.log("Session accessed:", new Date().toISOString());

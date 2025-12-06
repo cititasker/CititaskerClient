@@ -7,7 +7,6 @@ import {
 } from "@tanstack/react-query";
 import {
   getFaq,
-  getReviews,
   getUserApi,
   getUserPorfolio,
   getUserProfileDetails,
@@ -15,7 +14,6 @@ import {
   switchRoles,
 } from "./users.api";
 import { loginSchemaType } from "@/schema/auth";
-import { useBaseQuery } from "@/hooks/useBaseQuery";
 
 type GetUserResponse = { data: IUser };
 
@@ -37,6 +35,12 @@ export const useGetUser = (
   return useQuery<GetUserResponse, Error>({
     queryKey: [API_ROUTES.GET_USER_DETAILS],
     queryFn: getUserApi,
+    staleTime: 10 * 60 * 1000, // 10 minutes - data stays fresh
+    gcTime: 30 * 60 * 1000, // 30 minutes - cache lifetime
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    refetchOnMount: false,
+    retry: 2, // Retry failed requests
     ...options,
   });
 };
@@ -75,25 +79,6 @@ export const useGetFaq = (
     enabled: !!data.id,
     ...options,
   });
-};
-
-export const useGetReviews = (
-  id: number,
-  options?: {
-    enabled?: boolean;
-    onSuccess?: (data: GetReviewsResponse) => void;
-    onError?: (error: Error) => void;
-  }
-) => {
-  return useBaseQuery<GetReviewsResponse, Error>(
-    [API_ROUTES.GET_REVIEWS, id],
-    () => getReviews(id),
-    {
-      enabled: options?.enabled ?? !!id,
-      onSuccess: options?.onSuccess,
-      onError: options?.onError,
-    }
-  );
 };
 
 export const useSwitchRole = (

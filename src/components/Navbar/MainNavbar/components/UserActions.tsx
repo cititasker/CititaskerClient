@@ -2,13 +2,12 @@
 import React from "react";
 import Link from "next/link";
 import {
-  Bell,
   MessageCircle,
   Settings,
   LogOut,
   User,
   LayoutDashboard,
-} from "lucide-react";
+} from "@/components/icons/index";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,12 +16,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { defaultProfile } from "@/constant/images";
 import { ROUTES } from "@/constant";
 import { loggedInUser } from "@/utils";
 import SwitchRoleBtn from "./SwitchRoleBtn";
+import NotificationBell from "./Notifications/NotificationBell";
 
 interface UserActionsProps {
   user: Partial<IUser>;
@@ -31,7 +30,6 @@ interface UserActionsProps {
 
 export function UserActions({ user, onLogout }: UserActionsProps) {
   const [isOpen, setIsOpen] = React.useState(false);
-  const [notifications] = React.useState(2); // Mock data
 
   const userInitials = `${user.first_name?.[0] || ""}${
     user.last_name?.[0] || ""
@@ -65,18 +63,7 @@ export function UserActions({ user, onLogout }: UserActionsProps) {
   return (
     <div className="flex items-center gap-3">
       {/* Notifications */}
-      <Button
-        variant="ghost"
-        size="sm"
-        className="relative p-2 h-10 w-10 rounded-full hover:bg-gray-100"
-      >
-        <Bell className="w-5 h-5 text-gray-600" />
-        {notifications > 0 && (
-          <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center bg-red-500 text-[10px] text-white border-2 border-white">
-            {notifications}
-          </Badge>
-        )}
-      </Button>
+      <NotificationBell />
 
       {/* Messages */}
       <Button

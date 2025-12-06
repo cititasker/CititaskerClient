@@ -5,6 +5,8 @@ export const connectionFee = 10;
 
 export const PORTFOLIO_STORAGE_KEY = "portfolio_pending_images";
 export const MAX_IMAGES = 8;
+export const DATE_TIME_FORMAT = "MMM DD, YYYY hh:mm a";
+export const DATE_FORMAT = "MMM DD, YYYY";
 
 export enum ROLE {
   poster = "poster",
@@ -72,7 +74,9 @@ export const API_ROUTES = {
   GET_FAQ: "/faqs/user-faqs",
   UPDATE_FAQ: "/faqs/update",
   DELETE_FAQ: "/faqs/delete",
-  GET_REVIEWS: "/tasks/reviews/status",
+  GET_REVIEW_STATUS: "/tasks/reviews/status",
+  GET_REVIEWS: "/tasks/reviews/task-reviews",
+  GET_USER_REVIEW: (id: any) => `tasks/reviews/user-reviews/${id}`,
   POST_REVIEW: "/tasks/reviews",
   GET_QUESTIONS: "/tasks/questions",
   POST_QUESTION: "/tasks/post-question",
@@ -92,11 +96,23 @@ export const API_ROUTES = {
   POSTER_RESCHEDULE_TASK: "/tasks/reschedule/reject-with-counter",
   TASKER_RESCHEDULE_TASK: "/tasks/reschedule/reject-counter",
   //Dashboard
+  DASHBOARD_ANALYSIS: (role: TRole) => `dashboard/${role}`,
   DASHBOARD_STATS: (role: TRole) => `dashboard/${role}/kpis`,
   RECENT_TASKS: (role: TRole) => `dashboard/${role}/recent-tasks`,
   POSTER_EXPENSE_ANALYSIS: `dashboard/poster/expenses-chart`,
   TASKET_EARNING_ANALYSIS: `dashboard/tasker/earnings-chart`,
   AMOUNT_ANALYSIS: (role: TRole) => `dashboard/${role}/amount-chart`,
+
+  TRANSACTION_HISTORY: "/payments/transactions",
+
+  NOTIFICATIONS: {
+    GET_ALL: "/notifications",
+    UNREAD: "/notifications/unread",
+    READ: "/notifications",
+    READ_ALL: "/notifications/read-all",
+    DELETE: "/notifications",
+    DELETE_ALL_READ: "/notifications/read/all",
+  },
 } as const;
 
 const isProd = process.env.NEXT_PUBLIC_NODE_ENV === "production";
@@ -105,12 +121,12 @@ type RouteFunction = (role: "poster" | "tasker") => string;
 
 export const ROUTES = {
   // Auth routes
-  LOGIN: isProd ? "/waitlist" : "/login",
-  SIGNUP: isProd ? "/waitlist" : "/signup",
-  FORGOT_PASSWORD: "/forgot-password",
-  CREATE_ACCOUNT: "/create-account",
-  RESET_PASSWORD: "/reset-password",
-  OTP: "/otp",
+  LOGIN: isProd ? "/waitlist" : "/auth/login",
+  SIGNUP: isProd ? "/waitlist" : "/auth/signup",
+  FORGOT_PASSWORD: "/auth/forgot-password",
+  CREATE_ACCOUNT: "/auth/create-account",
+  RESET_PASSWORD: "/auth/reset-password",
+  OTP: "auth/otp",
 
   // Static routes
   HOME: "/",
@@ -143,8 +159,8 @@ export const ROUTES = {
 
   MY_TASKS: "/my-tasks",
   DASHBOARD: "/dashboard",
-  POSTER: isProd ? "/waitlist" : "/poster/discovery",
-  TASKER: isProd ? "/waitlist" : "/tasker/discovery",
+  POSTER: isProd ? "/waitlist" : "/discovery-poster",
+  TASKER: isProd ? "/waitlist" : "/discovery-tasker",
   WAITLIST: "/waitlist",
   POST_TASK: isProd ? "/waitlist" : "/post-task",
   BROWSE_TASK: "/browse-task",
@@ -153,11 +169,10 @@ export const ROUTES = {
   HOW_IT_WORKS: "/how-it-works",
   DISCOVERY: "/discovery",
 
-  DASHBOARD_TASKER: "/tasker/dashboard",
-  DASHBOARD_PAYMENT: "/dashboard/payment",
-  DASHBOARD_ACCOUNT: "/dashboard/account",
-  DASHBOARD_MESSAGE: "/dashboard/message",
-  DASHBOARD_PROFILE: "/dashboard/profile",
+  DASHBOARD_TRANSACTION: "/transactions",
+  DASHBOARD_ACCOUNT: "/account",
+  DASHBOARD_MESSAGE: "/message",
+  DASHBOARD_PROFILE: "/profile",
 } as const;
 
 export type UserRole = "poster" | "tasker";

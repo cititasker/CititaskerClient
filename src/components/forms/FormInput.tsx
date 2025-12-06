@@ -75,7 +75,7 @@ export default function FormInput({
           (showCustomIcon && iconPosition === "right");
 
         return (
-          <FormItem className={cn("space-y-2", className)}>
+          <FormItem className={cn("space-y-1", className)}>
             {label && (
               <FormLabel
                 htmlFor={name}

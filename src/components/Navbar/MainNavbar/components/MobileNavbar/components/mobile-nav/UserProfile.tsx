@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  Bell,
   MessageCircle,
   User,
   LayoutDashboard,
@@ -10,13 +9,13 @@ import {
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { defaultProfile } from "@/constant/images";
 import { loggedInUser } from "@/utils";
 import { ROUTES } from "@/constant";
 import { NavLink } from "./NavLink";
 import { ActionButton } from "./ActionButton";
 import SwitchRoleBtn from "../../../SwitchRoleBtn";
+import NotificationBell from "../../../Notifications/NotificationBell";
 
 interface UserProfileProps {
   user: Partial<IUser>;
@@ -27,7 +26,6 @@ interface UserProfileProps {
 
 export const UserProfile: React.FC<UserProfileProps> = ({
   user,
-  notifications,
   onLogout,
   onNavClick,
 }) => {
@@ -62,18 +60,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
           </div>
 
           <div className="flex items-center gap-1">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="relative h-9 w-9 rounded-full hover:bg-neutral-100"
-            >
-              <Bell className="w-4 h-4 text-neutral-600" />
-              {notifications > 0 && (
-                <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center bg-error text-[10px] text-white border-2 border-white">
-                  {notifications > 9 ? "9+" : notifications}
-                </Badge>
-              )}
-            </Button>
+            <NotificationBell />
             <Button
               variant="ghost"
               size="sm"

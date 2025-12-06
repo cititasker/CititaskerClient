@@ -4,7 +4,7 @@ import { ROLE, ROUTES } from "@/constant";
 import FormButton from "@/components/forms/FormButton";
 
 interface ActionButtonsProps {
-  user: IUser | undefined;
+  user: Partial<IUser> | undefined;
   isAuth: boolean;
   onNavClick: () => void;
 }

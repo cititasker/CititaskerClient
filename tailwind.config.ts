@@ -157,7 +157,7 @@ export default {
           foreground: "hsl(var(--destructive-foreground) / <alpha-value>)",
         },
         input: "hsl(var(--input) / <alpha-value>)",
-        ring: "hsl(var(--ring) / <alpha-value>)",
+        ring: "rgb(var(--ring) / <alpha-value>)",
         chart: {
           "1": "rgb(var(--chart-1) / <alpha-value>)",
           "2": "rgb(var(--chart-2) / <alpha-value>)",

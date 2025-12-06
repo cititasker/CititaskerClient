@@ -7,6 +7,8 @@ import {
   GetDashboardPayloadT,
   PosterAmountSpentAnalysisT,
   RecentTaskT,
+  WalletTransactionParamsT,
+  WalletTransactionRes,
 } from "./dashboard.types";
 
 export function getDashboardStats({
@@ -32,6 +34,25 @@ export function getRecentTasks({
 }): Promise<ApiResponse<RecentTaskT[]>> {
   return api
     .get(API_ROUTES.RECENT_TASKS(role), {
+      params: params,
+    })
+    .then((data) => data.data.data)
+    .catch((error: AxiosError) => {
+      throw error.response?.data;
+    });
+}
+
+export function getDashboardAnalysis({
+  role,
+  params = {},
+}: {
+  role: TRole;
+  params?: { time_range?: string };
+}): Promise<ApiResponse<ExpenseAnalysisT>> {
+  const endpoint = API_ROUTES.DASHBOARD_ANALYSIS(role);
+
+  return api
+    .get(endpoint, {
       params: params,
     })
     .then((data) => data.data.data)
@@ -78,6 +99,21 @@ export function getMonthlyFinancialSummary({
         ...params,
         ...(params.time_range && { "time-range": params.time_range }),
       },
+    })
+    .then((data) => data.data.data)
+    .catch((error: AxiosError) => {
+      throw error.response?.data;
+    });
+}
+
+export function getWalletTransactions({
+  params = {},
+}: {
+  params?: WalletTransactionParamsT;
+}): Promise<WalletTransactionRes> {
+  return api
+    .get(API_ROUTES.TRANSACTION_HISTORY, {
+      params: params,
     })
     .then((data) => data.data.data)
     .catch((error: AxiosError) => {

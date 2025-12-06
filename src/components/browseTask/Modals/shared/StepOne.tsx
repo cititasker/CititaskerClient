@@ -4,7 +4,6 @@ import React, { useCallback, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { NumericFormat } from "react-number-format";
 import { z } from "zod";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { setOfferData } from "@/store/slices/task";
@@ -13,6 +12,7 @@ import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { IEdit2 } from "@/constant/icons";
 import { baseSchema } from "@/schema/offer";
 import ActionsButtons from "@/components/reusables/ActionButtons";
+import { LazyNumericFormat } from "@/components/forms/LazyNumericFormat";
 
 const schema = baseSchema.pick({
   task_id: true,
@@ -105,7 +105,7 @@ const StepOne = ({
             render={({ field }) => (
               <FormItem>
                 <div className="relative bg-light-blue rounded-20 px-4 py-5 w-fit mx-auto max-w-[180px]">
-                  <NumericFormat
+                  <LazyNumericFormat
                     value={field.value}
                     onValueChange={({ value }) => field.onChange(value)}
                     thousandSeparator

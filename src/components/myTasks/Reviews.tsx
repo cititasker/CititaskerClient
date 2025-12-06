@@ -7,13 +7,13 @@ import Rating from "../reusables/Rating";
 import RatingModal from "./RatingModal";
 import EmptyState from "../reusables/EmptyState";
 import { initializeName } from "@/utils";
-import { postReview } from "@/services/user/users.api";
-import { useGetReviews } from "@/services/user/user.hook";
 import { useAppSelector } from "@/store/hook";
 import { defaultProfile } from "@/constant/images";
 import { cn } from "@/lib/utils";
 import { useBaseMutation } from "@/hooks/useBaseMutation";
 import { API_ROUTES } from "@/constant";
+import { postReview } from "@/services/review/reviews.api";
+import { useGetReviews, useUserReview } from "@/services/review/reviews.hook";
 
 interface ReviewsProps {
   task: ITask;
@@ -25,8 +25,14 @@ export default function Reviews({ task }: ReviewsProps) {
   const [showModal, setShowModal] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
-  const { data: reviews } = useGetReviews(task.id);
+  const { data: reviews } = useGetReviews(task?.id);
+  const { data: myReview } = useUserReview(user?.id);
+
+  console.log(77, myReview);
+
   const [posterReview, taskerReview] = reviews?.data || [];
+
+  console.log(33, reviews);
 
   const isCompleted = task?.status === "completed";
   const tasker = task.tasker?.profile;

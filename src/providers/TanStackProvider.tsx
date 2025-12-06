@@ -1,4 +1,3 @@
-// app/providers.tsx
 "use client";
 
 import { SessionProvider } from "next-auth/react";
@@ -12,17 +11,16 @@ export default function TanStackProvider({
 }: {
   children: React.ReactNode;
 }) {
-  // ✅ Create QueryClient with optimized settings
   const [queryClient] = useState(
     () =>
       new QueryClient({
         defaultOptions: {
           queries: {
-            staleTime: 5 * 60 * 1000, // 5 minutes
-            gcTime: 10 * 60 * 1000, // 10 minutes (formerly cacheTime)
-            refetchOnWindowFocus: false, // ✅ CRITICAL: Disable refetch on focus
-            refetchOnMount: false, // ✅ CRITICAL: Only fetch if stale
-            refetchOnReconnect: false, // Don't refetch on reconnect
+            staleTime: 5 * 60 * 1000,
+            gcTime: 10 * 60 * 1000,
+            refetchOnWindowFocus: false,
+            refetchOnMount: false,
+            refetchOnReconnect: false,
             retry: 1,
           },
         },
@@ -31,10 +29,9 @@ export default function TanStackProvider({
 
   return (
     <SessionProvider
-      // ✅ CRITICAL: Reduce session polling
-      refetchInterval={5 * 60} // 5 minutes (300 seconds)
-      refetchOnWindowFocus={false} // Don't refetch on every focus
-      refetchWhenOffline={false} // Don't refetch when offline
+      refetchInterval={5 * 60}
+      refetchOnWindowFocus={false}
+      refetchWhenOffline={false}
     >
       <ReduxProvider store={store}>
         <QueryClientProvider client={queryClient}>

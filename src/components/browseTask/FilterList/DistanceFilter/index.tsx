@@ -21,8 +21,6 @@ export default function DistanceFilter() {
     },
   });
 
-  console.log(89, form.watch());
-
   const { setValue, watch, handleSubmit, reset } = form;
   const location = watch("location");
   const address = watch("address");

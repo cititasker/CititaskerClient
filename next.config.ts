@@ -1,8 +1,19 @@
 import type { NextConfig } from "next";
 const path = require("path");
 
-const nextConfig: NextConfig = {
-  // output: "standalone",
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
+});
+
+const nextConfig: NextConfig = withBundleAnalyzer({
+  compiler: {
+    removeConsole:
+      process.env.NODE_ENV === "production"
+        ? {
+            exclude: ["error", "warn"],
+          }
+        : false,
+  },
   images: {
     remotePatterns: [
       {
@@ -18,9 +29,8 @@ const nextConfig: NextConfig = {
   // eslint: {
   //   ignoreDuringBuilds: true,
   // },
-  webpack(config, { isServer }) {
+  webpack(config: any, { isServer }: { isServer: boolean }) {
     if (!isServer) {
-      // Don't resolve 'fs' module on the client to prevent this error
       config.resolve.fallback = {
         ...config.resolve.fallback,
         fs: false,
@@ -57,6 +67,13 @@ const nextConfig: NextConfig = {
 
     return config;
   },
-};
+  experimental: {
+    optimizePackageImports: [
+      "lucide-react",
+      "@radix-ui/react-icons",
+      "framer-motion",
+    ],
+  },
+});
 
 export default nextConfig;

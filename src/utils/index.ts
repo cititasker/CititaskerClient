@@ -6,7 +6,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 import { connectionFee } from "@/constant";
-import moment from "moment";
+
 dayjs.extend(LocalizedFormat);
 dayjs.extend(relativeTime);
 dayjs.extend(customParseFormat);
@@ -71,7 +71,7 @@ export const truncate = (value: any, limit = 30) => {
 export const capitalize = (str: string | null) => {
   if (!str) return "";
   return str
-    .split(" ") // Split the string into words
+    .split(" ")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(" ");
 };
@@ -144,13 +144,11 @@ export const formatCurrency = ({
 
   const amount = typeof value === "string" ? parseFloat(value) : value;
 
-  // Use Intl.NumberFormat to format the number without a currency code
   const formattedAmount = new Intl.NumberFormat(locale, {
     minimumFractionDigits: noFraction ? 0 : 2,
     maximumFractionDigits: 2,
   }).format(amount);
 
-  // Prefix the formatted number with the "N" symbol
   return `${currencySymbol}${formattedAmount}`;
 };
 
@@ -230,11 +228,12 @@ export function loggedInUser(first_name: any, last_name: any) {
   else if (last_name) return last_name;
   return "Anonymous";
 }
+
 export function formatTime(dateString: string, format = "hh:mm a"): string {
-  // Parse the date string and format it as time (11:23 am)
   return dayjs(dateString).format(format);
 }
-export const maxDate = moment().endOf("day").toDate();
+
+export const maxDate = dayjs().endOf("day").toDate();
 
 /**
  * Returns a maxDate based on how many years ago you want to subtract.
@@ -243,10 +242,10 @@ export const maxDate = moment().endOf("day").toDate();
  */
 export function getMaxDate(years?: number): Date {
   if (typeof years === "number") {
-    return moment().subtract(years, "years").endOf("day").toDate();
+    return dayjs().subtract(years, "years").endOf("day").toDate();
   }
 
-  return moment().endOf("day").toDate(); // default to today
+  return dayjs().endOf("day").toDate();
 }
 
 export const updateQueryParams = (
@@ -270,9 +269,9 @@ export const calculateFees = (amount: number, percentage = connectionFee) => {
 };
 
 export const normalizeUrl = (url: string): string => {
-  if (/^https:\/\//i.test(url)) return url; // already https
-  if (/^http:\/\//i.test(url)) return url.replace(/^http:\/\//i, "https://"); // convert http to https
-  return `https://${url}`; // no protocol, prepend https
+  if (/^https:\/\//i.test(url)) return url;
+  if (/^http:\/\//i.test(url)) return url.replace(/^http:\/\//i, "https://");
+  return `https://${url}`;
 };
 
 export const formatFileSize = (bytes: number): string => {

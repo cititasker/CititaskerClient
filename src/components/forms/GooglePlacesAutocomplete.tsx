@@ -104,7 +104,7 @@ export const GooglePlacesAutocomplete = ({
       name={name}
       control={control}
       render={({ field, fieldState }) => (
-        <FormItem className={cn("space-y-2", className)}>
+        <FormItem className={cn("space-y-1", className)}>
           {label && (
             <FormLabel
               htmlFor={name}

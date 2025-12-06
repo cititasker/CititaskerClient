@@ -18,6 +18,7 @@ interface IProps {
   okVariant?: VariantProps<typeof buttonVariants>["variant"];
   cancelVariant?: VariantProps<typeof buttonVariants>["variant"];
   size?: "default" | "sm" | "lg" | "icon" | null | undefined;
+  formId?: string;
 }
 const ActionsButtons = ({
   loading,
@@ -33,6 +34,7 @@ const ActionsButtons = ({
   okVariant = "default",
   cancelVariant = "outline",
   size = "default",
+  formId,
 }: IProps) => {
   return (
     <div
@@ -59,6 +61,7 @@ const ActionsButtons = ({
         disabled={disabled || loading}
         variant={okVariant}
         size={size}
+        form={formId}
       />
     </div>
   );

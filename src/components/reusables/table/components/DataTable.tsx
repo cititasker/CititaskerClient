@@ -20,6 +20,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
   columns: ColumnDef<TData, TValue>[];
   pageSize?: number;
+  pageIndex?: number;
   className?: string;
   isLoading?: boolean;
   onRowSelectionChange?: (rowSelection: Record<string, boolean>) => void;
@@ -54,6 +55,7 @@ export const DataTable = forwardRef<DataTableRef, DataTableProps<any, any>>(
       data,
       columns,
       pageSize = 10,
+      pageIndex = 0,
       className,
       isLoading = false,
       onRowSelectionChange,
@@ -117,6 +119,7 @@ export const DataTable = forwardRef<DataTableRef, DataTableProps<any, any>>(
       manualPagination,
       enableRowSelection,
       pageSize,
+      pageIndex,
     });
 
     useImperativeHandle(
@@ -131,7 +134,7 @@ export const DataTable = forwardRef<DataTableRef, DataTableProps<any, any>>(
 
     return (
       <div className={cn("space-y-4", className)}>
-        <Card>
+        <Card className="shadow-none rounded-none">
           <div className="min-h-0 w-full flex-shrink-0 overflow-x-auto">
             <div className="min-w-max">
               <Table>

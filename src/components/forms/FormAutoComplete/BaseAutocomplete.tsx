@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { Popover, PopoverContent } from "@/components/ui/popover";
-import { Command, CommandList } from "@/components/ui/command";
+import React, { useState, useEffect, useRef } from "react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { AutocompleteTrigger } from "./AutocompleteTrigger";
-import { AutocompleteSearch } from "./AutocompleteSearch";
-import { AutocompleteEmptyState } from "./AutocompleteEmptyState";
-import { AutocompleteOption } from "./AutocompleteOption";
+import { Check, ChevronsUpDown, X, Loader2 } from "@/components/icons/index";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 interface BaseAutocompleteProps<TOption> {
   options: TOption[];
@@ -19,8 +21,6 @@ interface BaseAutocompleteProps<TOption> {
     option: TOption,
     selected: boolean
   ) => React.ReactNode;
-
-  // UI Props
   placeholder?: string;
   disabled?: boolean;
   loading?: boolean;
@@ -56,11 +56,17 @@ export function BaseAutocomplete<TOption>({
 }: BaseAutocompleteProps<TOption>) {
   const [open, setOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const sizeClasses = {
+    sm: "h-9 text-sm",
+    md: "h-12",
+    lg: "h-14 text-lg",
+  };
 
   // Filter options based on search query
   const filteredOptions = React.useMemo(() => {
     if (!searchQuery || !searchable) return options;
-
     return options.filter((option) =>
       getOptionLabel(option).toLowerCase().includes(searchQuery.toLowerCase())
     );
@@ -70,8 +76,11 @@ export function BaseAutocomplete<TOption>({
   useEffect(() => {
     if (!open) {
       setSearchQuery("");
+    } else if (searchable && inputRef.current) {
+      // Focus input when opening
+      setTimeout(() => inputRef.current?.focus(), 0);
     }
-  }, [open]);
+  }, [open, searchable]);
 
   const selected = options.find((opt) =>
     value ? isOptionEqualToValue(opt, value) : false
@@ -79,87 +88,121 @@ export function BaseAutocomplete<TOption>({
   const selectedLabel = selected ? getOptionLabel(selected) : "";
   const hasValue = Boolean(value);
 
-  const handleClear = (event: React.MouseEvent) => {
-    event.preventDefault();
-    event.stopPropagation();
+  const handleClear = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     onValueChange(null);
   };
 
   const handleOptionSelect = (option: TOption) => {
     const isSelected = selected && isOptionEqualToValue(option, selected);
-    const newValue = isSelected ? null : option;
-    onValueChange(newValue);
+    onValueChange(isSelected ? null : option);
     setOpen(false);
   };
 
   return (
     <div className={cn("w-full", className)}>
       <Popover open={open} onOpenChange={setOpen}>
-        <AutocompleteTrigger
-          selectedLabel={selectedLabel}
-          placeholder={placeholder}
-          disabled={disabled}
-          loading={loading}
-          hasError={hasError}
-          open={open}
-          clearable={clearable}
-          hasValue={hasValue}
-          size={size}
-          onClear={handleClear}
-          label={label}
-        />
+        <PopoverTrigger asChild>
+          <Button
+            type="button"
+            variant="outline"
+            disabled={disabled}
+            className={cn(
+              "w-full justify-between font-normal",
+              sizeClasses[size],
+              hasError && "border-error",
+              !hasValue && "text-muted-foreground"
+            )}
+          >
+            <span className="truncate">{selectedLabel || placeholder}</span>
+            <div className="flex items-center gap-2 ml-2 flex-shrink-0">
+              {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+              {clearable && hasValue && !loading && (
+                <X
+                  className="h-4 w-4 opacity-50 hover:opacity-100"
+                  onClick={handleClear}
+                />
+              )}
+              {!loading && <ChevronsUpDown className="h-4 w-4 opacity-50" />}
+            </div>
+          </Button>
+        </PopoverTrigger>
 
         <PopoverContent
-          side="bottom"
+          className="w-[var(--radix-popover-trigger-width)] p-0"
           align="start"
-          className={cn(
-            "w-[var(--radix-popover-trigger-width)] p-0 z-50 overflow-hidden",
-            "bg-background border border-neutral-200 shadow-xl rounded-xl"
-          )}
         >
-          <Command>
-            <AutocompleteSearch
-              searchable={searchable}
-              searchQuery={searchQuery}
-              onSearchQueryChange={setSearchQuery}
-              placeholder={label}
-              size={size}
-            />
+          <div className="flex flex-col">
+            {/* Search Input */}
+            {searchable && (
+              <div className="p-2 border-b">
+                <Input
+                  ref={inputRef}
+                  placeholder={`Search ${label || "options"}...`}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="h-9"
+                />
+              </div>
+            )}
 
-            <CommandList
+            {/* Options List */}
+            <div
               className="overflow-y-auto"
               style={{ maxHeight: `${maxHeight}px` }}
             >
-              <AutocompleteEmptyState
-                emptyMessage={emptyMessage}
-                searchQuery={searchQuery}
-                onClearSearch={() => setSearchQuery("")}
-              />
+              {filteredOptions.length === 0 ? (
+                <div className="py-6 text-center text-sm text-muted-foreground">
+                  {emptyMessage}
+                </div>
+              ) : (
+                filteredOptions.map((option, index) => {
+                  const isSelected =
+                    selected && isOptionEqualToValue(option, selected);
+                  const optionLabel = getOptionLabel(option);
 
-              {filteredOptions.map((option, index) => {
-                const isSelected =
-                  selected && isOptionEqualToValue(option, selected);
+                  if (renderOption) {
+                    return renderOption(
+                      {
+                        key: getOptionValue
+                          ? getOptionValue(option)
+                          : `${optionLabel}-${index}`,
+                        onClick: () => handleOptionSelect(option),
+                      },
+                      option,
+                      !!isSelected
+                    );
+                  }
 
-                return (
-                  <AutocompleteOption
-                    key={`${
-                      getOptionValue
-                        ? getOptionValue(option)
-                        : getOptionLabel(option)
-                    }-${index}`}
-                    option={option}
-                    isSelected={!!isSelected}
-                    onSelect={handleOptionSelect}
-                    getOptionLabel={getOptionLabel}
-                    getOptionValue={getOptionValue}
-                    renderOption={renderOption}
-                    size={size}
-                    index={index}
-                  />
-                );
-              })}
-            </CommandList>
-          </Command>
+                  return (
+                    <button
+                      key={
+                        getOptionValue
+                          ? getOptionValue(option)
+                          : `${optionLabel}-${index}`
+                      }
+                      type="button"
+                      onClick={() => handleOptionSelect(option)}
+                      className={cn(
+                        "w-full flex items-center gap-2 px-3 py-2 text-sm",
+                        "hover:bg-accent cursor-pointer transition-colors",
+                        isSelected && "bg-accent"
+                      )}
+                    >
+                      <Check
+                        className={cn(
+                          "h-4 w-4 flex-shrink-0",
+                          isSelected ? "opacity-100" : "opacity-0"
+                        )}
+                      />
+                      <span className="truncate">{optionLabel}</span>
+                    </button>
+                  );
+                })
+              )}
+            </div>
+          </div>
         </PopoverContent>
       </Popover>
     </div>

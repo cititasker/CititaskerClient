@@ -5,7 +5,7 @@ import { AlertCircle } from "lucide-react";
 
 import { Separator } from "@/components/ui/separator";
 import { ROUTES } from "@/constant";
-import ProgressBar from "@/app/(auth)/components/ProgressBar";
+import ProgressBar from "@/components/auth/ProgressBar";
 import { verificationConfig, VerificationStep } from "./constant";
 import { VerificationStepCard } from "./VerificationStepCard";
 import BaseModal from "@/components/browseTask/Modals/BaseModal";

@@ -1,4 +1,3 @@
-// Base autocomplete components (can be used independently)
 export { AutocompleteTrigger } from "./AutocompleteTrigger";
 export { AutocompleteSearch } from "./AutocompleteSearch";
 export { AutocompleteEmptyState } from "./AutocompleteEmptyState";

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useCallback } from "react";
 import {
   useReactTable,
   getCoreRowModel,
@@ -24,6 +24,7 @@ interface UseDataTableProps<TData> {
   manualPagination?: boolean;
   enableRowSelection?: boolean;
   pageSize?: number;
+  pageIndex?: number;
 }
 
 export const useDataTable = <TData>({
@@ -38,6 +39,7 @@ export const useDataTable = <TData>({
   manualPagination = false,
   enableRowSelection = false,
   pageSize = 10,
+  pageIndex = 0,
 }: UseDataTableProps<TData>) => {
   const [sorting, setSorting] = useState<SortingState>(initialSorting);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
@@ -46,23 +48,27 @@ export const useDataTable = <TData>({
   const [columnFilters, setColumnFilters] =
     useState<ColumnFiltersState>(initialColumnFilters);
   const [rowSelection, setRowSelection] = useState({});
-  const [pagination, setPagination] = useState<PaginationState>({
-    pageIndex: 0,
+
+  const pagination: PaginationState = {
+    pageIndex,
     pageSize,
-  });
+  };
 
-  // Track if we're handling an internal update
-  const isInternalUpdateRef = useRef(false);
+  const handlePaginationChange = useCallback(
+    (
+      updater: PaginationState | ((old: PaginationState) => PaginationState)
+    ) => {
+      const currentPagination = { pageIndex, pageSize };
 
-  // Sync pageSize from props without triggering callback
-  useEffect(() => {
-    setPagination((prev) => {
-      if (prev.pageSize !== pageSize) {
-        return { ...prev, pageSize };
+      const newPagination =
+        typeof updater === "function" ? updater(currentPagination) : updater;
+
+      if (onPaginationChange) {
+        onPaginationChange(newPagination);
       }
-      return prev;
-    });
-  }, [pageSize]);
+    },
+    [pageIndex, pageSize, onPaginationChange]
+  );
 
   const table = useReactTable({
     data,
@@ -86,17 +92,7 @@ export const useDataTable = <TData>({
         onRowSelectionChange(newSelection);
       }
     },
-    onPaginationChange: (updater) => {
-      const newPagination =
-        typeof updater === "function" ? updater(pagination) : updater;
-
-      setPagination(newPagination);
-
-      // Only call external callback if not an internal update
-      if (onPaginationChange && !isInternalUpdateRef.current) {
-        onPaginationChange(newPagination);
-      }
-    },
+    onPaginationChange: handlePaginationChange,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),

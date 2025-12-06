@@ -2,9 +2,8 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Search, X, RotateCcw, Download, MoreHorizontal } from "lucide-react";
+import { RotateCcw, Download, MoreHorizontal } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ColumnFiltersState } from "@tanstack/react-table";
 import {
@@ -14,6 +13,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import FilterDrawer from "./components/FilterDrawer";
+import Search from "../Search";
+import FormButton from "@/components/forms/FormButton";
 
 interface SearchAndFilterBarProps {
   // Search props
@@ -82,11 +83,6 @@ export const SearchAndFilterBar = ({
     }
   }, [searchValue]);
 
-  const clearSearch = () => {
-    setLocalSearchValue("");
-    onSearchChange?.("");
-  };
-
   const activeFiltersCount = filters?.length || 0;
 
   return (
@@ -99,43 +95,29 @@ export const SearchAndFilterBar = ({
     >
       {/* Search Section */}
       <div className="flex flex-1 gap-2 min-w-0">
-        <div className="relative flex-1 max-w-sm">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-          <Input
-            type="text"
-            placeholder={searchPlaceholder}
-            value={localSearchValue}
-            onChange={(e) => setLocalSearchValue(e.target.value)}
-            className="pl-9 pr-9"
-          />
-          {localSearchValue && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={clearSearch}
-              className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 p-0 hover:bg-muted"
-            >
-              <X className="w-3 h-3" />
-            </Button>
-          )}
-        </div>
-
+        <Search
+          placeholder={searchPlaceholder}
+          value={searchValue}
+          onChange={onSearchChange}
+          showCancel
+          onReset={onReset}
+        />
         {/* Active Filters Summary */}
         {hasActiveFilters && (
           <div className="flex items-center gap-2">
-            <Badge variant="secondary" className="hidden sm:flex">
+            <Badge variant="default" className="hidden sm:flex">
               {activeFiltersCount} filter{activeFiltersCount !== 1 ? "s" : ""}{" "}
               active
             </Badge>
-            <Button
+            <FormButton
               variant="ghost"
               size="sm"
               onClick={onReset}
               className="text-muted-foreground hover:text-foreground"
+              icon={<RotateCcw className="w-4 h-4" />}
             >
-              <RotateCcw className="w-4 h-4 mr-1" />
               {compact ? "" : "Clear"}
-            </Button>
+            </FormButton>
           </div>
         )}
       </div>

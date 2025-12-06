@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ROLE, ROUTES } from "@/constant";
+import { ROUTES } from "@/constant";
 
 export default function HowItWorksDropdown() {
   return (
@@ -28,17 +28,13 @@ export default function HowItWorksDropdown() {
             asChild
             className="py-2.5 px-3 hover:text-primary font-normal rounded-none"
           >
-            <Link href={`/${ROLE.poster}${ROUTES.HOW_IT_WORKS}`}>
-              For Poster
-            </Link>
+            <Link href={`${ROUTES.HOW_IT_WORKS}-poster`}>For Poster</Link>
           </DropdownMenuItem>
           <DropdownMenuItem
             asChild
             className="py-2.5 px-3 hover:text-primary font-normal rounded-none"
           >
-            <Link href={`/${ROLE.tasker}${ROUTES.HOW_IT_WORKS}`}>
-              For Tasker
-            </Link>
+            <Link href={`${ROUTES.HOW_IT_WORKS}-tasker`}>For Tasker</Link>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

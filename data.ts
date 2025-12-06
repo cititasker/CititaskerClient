@@ -602,8 +602,8 @@ export const menuData = [
   { name: "Dashboard", href: ROUTES.DASHBOARD, icon: IGridView },
   { name: "Message", href: ROUTES.DASHBOARD_MESSAGE, icon: IChat },
   {
-    name: "Payment & Billing",
-    href: ROUTES.DASHBOARD_PAYMENT,
+    name: "Transactions",
+    href: ROUTES.DASHBOARD_TRANSACTION,
     icon: ICreditCard,
   },
   {

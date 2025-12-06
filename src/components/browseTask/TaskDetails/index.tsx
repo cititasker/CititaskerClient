@@ -16,6 +16,7 @@ import { TaskContent } from "./TaskContent";
 
 const ShareTaskModal = dynamic(() => import("../Modals/ShareTaskModal"), {
   ssr: false,
+  loading: () => null,
 });
 
 const TaskModals = dynamic(
@@ -25,6 +26,7 @@ const TaskModals = dynamic(
     })),
   {
     ssr: false,
+    loading: () => null,
   }
 );
 
@@ -53,7 +55,6 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ back }) => {
     onReleasePaymentAction: () => {},
   });
 
-  // Set task details in Redux
   useEffect(() => {
     if (!task) return;
     dispatch(setTaskDetails(task));
@@ -80,7 +81,6 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ back }) => {
 
   return (
     <>
-      {/* Single Alert Banner - Shows highest priority alert */}
       <div className="space-y-2 mb-2">
         {alerts.map((alert) => (
           <TaskAlertBanner key={alert.id} alert={alert} />
@@ -92,7 +92,6 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ back }) => {
         <TaskContent task={task} onOptionSelect={handleOptionSelect} />
       </Card>
 
-      {/* Only render modals when they're actually opened */}
       {shareModal.isOpen && (
         <ShareTaskModal
           open={shareModal.isOpen}
@@ -101,7 +100,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ back }) => {
         />
       )}
 
-      <TaskModals task={task} actions={actions} role="tasker" />
+      {task && <TaskModals task={task} actions={actions} role="tasker" />}
     </>
   );
 };

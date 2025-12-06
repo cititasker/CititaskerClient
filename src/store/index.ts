@@ -10,31 +10,24 @@ const taskPersistConfig = {
   key: "task",
   storage,
   whitelist: ["task", "offer"],
-  // Transform to ensure only serializable data is persisted
   transforms: [
     {
-      in: (inboundState: any) => {
-        // Transform images to remove any File objects before persisting
-        if (inboundState?.task?.images) {
-          return {
-            ...inboundState,
-            task: {
-              ...inboundState.task,
-              images: inboundState.task.images.map((img: any) => ({
-                src: img.src,
-                name: img.name || "",
-                new: img.new || false,
-                // Explicitly exclude any File objects or other non-serializable data
-              })),
-            },
-          };
-        }
-        return inboundState;
+      in: (state: any) => {
+        if (!state?.task?.images) return state;
+
+        return {
+          ...state,
+          task: {
+            ...state.task,
+            images: state.task.images.map((img: any) => ({
+              src: img.src || img.url,
+              name: img.name,
+              new: img.new,
+            })),
+          },
+        };
       },
-      out: (outboundState: any) => {
-        // No transformation needed on the way out
-        return outboundState;
-      },
+      out: (state: any) => state,
     },
   ],
 };
@@ -51,7 +44,6 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        // Ignore redux-persist actions
         ignoredActions: [
           "persist/PERSIST",
           "persist/REHYDRATE",
@@ -60,15 +52,12 @@ export const store = configureStore({
           "persist/FLUSH",
           "persist/PAUSE",
         ],
-        // Ignore specific paths that might contain non-serializable data
-        ignoredActionsPaths: ["meta.arg", "payload.timestamp"],
-        ignoredPaths: ["task.task.images.file"], // Ignore the file property if it exists
+        ignoredPaths: ["task.task.images.file"],
       },
     }),
 });
 
 export const persistor = persistStore(store);
 
-// Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

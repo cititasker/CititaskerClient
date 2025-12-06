@@ -37,7 +37,7 @@ export default function CustomTab({
     searchParams.get(queryKey) ?? defaultValue ?? items[0]?.value;
 
   const handleTabChange = (value: string) => {
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams();
     params.set(queryKey, value);
     router.replace(`?${params.toString()}`, { scroll: false });
   };

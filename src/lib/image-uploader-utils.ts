@@ -1,4 +1,4 @@
-import { convertToBase64 } from "@/app/post-task/utils/fileHelpers";
+import { convertToBase64 } from "@/utils";
 
 export interface NormalizedImage {
   id: string;

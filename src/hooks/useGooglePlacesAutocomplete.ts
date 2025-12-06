@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from "react";
-import { debounce } from "lodash";
+import { useEffect, useRef, useState, useCallback } from "react";
 
 export interface PlaceOption {
   description: string;
@@ -17,7 +16,6 @@ interface UseGooglePlacesAutocompleteOptions {
   filterByCity?: string;
 }
 
-// Move default location outside to prevent recreation
 const DEFAULT_LOCATION_BIAS = {
   lat: 6.5244,
   lng: 3.3792,
@@ -43,6 +41,8 @@ export const useGooglePlacesAutocomplete = (
   const autocompleteServiceRef =
     useRef<google.maps.places.AutocompleteService | null>(null);
   const pendingRequestRef = useRef<boolean>(false);
+  // ✅ Fix: Use undefined as initial value for optional timeout
+  const timeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
   // Initialize Google Maps API
   useEffect(() => {
@@ -57,13 +57,11 @@ export const useGooglePlacesAutocomplete = (
       }
     };
 
-    // Check if already loaded
     if (window.google?.maps?.places) {
       initializeService();
       return;
     }
 
-    // Load the script if not already present
     const existingScript = document.querySelector("#google-maps-script");
     if (existingScript) {
       existingScript.addEventListener("load", initializeService);
@@ -83,11 +81,9 @@ export const useGooglePlacesAutocomplete = (
     document.head.appendChild(script);
   }, []);
 
-  // Create stable debounced function with useRef to avoid recreation
-  const debouncedFetchRef = useRef<ReturnType<typeof debounce> | null>(null);
-
-  if (!debouncedFetchRef.current) {
-    debouncedFetchRef.current = debounce((searchInput: string) => {
+  // Fetch function
+  const fetchPlaces = useCallback(
+    (searchInput: string) => {
       if (
         !autocompleteServiceRef.current ||
         !searchInput.trim() ||
@@ -123,7 +119,6 @@ export const useGooglePlacesAutocomplete = (
           ) {
             let filteredPredictions = predictions;
 
-            // Apply city filter if specified
             if (filterByCity) {
               filteredPredictions = predictions.filter((prediction) =>
                 prediction.description
@@ -144,46 +139,60 @@ export const useGooglePlacesAutocomplete = (
           }
         }
       );
-    }, debounceMs);
-  }
+    },
+    [countryCode, filterByCity]
+  );
 
-  // Handle input changes
+  // Handle input changes with debounce
   useEffect(() => {
-    if (!isReady || !debouncedFetchRef.current) return;
+    if (!isReady) return;
 
     if (input.length >= minInputLength) {
-      debouncedFetchRef.current(input);
+      // Clear existing timeout
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      // Set new timeout
+      timeoutRef.current = setTimeout(() => {
+        fetchPlaces(input);
+      }, debounceMs);
     } else {
-      debouncedFetchRef.current.cancel();
+      // Clear timeout if input is too short
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
       setPlaces([]);
       setIsLoading(false);
     }
-  }, [input, isReady, minInputLength]);
+
+    // Cleanup
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, [input, isReady, minInputLength, debounceMs, fetchPlaces]);
 
   // Cleanup on unmount
   useEffect(() => {
     return () => {
-      if (debouncedFetchRef.current) {
-        debouncedFetchRef.current.cancel();
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
       }
       pendingRequestRef.current = false;
     };
   }, []);
 
   return {
-    // Data
     input,
-    options: places, // Keeping 'options' for backward compatibility
+    options: places,
     places,
-
-    // State
     isLoading,
     isReady,
     error,
-
-    // Actions
     setInput,
-    setOptions: setPlaces, // For backward compatibility
+    setOptions: setPlaces,
     setPlaces,
   };
 };

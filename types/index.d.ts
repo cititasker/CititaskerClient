@@ -92,9 +92,9 @@ interface IUser {
   };
   bank_details: {
     account_name: string;
-    account_no: string;
     bank_code: string;
     bank_name: string;
+    account_number: string;
   };
   message_notifications_route: "email";
   notifications: "true" | "false";
@@ -112,6 +112,10 @@ type LocationTypeT = "in_person" | "online";
 type TaskStatusT = "open" | "assigned" | "completed";
 
 type TaskTimeT = "morning" | "mid_day" | "afternoon" | "evening";
+
+type TransactionStatusT = "pending" | "approved" | "failed";
+
+type TransactionType = "credit" | "debit";
 
 interface ITasker {
   created_at: string;
@@ -163,6 +167,14 @@ interface IReschedule {
   initiated_by: TRole;
 }
 
+interface IAcceptedOffer {
+  created_at: string;
+  description: string;
+  id: number;
+  offer_amount: number;
+  status: "accepted";
+}
+
 interface ITask {
   price: React.JSX.Element;
   id: number;
@@ -199,9 +211,10 @@ interface ITask {
   status: string;
   address: string;
   payment_requested: boolean;
+  payment_released: boolean;
   has_surcharge_requests: boolean;
   reschedule: IReschedule;
-  updatedBudget: number;
+  accepted_offer: IAcceptedOffer;
 }
 
 interface ITaskCategory {

@@ -65,7 +65,7 @@ const TaskerInfo = ({
           className="h-8 px-2 text-text-muted hover:text-primary"
         >
           <Link
-            href={`/tasker/profile/${tasker.id}`}
+            href={`/tasker-profile/${tasker.id}`}
             className="flex items-center gap-1"
           >
             <Icons.person className="w-4 h-4" />
@@ -145,7 +145,7 @@ const UserOffer = ({ offer, task, toggleModal }: IProps) => {
   }, [replies]);
 
   return (
-    <Card className="p-6 border border-border-light hover:border-border-medium mb-6 last:mb-0 animate-fade-in">
+    <Card className="p-4 sm:p-6 border border-border-medium hover:border-border-medium mb-6 last:mb-0 animate-fade-in">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-6">
         <TaskerInfo tasker={offer.tasker} task={task} />

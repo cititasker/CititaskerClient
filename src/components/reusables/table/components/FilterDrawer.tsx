@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
   Sheet,
@@ -14,6 +14,8 @@ import {
 import { Filter } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ColumnFiltersState } from "@tanstack/react-table";
+import FormButton from "@/components/forms/FormButton";
+import { VariantProps } from "class-variance-authority";
 
 interface FilterDrawerProps {
   // Filter state
@@ -36,7 +38,7 @@ interface FilterDrawerProps {
     | "secondary"
     | "ghost"
     | "link";
-  triggerSize?: "default" | "sm" | "lg";
+  triggerSize?: VariantProps<typeof buttonVariants>["size"];
   disabled?: boolean;
 
   // Children - flexible content
@@ -76,18 +78,18 @@ export const FilterDrawer = ({
   const activeFiltersCount = filters.length;
 
   // Default icon
-  const defaultIcon = triggerIcon || <Filter className="w-4 h-4 mr-2" />;
+  const defaultIcon = triggerIcon || <Filter className="w-4 h-4" />;
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button
+        <FormButton
           variant={triggerVariant}
           size={triggerSize}
           disabled={disabled}
-          className={cn("relative", triggerClassName)}
+          className={cn("relative px-3", triggerClassName)}
+          icon={defaultIcon}
         >
-          {defaultIcon}
           {triggerText}
           {activeFiltersCount > 0 && (
             <Badge
@@ -97,7 +99,7 @@ export const FilterDrawer = ({
               {activeFiltersCount}
             </Badge>
           )}
-        </Button>
+        </FormButton>
       </SheetTrigger>
 
       <SheetContent

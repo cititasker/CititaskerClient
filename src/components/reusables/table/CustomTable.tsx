@@ -1,14 +1,13 @@
 "use client";
 
 import React from "react";
-import { ColumnDef, RowData } from "@tanstack/react-table";
+import { ColumnDef, PaginationState, RowData } from "@tanstack/react-table";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Plus, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 import SearchAndFilterBar from "./SearchAndFilterBar";
-import { useTableState } from "./hooks/useTableState";
 import { DataTable } from "./components/DataTable";
 
 interface CustomTableProps<TData extends RowData> {
@@ -17,14 +16,22 @@ interface CustomTableProps<TData extends RowData> {
   description?: string;
   data: TData[];
   columns: ColumnDef<TData>[];
+  totalDocuments: number;
+  totalPages: number;
 
   // Filter configuration
+  searchTerm?: string;
+  handleSearch?: (value: string) => void;
+  hand?: string;
   searchPlaceholder?: string;
+  hasActiveFilters?: boolean;
 
   // Actions
+  onReset?: () => void;
   onRefresh?: () => void;
   onCreate?: () => void;
   onExport?: (format: "csv" | "excel" | "pdf") => void;
+  onFiltersChange?: (newFilters: Record<string, any>) => void;
   extraActions?: React.ReactNode[];
 
   // Row actions
@@ -38,6 +45,9 @@ interface CustomTableProps<TData extends RowData> {
   enableColumnVisibility?: boolean;
   enableRowSelection?: boolean;
   enablePagination?: boolean;
+  pagination: PaginationState;
+  onPaginationChange: ({ pageIndex, pageSize }: PaginationState) => void;
+  showPagination?: boolean;
 
   // States
   isLoading?: boolean;
@@ -57,27 +67,26 @@ export function CustomTable<TData extends RowData>({
   description,
   data,
   columns,
+  totalDocuments,
+  totalPages,
   searchPlaceholder = "Search...",
+  searchTerm,
+  onReset,
+  handleSearch,
   onRefresh,
   onCreate,
   onExport,
+  onFiltersChange,
   extraActions = [],
-  defaultPageSize = 10,
   isLoading = false,
   error = null,
   className,
   compact = false,
+  hasActiveFilters,
+  showPagination = true,
+  pagination,
+  onPaginationChange,
 }: CustomTableProps<TData>) {
-  // Use our custom hook for URL-persistent state management
-  const {
-    tableState,
-    setSearch,
-    setColumnFilters,
-    resetAll,
-    hasActiveFilters,
-  } = useTableState(defaultPageSize);
-
-  // Prepare actions for SearchAndFilterBar
   const searchFilterActions = [
     ...(onRefresh
       ? [
@@ -130,12 +139,11 @@ export function CustomTable<TData extends RowData>({
 
       {/* Search and Filter Bar */}
       <SearchAndFilterBar
-        searchValue={tableState.search}
-        onSearchChange={setSearch}
+        searchValue={searchTerm}
+        onSearchChange={handleSearch}
         searchPlaceholder={searchPlaceholder}
-        filters={tableState.columnFilters}
-        onFiltersChange={setColumnFilters}
-        onReset={resetAll}
+        onFiltersChange={onFiltersChange}
+        onReset={onReset}
         hasActiveFilters={hasActiveFilters}
         onExport={onExport}
         extraActions={searchFilterActions}
@@ -143,7 +151,20 @@ export function CustomTable<TData extends RowData>({
       />
 
       {/* Data Table */}
-      <DataTable data={data} columns={columns} isLoading={isLoading} />
+      <DataTable
+        data={data}
+        columns={columns}
+        pageSize={pagination.pageSize}
+        pageIndex={pagination.pageIndex}
+        isLoading={isLoading}
+        totalCount={totalDocuments}
+        pageCount={totalPages}
+        manualPagination
+        onPaginationChange={onPaginationChange}
+        showPagination={showPagination}
+        showTableCount
+        enableRowSelection
+      />
     </div>
   );
 }

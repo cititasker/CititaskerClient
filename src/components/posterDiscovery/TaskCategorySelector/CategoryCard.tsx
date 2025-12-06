@@ -1,6 +1,5 @@
 import { cn } from "@/lib/utils";
 
-// Category card
 interface CategoryCardProps {
   category: ITaskCategory;
   onClick: () => void;

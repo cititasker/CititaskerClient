@@ -4,7 +4,8 @@ import {
   TableHeader as UITableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ArrowUp, ArrowDown, ArrowUpDown } from "lucide-react";
+import { ArrowUp, ArrowDown, ChevronsUpDown } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface TableHeaderProps<TData> {
   table: Table<TData>;
@@ -14,31 +15,44 @@ export const TableHeader = <TData,>({ table }: TableHeaderProps<TData>) => {
   const getSortIcon = (sortDirection: false | "asc" | "desc") => {
     switch (sortDirection) {
       case "asc":
-        return <ArrowUp className="h-4 w-4" />;
+        return <ArrowUp size={12} />;
       case "desc":
-        return <ArrowDown className="h-4 w-4" />;
+        return <ArrowDown size={12} />;
       default:
-        return <ArrowUpDown className="h-4 w-4" />;
+        return <ChevronsUpDown size={12} />;
     }
   };
 
   return (
     <UITableHeader>
-      {table.getHeaderGroups().map((headerGroup) => (
-        <TableRow key={headerGroup.id} className="bg-primary hover:bg-primary">
-          {headerGroup.headers.map((header) => (
+      {table.getHeaderGroups().map((headerGroup, groupIndex) => (
+        <TableRow
+          key={headerGroup.id}
+          className={cn(
+            "bg-light-primary-1 hover:bg-light-primary-1",
+            groupIndex === 0 && "rounded-t-lg"
+          )}
+        >
+          {headerGroup.headers.map((header, headerIndex) => (
             <TableHead
               key={header.id}
               align="right"
-              className="text-xs text-white px-4 py-5 font-medium tracking-[1px] uppercase last:flex last:items-center last:justify-end"
+              className={cn(
+                "text-xs text-black-2 px-4 py-5 font-medium tracking-[1px] uppercase h-auto",
+                headerIndex === 0 && "rounded-tl-lg", // left corner
+                headerIndex === headerGroup.headers.length - 1 &&
+                  "rounded-tr-lg text-right" // right corner
+              )}
             >
               {header.isPlaceholder ? null : (
                 <div
-                  className={
+                  className={cn(
                     header.column.getCanSort()
                       ? "flex cursor-pointer items-center select-none"
-                      : "flex items-center"
-                  }
+                      : "flex items-center",
+                    headerIndex === headerGroup.headers.length - 1 &&
+                      "justify-end"
+                  )}
                   onClick={header.column.getToggleSortingHandler()}
                 >
                   {flexRender(

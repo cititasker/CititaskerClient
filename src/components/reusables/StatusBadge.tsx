@@ -17,7 +17,8 @@ export type StatusType =
   | "pending"
   | "processing"
   | "active"
-  | "inactive";
+  | "inactive"
+  | "approved";
 
 type StatusVariant = "success" | "warning" | "error" | "info";
 
@@ -36,6 +37,7 @@ const STATUS_MAP: Record<
   completed: { variant: "success" },
   successful: { variant: "success" },
   verified: { variant: "success" },
+  approved: { variant: "success" },
   active: { variant: "success" },
   assigned: { variant: "warning" },
   on_hold: { variant: "warning", label: "on hold" },
@@ -69,9 +71,9 @@ const SIZES = {
 };
 
 const DOT_SIZES = {
-  sm: "w-1.5 h-1.5",
-  md: "w-2 h-2",
-  lg: "w-2.5 h-2.5",
+  sm: "w-1 h-1",
+  md: "w-1.5 h-1.5",
+  lg: "w-2 h-2",
 };
 
 const StatusBadge: React.FC<StatusBadgeProps> = ({

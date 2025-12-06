@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { SessionProvider } from "next-auth/react";
 import "./globals.css";
 import Providers from "@/providers";
 import AppProvider from "@/providers/AppProvider";
@@ -30,7 +29,8 @@ export default async function RootLayout({
   const session = await auth();
   const queryClient = getQueryClient();
 
-  if (session?.user) {
+  // Prefetch user data on server if authenticated
+  if (session?.user?.authToken) {
     await queryClient.prefetchQuery({
       queryKey: [API_ROUTES.GET_USER_DETAILS],
       queryFn: getUserApi,
@@ -42,16 +42,13 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className="relative">
-        <SessionProvider>
-          <AppProvider>
-            {/* Hydrate React Query cache */}
+        <AppProvider>
+          <Providers session={session}>
             <HydrationBoundary state={dehydratedState}>
-              <Providers>
-                <TooltipProvider>{children}</TooltipProvider>
-              </Providers>
+              <TooltipProvider>{children}</TooltipProvider>
             </HydrationBoundary>
-          </AppProvider>
-        </SessionProvider>
+          </Providers>
+        </AppProvider>
       </body>
     </html>
   );

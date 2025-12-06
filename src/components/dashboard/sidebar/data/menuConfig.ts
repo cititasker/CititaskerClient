@@ -25,14 +25,14 @@ export const MENU_ITEMS: MenuItem[] = [
   },
   {
     name: "Messages",
-    href: "/dashboard/messages",
+    href: "/messages",
     icon: MessageCircle,
     badge: 5, // Example badge for unread messages
     description: "Chat and notifications",
   },
   {
-    name: "Payment & Billing",
-    href: "/dashboard/payment",
+    name: "Transactions",
+    href: "/transactions",
     icon: CreditCard,
     description: "Manage payments and invoices",
   },
@@ -43,13 +43,13 @@ export const MENU_ITEMS: MenuItem[] = [
     children: [
       {
         name: "Account",
-        href: "/dashboard/account",
+        href: "/account",
         icon: User,
         description: "Account settings",
       },
       {
         name: "Profile",
-        href: "/dashboard/profile",
+        href: "/profile",
         icon: UserCircle,
         description: "Public profile",
       },

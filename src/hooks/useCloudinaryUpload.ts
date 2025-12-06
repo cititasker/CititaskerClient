@@ -3,7 +3,7 @@ import {
   uploadToCloudinaryClient,
   CloudinaryUploadError,
   CloudinaryUploadResult,
-} from "@/lib/cloudinary-upload";
+} from "@/lib/cloudinary-upload-client";
 
 interface UseCloudinaryUploadOptions {
   folder?: string;

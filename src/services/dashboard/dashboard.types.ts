@@ -68,3 +68,21 @@ export type PosterAmountSpentAnalysisT = {
   month: string;
   amount: number;
 };
+
+export type WalletTransactionParamsT = {
+  type?: TransactionType;
+  status?: TransactionStatusT;
+  [key: string]: any;
+};
+
+export type WalletTransactionData = {
+  amount: number;
+  created_at: string;
+  id: number;
+  status: TransactionStatusT;
+  type: TransactionType;
+};
+
+export interface WalletTransactionRes extends IResponse {
+  data: WalletTransactionData[];
+}

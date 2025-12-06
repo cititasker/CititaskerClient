@@ -105,7 +105,7 @@ function PercentageField<T extends FieldValues>({
   };
 
   return (
-    <FormItem>
+    <FormItem className="space-y-1">
       {label && <FormLabel>{label}</FormLabel>}
       <FormControl>
         <div className="relative w-full">

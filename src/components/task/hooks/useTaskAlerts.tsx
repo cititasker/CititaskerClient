@@ -78,7 +78,8 @@ export const useTaskAlerts = ({
     if (
       !agreedDate &&
       !agreedTime &&
-      task?.reschedule?.initiated_by == "tasker"
+      task?.reschedule?.initiated_by == "tasker" &&
+      role === "poster"
     ) {
       const taskerName = getPartialInitials(task?.tasker?.profile);
       alertList.push({
@@ -100,7 +101,8 @@ export const useTaskAlerts = ({
     if (
       !agreedDate &&
       !agreedTime &&
-      task?.reschedule?.initiated_by == "poster"
+      task?.reschedule?.initiated_by == "poster" &&
+      role === "tasker"
     ) {
       const posterName = getPartialInitials(task.poster.profile);
       alertList.push({

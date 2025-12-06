@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle } from "@/components/icons/index";
 import React from "react";
 
 interface IProps {

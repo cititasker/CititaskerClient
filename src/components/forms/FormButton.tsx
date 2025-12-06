@@ -12,6 +12,7 @@ interface FormButtonProps extends ButtonProps {
   loading?: boolean;
   handleClick?: () => void;
   icon?: React.ReactNode;
+  form?: string;
 }
 
 const FormButton: React.FC<FormButtonProps> = ({
@@ -27,6 +28,7 @@ const FormButton: React.FC<FormButtonProps> = ({
   handleClick,
   variant = "default",
   size = "default",
+  form,
   ...props
 }) => {
   const content = (
@@ -46,7 +48,7 @@ const FormButton: React.FC<FormButtonProps> = ({
         variant={variant}
         size={size}
         className={cn(
-          "w-fit px-5 flex items-center justify-center gap-2",
+          "w-fit flex items-center justify-center gap-2",
           className
         )}
         {...props}
@@ -65,6 +67,7 @@ const FormButton: React.FC<FormButtonProps> = ({
       size={size}
       disabled={disabled || loading}
       onClick={handleClick}
+      form={form}
       className={cn(
         "relative min-w-max flex items-center justify-center gap-2",
         className

@@ -171,7 +171,7 @@ export const useFetchReschedules = (id: string) => {
 };
 
 export const useAcceptReschedule = () => {
-  return useMutation<any, Error, { data: any; role: TRole }>({
+  return useMutation<any, Error, { data: any }>({
     mutationFn: acceptReschedule,
   });
 };

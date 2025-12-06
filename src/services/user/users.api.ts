@@ -135,34 +135,6 @@ export function deleteFaq(id: any) {
     });
 }
 
-export const getReviews = (
-  id: number | string
-): Promise<GetReviewsResponse> => {
-  return api
-    .get(`${API_ROUTES.GET_REVIEWS}?task_id=${id}`)
-    .then((data) => {
-      return data.data.data;
-    })
-    .catch((error: AxiosError) => {
-      throw error.response?.data;
-    });
-};
-
-export const postReview = ({
-  data,
-  role,
-}: {
-  data: any;
-  role: TRole | undefined;
-}): Promise<GetReviewsResponse> => {
-  return api
-    .post(`${API_ROUTES.POST_REVIEW}/${role}`, data)
-    .then((res) => res.data)
-    .catch((error: AxiosError) => {
-      throw error.response?.data;
-    });
-};
-
 export const reorderFaqs = (data: any): Promise<GetReviewsResponse> => {
   return api
     .post(`${API_ROUTES.POST_REVIEW}`, data)

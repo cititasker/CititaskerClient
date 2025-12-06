@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useParams } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { useAuth } from "@/hooks/useAuth";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAppSelector } from "@/store/hook";
@@ -9,7 +9,7 @@ import { useSnackbar } from "@/providers/SnackbarProvider";
 import { baseSchema, offerSchemaType } from "@/schema/offer";
 import StepThreeForm from "./StepThreeForm";
 import { calculateFees } from "@/utils";
-import { API_ROUTES, ROUTES } from "@/constant";
+import { API_ROUTES } from "@/constant";
 import { useMakeOrUpdateOffer } from "@/services/offers/offers.hook";
 import { z } from "zod";
 import { useQueryClient } from "@tanstack/react-query";
@@ -29,7 +29,7 @@ export default function StepThree({
   isEdit,
 }: StepThreeProps) {
   const { id } = useParams();
-  const { data: session } = useSession();
+  const { session } = useAuth();
   const router = useRouter();
   const { showSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
@@ -60,7 +60,7 @@ export default function StepThree({
   const handleSubmit = () => {
     if (!session?.user) {
       router.push(
-        `${ROUTES.LOGIN}?redirect=${encodeURIComponent(window.location.href)}`
+        `/auth/login?redirect=${encodeURIComponent(window.location.href)}`
       );
       return;
     }

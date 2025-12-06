@@ -1,7 +1,7 @@
 import React from "react";
 import { FormField, FormItem, FormMessage } from "@/components/ui/form";
-import { NumericFormat } from "react-number-format";
 import { useFormContext } from "react-hook-form";
+import { LazyNumericFormat } from "@/components/forms/LazyNumericFormat";
 
 interface PriceInputProps {
   name: "min" | "max";
@@ -26,7 +26,7 @@ export function PriceInput({ name, label }: PriceInputProps) {
         render={({ field, fieldState }) => (
           <FormItem>
             <div className="relative">
-              <NumericFormat
+              <LazyNumericFormat
                 value={field.value}
                 onValueChange={({ value }) => field.onChange(Number(value))}
                 thousandSeparator

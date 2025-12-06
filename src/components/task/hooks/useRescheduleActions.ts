@@ -5,7 +5,7 @@ import {
   useCreateReschedule,
   useAcceptReschedule,
 } from "@/services/tasks/tasks.hook";
-import { API_ROUTES, ROLE } from "@/constant";
+import { API_ROUTES } from "@/constant";
 import { formatDate } from "@/utils";
 import useModal from "@/hooks/useModal";
 import { rescheduleTaskSchemaType } from "@/components/task/modals/reschedule/schema";
@@ -14,13 +14,9 @@ import { RescheduleStep } from "../modals/reschedule/constants";
 
 interface UseRescheduleActionsProps {
   task: ITask;
-  role: "poster" | "tasker";
 }
 
-export const useRescheduleActions = ({
-  task,
-  role,
-}: UseRescheduleActionsProps) => {
+export const useRescheduleActions = ({ task }: UseRescheduleActionsProps) => {
   const [step, setStep] = useState<RescheduleStep>("request");
   const queryClient = useQueryClient();
   const rescheduleModal = useModal();
@@ -97,7 +93,7 @@ export const useRescheduleActions = ({
     };
 
     acceptReschedule.mutate(
-      { data: payload, role: ROLE[role] },
+      { data: payload },
       {
         onSuccess: () => {
           invalidateQueries();

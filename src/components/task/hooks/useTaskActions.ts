@@ -2,7 +2,6 @@ import { useMemo } from "react";
 import { usePaymentActions } from "./usePaymentActions";
 import { useSurchargeActions } from "./useSurchargeActions";
 import { useRescheduleActions } from "./useRescheduleActions";
-import { useAppSelector } from "@/store/hook";
 
 export type TaskActionType =
   | "surcharge_request"
@@ -23,9 +22,6 @@ interface UseTaskActionsProps {
 }
 
 export const useTaskActions = ({ task }: UseTaskActionsProps) => {
-  const { user } = useAppSelector((s) => s.user);
-  const role = user.role as TRole;
-
   const acceptedOffer = useMemo(
     () => task?.offers?.find((o) => o.status === "accepted"),
     [task]
@@ -37,7 +33,7 @@ export const useTaskActions = ({ task }: UseTaskActionsProps) => {
 
   const payment = usePaymentActions(task);
   const surcharge = useSurchargeActions(task);
-  const reschedule = useRescheduleActions({ task, role });
+  const reschedule = useRescheduleActions({ task });
 
   return {
     // Derived state

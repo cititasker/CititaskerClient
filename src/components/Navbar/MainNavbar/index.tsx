@@ -18,25 +18,25 @@ import MobileNavbar from "./components/MobileNavbar/MobileNavbar";
 import { Button } from "@/components/ui/button";
 import { useSidebar } from "@/components/dashboard/sidebar/hooks/useSidebar";
 import { usePathname } from "next/navigation";
-import { useGetUser } from "@/services/user/user.hook";
-import { useSession } from "next-auth/react";
+import { useAuth } from "@/hooks/useAuth";
 import BrandLogo from "@/components/reusables/BrandLogo";
+import { cn } from "@/lib/utils";
 
 export default function MainNavbar() {
   const { openSidebar } = useSidebar();
   const dispatch = useAppDispatch();
-  const { data } = useGetUser();
+  const { user, isAuthenticated } = useAuth();
 
   const showMobileNav = useToggle();
   const path = usePathname();
 
-  const user = data?.data;
-  const { data: session } = useSession();
-  const isAuth = !!session?.user;
-
   const isDashboard = path.includes("dashboard");
 
   const { categoryGroups, isLoading } = useNavbarData();
+
+  const isActive = (href: string) => {
+    return path === href || path.startsWith(href);
+  };
 
   const handleLogout = async () => {
     try {
@@ -48,7 +48,9 @@ export default function MainNavbar() {
     }
   };
 
-  const homeRoute = isAuth ? `/${user?.role}${ROUTES.DISCOVERY}` : ROUTES.HOME;
+  const homeRoute = isAuthenticated
+    ? `${ROUTES.DISCOVERY}-${user?.role}`
+    : ROUTES.HOME;
 
   return (
     <>
@@ -60,7 +62,7 @@ export default function MainNavbar() {
             <div className="flex items-center gap-6">
               {/* Mobile Menu & Logo */}
               <div className="flex items-center gap-4">
-                {isAuth && isDashboard && (
+                {isAuthenticated && isDashboard && (
                   <Button
                     variant="outline"
                     size="icon"
@@ -82,11 +84,15 @@ export default function MainNavbar() {
                 />
                 <HowItWorksDropdown />
 
-                {isAuth && user?.role && (
+                {isAuthenticated && user?.role && (
                   <Button
                     asChild
                     variant="ghost"
-                    className="flex items-center gap-2 hover:bg-primary/10 hover:text-primary"
+                    className={cn(
+                      "flex items-center gap-2 hover:bg-primary/10 hover:text-primary",
+                      isActive(`/${user.role}${ROUTES.MY_TASKS}`) &&
+                        "text-primary bg-primary/10"
+                    )}
                   >
                     <Link href={`/${user.role}${ROUTES.MY_TASKS}`}>
                       My Tasks
@@ -99,12 +105,12 @@ export default function MainNavbar() {
             {/* Right Section */}
             <div className="flex items-center gap-4">
               <div className="hidden md:flex">
-                <RoleBasedActions user={user} isAuth={isAuth} />
+                <RoleBasedActions user={user} isAuth={isAuthenticated} />
               </div>
 
               {/* User Actions */}
               <div className="hidden md:flex">
-                {isAuth && user ? (
+                {isAuthenticated && user ? (
                   <UserActions user={user} onLogout={handleLogout} />
                 ) : (
                   <GuestActions />
@@ -124,7 +130,7 @@ export default function MainNavbar() {
       <MobileNavbar
         showMobileNav={showMobileNav.isOpen}
         toggleMobileNav={showMobileNav.toggle}
-        isAuth={isAuth}
+        isAuth={isAuthenticated}
         user={user}
         onLogout={handleLogout}
       />

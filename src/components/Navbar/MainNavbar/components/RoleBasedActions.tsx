@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { ROUTES, ROLE } from "@/constant";
 
 interface RoleBasedActionsProps {
-  user: IUser | undefined;
+  user: Partial<IUser> | undefined;
   isAuth: boolean;
 }
 

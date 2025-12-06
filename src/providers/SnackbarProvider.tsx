@@ -1,7 +1,6 @@
 "use client";
 
 import React, { createContext, useContext, ReactNode, FC } from "react";
-// import { Toaster } from "@/components/ui/sonner";
 import { toast, Toaster } from "sonner";
 
 type SnackbarSeverity = "success" | "info" | "warning" | "error";

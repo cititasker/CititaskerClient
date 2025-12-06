@@ -13,7 +13,7 @@ interface MobileNavbarProps {
   showMobileNav: boolean;
   toggleMobileNav: () => void;
   isAuth: boolean;
-  user: IUser | undefined;
+  user: Partial<IUser> | undefined;
   onLogout: () => void;
 }
 
