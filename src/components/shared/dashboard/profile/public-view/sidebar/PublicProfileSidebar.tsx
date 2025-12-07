@@ -2,7 +2,7 @@
 import React from "react";
 import { useGetUserProfile } from "@/services/user/user.hook";
 import { useParams } from "next/navigation";
-import { Award, User, Sparkles } from "lucide-react";
+import { Award, User, Sparkles, LucideIcon } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { ProfileHeader } from "./components/ProfileHeader";
 import { LocationAndRating } from "./components/LocationAndRating";
@@ -10,59 +10,57 @@ import { SkillsSection } from "./components/SkillsSection";
 import { BadgeSection } from "./components/BadgeSection";
 import { LoadingSkeleton } from "./components/LoadingSkeleton";
 import { ErrorState } from "./components/ErrorState";
+import { useAuth } from "@/hooks/useAuth";
+import { ROLE } from "@/constant";
 
-const SectionHeader = ({
-  title,
-  icon,
-}: {
+interface SectionProps {
   title: string;
-  icon?: React.ReactNode;
-}) => (
-  <div className="flex items-center gap-2 mb-4">
-    {icon && <div className="w-5 h-5 text-primary">{icon}</div>}
-    <h3 className="text-base font-semibold text-text-primary">{title}</h3>
+  icon: LucideIcon;
+  children: React.ReactNode;
+  noBorder?: boolean;
+}
+
+const Section = ({ title, icon: Icon, children, noBorder }: SectionProps) => (
+  <div className={`py-6 ${!noBorder ? "border-b border-neutral-200" : ""}`}>
+    <div className="flex items-center gap-2 mb-4">
+      <Icon className="w-5 h-5 text-primary" />
+      <h3 className="text-base font-semibold text-text-primary">{title}</h3>
+    </div>
+    {children}
   </div>
 );
 
 const PublicProfileSidebar = () => {
-  const params = useParams();
-  const id = params.id;
+  const { id } = useParams();
   const { data, isLoading, error, refetch } = useGetUserProfile({ id });
+  const { role } = useAuth();
+
   const user = data?.data;
+  const isTasker = role === ROLE.tasker;
 
-  if (isLoading) {
-    return <LoadingSkeleton />;
-  }
-
-  if (error) {
-    return <ErrorState onRetry={refetch} />;
-  }
+  if (isLoading) return <LoadingSkeleton />;
+  if (error) return <ErrorState onRetry={refetch} />;
 
   return (
-    <aside className=" md:max-w-[300px] h-fit md:sticky md:top-6 md:self-start overflow-hidden">
-      <Card className="p-5">
+    <aside className="md:max-w-[300px] h-fit md:sticky md:top-6 md:self-start">
+      <Card className="p-5 space-y-0">
         <ProfileHeader user={user} />
 
-        <div className="py-6 border-b border-neutral-200">
-          <SectionHeader title="Overview" icon={<User className="w-5 h-5" />} />
-          <LocationAndRating user={user} />
-        </div>
+        <Section title="Overview" icon={User}>
+          <LocationAndRating user={user} role={role} />
+        </Section>
 
-        <div className="py-6 border-b border-neutral-200">
-          <SectionHeader
-            title="Skills"
-            icon={<Sparkles className="w-5 h-5" />}
-          />
-          <SkillsSection skills={user?.skills || []} />
-        </div>
+        {isTasker && (
+          <>
+            <Section title="Skills" icon={Sparkles}>
+              <SkillsSection skills={user?.skills || []} />
+            </Section>
 
-        <div className="py-6">
-          <SectionHeader
-            title="Achievements"
-            icon={<Award className="w-5 h-5" />}
-          />
-          <BadgeSection user={user} />
-        </div>
+            <Section title="Achievements" icon={Award} noBorder>
+              <BadgeSection user={user} />
+            </Section>
+          </>
+        )}
       </Card>
     </aside>
   );

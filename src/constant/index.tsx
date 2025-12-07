@@ -86,6 +86,7 @@ export const API_ROUTES = {
   RELEASE_PAYMENT: "/tasks/accept-payment-request",
   //Surcharge
   SURCHARGE_REQUEST: "tasks/surcharge/request",
+  SURCHARGE_REJECT: "tasks/surcharge/reject",
   SURCHARGE_REQUEST_LIST: "tasks/surcharge/list",
   // Reschedule
   CREAT_TASK_RESCHEDULE: "/tasks/reschedule/create",
@@ -104,6 +105,7 @@ export const API_ROUTES = {
   AMOUNT_ANALYSIS: (role: TRole) => `dashboard/${role}/amount-chart`,
 
   TRANSACTION_HISTORY: "/payments/transactions",
+  WITHDRAW: "/payments/withdraw",
 
   NOTIFICATIONS: {
     GET_ALL: "/notifications",

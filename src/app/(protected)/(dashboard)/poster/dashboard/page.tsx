@@ -16,7 +16,6 @@ import {
   getRecentTasks,
   getMonthlyFinancialSummary,
   getTransactionAnalysis,
-  // getDashboardAnalysis,
 } from "@/services/dashboard/dashboard.api";
 import { formatISODate, getPartialInitials } from "@/utils";
 import { useExpenseChartData } from "@/components/shared/charts/hooks.ts/useExpenseChartData";
@@ -72,19 +71,6 @@ export default function DashboardPage() {
     () => getRecentTasks({ role, params: query }),
     { enabled: !!role }
   );
-
-  // Dashboard Analysis getDashboardAnalysis
-  // const { data: analysisData, isLoading: analysisLoading } = useBaseQuery(
-  //   [API_ROUTES.DASHBOARD_ANALYSIS(role), role, timeframe],
-  //   () =>
-  //     getDashboardAnalysis({
-  //       role,
-  //       params: { time_range: timeframe },
-  //     }),
-  //   { enabled: !!role }
-  // );
-
-  // console.log(10, analysisData);
 
   // Expense Analysis
   const { data: expensesData, isLoading: expenseLoading } = useBaseQuery(

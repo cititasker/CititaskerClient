@@ -4,10 +4,5 @@ import CustomTab from "@/components/reusables/CustomTab";
 import { tabs } from "@/components/dashboard/transactions/tasker/data";
 
 export default function Page() {
-  return (
-    <CustomTab
-      items={tabs}
-      contentClassName="p-5 sm:p-8 lg:px-12 lg:py-8 h-full"
-    />
-  );
+  return <CustomTab items={tabs} contentClassName="p-5 sm:p-8 h-full" />;
 }

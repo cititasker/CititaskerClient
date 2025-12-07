@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef } from "react";
 import { getPartialInitials } from "@/utils";
 import { useTaskAlert } from "@/providers/TaskAlertContext";
+import { ISurcharge } from "@/services/offers/offers.types";
 
 export interface TaskAlert {
   id: string;
@@ -14,6 +15,7 @@ export interface TaskAlert {
 interface UseTaskAlertsProps {
   task: ITask;
   acceptedOffer?: IOffer;
+  pendingSurcharge?: ISurcharge;
   role: "poster" | "tasker";
   onSurchargeAction: () => void;
   onRescheduleAction: () => void;
@@ -23,13 +25,27 @@ interface UseTaskAlertsProps {
 export const useTaskAlerts = ({
   task,
   acceptedOffer,
+  pendingSurcharge,
   role,
   onSurchargeAction,
   onRescheduleAction,
   onReleasePaymentAction,
 }: UseTaskAlertsProps) => {
-  const { showAlert } = useTaskAlert();
-  const shownAlertsRef = useRef<Set<string>>(new Set());
+  const { showAlert, clearAllAlerts } = useTaskAlert();
+  const callbacksRef = useRef({
+    onSurchargeAction,
+    onRescheduleAction,
+    onReleasePaymentAction,
+  });
+
+  // Update callbacks ref on every render (handles hot reload)
+  useEffect(() => {
+    callbacksRef.current = {
+      onSurchargeAction,
+      onRescheduleAction,
+      onReleasePaymentAction,
+    };
+  });
 
   const alerts = useMemo(() => {
     const alertList: TaskAlert[] = [];
@@ -56,12 +72,17 @@ export const useTaskAlerts = ({
           </p>
         ),
         actionText: "Release Payment",
-        onAction: onReleasePaymentAction,
+        onAction: () => callbacksRef.current.onReleasePaymentAction(),
       });
     }
 
     // Surcharge alert
-    if (role === "poster" && has_surcharge_requests && acceptedOffer) {
+    if (
+      role === "poster" &&
+      has_surcharge_requests &&
+      acceptedOffer &&
+      pendingSurcharge
+    ) {
       const taskerName = getPartialInitials(acceptedOffer.tasker);
       alertList.push({
         id: `surcharge_${task?.id}`,
@@ -74,7 +95,7 @@ export const useTaskAlerts = ({
           </p>
         ),
         actionText: "Respond to Request",
-        onAction: onSurchargeAction,
+        onAction: () => callbacksRef.current.onSurchargeAction(),
       });
     }
 
@@ -97,7 +118,7 @@ export const useTaskAlerts = ({
           </p>
         ),
         actionText: "Respond to Request",
-        onAction: onRescheduleAction,
+        onAction: () => callbacksRef.current.onRescheduleAction(),
       });
     }
 
@@ -120,34 +141,19 @@ export const useTaskAlerts = ({
           </p>
         ),
         actionText: "Respond to Request",
-        onAction: onRescheduleAction,
+        onAction: () => callbacksRef.current.onRescheduleAction(),
       });
     }
 
     return alertList.sort((a, b) => a.priority - b.priority);
-  }, [
-    task,
-    acceptedOffer,
-    role,
-    onSurchargeAction,
-    onRescheduleAction,
-    onReleasePaymentAction,
-  ]);
+  }, [task, acceptedOffer, pendingSurcharge, role]);
 
   const alertsKey = useMemo(() => alerts.map((a) => a.id).join(","), [alerts]);
 
   useEffect(() => {
-    if (shownAlertsRef.current.has(alertsKey)) return;
-
+    clearAllAlerts();
     alerts.forEach((alert) => showAlert(alert));
-    shownAlertsRef.current.add(alertsKey);
-
-    // Cleanup
-    if (shownAlertsRef.current.size > 10) {
-      const entries = Array.from(shownAlertsRef.current);
-      shownAlertsRef.current = new Set(entries.slice(-5));
-    }
-  }, [alertsKey, alerts]);
+  }, [alertsKey, alerts, showAlert, clearAllAlerts]);
 
   return {
     alerts,

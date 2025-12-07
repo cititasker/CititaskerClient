@@ -120,3 +120,12 @@ export function getWalletTransactions({
       throw error.response?.data;
     });
 }
+
+export function withdrawFund(data: { amount: number }): Promise<any> {
+  return api
+    .post(API_ROUTES.WITHDRAW, data)
+    .then((data) => data.data.data)
+    .catch((error: AxiosError) => {
+      throw error.response?.data;
+    });
+}

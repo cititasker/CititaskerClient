@@ -13,7 +13,12 @@ import { useSnackbar } from "@/providers/SnackbarProvider";
 import { errorHandler } from "@/utils";
 import { useTaskAlert } from "@/providers/TaskAlertContext";
 
-type SurchargeStep = "request" | "accept" | "reject" | "success";
+type SurchargeStep =
+  | "request"
+  | "accept"
+  | "reject"
+  | "success"
+  | "reject_success";
 
 export const useSurchargeActions = (task: ITask) => {
   const [surchargeStep, setSurchargeStep] = useState<SurchargeStep>("request");
@@ -23,7 +28,6 @@ export const useSurchargeActions = (task: ITask) => {
   const { hideAlert } = useTaskAlert();
 
   const surchargeModal = useModal();
-  const rejectSurchargeModal = useModal();
 
   const { data: surchargeList } = useSurchargeList(
     String(task?.id),
@@ -38,7 +42,15 @@ export const useSurchargeActions = (task: ITask) => {
     return pending;
   }, [surchargeList]);
 
-  const rejectSurcharge = useRejectSurchargeRequest();
+  const rejectedSurcharge = useMemo(() => {
+    const rejected = surchargeList?.data?.data.find(
+      (s) => s.status === "rejected"
+    );
+    if (!rejected) return undefined;
+    return rejected;
+  }, [surchargeList]);
+
+  const rejectSurcharge = useRejectSurchargeRequest(String(task?.id));
 
   const invalidateQueries = () => {
     queryClient.invalidateQueries({
@@ -84,11 +96,11 @@ export const useSurchargeActions = (task: ITask) => {
   return {
     // State
     pendingSurcharge,
+    rejectedSurcharge,
     surchargeStep,
 
     // Modals
     surchargeModal,
-    rejectSurchargeModal,
 
     // Mutations
     rejectSurcharge,

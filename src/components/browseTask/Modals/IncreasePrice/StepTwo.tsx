@@ -50,7 +50,7 @@ type SchemaType = z.infer<typeof schema>;
 
 export default function StepTwo({ nextStep, prevStep }: StepTwoProps) {
   const dispatch = useAppDispatch();
-  const { offer, taskersOffer } = useAppSelector((state) => state.task);
+  const { offer } = useAppSelector((state) => state.task);
 
   const methods = useForm<SchemaType>({
     defaultValues: {
@@ -64,15 +64,15 @@ export default function StepTwo({ nextStep, prevStep }: StepTwoProps) {
 
   const reason = watch("reason");
 
-  React.useEffect(() => {
-    if (taskersOffer) {
-      const payload = {
-        reason: taskersOffer.reason ?? "",
-        description: taskersOffer.description ?? "",
-      };
-      dispatch(setOfferData({ ...payload, ...offer }));
-    }
-  }, [taskersOffer]);
+  // React.useEffect(() => {
+  //   if (taskersOffer) {
+  //     const payload = {
+  //       reason: taskersOffer.reason ?? "",
+  //       description: taskersOffer.description ?? "",
+  //     };
+  //     dispatch(setOfferData({ ...payload, ...offer }));
+  //   }
+  // }, [taskersOffer]);
 
   const onSubmit = (data: SchemaType) => {
     dispatch(setOfferData({ ...offer, ...data }));

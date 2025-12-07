@@ -1,7 +1,6 @@
 import ActionsButtons from "@/components/reusables/ActionButtons";
 import SummaryItem from "@/components/reusables/SummaryItem";
 import { Label } from "@/components/ui/label";
-import { surchargeReasons } from "@/constant";
 import { ISurcharge } from "@/services/offers/offers.types";
 import { useAppSelector } from "@/store/hook";
 import { formatCurrency } from "@/utils";
@@ -21,20 +20,17 @@ export default function Request({
   handleSubmit,
 }: IProps) {
   const { taskDetails } = useAppSelector((s) => s.task);
-  const surchargeReason = pendingSurcharge
-    ? surchargeReasons[pendingSurcharge.reason]
-    : undefined;
 
   const offerAmount = pendingSurcharge?.amount || 0;
 
-  if (!pendingSurcharge) return <p>Loading...</p>;
+  // if (!pendingSurcharge) return <p>Loading...</p>;
 
   return (
     <div className="space-y-6">
       <p>{`${taskerName} is requesting for an Increase in price for the task “${taskDetails?.name}”.`}</p>
       <div>
         <Label className="text-base font-bold text-black-2">Reason:</Label>
-        <p>{surchargeReason}</p>
+        <p>{pendingSurcharge?.reason}</p>
       </div>
       <div>
         <SummaryItem

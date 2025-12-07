@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { useParams } from "next/navigation";
 import dynamic from "next/dynamic";
 import useModal from "@/hooks/useModal";
@@ -45,38 +45,55 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ back }) => {
 
   const actions = useTaskActions({ task });
 
+  const handleSurchargeAction = useCallback(() => {}, []);
+
+  const handleRescheduleAction = useCallback(() => {
+    actions.openRescheduleModal("request");
+  }, [actions.openRescheduleModal]);
+
+  const handleReleasePaymentAction = useCallback(() => {}, []);
+
   useTaskAlerts({
     task,
     acceptedOffer: undefined,
+    pendingSurcharge: actions.pendingSurcharge,
     role: "tasker",
-    onSurchargeAction: () => {},
-    onRescheduleAction: () => actions.openRescheduleModal("request"),
-    onReleasePaymentAction: () => {},
+    onSurchargeAction: handleSurchargeAction,
+    onRescheduleAction: handleRescheduleAction,
+    onReleasePaymentAction: handleReleasePaymentAction,
   });
 
   useEffect(() => {
     if (!task) return;
     dispatch(setTaskDetails(task));
-    const userOffer = task.offers.find((offer) => offer.tasker.id === user?.id);
+    const userOffer = task.offers?.find(
+      (offer) => offer.tasker.id === user?.id
+    );
     dispatch(setUserTaskOffer(userOffer ?? null));
   }, [task, user?.id, dispatch]);
 
-  const handleHeaderAction = (key: string) => {
-    const headerActions: Record<string, () => void> = {
-      share: shareModal.openModal,
-      report: () => console.log("Report task"),
-      bookmark: () => console.log("Bookmark task"),
-    };
-    headerActions[key]?.();
-  };
+  const handleHeaderAction = useCallback(
+    (key: string) => {
+      const headerActions: Record<string, () => void> = {
+        share: shareModal.openModal,
+        report: () => console.log("Report task"),
+        bookmark: () => console.log("Bookmark task"),
+      };
+      headerActions[key]?.();
+    },
+    [shareModal]
+  );
 
-  const handleOptionSelect = (action: MoreOptionItem) => {
-    if (action.name === "reschedule") {
-      actions.openRescheduleModal("create");
-    }
-  };
+  const handleOptionSelect = useCallback(
+    (action: MoreOptionItem) => {
+      if (action.name === "reschedule") {
+        actions.openRescheduleModal("create");
+      }
+    },
+    [actions.openRescheduleModal]
+  );
 
-  if (isLoading) return <TaskDetailSkeleton />;
+  if (isLoading || !task) return <TaskDetailSkeleton />;
 
   return (
     <>
@@ -93,7 +110,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ back }) => {
         />
       )}
 
-      {task && <TaskModals task={task} actions={actions} role="tasker" />}
+      <TaskModals task={task} actions={actions} role="tasker" />
     </>
   );
 };

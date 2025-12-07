@@ -1,28 +1,34 @@
 import { useEffect } from "react";
 import CustomModal from "@/components/reusables/CustomModal";
 import AnimatedStep from "@/components/reusables/AnimatedStep";
-import { DeleteConfirmModal } from "@/components/reusables/Modals/ConfirmModal";
 import dynamic from "next/dynamic";
-import Loader from "@/components/reusables/Loading";
+import Success from "@/components/reusables/Success";
+import { formatCurrency } from "@/utils";
+import Request from "./Request";
+import { Loader2 } from "lucide-react";
+import { useTaskAlert } from "@/providers/TaskAlertContext";
 
-const Request = dynamic(() => import("./Request"), {
-  ssr: false,
-  loading: () => <Loader />,
-});
+// Custom inline loader
+const StepLoader = () => (
+  <div className="flex items-center justify-center py-12">
+    <Loader2 className="w-8 h-8 animate-spin text-primary" />
+  </div>
+);
 
+// Lazy load steps
 const AcceptRequest = dynamic(() => import("./AcceptRequest"), {
   ssr: false,
-  loading: () => <Loader />,
+  loading: StepLoader,
 });
 
 const RejectRequest = dynamic(() => import("./RejectRequest"), {
   ssr: false,
-  loading: () => <Loader />,
+  loading: StepLoader,
 });
 
 const PaymentSuccess = dynamic(() => import("./PaymentSuccess"), {
   ssr: false,
-  loading: () => <Loader />,
+  loading: StepLoader,
 });
 
 // Prefetch map for surcharge steps
@@ -45,24 +51,28 @@ export default function SurchargeModals({
   surchargeActions,
   taskerName,
 }: SurchargeModalsProps) {
+  const { hideAlert } = useTaskAlert();
   const {
     surchargeStep,
     setSurchargeStep,
     closeSurchargeModal,
     handleSurchargePayment,
-    rejectSurchargeModal,
     surchargeModal,
     paySurchargeMutation,
     pendingSurcharge,
+    rejectedSurcharge,
     rejectSurcharge,
   } = surchargeActions;
 
   const modalTitles = {
-    request: "Increase price",
+    request: "Price increase",
     accept: "Accept price increase",
     reject: "Reason for rejection",
     success: undefined,
-  };
+    reject_success: undefined,
+  } as const;
+
+  const acceptedOffer = task.offers?.find((o) => o.status === "accepted");
 
   // Prefetch next likely step
   useEffect(() => {
@@ -78,9 +88,21 @@ export default function SurchargeModals({
     }
   }, [surchargeStep, surchargeModal.isOpen]);
 
+  // Preload components when modal opens
+  useEffect(() => {
+    if (surchargeModal.isOpen && surchargeStep === "request") {
+      import("./AcceptRequest").catch(console.error);
+      import("./RejectRequest").catch(console.error);
+    }
+  }, [surchargeModal.isOpen, surchargeStep]);
+
   const closeModal = () => {
     setSurchargeStep("request");
     closeSurchargeModal();
+  };
+
+  const handleStepChange = (nextStep: typeof surchargeStep) => {
+    setSurchargeStep(nextStep);
   };
 
   const handleAccept = () => {
@@ -99,46 +121,49 @@ export default function SurchargeModals({
           {surchargeStep === "request" && (
             <Request
               taskerName={taskerName}
-              acceptedOffer={task.offers?.find((o) => o.status === "accepted")}
-              pendingSurcharge={surchargeActions.pendingSurcharge}
-              handleReject={() => setSurchargeStep("reject")}
-              handleSubmit={() => setSurchargeStep("accept")}
+              acceptedOffer={acceptedOffer}
+              pendingSurcharge={pendingSurcharge}
+              handleReject={() => handleStepChange("reject")}
+              handleSubmit={() => handleStepChange("accept")}
             />
           )}
 
           {surchargeStep === "accept" && (
             <AcceptRequest
               loading={paySurchargeMutation.isPending}
-              acceptedOffer={task.offers?.find((o) => o.status === "accepted")}
+              acceptedOffer={acceptedOffer}
               pendingSurcharge={pendingSurcharge}
               taskerName={taskerName}
               onSubmit={handleAccept}
             />
           )}
 
-          {surchargeStep === "reject" && <RejectRequest onClose={closeModal} />}
+          {surchargeStep === "reject" && (
+            <RejectRequest
+              onClose={closeModal}
+              pendingSurcharge={pendingSurcharge}
+              handleSubmit={() => {
+                hideAlert(`surcharge_${task?.id}`);
+                handleStepChange("reject_success");
+              }}
+              rejectSurcharge={rejectSurcharge}
+            />
+          )}
 
           {surchargeStep === "success" && (
             <PaymentSuccess taskerName={taskerName} onClose={closeModal} />
           )}
+
+          {surchargeStep === "reject_success" && (
+            <Success
+              title="Success"
+              desc={`${taskerName} request for additional ${formatCurrency({
+                value: rejectedSurcharge?.amount,
+              })} has been rejected`}
+            />
+          )}
         </AnimatedStep>
       </CustomModal>
-
-      <DeleteConfirmModal
-        open={rejectSurchargeModal.isOpen}
-        onClose={rejectSurchargeModal.closeModal}
-        title="Reject Surcharge Request"
-        type="warning"
-        description="Rejecting this request means the task cannot proceed until resolved. Continue?"
-        confirmText="Reject"
-        loading={rejectSurcharge.isPending}
-        onConfirm={() =>
-          pendingSurcharge &&
-          rejectSurcharge.mutate({
-            surcharge_id: String(pendingSurcharge.id),
-          })
-        }
-      />
     </>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense } from "react";
+import React from "react";
 import dynamic from "next/dynamic";
 import { useAppSelector } from "@/store/hook";
 import CustomModal from "@/components/reusables/CustomModal";
@@ -82,21 +82,17 @@ const IncreasePriceModal: React.FC<Props> = ({ open, handleClose }) => {
       }
     >
       <div className="relative">
-        <Suspense
-          fallback={<div className="h-48 animate-pulse bg-gray-100 rounded" />}
-        >
-          <AnimatedStep currentStep={currentStep}>
-            {isFinalStep ? (
-              <Success
-                title="Success"
-                desc={`Your request was successfully sent to ${posterName}`}
-                className="justify-center py-8"
-              />
-            ) : (
-              steps[currentStep - 1]?.content(nextStep, prevStep)
-            )}
-          </AnimatedStep>
-        </Suspense>
+        <AnimatedStep currentStep={currentStep}>
+          {isFinalStep ? (
+            <Success
+              title="Success"
+              desc={`Your request was successfully sent to ${posterName}`}
+              className="justify-center py-8"
+            />
+          ) : (
+            steps[currentStep - 1]?.content(nextStep, prevStep)
+          )}
+        </AnimatedStep>
       </div>
     </CustomModal>
   );

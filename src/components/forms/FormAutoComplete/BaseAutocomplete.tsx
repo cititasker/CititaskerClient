@@ -190,13 +190,13 @@ export function BaseAutocomplete<TOption>({
                         isSelected && "bg-accent"
                       )}
                     >
+                      <span className="truncate">{optionLabel}</span>
                       <Check
                         className={cn(
                           "h-4 w-4 flex-shrink-0",
                           isSelected ? "opacity-100" : "opacity-0"
                         )}
                       />
-                      <span className="truncate">{optionLabel}</span>
                     </button>
                   );
                 })

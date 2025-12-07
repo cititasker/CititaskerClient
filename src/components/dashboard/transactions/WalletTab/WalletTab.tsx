@@ -13,8 +13,11 @@ import useModal from "@/hooks/useModal";
 import WithdrawalModal from "./WithdrawalModal";
 import ActionsButtons from "@/components/reusables/ActionButtons";
 import { formatCurrency } from "@/utils";
+import { useBaseMutation } from "@/hooks/useBaseMutation";
+import { withdrawFund } from "@/services/dashboard/dashboard.api";
+import { useFeedbackModal } from "@/components/reusables/Modals/UniversalFeedbackModal/hooks/useFeedbackModal";
 
-const AVAILABLE_BALANCE = 0;
+const AVAILABLE_BALANCE = 50000;
 const MIN_WITHDRAWAL = 1000;
 
 const withdrawalSchema = z.object({
@@ -45,6 +48,7 @@ type WithdrawalFormData = z.infer<typeof withdrawalSchema>;
 
 const WalletTab: React.FC = () => {
   const withdrawalModal = useModal();
+  const { showSuccess, showError, FeedbackModal } = useFeedbackModal();
   const {
     user,
     isTransactionPending,
@@ -62,6 +66,20 @@ const WalletTab: React.FC = () => {
     handleFilters,
   } = useWallet();
   const [showBalance, setShowBalance] = useState(true);
+
+  // mutation
+  const withdrawalMutation = useBaseMutation(withdrawFund, {
+    invalidateQueryKeys: [[]],
+    disableSuccessToast: true,
+    onSuccess: () => {
+      withdrawalModal.closeModal();
+      showSuccess("Withdrawal successful", { title: "Success" });
+      reset();
+    },
+    onError: () => {
+      showError("Withdrawal failed", { title: "Error" });
+    },
+  });
 
   // Withdrawal form methods
   const methods = useForm<WithdrawalFormData>({
@@ -85,18 +103,8 @@ const WalletTab: React.FC = () => {
     setShowBalance(!showBalance);
   };
 
-  const onSubmit = async (data: WithdrawalFormData) => {
-    try {
-      console.log("Withdrawal data:", data);
-
-      // TODO: Implement withdrawal API call
-      // await withdrawalMutation.mutateAsync(data);
-
-      reset();
-      withdrawalModal.closeModal();
-    } catch (error) {
-      console.error("Withdrawal failed:", error);
-    }
+  const onSubmit = (data: WithdrawalFormData) => {
+    withdrawalMutation.mutate({ amount: Number(data.amount) });
   };
 
   const FORM_ID = "withdrawal-form";
@@ -145,7 +153,7 @@ const WalletTab: React.FC = () => {
               <ActionsButtons
                 handleCancel={withdrawalModal.closeModal}
                 okText="Confirm Withdrawal"
-                loading={isSubmitting}
+                loading={isSubmitting || withdrawalMutation.isPending}
                 disabled={isSubmitting || !user.bank_details}
                 formId={FORM_ID}
               />
@@ -159,6 +167,8 @@ const WalletTab: React.FC = () => {
           </CustomModal>
         </form>
       </FormProvider>
+
+      <FeedbackModal />
     </div>
   );
 };

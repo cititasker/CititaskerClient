@@ -8,7 +8,7 @@ import AllOffers from "@/components/myTasks/AllOffers";
 import Reviews from "@/components/myTasks/Reviews";
 import CustomTab from "@/components/reusables/CustomTab";
 import Questions from "@/components/shared/components/comment/Questions";
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { useAppDispatch } from "@/store/hook";
 import { setTaskDetails } from "@/store/slices/task";
 import { useTaskActions, useTaskAlerts } from "@/components/task/hooks";
@@ -17,13 +17,14 @@ import {
   useFetchTaskQuestion,
   useFetchUserTaskById,
 } from "@/services/tasks/tasks.hook";
+import Loader from "@/components/reusables/Loading";
 
 export default function Offer() {
   const { id } = useParams();
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  const { data } = useFetchUserTaskById({ id: id as string });
+  const { data, isLoading } = useFetchUserTaskById({ id: id as string });
   const task = data?.data;
 
   const { data: questionData } = useFetchTaskQuestion(task?.id);
@@ -35,16 +36,32 @@ export default function Offer() {
 
   const actions = useTaskActions({ task });
 
+  // Stable callback references
+  const handleSurchargeAction = useCallback(() => {
+    actions.surchargeModal.openModal();
+  }, [actions.surchargeModal]);
+
+  const handleRescheduleAction = useCallback(() => {
+    actions.openRescheduleModal("request");
+  }, [actions.openRescheduleModal]);
+
+  const handleReleasePaymentAction = useCallback(() => {
+    actions.openReleasePaymentModal();
+  }, [actions.openReleasePaymentModal]);
+
   useTaskAlerts({
     task,
     acceptedOffer: actions.acceptedOffer,
+    pendingSurcharge: actions.pendingSurcharge,
     role: "poster",
-    onSurchargeAction: actions.surchargeModal.openModal,
-    onRescheduleAction: () => actions.openRescheduleModal("request"),
-    onReleasePaymentAction: actions.openReleasePaymentModal,
+    onSurchargeAction: handleSurchargeAction,
+    onRescheduleAction: handleRescheduleAction,
+    onReleasePaymentAction: handleReleasePaymentAction,
   });
 
   const handlePrimaryAction = () => {
+    if (!task) return;
+
     if (task.status === "open") {
       router.push(`/post-task/${task.id}`);
     } else if (task.status === "assigned") {
@@ -53,6 +70,10 @@ export default function Offer() {
       actions.openReleasePaymentModal();
     }
   };
+
+  if (isLoading || !task) {
+    return <Loader />;
+  }
 
   const tabs = [
     {
@@ -98,9 +119,7 @@ export default function Offer() {
                     ? "Release payment"
                     : "Payment released"
                 }
-                disabledButtonText={
-                  !task.payment_requested || task.payment_released
-                }
+                disabledButtonText={task.payment_released}
               />
             </div>
             {/* Right column */}

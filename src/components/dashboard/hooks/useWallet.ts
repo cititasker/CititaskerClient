@@ -72,7 +72,7 @@ export const useWallet = () => {
     totalPages,
     totalDocuments,
     isTransactionPending,
-    //
+
     pagination,
     onPaginationChange,
     searchTerm,

@@ -10,7 +10,7 @@ import { baseSchema } from "@/schema/offer";
 import AcceptTermsCheckboxLabel from "@/components/reusables/AcceptTermsCheckboxLabel";
 import SummaryItem from "@/components/reusables/SummaryItem";
 import { IInfoCircle } from "@/constant/icons";
-import { API_ROUTES, connectionFee } from "@/constant";
+import { API_ROUTES, connectionFee, surchargeReasons } from "@/constant";
 import { useSurchargeRequest } from "@/services/offers/offers.hook";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
@@ -44,12 +44,15 @@ export default function StepThree({ prevStep, nextStep }: Props) {
   });
 
   const onSubmit = () => {
-    console.log(444, offer);
     const payload = {
       task_id: `${offer?.task_id}`,
       amount: offerAmount,
-      reason: offer.reason!,
-    };
+      reason:
+        offer.reason !== "5"
+          ? surchargeReasons[offer.reason as string]
+          : offer.description,
+    } as any;
+
     mutateSurchargeRequest.mutate(payload, {
       onSuccess: (data) => {
         nextStep();

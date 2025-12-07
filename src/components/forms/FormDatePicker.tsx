@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import { FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import { DATE_FORMAT as DISPLAY_FORMAT } from "@/constant";
 
 // Enable custom parse format plugin
 dayjs.extend(customParseFormat);
@@ -32,7 +33,6 @@ interface FormDatePickerProps {
 }
 
 const DATE_FORMAT = "DD-MM-YYYY";
-const DISPLAY_FORMAT = "DD/MM/YYYY";
 
 export default function FormDatePicker({
   name,

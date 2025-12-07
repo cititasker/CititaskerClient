@@ -64,9 +64,12 @@ export function surchargeRequest(data: ISurchargeRequestPayload) {
     });
 }
 
-export function rejectSurchargeRequest(data: { surcharge_id: string }) {
+export function rejectSurchargeRequest(data: {
+  surcharge_id: string;
+  rejection_reason: string;
+}) {
   return api
-    .post(API_ROUTES.SURCHARGE_REQUEST, data)
+    .post(API_ROUTES.SURCHARGE_REJECT, data)
     .then((data) => {
       return data.data;
     })

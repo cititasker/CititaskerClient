@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   useRescheduleTask,
@@ -27,64 +27,71 @@ export const useRescheduleActions = ({ task }: UseRescheduleActionsProps) => {
   const createReschedule = useCreateReschedule();
   const acceptReschedule = useAcceptReschedule();
 
-  const invalidateQueries = () => {
+  const invalidateQueries = useCallback(() => {
+    if (!task?.id) return;
+
     queryClient.invalidateQueries({
       queryKey: [API_ROUTES.GET_USER_TASK, String(task.id)],
     });
     queryClient.invalidateQueries({
       queryKey: [API_ROUTES.GET_TASK_BY_ID, String(task.id)],
     });
-  };
+  }, [queryClient, task?.id]);
 
-  const handleCreateReschedule = (
-    data: rescheduleTaskSchemaType,
-    onSuccess: () => void
-  ) => {
-    const payload = {
-      task_id: String(task?.id),
-      date: formatDate(data.proposed_date, "YYYY-MM-DD"),
-      time: data.proposed_time,
-    };
+  const handleCreateReschedule = useCallback(
+    (data: rescheduleTaskSchemaType, onSuccess: () => void) => {
+      if (!task?.id) return;
 
-    createReschedule.mutate(payload, {
-      onSuccess: () => {
-        invalidateQueries();
-        onSuccess();
-      },
-      onError: () => {
-        toast.error("Task reschedule failed, please try again");
-      },
-    });
-  };
+      const payload = {
+        task_id: String(task.id),
+        date: formatDate(data.proposed_date, "YYYY-MM-DD"),
+        time: data.proposed_time,
+      };
 
-  const handleRescheduleSubmit = (
-    data: rescheduleTaskSchemaType,
-    onSuccess: () => void
-  ) => {
-    const payload = {
-      reschedule_id: task?.reschedule?.reschedule_id,
-      proposed_date: formatDate(data.proposed_date, "YYYY-MM-DD"),
-      proposed_time: data.proposed_time,
-    };
-
-    const rejectWithCounter =
-      task.reschedule.id == task.reschedule.reschedule_id;
-
-    rescheduleTask.mutate(
-      { data: payload, rejectWithCounter },
-      {
+      createReschedule.mutate(payload, {
         onSuccess: () => {
           invalidateQueries();
           onSuccess();
         },
         onError: () => {
-          toast.error("Failed to reschedule task");
+          toast.error("Task reschedule failed, please try again");
         },
-      }
-    );
-  };
+      });
+    },
+    [task?.id, createReschedule, invalidateQueries]
+  );
 
-  const handleAcceptReschedule = () => {
+  const handleRescheduleSubmit = useCallback(
+    (data: rescheduleTaskSchemaType, onSuccess: () => void) => {
+      if (!task?.reschedule?.reschedule_id) return;
+
+      const payload = {
+        reschedule_id: task.reschedule.reschedule_id,
+        proposed_date: formatDate(data.proposed_date, "YYYY-MM-DD"),
+        proposed_time: data.proposed_time,
+      };
+
+      const rejectWithCounter =
+        task.reschedule.id == task.reschedule.reschedule_id;
+
+      rescheduleTask.mutate(
+        { data: payload, rejectWithCounter },
+        {
+          onSuccess: () => {
+            invalidateQueries();
+            hideAlert(`reschedule_${task?.id}`);
+            onSuccess();
+          },
+          onError: () => {
+            toast.error("Failed to reschedule task");
+          },
+        }
+      );
+    },
+    [task, rescheduleTask, invalidateQueries, hideAlert]
+  );
+
+  const handleAcceptReschedule = useCallback(() => {
     if (!task?.reschedule?.id) {
       toast.error("No reschedule request found");
       return;
@@ -107,17 +114,20 @@ export const useRescheduleActions = ({ task }: UseRescheduleActionsProps) => {
         },
       }
     );
-  };
+  }, [task, acceptReschedule, invalidateQueries, hideAlert]);
 
-  const openRescheduleModal = (type?: RescheduleStep) => {
-    if (type) setStep(type);
-    rescheduleModal.openModal();
-  };
+  const openRescheduleModal = useCallback(
+    (type?: RescheduleStep) => {
+      if (type) setStep(type);
+      rescheduleModal.openModal();
+    },
+    [rescheduleModal]
+  );
 
-  const closeRescheduleModal = () => {
+  const closeRescheduleModal = useCallback(() => {
     rescheduleModal.closeModal();
     setStep("request");
-  };
+  }, [rescheduleModal]);
 
   return {
     // State

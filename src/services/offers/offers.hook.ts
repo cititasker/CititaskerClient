@@ -19,6 +19,7 @@ import {
   updateOffer,
 } from "./offers.api";
 import { API_ROUTES } from "@/constant";
+import { useBaseMutation } from "@/hooks/useBaseMutation";
 
 export const useMakeOrUpdateOffer = ({
   isUpdating,
@@ -53,9 +54,12 @@ export const useSurchargeRequest = () => {
   });
 };
 
-export const useRejectSurchargeRequest = () => {
-  return useMutation<any, Error, { surcharge_id: string }>({
-    mutationFn: rejectSurchargeRequest,
+export const useRejectSurchargeRequest = (id: string) => {
+  return useBaseMutation(rejectSurchargeRequest, {
+    invalidateQueryKeys: [
+      [API_ROUTES.SURCHARGE_REQUEST_LIST, id],
+      [API_ROUTES.GET_TASK_BY_ID, id],
+    ],
   });
 };
 
