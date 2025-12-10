@@ -1,7 +1,6 @@
 import {
   FileText,
   AlertCircle,
-  DollarSign,
   MessageSquare,
   CheckCircle,
   Clock,
@@ -11,6 +10,7 @@ import {
   User,
   Coins,
   BanknoteArrowUp,
+  Banknote,
 } from "lucide-react";
 
 export function getNotificationIcon(type?: string, icon?: string) {
@@ -20,7 +20,7 @@ export function getNotificationIcon(type?: string, icon?: string) {
   const iconMap: Record<string, React.ReactNode> = {
     check: <CheckCircle {...iconProps} className="w-4 h-4 text-green-600" />,
     alert: <AlertCircle {...iconProps} className="w-4 h-4 text-red-600" />,
-    dollar: <DollarSign {...iconProps} className="w-4 h-4 text-green-600" />,
+    dollar: <Banknote {...iconProps} className="w-4 h-4 text-green-600" />,
     clock: <Clock {...iconProps} className="w-4 h-4 text-orange-600" />,
     calendar: <Calendar {...iconProps} className="w-4 h-4 text-blue-600" />,
     user: <User {...iconProps} className="w-4 h-4 text-purple-600" />,

@@ -1,6 +1,6 @@
 import { Form } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
-import { formatCurrency } from "@/utils";
+import { filterEmptyValues, formatCurrency } from "@/utils";
 import ActionsButtons from "@/components/reusables/ActionButtons";
 import FormCheckbox from "@/components/forms/FormCheckbox";
 
@@ -10,7 +10,7 @@ import { baseSchema } from "@/schema/offer";
 import AcceptTermsCheckboxLabel from "@/components/reusables/AcceptTermsCheckboxLabel";
 import SummaryItem from "@/components/reusables/SummaryItem";
 import { IInfoCircle } from "@/constant/icons";
-import { API_ROUTES, connectionFee, surchargeReasons } from "@/constant";
+import { API_ROUTES, connectionFee } from "@/constant";
 import { useSurchargeRequest } from "@/services/offers/offers.hook";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
@@ -44,14 +44,12 @@ export default function StepThree({ prevStep, nextStep }: Props) {
   });
 
   const onSubmit = () => {
-    const payload = {
+    const payload = filterEmptyValues({
       task_id: `${offer?.task_id}`,
       amount: offerAmount,
-      reason:
-        offer.reason !== "5"
-          ? surchargeReasons[offer.reason as string]
-          : offer.description,
-    } as any;
+      reason: offer.reason,
+      description: offer.description,
+    }) as any;
 
     mutateSurchargeRequest.mutate(payload, {
       onSuccess: (data) => {

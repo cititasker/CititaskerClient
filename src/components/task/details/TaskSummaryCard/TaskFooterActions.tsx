@@ -31,8 +31,8 @@ export default function TaskFooterActions({
       case "reschedule":
         router.push(`/post-task/${task.id}?step=3&action=reschedule`);
         break;
+      case "help":
       case "cancel-task":
-        // Dialog will now open properly after dropdown closes
         onSelectOption?.(option);
         break;
       case "similar-task":
@@ -40,9 +40,6 @@ export default function TaskFooterActions({
         break;
       case "refund":
         router.push(`/task/${task.id}/refund`);
-        break;
-      case "help":
-        router.push("/help?task=" + task.id);
         break;
       default:
         console.log("Unknown option:", option);

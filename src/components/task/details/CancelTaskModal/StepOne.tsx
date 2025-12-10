@@ -6,7 +6,7 @@ import { maxLengthChar } from "@/constant";
 import { CancelTaskFormData } from "./hooks/useCancelTask";
 
 interface StepOneProps {
-  reasons: SelectOption[];
+  reasons: readonly SelectOption[];
   selectedReason: string;
 }
 
@@ -28,7 +28,7 @@ export const StepOne: React.FC<StepOneProps> = ({
         />
       </div>
 
-      {selectedReason === "5" && (
+      {selectedReason === "other" && (
         <div className="space-y-2">
           <FormTextArea
             name="description"

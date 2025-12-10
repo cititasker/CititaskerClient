@@ -1,3 +1,4 @@
+import { RejectionReason } from "@/constant";
 import { offerSchemaType } from "@/schema/offer";
 import { UseMutationOptions } from "@tanstack/react-query";
 
@@ -31,7 +32,8 @@ export interface ISurcharge {
   id: number;
   task_id: number;
   amount: number;
-  reason: string;
+  reason: RejectionReason;
+  description?: string;
   status: "pending" | "completed" | "failed" | string;
   payment_status: "unpaid" | "paid" | "refunded" | string;
   created_at: string;

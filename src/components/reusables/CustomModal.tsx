@@ -42,6 +42,8 @@ interface CustomModalProps extends IModal {
   bodyClassName?: string;
   contentClassName?: string;
   footerClassName?: string;
+  titleClassName?: string;
+  descriptionClassName?: string;
 }
 
 const CustomModal = ({
@@ -63,6 +65,8 @@ const CustomModal = ({
   customFooter,
 
   // Styling props
+  titleClassName,
+  descriptionClassName,
   bodyClassName,
   headerClassName,
   contentClassName,
@@ -109,12 +113,19 @@ const CustomModal = ({
               headerClassName
             )}
           >
-            <DialogTitle className="text-lg sm:text-xl font-semibold pr-8">
+            <DialogTitle
+              className={cn(
+                "text-lg sm:text-xl font-semibold pr-8",
+                titleClassName
+              )}
+            >
               {title}
             </DialogTitle>
 
             {description && (
-              <DialogDescription className="text-text-secondary">
+              <DialogDescription
+                className={cn("text-text-secondary", descriptionClassName)}
+              >
                 {description}
               </DialogDescription>
             )}

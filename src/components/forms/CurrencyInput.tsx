@@ -64,9 +64,10 @@ export default function CurrencyInput({
               disabled={disabled}
               customInput={Input as any}
               className={cn(
-                "px-4 rounded-xl transition-all duration-200",
+                "px-4 rounded-xl transition-all duration-200 placeholder:font-normal",
                 "bg-background text-text-primary placeholder:text-text-muted font-medium",
                 "focus:outline-none",
+                "border-border-light hover:border-border-medium",
                 error && "border-error focus:border-error",
                 disabled &&
                   "opacity-50 cursor-not-allowed bg-background-secondary"

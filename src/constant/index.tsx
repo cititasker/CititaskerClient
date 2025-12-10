@@ -115,6 +115,10 @@ export const API_ROUTES = {
     DELETE: "/notifications",
     DELETE_ALL_READ: "/notifications/read/all",
   },
+  DISPUTE: {
+    CREATE: "/tasks/disputes/create",
+    GET_ALL: "/tasks/disputes/fetch",
+  },
 } as const;
 
 const isProd = process.env.NEXT_PUBLIC_NODE_ENV === "production";
@@ -211,21 +215,44 @@ export const LOCATION_TYPE: Record<LocationTypeT, string> = {
   online: "Remote",
 };
 
-export const rejectionReasonOptions = [
-  { name: "The offer was too small for the job", id: "1" },
-  { name: "The poster changed scope of work", id: "2" },
-  { name: "The offer didn't match the workload.", id: "3" },
-  { name: "The poster added a new task", id: "4" },
-  { name: "Other reasons", id: "5" },
-];
+export const REJECTION_REASON = {
+  OFFER_TOO_SMALL: "offer_too_small",
+  SCOPE_CHANGED: "scope_changed",
+  WORKLOAD_MISMATCH: "workload_mismatch",
+  ADDITIONAL_TASKS_ADDED: "additional_tasks_added",
+  OTHER: "other",
+} as const;
 
-export const surchargeReasons = {
-  "1": "The offer was too small for the job",
-  "2": "The poster changed scope of work",
-  "3": "The offer didn't match the workload.",
-  "4": "The poster added a new task",
-  "5": "Other reasons",
-} as Record<string, string>;
+export const rejectionReasonOptions = [
+  {
+    id: REJECTION_REASON.OFFER_TOO_SMALL,
+    name: "The offer was too small for the job",
+  },
+  {
+    id: REJECTION_REASON.SCOPE_CHANGED,
+    name: "The poster changed scope of work",
+  },
+  {
+    id: REJECTION_REASON.WORKLOAD_MISMATCH,
+    name: "The offer didn't match the workload.",
+  },
+  {
+    id: REJECTION_REASON.ADDITIONAL_TASKS_ADDED,
+    name: "The poster added a new task",
+  },
+  {
+    id: REJECTION_REASON.OTHER,
+    name: "Other reasons",
+  },
+] as const;
+
+export type RejectionReason =
+  (typeof REJECTION_REASON)[keyof typeof REJECTION_REASON];
+
+export const surchargeReasons: Record<RejectionReason, string> =
+  Object.fromEntries(
+    rejectionReasonOptions.map((opt) => [opt.id, opt.name])
+  ) as Record<RejectionReason, string>;
 
 export const TIME_OPTIONS = [
   {

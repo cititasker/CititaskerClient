@@ -85,7 +85,7 @@ const ExtraInfo: React.FC<ExtraInfoProps> = ({
 
         <div
           className={cn(
-            "text-text-primary leading-relaxed text-left w-full",
+            "text-text-primary leading-relaxed text-left w-full ",
             compact ? "text-sm" : "text-sm sm:text-base",
             !showIcon && "text-center"
           )}

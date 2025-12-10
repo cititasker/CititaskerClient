@@ -51,9 +51,7 @@ export const TaskAlertProvider = ({ children }: { children: ReactNode }) => {
       <div
         className={cn(
           "fixed top-4 z-50 flex flex-col gap-3 pointer-events-none",
-          isMediumScreen
-            ? "right-4 w-full max-w-sm" // Desktop: right-aligned
-            : "left-4 right-4" // Mobile: full width with margins
+          isMediumScreen ? "right-4 w-full max-w-sm" : "left-4 right-4"
         )}
       >
         {alerts.map((alert, index) => (

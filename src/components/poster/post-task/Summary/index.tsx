@@ -8,12 +8,12 @@ import PostTaskFormActions from "../partials/PostTaskFormActions";
 import {
   Calendar,
   MapPin,
-  DollarSign,
   Tag,
   Clock,
   User,
   FileText,
   ImageIcon,
+  Banknote,
 } from "lucide-react";
 import { usePurgeData } from "@/utils/dataPurge";
 import SummaryField from "./SummaryField";
@@ -155,7 +155,7 @@ export default function Summary() {
             />
           )}
           <SummaryField
-            icon={<DollarSign className="w-4 h-4" />}
+            icon={<Banknote className="w-4 h-4" />}
             label="Budget"
             value={formatCurrency({ value: task.budget })}
           />

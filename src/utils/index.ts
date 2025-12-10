@@ -235,11 +235,6 @@ export function formatTime(dateString: string, format = "hh:mm a"): string {
 
 export const maxDate = dayjs().endOf("day").toDate();
 
-/**
- * Returns a maxDate based on how many years ago you want to subtract.
- * @param years - number of years to subtract from today (e.g., 18 for DOB)
- * @returns Date object
- */
 export function getMaxDate(years?: number): Date {
   if (typeof years === "number") {
     return dayjs().subtract(years, "years").endOf("day").toDate();
@@ -286,4 +281,28 @@ export function extractPublicIdFromUrl(url?: any): string | undefined {
   if (!url) return undefined;
   const afterUpload = url.split("/upload/")[1] || url;
   return afterUpload.replace(/^v\d+\//, "").replace(/\.[^.]+$/, "");
+}
+
+export function filterEmptyValues(
+  obj: Record<string, any>
+): Record<string, any> {
+  const isPlainObject = (val: any) =>
+    val !== null && typeof val === "object" && val.constructor === Object;
+
+  const isEmpty = (val: any): boolean => {
+    if (val == null) return true; // null or undefined
+    if (typeof val === "string") return val.trim() === "";
+    if (Array.isArray(val)) return val.length === 0;
+    if (val instanceof File || val instanceof Blob) return false;
+    if (isPlainObject(val))
+      return Object.keys(filterEmptyValues(val)).length === 0;
+    return false;
+  };
+
+  return Object.entries(obj).reduce((acc, [key, val]) => {
+    if (!isEmpty(val)) {
+      acc[key] = isPlainObject(val) ? filterEmptyValues(val) : val;
+    }
+    return acc;
+  }, {} as Record<string, any>);
 }

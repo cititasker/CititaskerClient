@@ -12,7 +12,7 @@ import { useFormContext } from "react-hook-form";
 import { FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 
 interface FormSelectProps {
-  options: SelectOption[];
+  options: readonly SelectOption[];
   name: string;
   label?: string;
   required?: boolean;

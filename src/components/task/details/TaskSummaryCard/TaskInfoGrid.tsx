@@ -1,5 +1,5 @@
 import React from "react";
-import { Calendar, DollarSign, MapPin, Clock } from "lucide-react";
+import { Calendar, MapPin, Clock, Banknote } from "lucide-react";
 import { formatCurrency } from "@/utils";
 import InfoRow from "./InfoRow";
 
@@ -36,7 +36,7 @@ export default function TaskInfoGrid({
         <InfoRow
           label="Budget"
           value={formatCurrency({ value: task.budget, noFraction: true })}
-          icon={<DollarSign className="w-4 h-4" />}
+          icon={<Banknote className="w-4 h-4" />}
           onEdit={onEditPrice}
           canEdit={canEdit}
         />

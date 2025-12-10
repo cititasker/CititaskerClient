@@ -11,7 +11,7 @@ export const LazyNumericFormat = dynamic(
       <Input
         disabled
         placeholder="Loading..."
-        className="text-3xl font-semibold text-center bg-transparent outline-none w-full"
+        className="font-semibold bg-transparent outline-none w-full"
       />
     ),
   }

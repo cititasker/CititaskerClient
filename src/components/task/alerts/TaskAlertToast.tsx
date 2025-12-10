@@ -63,7 +63,7 @@ export function TaskAlertToast({
         transitionDelay: isVisible && !isExiting ? `${index * 50}ms` : "0ms",
       }}
     >
-      <div className="flex items-start gap-3 w-full">
+      <div className="relative w-full">
         {/* Content */}
         <div className="flex-1 min-w-0 space-y-3">
           <div className="text-sm font-medium leading-relaxed pr-6">
@@ -85,9 +85,9 @@ export function TaskAlertToast({
         <button
           onClick={handleClose}
           className={cn(
-            "shrink-0 rounded-md p-1 transition-colors",
-            "hover:bg-black/10 focus:outline-none focus:ring-2 focus:ring-offset-1",
-            "focus:ring-current"
+            "rounded-md p-1 transition-colors",
+            "hover:bg-black/10 focus:outline-none",
+            "absolute top-0 right-0"
           )}
           aria-label="Close notification"
         >

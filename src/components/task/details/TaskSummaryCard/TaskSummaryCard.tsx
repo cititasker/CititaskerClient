@@ -10,6 +10,8 @@ import TaskHeader from "./TaskHeader";
 import TaskImageGallery from "./TaskImageGallery";
 import TaskInfoGrid from "./TaskInfoGrid";
 import TaskFooterActions from "./TaskFooterActions";
+import HelpModal from "../HelpModal";
+import DisputeForm from "../dispute/DisputeForm";
 
 interface Props {
   task: ITask;
@@ -33,7 +35,22 @@ export default function TaskSummaryCard({
   disabledButtonText,
 }: Props) {
   const cancelTask = useModal();
+  const helpModal = useModal();
+  const disputeModal = useModal();
   const helpers = useTaskHelpers(task);
+
+  const handleSelectedOption = (opt: MoreOptionItem) => {
+    switch (opt.name) {
+      case "cancel-task": {
+        cancelTask.openModal();
+        break;
+      }
+      case "help": {
+        helpModal.openModal();
+        break;
+      }
+    }
+  };
 
   return (
     <>
@@ -71,7 +88,7 @@ export default function TaskSummaryCard({
             onPrimaryAction={onPrimaryAction}
             showViewButton={showViewButton}
             onViewTask={onViewTask}
-            onSelectOption={() => cancelTask.openModal()}
+            onSelectOption={handleSelectedOption}
             disabledButtonText={disabledButtonText}
           />
         </CardContent>
@@ -80,6 +97,18 @@ export default function TaskSummaryCard({
       <CancelTaskModal
         isOpen={cancelTask.isOpen}
         onClose={cancelTask.setIsOpen}
+      />
+      <HelpModal
+        isOpen={helpModal.isOpen}
+        onClose={helpModal.closeModal}
+        handleSubmit={() => {
+          helpModal.closeModal();
+          disputeModal.openModal();
+        }}
+      />
+      <DisputeForm
+        isOpen={disputeModal.isOpen}
+        onClose={disputeModal.closeModal}
       />
     </>
   );

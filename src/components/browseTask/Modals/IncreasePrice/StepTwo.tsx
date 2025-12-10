@@ -23,12 +23,12 @@ const schema = z
     description: z.string().optional(),
   })
   .superRefine((data, ctx) => {
-    if (data.reason === "5") {
+    if (data.reason === "other") {
       if (!data.description?.trim()) {
         ctx.addIssue({
           path: ["description"],
           code: z.ZodIssueCode.custom,
-          message: "Description is required when reason is 'Other'",
+          message: "Description is required'",
         });
       } else if (data.description.trim().length < 15) {
         ctx.addIssue({
@@ -64,16 +64,6 @@ export default function StepTwo({ nextStep, prevStep }: StepTwoProps) {
 
   const reason = watch("reason");
 
-  // React.useEffect(() => {
-  //   if (taskersOffer) {
-  //     const payload = {
-  //       reason: taskersOffer.reason ?? "",
-  //       description: taskersOffer.description ?? "",
-  //     };
-  //     dispatch(setOfferData({ ...payload, ...offer }));
-  //   }
-  // }, [taskersOffer]);
-
   const onSubmit = (data: SchemaType) => {
     dispatch(setOfferData({ ...offer, ...data }));
     nextStep();
@@ -92,7 +82,7 @@ export default function StepTwo({ nextStep, prevStep }: StepTwoProps) {
               options={rejectionReasonOptions}
               placeholder="Please select a reason"
             />
-            {reason == "5" && (
+            {reason === "other" && (
               <FormTextArea
                 name="description"
                 label="Explain the reason"
