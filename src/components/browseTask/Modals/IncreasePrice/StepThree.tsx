@@ -59,10 +59,10 @@ export default function StepThree({ prevStep, nextStep }: Props) {
           data.message || "Surcharge request submitted successfully"
         );
         queryClient.invalidateQueries({
-          queryKey: [API_ROUTES.GET_TASK_BY_ID, String(offer?.task_id)],
+          queryKey: [API_ROUTES.TASKS, String(offer?.task_id)],
         });
         queryClient.invalidateQueries({
-          queryKey: [API_ROUTES.GET_USER_TASK, String(offer?.task_id)],
+          queryKey: [API_ROUTES.USER_TASKS, String(offer?.task_id)],
         });
       },
       onError(error) {

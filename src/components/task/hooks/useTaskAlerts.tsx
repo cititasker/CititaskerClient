@@ -52,13 +52,17 @@ export const useTaskAlerts = ({
 
     if (!task) return alertList;
 
-    const { status, payment_requested, has_surcharge_requests, reschedule } =
-      task;
+    const {
+      payment_requested,
+      payment_released,
+      has_surcharge_requests,
+      reschedule,
+    } = task;
     const agreedDate = reschedule?.agreed_date;
     const agreedTime = reschedule?.agreed_time;
 
     // Release Payment alert
-    if (role === "poster" && status === "completed" && payment_requested) {
+    if (role === "poster" && payment_requested && !payment_released) {
       const taskerName = getPartialInitials(task?.tasker?.profile);
       alertList.push({
         id: `release_payment_${task?.id}`,

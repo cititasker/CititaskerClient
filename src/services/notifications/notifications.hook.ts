@@ -4,14 +4,18 @@ import { API_ROUTES } from "@/constant";
 import { notificationsApi } from "./notifications.api";
 
 // Fetch all notifications
-export function useNotifications(params?: {
-  page?: number;
-  per_page?: number;
+export function useNotifications(options: {
+  params?: {
+    page?: number;
+    per_page?: number;
+  };
+  enabled?: boolean;
 }) {
   return useBaseQuery(
-    [API_ROUTES.NOTIFICATIONS.GET_ALL, params],
-    () => notificationsApi.getNotifications(params),
+    [API_ROUTES.NOTIFICATIONS.GET_ALL, options.params],
+    () => notificationsApi.getNotifications(options.params),
     {
+      enabled: options?.enabled ?? true,
       queryOptions: {
         staleTime: 1 * 60 * 1000,
       },

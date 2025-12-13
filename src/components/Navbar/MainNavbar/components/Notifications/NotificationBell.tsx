@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, memo } from "react";
+import React, { useState, memo, useCallback } from "react";
 import { Bell } from "@/components/icons/index";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import NotificationHeader from "./NotificationHeader";
 import dynamic from "next/dynamic";
-import { useNotifications } from "@/hooks/useNotifications";
+import { useNotifications } from "@/providers/NotificationsProvider";
 
 const NotificationTabs = dynamic(() => import("./NotificationTabs"), {
   loading: () => <div className="p-5 text-center">Loading...</div>,
@@ -21,15 +21,54 @@ const NotificationBell = memo(function NotificationBell() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("all");
 
+  // Track individual notification loading states
+  const [loadingStates, setLoadingStates] = useState<{
+    markingAsRead: string | null;
+    deleting: string | null;
+  }>({
+    markingAsRead: null,
+    deleting: null,
+  });
+
   const {
     notifications,
     unreadNotifications,
     unreadCount,
     isLoading,
-    markAsRead,
+    markAsRead: originalMarkAsRead,
     markAllAsRead,
-    deleteNotification,
+    deleteNotification: originalDeleteNotification,
+    isMarkingAllAsRead,
   } = useNotifications();
+
+  // Wrap markAsRead to track individual notification
+  const handleMarkAsRead = useCallback(
+    (id: string) => {
+      setLoadingStates((prev) => ({ ...prev, markingAsRead: id }));
+      originalMarkAsRead(id);
+
+      // Reset after operation completes
+      setTimeout(() => {
+        setLoadingStates((prev) => ({ ...prev, markingAsRead: null }));
+      }, 1000);
+    },
+    [originalMarkAsRead]
+  );
+
+  // Wrap deleteNotification to track individual notification
+  const handleDeleteNotification = useCallback(
+    (id: string, e: React.MouseEvent) => {
+      e.stopPropagation();
+      setLoadingStates((prev) => ({ ...prev, deleting: id }));
+      originalDeleteNotification(id);
+
+      // Reset after operation completes
+      setTimeout(() => {
+        setLoadingStates((prev) => ({ ...prev, deleting: null }));
+      }, 1000);
+    },
+    [originalDeleteNotification]
+  );
 
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
@@ -70,8 +109,10 @@ const NotificationBell = memo(function NotificationBell() {
             unreadNotifications={unreadNotifications}
             unreadCount={unreadCount}
             markAllAsRead={markAllAsRead}
-            markAsRead={markAsRead}
-            deleteNotification={deleteNotification}
+            markAsRead={handleMarkAsRead}
+            deleteNotification={handleDeleteNotification}
+            isMarkingAllAsRead={isMarkingAllAsRead}
+            loadingStates={loadingStates}
           />
         )}
       </DropdownMenuContent>

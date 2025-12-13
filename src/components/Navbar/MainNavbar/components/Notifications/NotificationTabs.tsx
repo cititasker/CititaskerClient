@@ -1,10 +1,10 @@
 import React, { memo } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
 import { CheckCheck } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { NotificationItem } from "./types";
 import NotificationList from "./NotificationList";
+import FormButton from "@/components/forms/FormButton";
 
 interface NotificationTabsProps {
   activeTab: string;
@@ -15,6 +15,11 @@ interface NotificationTabsProps {
   markAllAsRead: () => void;
   markAsRead: (id: string) => void;
   deleteNotification: (id: string, e: React.MouseEvent) => void;
+  isMarkingAllAsRead: boolean;
+  loadingStates: {
+    markingAsRead: string | null;
+    deleting: string | null;
+  };
 }
 
 const NotificationTabs = memo(function NotificationTabs({
@@ -26,6 +31,8 @@ const NotificationTabs = memo(function NotificationTabs({
   markAllAsRead,
   markAsRead,
   deleteNotification,
+  isMarkingAllAsRead,
+  loadingStates,
 }: NotificationTabsProps) {
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -51,15 +58,17 @@ const NotificationTabs = memo(function NotificationTabs({
         </TabsList>
 
         {unreadCount > 0 && (
-          <Button
+          <FormButton
             variant="ghost"
             size="sm"
             onClick={markAllAsRead}
             className="h-8 text-xs text-primary hover:text-primary hover:bg-primary/10 font-medium"
+            disabled={isMarkingAllAsRead}
+            icon={<CheckCheck className="w-3.5 h-3.5" />}
+            loading={isMarkingAllAsRead}
           >
-            <CheckCheck className="w-3.5 h-3.5 mr-1.5" />
             Mark all read
-          </Button>
+          </FormButton>
         )}
       </div>
 
@@ -68,6 +77,7 @@ const NotificationTabs = memo(function NotificationTabs({
           notifications={notifications}
           markAsRead={markAsRead}
           deleteNotification={deleteNotification}
+          loadingStates={loadingStates}
         />
       </TabsContent>
       <TabsContent value="unread" className="m-0">
@@ -75,6 +85,7 @@ const NotificationTabs = memo(function NotificationTabs({
           notifications={unreadNotifications}
           markAsRead={markAsRead}
           deleteNotification={deleteNotification}
+          loadingStates={loadingStates}
         />
       </TabsContent>
     </Tabs>

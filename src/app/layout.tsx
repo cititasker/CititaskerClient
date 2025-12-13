@@ -1,13 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Providers from "@/providers";
-import AppProvider from "@/providers/AppProvider";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import AppProviders from "@/providers/AppProviders";
 import { auth } from "@/auth";
 import { getQueryClient } from "@/constant/queryClient";
 import { API_ROUTES } from "@/constant";
 import { getUserApi } from "@/services/user/users.api";
-import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
+import { dehydrate } from "@tanstack/react-query";
 
 export const metadata: Metadata = {
   title: "CitiTasker",
@@ -42,13 +40,9 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className="relative">
-        <AppProvider>
-          <Providers session={session}>
-            <HydrationBoundary state={dehydratedState}>
-              <TooltipProvider>{children}</TooltipProvider>
-            </HydrationBoundary>
-          </Providers>
-        </AppProvider>
+        <AppProviders session={session} dehydratedState={dehydratedState}>
+          {children}
+        </AppProviders>
       </body>
     </html>
   );

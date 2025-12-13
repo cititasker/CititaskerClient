@@ -33,7 +33,7 @@ export default async function Page({ params }: Props) {
   const queryClient = getQueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: [API_ROUTES.GET_TASK_BY_ID, id],
+    queryKey: [API_ROUTES.TASKS, id],
     queryFn: () => getUserTaskById(id),
   });
   return <TaskDetails back={ROUTES.BROWSE_TASK} />;

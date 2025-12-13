@@ -1,7 +1,7 @@
 import React, { memo } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { Trash2, Bell } from "lucide-react";
+import { Trash2, Bell, Loader2, Check } from "lucide-react";
 import { getNotificationIcon } from "./utils";
 import { cn } from "@/lib/utils";
 import type { NotificationItem } from "./types";
@@ -10,12 +10,17 @@ interface NotificationListProps {
   notifications: NotificationItem[];
   markAsRead: (id: string) => void;
   deleteNotification: (id: string, e: React.MouseEvent) => void;
+  loadingStates: {
+    markingAsRead: string | null;
+    deleting: string | null;
+  };
 }
 
 const NotificationList = memo(function NotificationList({
   notifications,
   markAsRead,
   deleteNotification,
+  loadingStates,
 }: NotificationListProps) {
   if (!notifications.length) {
     return (
@@ -38,6 +43,8 @@ const NotificationList = memo(function NotificationList({
             notification={notification}
             markAsRead={markAsRead}
             deleteNotification={deleteNotification}
+            isMarkingAsRead={loadingStates.markingAsRead === notification.id}
+            isDeleting={loadingStates.deleting === notification.id}
           />
         ))}
       </div>
@@ -49,39 +56,70 @@ const NotificationItem = memo(function NotificationItem({
   notification,
   markAsRead,
   deleteNotification,
+  isMarkingAsRead,
+  isDeleting,
 }: {
   notification: NotificationItem;
   markAsRead: (id: string) => void;
   deleteNotification: (id: string, e: React.MouseEvent) => void;
+  isMarkingAsRead: boolean;
+  isDeleting: boolean;
 }) {
+  const handleClick = () => {
+    if (!notification.read && !isMarkingAsRead) {
+      markAsRead(notification.id);
+    }
+  };
+
+  const handleDelete = (e: React.MouseEvent) => {
+    if (!isDeleting) {
+      deleteNotification(notification.id, e);
+    }
+  };
+
   return (
     <div
       className={cn(
-        "group relative px-5 py-4 cursor-pointer transition-all border-b last:border-b-0 hover:bg-gray-50",
-        !notification.read && "bg-blue-50/50 hover:bg-blue-50"
+        "group relative px-5 py-4 transition-all border-b last:border-b-0",
+        !notification.read && "bg-blue-50/50",
+        !notification.read &&
+          !isMarkingAsRead &&
+          "cursor-pointer hover:bg-blue-100/50",
+        (isMarkingAsRead || isDeleting) && "opacity-50"
       )}
-      onClick={() => markAsRead(notification.id)}
+      onClick={handleClick}
     >
       <div className="flex gap-3">
+        {/* Icon with loading state */}
         <div
           className={cn(
-            "shrink-0 w-9 h-9 rounded-full flex items-center justify-center mt-0.5",
+            "shrink-0 w-9 h-9 rounded-full flex items-center justify-center mt-0.5 relative",
             !notification.read ? "bg-white shadow-sm" : "bg-gray-100"
           )}
         >
-          {getNotificationIcon(notification.type, notification.data?.icon)}
+          {isMarkingAsRead ? (
+            <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
+          ) : (
+            getNotificationIcon(notification.type, notification.data?.icon)
+          )}
         </div>
 
         <div className="flex-1 min-w-0">
           {notification.data?.title && (
-            <p
-              className={cn(
-                "text-xs font-semibold mb-1",
-                !notification.read ? "text-gray-900" : "text-gray-700"
+            <div className="flex items-center gap-2">
+              <p
+                className={cn(
+                  "text-xs font-semibold mb-1",
+                  !notification.read ? "text-gray-900" : "text-gray-700"
+                )}
+              >
+                {notification.data.title}
+              </p>
+              {/* Success checkmark after marking as read */}
+              {isMarkingAsRead && (
+                <Check className="w-3 h-3 text-green-600 animate-in fade-in zoom-in duration-200" />
               )}
-            >
-              {notification.data.title}
-            </p>
+            </div>
           )}
           <p
             className={cn(
@@ -95,19 +133,30 @@ const NotificationItem = memo(function NotificationItem({
             <span className="text-xs text-gray-500">
               {notification.data?.created_at_human || notification.created_at}
             </span>
-            {!notification.read && (
+            {!notification.read && !isMarkingAsRead && (
               <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
             )}
           </div>
         </div>
 
+        {/* Delete button with loading state */}
         <Button
           variant="ghost"
           size="icon"
-          onClick={(e) => deleteNotification(notification.id, e)}
-          className="shrink-0 h-7 w-7 rounded-full opacity-0 group-hover:opacity-100 hover:bg-red-50 hover:text-red-600 transition-all"
+          onClick={handleDelete}
+          disabled={isDeleting || isMarkingAsRead}
+          className={cn(
+            "shrink-0 h-7 w-7 rounded-full transition-all",
+            isDeleting
+              ? "opacity-100"
+              : "opacity-0 group-hover:opacity-100 hover:bg-red-50 hover:text-red-600"
+          )}
         >
-          <Trash2 className="w-3.5 h-3.5" />
+          {isDeleting ? (
+            <Loader2 className="w-3.5 h-3.5 animate-spin text-red-600" />
+          ) : (
+            <Trash2 className="w-3.5 h-3.5" />
+          )}
         </Button>
       </div>
     </div>

@@ -40,6 +40,8 @@ const schema = z.object({
 
 type schemaType = z.infer<typeof schema>;
 
+const FORM_ID = "complete-task-form";
+
 export default function CompleteTaskModal({ isOpen, onClose }: IModal) {
   const queryClient = useQueryClient();
   const { showSnackbar } = useSnackbar();
@@ -78,7 +80,7 @@ export default function CompleteTaskModal({ isOpen, onClose }: IModal) {
         success.handleOpen();
         showSnackbar(data.message, "success");
         queryClient.invalidateQueries({
-          queryKey: [API_ROUTES.GET_TASK_BY_ID, String(id)],
+          queryKey: [API_ROUTES.TASKS, String(id)],
         });
       },
       onError: (error) => {
@@ -98,6 +100,19 @@ export default function CompleteTaskModal({ isOpen, onClose }: IModal) {
       isOpen={isOpen}
       onClose={handleClose}
       title={!success.isOpen ? "Complete task" : undefined}
+      customFooter={
+        !success.isOpen && (
+          <FormButton
+            form={FORM_ID}
+            type="submit"
+            size="lg"
+            className="mx-auto px-10"
+            loading={completeTask.isPending}
+          >
+            Send
+          </FormButton>
+        )
+      }
     >
       {!success.isOpen ? (
         <div>
@@ -107,7 +122,11 @@ export default function CompleteTaskModal({ isOpen, onClose }: IModal) {
             </p>
           </div>
           <FormProvider {...methods}>
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+            <form
+              id={FORM_ID}
+              onSubmit={handleSubmit(onSubmit)}
+              className="space-y-5"
+            >
               <div>
                 <Label className="text-xs text-black mb-4">
                   File supported: JPEG (.jpeg) PNG (.png)
@@ -136,14 +155,6 @@ export default function CompleteTaskModal({ isOpen, onClose }: IModal) {
                 name="agreed"
                 label="I confirm that the task has been completed"
               />
-              <FormButton
-                type="submit"
-                size="lg"
-                className="mt-5 mx-auto px-10"
-                loading={completeTask.isPending}
-              >
-                Send
-              </FormButton>
             </form>
           </FormProvider>
         </div>

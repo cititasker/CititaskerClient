@@ -54,7 +54,7 @@ export const useFetchTaskById = ({
   ...options
 }: UseFetchUserTaskByIdOptions) => {
   return useQuery<TaskApiResponse, Error, TaskApiResponse, [string, string]>({
-    queryKey: [API_ROUTES.GET_TASK_BY_ID, String(id)],
+    queryKey: [API_ROUTES.TASKS, String(id)],
     queryFn: () => getUserTaskById(id),
     enabled: !!id,
     ...options,
@@ -86,7 +86,7 @@ export const useFetchUserTaskById = ({
     TaskApiResponse,
     [string, string]
   >({
-    queryKey: [API_ROUTES.GET_USER_TASK, String(id)],
+    queryKey: [API_ROUTES.USER_TASKS, String(id)],
     queryFn: () => getUserTaskById(id),
     ...options,
   });

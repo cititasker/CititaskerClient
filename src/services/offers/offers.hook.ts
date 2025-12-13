@@ -58,7 +58,7 @@ export const useRejectSurchargeRequest = (id: string) => {
   return useBaseMutation(rejectSurchargeRequest, {
     invalidateQueryKeys: [
       [API_ROUTES.SURCHARGE_REQUEST_LIST, id],
-      [API_ROUTES.GET_TASK_BY_ID, id],
+      [API_ROUTES.TASKS, id],
     ],
   });
 };

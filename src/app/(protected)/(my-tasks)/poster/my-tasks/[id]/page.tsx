@@ -8,7 +8,7 @@ import AllOffers from "@/components/myTasks/AllOffers";
 import Reviews from "@/components/myTasks/Reviews";
 import CustomTab from "@/components/reusables/CustomTab";
 import Questions from "@/components/shared/components/comment/Questions";
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useMemo } from "react";
 import { useAppDispatch } from "@/store/hook";
 import { setTaskDetails } from "@/store/slices/task";
 import { useTaskActions, useTaskAlerts } from "@/components/task/hooks";
@@ -64,12 +64,21 @@ export default function Offer() {
 
     if (task.status === "open") {
       router.push(`/post-task/${task.id}`);
-    } else if (task.status === "assigned") {
+    } else if (task.status === "assigned" && task.has_surcharge_requests) {
       actions.surchargeModal.openModal();
     } else if (task.payment_requested) {
       actions.openReleasePaymentModal();
     }
   };
+
+  const buttonText = useMemo(() => {
+    if (task.status === "open") return "Edit task";
+    if (task.has_surcharge_requests) return "Pay surcharge";
+    if (task.payment_requested && !task.payment_released)
+      return "Release payment";
+    if (task.status === "assigned") return "Release payment";
+    return "Payment released";
+  }, [task]);
 
   if (isLoading || !task) {
     return <Loader />;
@@ -112,14 +121,13 @@ export default function Offer() {
                 onEditDate={() => router.push(`/post-task/${task.id}?step=3`)}
                 onEditPrice={() => router.push(`/post-task/${task.id}?step=4`)}
                 onPrimaryAction={handlePrimaryAction}
-                buttonText={
-                  task.status === "open"
-                    ? "Edit task"
-                    : task.payment_requested || task.status == "assigned"
-                    ? "Release payment"
-                    : "Payment released"
+                buttonText={buttonText}
+                disabledButtonText={
+                  task.payment_released ||
+                  (task.status == "assigned" &&
+                    !task.payment_requested &&
+                    !task.has_surcharge_requests)
                 }
-                disabledButtonText={task.payment_released}
               />
             </div>
             {/* Right column */}

@@ -1,14 +1,11 @@
 "use client";
-import React, { useEffect } from "react";
-import { SessionProvider } from "next-auth/react";
-import { SnackbarProvider } from "./SnackbarProvider";
+import { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useAppDispatch } from "@/store/hook";
 import { setUser } from "@/store/slices/user";
 import { useGetUser } from "@/services/user/user.hook";
-import type { Session } from "next-auth";
 
-function SessionSync() {
+export function SessionSync() {
   const { status, data: session } = useSession();
   const dispatch = useAppDispatch();
 
@@ -24,22 +21,4 @@ function SessionSync() {
   }, [isSuccess, userData, dispatch]);
 
   return null;
-}
-
-interface ProvidersProps {
-  children: React.ReactNode;
-  session: Session | null;
-}
-
-export default function Providers({ children, session }: ProvidersProps) {
-  return (
-    <SessionProvider
-      session={session}
-      refetchInterval={5 * 60} // 5 minutes
-      refetchOnWindowFocus={false}
-    >
-      <SessionSync />
-      <SnackbarProvider>{children}</SnackbarProvider>
-    </SessionProvider>
-  );
 }

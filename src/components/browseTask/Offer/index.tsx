@@ -44,7 +44,7 @@ const Offer: React.FC<OfferProps> = ({ offers }) => {
 
       // Invalidate related queries
       queryClient.invalidateQueries({
-        queryKey: [API_ROUTES.GET_TASK_BY_ID, id],
+        queryKey: [API_ROUTES.TASKS, id],
       });
       queryClient.invalidateQueries({
         queryKey: [API_ROUTES.TASKS],

@@ -19,6 +19,7 @@ import NotificationBell from "../../../Notifications/NotificationBell";
 
 interface UserProfileProps {
   user: Partial<IUser>;
+
   notifications: number;
   onLogout: () => void;
   onNavClick: () => void;

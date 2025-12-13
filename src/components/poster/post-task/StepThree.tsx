@@ -57,7 +57,7 @@ export default function StepThree() {
     onSuccess: async (data) => {
       showSnackbar(data.message, "success");
       queryClient.invalidateQueries({
-        queryKey: [API_ROUTES.GET_USER_TASK, id],
+        queryKey: [API_ROUTES.USER_TASKS, id],
       });
       router.push(`/${role}/${ROUTES.MY_TASKS}/${id}`);
     },

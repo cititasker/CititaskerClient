@@ -35,7 +35,7 @@ export const getAllTasks = async (
 
 export function getTaskById(id: string) {
   return api
-    .get(`${API_ROUTES.GET_TASK_BY_ID}/${id}`)
+    .get(`${API_ROUTES.TASKS}/single/${id}`)
     .then((data) => {
       return data.data;
     })
@@ -57,14 +57,17 @@ export function getUserTasks(
 }
 
 export function getUserTaskById(id: string) {
-  return api
-    .get(`${API_ROUTES.GET_TASK_BY_ID}/${id}`)
-    .then((data) => {
-      return data.data;
-    })
-    .catch((error: AxiosError) => {
-      throw error.response?.data;
-    });
+  return (
+    api
+      // .get(`${API_ROUTES.USER_TASKS}/single/${id}`)
+      .get(`${API_ROUTES.TASKS}/single/${id}`)
+      .then((data) => {
+        return data.data;
+      })
+      .catch((error: AxiosError) => {
+        throw error.response?.data;
+      })
+  );
 }
 
 export function paymentReference(data: any) {

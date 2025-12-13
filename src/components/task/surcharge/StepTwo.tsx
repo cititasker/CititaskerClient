@@ -46,10 +46,10 @@ export default function StepTwo({
 
   const handleSuccess = useCallback(() => {
     queryClient.invalidateQueries({
-      queryKey: [API_ROUTES.GET_TASK_BY_ID, String(taskDetails?.id)],
+      queryKey: [API_ROUTES.TASKS, String(taskDetails?.id)],
     });
     queryClient.invalidateQueries({
-      queryKey: [API_ROUTES.GET_USER_TASK, String(taskDetails?.id)],
+      queryKey: [API_ROUTES.USER_TASKS, String(taskDetails?.id)],
     });
     showSuccess("Surcharge payment successful", {
       title: "Payment Successful",

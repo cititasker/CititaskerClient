@@ -57,10 +57,8 @@ export const API_ROUTES = {
   },
 
   CREATE_PAYMENT_INTENT: "/payments/create-intent",
-  GET_USER_TASK: "tasks/user/single",
   CREATE_TASK: "/tasks/create",
   UPDATE_TASK: "tasks/update-task",
-  GET_TASK_BY_ID: "/tasks/single",
   MAKE_OFFER: "/tasks/make-offer",
   UPDATE_OFFER: "/tasks/edit-offer",
   OFFER_REPLIES: "/tasks/offer-replies",

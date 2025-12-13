@@ -54,7 +54,7 @@ export const useSurchargeActions = (task: ITask) => {
 
   const invalidateQueries = () => {
     queryClient.invalidateQueries({
-      queryKey: [API_ROUTES.GET_USER_TASK, String(task.id)],
+      queryKey: [API_ROUTES.USER_TASKS, String(task.id)],
     });
   };
 

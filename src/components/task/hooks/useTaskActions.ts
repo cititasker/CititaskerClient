@@ -29,7 +29,7 @@ export const useTaskActions = ({ task }: UseTaskActionsProps) => {
 
   const updatedBudget = useMemo(() => {
     return acceptedOffer?.offer_amount || task?.budget;
-  }, [acceptedOffer]);
+  }, [acceptedOffer, task]);
 
   const payment = usePaymentActions(task);
   const surcharge = useSurchargeActions(task);

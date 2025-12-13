@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import Pusher from "pusher-js";
 import Echo from "laravel-echo";
@@ -8,7 +8,11 @@ if (typeof window !== "undefined") {
   (window as any).Pusher = Pusher;
 }
 
-// Notification event types
+// Enable Pusher logging in development only
+if (process.env.NODE_ENV === "development") {
+  Pusher.logToConsole = true;
+}
+
 const NOTIFICATION_TYPES = [
   "NewDisputeNotification",
   "DisputeProposalNotification",
@@ -36,78 +40,141 @@ interface UsePusherOptions {
 export function usePusher(options: UsePusherOptions = {}) {
   const { onNotification, enabled = true } = options;
   const { user, authToken, isAuthenticated } = useAuth();
-  const echoRef = useRef<any>(null);
-  const channelRef = useRef<any>(null);
 
+  const echoRef = useRef<any>(null);
+  const pusherChannelRef = useRef<any>(null);
   const onNotificationRef = useRef(onNotification);
+
+  const [connectionState, setConnectionState] = useState<string>("initialized");
+  const [authError, setAuthError] = useState<string | null>(null);
 
   useEffect(() => {
     onNotificationRef.current = onNotification;
   }, [onNotification]);
 
-  // Initialize Echo
   useEffect(() => {
     if (!enabled || !isAuthenticated || !authToken || !user?.id) {
+      setConnectionState("disabled");
       return;
     }
 
-    // Prevent duplicate connections
-    if (echoRef.current) {
+    if (echoRef.current) return;
+
+    const requiredEnvVars = {
+      key: process.env.NEXT_PUBLIC_PUSHER_KEY,
+      cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
+      apiUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
+    };
+
+    const missingVar = Object.entries(requiredEnvVars).find(
+      ([_, value]) => !value
+    );
+    if (missingVar) {
+      console.error(
+        `Missing required env var: NEXT_PUBLIC_PUSHER_${missingVar[0].toUpperCase()}`
+      );
+      setAuthError(`Missing ${missingVar[0]} configuration`);
       return;
     }
 
-    console.log("Initializing Pusher connection...");
+    setConnectionState("initializing");
 
-    // Initialize Laravel Echo with Pusher
-    echoRef.current = new Echo({
-      broadcaster: "pusher",
-      key: process.env.NEXT_PUBLIC_PUSHER_KEY!,
-      cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
-      forceTLS: true,
-      authEndpoint: `${process.env.NEXT_PUBLIC_API_BASE_URL}broadcasting/auth`,
-      auth: {
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-          Accept: "application/json",
+    try {
+      const apiBaseUrl = requiredEnvVars.apiUrl!.replace(/\/$/, "");
+      const authEndpoint = `${apiBaseUrl}/broadcasting/auth`;
+
+      // Initialize Laravel Echo with Pusher
+      echoRef.current = new Echo({
+        broadcaster: "pusher",
+        key: requiredEnvVars.key,
+        cluster: requiredEnvVars.cluster,
+        forceTLS: true,
+        encrypted: true,
+        authEndpoint,
+        auth: {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            Accept: "application/json",
+          },
         },
-      },
-    });
-
-    // Subscribe to private user
-    const channelName = `user.${user.id}`;
-    channelRef.current = echoRef.current.private(channelName);
-
-    console.log("Pusher connected:", channelName);
-
-    // Bind each notification type
-    NOTIFICATION_TYPES.forEach((notificationType) => {
-      const eventName = `App\\Models\\User.${notificationType}`;
-
-      channelRef.current.listen(eventName, (data: any) => {
-        console.log(`Received ${notificationType}:`, data);
-        onNotificationRef.current?.(data, notificationType);
+        enabledTransports: ["ws", "wss"],
       });
 
-      console.log(`Listening to: ${eventName}`);
-    });
+      const pusherInstance = echoRef.current.connector.pusher;
 
-    return () => {
-      if (channelRef.current) {
-        NOTIFICATION_TYPES.forEach((notificationType) => {
-          const eventName = `App\\Models\\User.${notificationType}`;
-          channelRef.current.stopListening(eventName);
+      // Monitor connection state changes
+      pusherInstance.connection.bind("state_change", (states: any) => {
+        setConnectionState(states.current);
+        if (states.current === "connected") {
+          setAuthError(null);
+        }
+      });
+
+      pusherInstance.connection.bind("error", (err: any) => {
+        console.error("Pusher connection error:", err);
+        setAuthError(err.error?.message || "Connection error");
+      });
+
+      // Subscribe to user's private channel
+      const channelName = `user.${user.id}`;
+      const echoChannel = echoRef.current.private(channelName);
+      pusherChannelRef.current = pusherInstance.channel(
+        `private-${channelName}`
+      );
+
+      // Monitor subscription errors
+      pusherChannelRef.current.bind(
+        "pusher:subscription_error",
+        (status: any) => {
+          console.error("Channel subscription failed:", status);
+          setAuthError(`Subscription failed: ${status}`);
+        }
+      );
+
+      // Listen for Laravel notification broadcasts
+      echoChannel.notification((notification: any) => {
+        onNotificationRef.current?.(notification, notification.type);
+      });
+
+      // Listen for specific notification types
+      NOTIFICATION_TYPES.forEach((notificationType) => {
+        const eventName = `App\\Notifications\\${notificationType}`;
+        pusherChannelRef.current.bind(eventName, (data: any) => {
+          onNotificationRef.current?.(data, notificationType);
         });
-        echoRef.current?.leave(channelName);
+      });
+    } catch (error) {
+      console.error("Failed to initialize Pusher:", error);
+      setConnectionState("error");
+      setAuthError(error instanceof Error ? error.message : "Unknown error");
+    }
+
+    // Cleanup function
+    return () => {
+      if (pusherChannelRef.current) {
+        NOTIFICATION_TYPES.forEach((notificationType) => {
+          pusherChannelRef.current.unbind(
+            `App\\Notifications\\${notificationType}`
+          );
+        });
+        pusherChannelRef.current = null;
       }
-      echoRef.current?.disconnect();
-      echoRef.current = null;
-      channelRef.current = null;
-      console.log("Pusher disconnected");
+
+      if (echoRef.current) {
+        echoRef.current.leave(`user.${user.id}`);
+        echoRef.current.disconnect();
+        echoRef.current = null;
+      }
+
+      setConnectionState("disconnected");
     };
   }, [enabled, isAuthenticated, authToken, user?.id]);
 
   return {
     echo: echoRef.current,
-    channel: channelRef.current,
+    channel: pusherChannelRef.current,
+    isConnected: connectionState === "connected",
+    connectionState,
+    authError,
   };
 }

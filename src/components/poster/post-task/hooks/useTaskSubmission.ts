@@ -33,10 +33,10 @@ export const useTaskSubmission = () => {
 
               await Promise.all([
                 queryClient.invalidateQueries({
-                  queryKey: [API_ROUTES.GET_USER_TASK, taskId],
+                  queryKey: [API_ROUTES.USER_TASKS, taskId],
                 }),
                 queryClient.invalidateQueries({
-                  queryKey: [API_ROUTES.GET_TASK_BY_ID, taskId],
+                  queryKey: [API_ROUTES.TASKS, taskId],
                 }),
               ]);
 

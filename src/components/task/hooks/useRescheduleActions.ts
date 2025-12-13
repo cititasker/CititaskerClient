@@ -31,10 +31,10 @@ export const useRescheduleActions = ({ task }: UseRescheduleActionsProps) => {
     if (!task?.id) return;
 
     queryClient.invalidateQueries({
-      queryKey: [API_ROUTES.GET_USER_TASK, String(task.id)],
+      queryKey: [API_ROUTES.USER_TASKS, String(task.id)],
     });
     queryClient.invalidateQueries({
-      queryKey: [API_ROUTES.GET_TASK_BY_ID, String(task.id)],
+      queryKey: [API_ROUTES.TASKS, String(task.id)],
     });
   }, [queryClient, task?.id]);
 
