@@ -1,3 +1,4 @@
+// middleware.ts
 import { auth } from "@/auth";
 import { NextResponse } from "next/server";
 import {
@@ -8,11 +9,28 @@ import {
   isProtectedRoute,
   isWrongRoleForPublicRoute,
 } from "@/lib/middleware/guards/route-config";
+import {
+  shouldRedirectToWaitlist,
+  WAITLIST_CONFIG,
+} from "@/lib/middleware/waitlist-redirect";
 
 export default auth((req) => {
   const { pathname } = req.nextUrl;
+  const hostname = req.headers.get("host") || "";
   const user = req.auth?.user;
   const role = user?.role?.toLowerCase() as "poster" | "tasker" | undefined;
+
+  // ========================================
+  // TEMPORARY: Production Waitlist Redirect
+  // ========================================
+  // TO REMOVE: Set ENABLED to false in waitlist-redirect.ts
+  // or delete lib/middleware/waitlist-redirect.ts entirely
+  // ========================================
+  if (shouldRedirectToWaitlist(hostname, pathname)) {
+    return NextResponse.redirect(
+      new URL(WAITLIST_CONFIG.WAITLIST_PATH, req.url)
+    );
+  }
 
   // 0. Homepage handling: redirect authenticated users to their discovery page
   if (pathname === "/") {
@@ -69,17 +87,7 @@ export default auth((req) => {
 
 export const config = {
   matcher: [
-    "/", // Add homepage to matcher
-    "/auth/:path*",
-    "/poster/:path*",
-    "/tasker/:path*",
-    "/browse-tasks/:path*",
-    "/post-task/:path*",
-    "/how-it-works-poster/:path*",
-    "/how-it-works-tasker/:path*",
-    "/discovery-poster/:path*",
-    "/discovery-tasker/:path*",
-    "/poster-profile/:path*",
-    "/tasker-profile/:path*",
+    // Match all routes except static files and Next.js internals
+    "/((?!_next/static|_next/image|favicon.ico).*)",
   ],
 };

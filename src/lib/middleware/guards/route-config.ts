@@ -19,6 +19,7 @@ export const ROUTE_CONFIG = {
     "/legal",
     "/poster-profile",
     "/tasker-profile",
+    "/waitlist",
   ],
 
   // Routes that require specific roles (when logged in)
