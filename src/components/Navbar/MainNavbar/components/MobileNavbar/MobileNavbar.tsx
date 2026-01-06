@@ -56,11 +56,13 @@ export default function MobileNavbar({
 
         {/* Navigation Content */}
         <div className="flex-1 overflow-y-auto">
-          <CategorySection
-            categoryGroups={categoryGroups}
-            isLoading={isLoading}
-            onNavClick={handleNavClick}
-          />
+          {user?.role !== "poster" && (
+            <CategorySection
+              categoryGroups={categoryGroups}
+              isLoading={isLoading}
+              onNavClick={handleNavClick}
+            />
+          )}
 
           <HowItWorksSection onNavClick={handleNavClick} />
 

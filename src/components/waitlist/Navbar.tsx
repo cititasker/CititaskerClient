@@ -1,119 +1,113 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { MdClose } from "react-icons/md";
-
-import Icons from "../Icons";
-import FormButton from "../forms/FormButton";
-import WaitlistModalForm from "./WaitlistModalForm";
-
-import { useAppDispatch } from "@/store/hook";
-import { toggleWaitlistModal } from "@/store/slices/general";
-import { Logo } from "@/constant/icons";
-import { ROUTES } from "@/constant";
+import { Menu, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import WaitlistModal from "./WaitlistModal";
 import BrandLogo from "../reusables/BrandLogo";
 
 const NAV_ITEMS = [
-  { href: "#home", name: "Home" },
-  { href: "#why_cititasker", name: "Why CitiTasker" },
-  { href: "#faq", name: "FAQ" },
+  { href: "#home", label: "Home" },
+  { href: "#why-cititasker", label: "Why CitiTasker" },
+  { href: "#faq", label: "FAQ" },
 ];
 
-const Navbar = () => {
-  const [showMobileNav, setShowMobileNav] = useState(false);
-  const [active, setActive] = useState("#home");
-
-  const dispatch = useAppDispatch();
+export default function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [activeHash, setActiveHash] = useState("#home");
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    setActive(window.location.hash || "#home");
+    setActiveHash(window.location.hash || "#home");
 
-    const onHashChange = () => setActive(window.location.hash);
-    window.addEventListener("hashchange", onHashChange);
+    const handleHashChange = () => setActiveHash(window.location.hash);
+    window.addEventListener("hashchange", handleHashChange);
 
-    return () => window.removeEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
   }, []);
 
-  const handleToggleMobileNav = useCallback(() => {
-    setShowMobileNav((prev) => !prev);
+  const handleNavClick = useCallback(() => {
+    setIsOpen(false);
   }, []);
 
-  const handleJoinWaitlist = useCallback(() => {
-    dispatch(toggleWaitlistModal());
-    setShowMobileNav(false);
-  }, [dispatch]);
-
-  const renderNavLinks = (isMobile = false) =>
-    NAV_ITEMS.map(({ href, name }, idx) => (
-      <li
-        key={idx}
-        onClick={isMobile ? handleToggleMobileNav : undefined}
-        className={`text-base p-2.5 ${
-          active === href
-            ? "border-b-[3px] border-primary"
-            : "border-transparent"
-        } ${
-          isMobile
-            ? "text-center w-fit mx-auto mb-6 last:mb-0"
-            : "text-dark-secondary mr-4 last:mr-0"
-        }`}
-      >
-        <Link href={href} className="inline-block text-dark-secondary">
-          {name}
-        </Link>
-      </li>
-    ));
+  const handleOpenModal = useCallback(() => {
+    setShowModal(true);
+    setIsOpen(false);
+  }, []);
 
   return (
-    <div className="fixed top-5 w-full z-40 px-5">
-      <div className="shadow-md bg-white rounded-[3.125rem] h-[4.688rem] px-5 flex items-center max-w-[87.5rem] mx-auto">
-        <div className="w-full flex justify-between items-center max-w-[79.375rem] mx-auto">
-          <BrandLogo href={`${ROUTES.WAITLIST}#home`} />
+    <>
+      <nav className="fixed top-0 left-0 right-0 z-50 px-4 pt-4 sm:px-6 sm:pt-6">
+        <div className="container-w p-0">
+          <div className="flex h-16 items-center justify-between rounded-2xl bg-white/95 px-4 shadow-md backdrop-blur-md sm:px-6">
+            <BrandLogo />
 
-          <ul className="hidden md:flex items-center mx-2">
-            {renderNavLinks()}
-          </ul>
+            {/* Desktop Navigation */}
+            <nav className="hidden items-center gap-8 lg:flex">
+              {NAV_ITEMS.map(({ href, label }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className={`relative text-sm font-medium transition-colors hover:text-primary ${
+                    activeHash === href
+                      ? "text-primary after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full after:bg-primary"
+                      : "text-neutral-600"
+                  }`}
+                >
+                  {label}
+                </Link>
+              ))}
+            </nav>
 
-          <FormButton
-            text="Join waitlist"
-            className="hidden md:flex"
-            handleClick={() => dispatch(toggleWaitlistModal())}
-          />
+            <div className="flex items-center gap-3">
+              <Button
+                onClick={() => setShowModal(true)}
+                className="!hidden sm:!inline-flex"
+              >
+                Join Waitlist
+              </Button>
 
-          <Icons.hambuger
-            className="md:hidden cursor-pointer"
-            onClick={handleToggleMobileNav}
-          />
+              <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="rounded-full p-2 hover:bg-neutral-100 lg:hidden"
+                aria-label="Toggle menu"
+              >
+                {isOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
 
-      {/* Mobile Navigation */}
-      <div
-        className={`fixed top-0 left-0 bg-white w-full px-5 transition-all duration-500 ease-[cubic-bezier(.75,.26,.93,.59)] overflow-hidden ${
-          showMobileNav ? "h-dvh" : "h-0"
-        }`}
-      >
-        <div className="min-h-[75px] flex items-center justify-between mt-5 px-5">
-          <Link href={ROUTES.WAITLIST}>
-            <Logo className="inline-block h-5 w-fit" />
-          </Link>
-          <MdClose className="text-2xl" onClick={handleToggleMobileNav} />
-        </div>
+        {/* Mobile Navigation */}
+        {isOpen && (
+          <div className="absolute left-4 right-4 top-[86px] rounded-2xl bg-white p-6 shadow-xl sm:left-6 sm:right-6 lg:hidden">
+            <nav className="flex flex-col gap-4">
+              {NAV_ITEMS.map(({ href, label }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  onClick={handleNavClick}
+                  className={`rounded-lg px-4 py-3 text-center text-sm font-medium transition-colors ${
+                    activeHash === href
+                      ? "bg-primary/10 text-primary"
+                      : "text-neutral-700 hover:bg-neutral-50"
+                  }`}
+                >
+                  {label}
+                </Link>
+              ))}
+              <Button
+                onClick={handleOpenModal}
+                className="mt-2 w-full rounded-full"
+              >
+                Join Waitlist
+              </Button>
+            </nav>
+          </div>
+        )}
+      </nav>
 
-        <ul className="mt-8 mb-6 flex flex-col gap mx-auto w-fit">
-          {renderNavLinks(true)}
-        </ul>
-
-        <FormButton
-          text="Join waitlist"
-          className="mx-auto"
-          handleClick={handleJoinWaitlist}
-        />
-      </div>
-
-      <WaitlistModalForm />
-    </div>
+      <WaitlistModal open={showModal} onOpenChange={setShowModal} />
+    </>
   );
-};
-
-export default Navbar;
+}

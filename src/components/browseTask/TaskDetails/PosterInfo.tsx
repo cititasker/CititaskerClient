@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
-import { TASK_STATUS } from "@/constant";
+import React, { useMemo } from "react";
+import { FORMATTED_OPTIONS, TASK_STATUS } from "@/constant";
 import { defaultProfile } from "@/constant/images";
 import {
   cn,
@@ -13,7 +13,7 @@ import {
 import TaskBudget from "./TaskBudget";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
-import { Calendar, Clock, MapPin } from "lucide-react";
+import { Calendar, Clock, History, MapPin } from "lucide-react";
 
 interface PosterInfoProps {
   task: ITask;
@@ -48,12 +48,9 @@ const PosterAvatar = ({
 );
 
 const TaskDetails = ({ task }: { task: ITask }) => {
+  const dueTime = FORMATTED_OPTIONS.find((el) => el.id == task?.time);
+
   const infoItems = [
-    {
-      icon: MapPin,
-      label: "Location",
-      value: truncate(task.address, 25),
-    },
     {
       icon: Calendar,
       label: "Due Date",
@@ -61,6 +58,16 @@ const TaskDetails = ({ task }: { task: ITask }) => {
     },
     {
       icon: Clock,
+      label: "Time",
+      value: `${dueTime?.name} (${dueTime?.description})`,
+    },
+    {
+      icon: MapPin,
+      label: "Location",
+      value: truncate(task.address, 25),
+    },
+    {
+      icon: History,
       label: "Posted",
       value: formatDateAgo(task?.created_at),
     },
@@ -68,13 +75,10 @@ const TaskDetails = ({ task }: { task: ITask }) => {
 
   return (
     <div className="space-y-4">
-      <div>
-        <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-text-primary mb-2">
-          {task.name}
-        </h1>
-        <p className="text-text-muted">Task ID: #{task.id}</p>
-      </div>
-      <div className="grid grid-cols-1 gap-4">
+      <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-text-primary mb-2">
+        {task.name}
+      </h1>
+      <div className="grid grid-cols-1 gap-3">
         {infoItems.map(({ icon: Icon, label, value }, index) => (
           <div key={index} className="flex items-start gap-3">
             <div className="p-1 text-text-muted">
@@ -95,9 +99,13 @@ const PosterInfo: React.FC<PosterInfoProps> = ({
   task,
   handleOptionSelect,
 }) => {
-  const posterName = task.poster?.profile
-    ? initializeName(task.poster?.profile)
-    : "Anonymous User";
+  const posterName = useMemo(
+    () =>
+      task.poster?.profile
+        ? initializeName(task.poster.profile)
+        : "Anonymous User",
+    [task.poster?.profile]
+  );
 
   return (
     <div className="flex gap-7 mb-6 sm:mb-12">
@@ -138,7 +146,7 @@ const PosterInfo: React.FC<PosterInfoProps> = ({
             />
 
             {/* Task details - visible based on screen size */}
-            <div className="w-fit hidden sm:inline-block">
+            <div className="w-full hidden sm:block">
               <TaskDetails task={task} />
             </div>
           </div>

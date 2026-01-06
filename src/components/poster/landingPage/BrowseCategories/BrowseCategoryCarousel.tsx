@@ -1,11 +1,14 @@
 "use client";
-import React, { useRef } from "react";
+import React, { useRef, useMemo } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import { taskByCategories } from "../../../../../data";
 import CustomArrow from "../CustomArrow";
+import { useGetCategories } from "@/services/general/index.hook";
+import Link from "next/link";
+import { ROUTES } from "@/constant";
+import { getCategoryImage } from "@/lib/utils/category-images";
 
 // Types
 interface CarouselRef {
@@ -13,10 +16,12 @@ interface CarouselRef {
   previous: () => void;
 }
 
-interface CategoryItem {
-  img: string;
+interface CategoryDisplay {
+  id: number;
   name: string;
-  id?: number;
+  img: string;
+  href: string;
+  taskersCount: number;
 }
 
 // Constants
@@ -43,6 +48,21 @@ const CAROUSEL_CONFIG = {
 
 const BrowseCategoryCarousel: React.FC = () => {
   const carouselRef = useRef<CarouselRef | any>(null);
+  const { data: categories, isLoading, isError } = useGetCategories();
+
+  // Transform API categories into display format
+  const displayCategories = useMemo<CategoryDisplay[]>(() => {
+    if (!categories || categories.length === 0) return [];
+
+    return categories.map((category) => ({
+      id: category.id,
+      name: category.name,
+      img: getCategoryImage(category.name),
+      href: `${ROUTES.BROWSE_TASK}?category_id=${category.id}`,
+      // TODO: Replace with real tasker count from API when available
+      taskersCount: Math.floor(Math.random() * (3000 - 500) + 500),
+    }));
+  }, [categories]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -62,6 +82,30 @@ const BrowseCategoryCarousel: React.FC = () => {
     },
   };
 
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="relative">
+        <div className="max-w-5xl mx-auto">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="animate-pulse">
+                <div className="w-32 h-32 md:w-40 md:h-40 mx-auto mb-4 rounded-full bg-white/20" />
+                <div className="h-4 bg-white/20 rounded mx-auto w-24 mb-2" />
+                <div className="h-3 bg-white/20 rounded mx-auto w-20" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Error or empty state
+  if (isError || !categories || displayCategories.length === 0) {
+    return null;
+  }
+
   return (
     <div className="relative">
       {/* Left Arrow */}
@@ -79,15 +123,15 @@ const BrowseCategoryCarousel: React.FC = () => {
         variants={containerVariants}
       >
         <Carousel ref={carouselRef} {...CAROUSEL_CONFIG}>
-          {taskByCategories.map((category: CategoryItem, index: number) => (
+          {displayCategories.map((category) => (
             <motion.div
-              key={category.id || index}
+              key={category.id}
               className="px-3"
               variants={itemVariants}
               whileHover={{ scale: 1.05 }}
               transition={{ type: "spring", stiffness: 300 }}
             >
-              <div className="group cursor-pointer">
+              <Link href={category.href} className="group cursor-pointer block">
                 {/* Category Image */}
                 <div className="relative w-32 h-32 md:w-40 md:h-40 mx-auto mb-4 rounded-full overflow-hidden shadow-2xl group-hover:shadow-glow-primary transition-all duration-300">
                   <Image
@@ -111,13 +155,10 @@ const BrowseCategoryCarousel: React.FC = () => {
                     {category.name}
                   </h3>
                   <p className="text-sm text-white/80 font-medium">
-                    (1,823 Taskers)
+                    ({category.taskersCount.toLocaleString()} Taskers)
                   </p>
                 </div>
-
-                {/* Glow Effect */}
-                <div className="absolute inset-0 bg-gradient-to-t from-accent-purple/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full pointer-events-none" />
-              </div>
+              </Link>
             </motion.div>
           ))}
         </Carousel>
@@ -132,15 +173,15 @@ const BrowseCategoryCarousel: React.FC = () => {
 
       {/* Progress Indicator */}
       <div className="flex justify-center mt-8 space-x-2">
-        {Array.from({ length: Math.ceil(taskByCategories.length / 5) }).map(
-          (_, index) => (
-            <div
-              key={index}
-              className="w-2 h-2 rounded-full bg-white/30 animate-pulse"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            />
-          )
-        )}
+        {Array.from({
+          length: Math.ceil(displayCategories.length / 5),
+        }).map((_, index) => (
+          <div
+            key={index}
+            className="w-2 h-2 rounded-full bg-white/30 animate-pulse"
+            style={{ animationDelay: `${index * 0.1}s` }}
+          />
+        ))}
       </div>
     </div>
   );

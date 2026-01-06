@@ -291,6 +291,10 @@ export const legal = [
     href: "/legal/terms-and-conditions",
   },
   {
+    name: "Refund Policy",
+    href: "/legal/refund-policy",
+  },
+  {
     name: "Community Guidelines",
     href: "/legal/community-guidelines",
   },
@@ -344,7 +348,6 @@ import {
   IChat,
   ICreditCard,
   IGridView,
-  INotifications,
   IProfileCircle,
   ISettings,
 } from "@/constant/icons";
@@ -474,87 +477,6 @@ export const tasks = [
     jobCompletion: 180,
     offer: 3,
     date: "2024-11-24T18:13:32.285Z",
-  },
-];
-
-export const taskByCategories = [
-  {
-    name: "Assembler & Installer",
-    href: "#",
-    img: "/images/categories/carpenter.png",
-  },
-  { name: "Business", href: "#", img: "/images/categories/cleaner.png" },
-  { name: "Cleaner", href: "#", img: "/images/categories/makeup_artist.png" },
-  { name: "Deliverer", href: "#", img: "/images/categories/installer.png" },
-  {
-    name: "Fashion & Beauty",
-    href: "#",
-    img: "/images/categories/carpenter.png",
-  },
-  {
-    name: "Event Planner",
-    href: "#",
-    img: "/images/categories/makeup_artist.png",
-  },
-  { name: "Handy Man", href: "#", img: "/images/categories/cleaner.png" },
-];
-
-export const taskList = [
-  {
-    id: 1,
-    img: "/images/listTaskimg.png",
-    title: "Fix bathroom pipe",
-    task: "Yorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputatee...",
-    date: "On 23rd May 2024",
-    location: "Onike Yaba",
-    offer: "10 Offer",
-    status: "open",
-  },
-  {
-    id: 2,
-    img: "/images/listTaskimg.png",
-    title: "Paint the house",
-    task: "Yorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputatee...",
-    date: "On 23rd May 2024",
-    location: "Onike Yaba",
-    offer: "10 Offer",
-  },
-  {
-    id: 3,
-    img: "/images/listTaskimg.png",
-    title: "Sell the dog",
-    task: "Yorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputatee...",
-    date: "On 23rd May 2024",
-    location: "Onike Yaba",
-    offer: "10 Offer",
-  },
-  {
-    id: 4,
-    img: "/images/listTaskimg.png",
-    title: "Sweep the compound",
-    task: "Yorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputatee...",
-    date: "On 23rd May 2024",
-    location: "Onike Yaba",
-    offer: "10 Offer",
-  },
-];
-
-export const QuestionTabItems = [
-  {
-    id: 1,
-    img: "/images/messageQue.png",
-    name: "Glory Okonkwo",
-    message:
-      "Hi Judith\nBorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, nc vulputate libero et velit interdum, ac aliquet odio mattis. . Nunc vulputate libero.",
-    time: "11:30am",
-  },
-  {
-    id: 2,
-    img: "/images/messageQue2.png",
-    name: "Ademola Balogun",
-    message:
-      "Hi Judith\nBorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, nc vulputate libero et velit interdum, ac aliquet odio mattis. . Nunc vulputate libero.",
-    time: "11:30am",
   },
 ];
 

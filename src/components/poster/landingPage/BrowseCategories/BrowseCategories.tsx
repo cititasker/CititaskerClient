@@ -9,7 +9,7 @@ const BrowseCategories: React.FC = () => {
     <section className="bg-background py-16 md:py-20">
       <div className="container-w">
         <motion.div
-          className="relative bg-gradient-primary rounded-3xl md:rounded-[3.75rem] px-6 py-12 md:px-8 md:py-16 overflow-hidden"
+          className="relative bg-gradient-secondary rounded-3xl md:rounded-[3.75rem] px-6 py-12 md:px-8 md:py-16 overflow-hidden"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}

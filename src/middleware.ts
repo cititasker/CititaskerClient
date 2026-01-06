@@ -14,17 +14,26 @@ export default auth((req) => {
   const user = req.auth?.user;
   const role = user?.role?.toLowerCase() as "poster" | "tasker" | undefined;
 
-  // 0. Allow public routes (profiles, landing page, etc.) - no restrictions
+  // 0. Homepage handling: redirect authenticated users to their discovery page
+  if (pathname === "/") {
+    if (user && role) {
+      return NextResponse.redirect(new URL(getDefaultRedirect(role), req.url));
+    }
+    // Allow unauthenticated users to access homepage
+    return NextResponse.next();
+  }
+
+  // 1. Allow public routes (profiles, about, contact, etc.)
   if (isPublicRoute(pathname)) {
     return NextResponse.next();
   }
 
-  // 1. Redirect authenticated users away from /auth/* pages
+  // 2. Redirect authenticated users away from /auth/* pages
   if (user && isAuthRoute(pathname)) {
     return NextResponse.redirect(new URL(getDefaultRedirect(role!), req.url));
   }
 
-  // 2. Protect role-prefixed routes (/poster/*, /tasker/*)
+  // 3. Protect role-prefixed routes (/poster/*, /tasker/*)
   if (isProtectedRoute(pathname)) {
     // Require authentication
     if (!user) {
@@ -40,9 +49,19 @@ export default auth((req) => {
     }
   }
 
-  // 3. Handle role-specific public routes (when logged in)
+  // 4. Handle role-specific routes (discovery pages, task posting/browsing, etc.)
   if (user && isWrongRoleForPublicRoute(pathname, role!)) {
     return NextResponse.redirect(new URL(getFallbackRedirect(role!), req.url));
+  }
+
+  // 5. Protect discovery pages - require authentication
+  const discoveryPages = ["/discovery-poster", "/discovery-tasker"];
+  if (discoveryPages.some((page) => pathname.startsWith(page))) {
+    if (!user) {
+      const loginUrl = new URL("/auth/login", req.url);
+      loginUrl.searchParams.set("redirect", pathname);
+      return NextResponse.redirect(loginUrl);
+    }
   }
 
   return NextResponse.next();
@@ -50,6 +69,7 @@ export default auth((req) => {
 
 export const config = {
   matcher: [
+    "/", // Add homepage to matcher
     "/auth/:path*",
     "/poster/:path*",
     "/tasker/:path*",

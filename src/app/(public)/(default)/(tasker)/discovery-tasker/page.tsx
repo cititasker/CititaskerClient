@@ -21,7 +21,6 @@ export default async function Page() {
         description="No worries! There are many tasks that deserve your skills on CitiTasker."
         buttonText="Browse Task"
         buttonLink={ROUTES.BROWSE_TASK}
-        className="min-h-[247px]"
       />
     </main>
   );

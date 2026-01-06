@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 import { getPartialInitials } from "@/utils";
+import CancelTaskModal from "../details/CancelTaskModal";
 
 const SurchargeModals = dynamic(() => import("./surcharge/SurchargeModals"), {
   ssr: false,
@@ -49,6 +50,11 @@ export default function TaskModals({ task, actions, role }: TaskModalsProps) {
       )}
 
       <RescheduleModals task={task} rescheduleActions={actions} role={role} />
+
+      <CancelTaskModal
+        isOpen={actions.cancelTaskModal.isOpen}
+        onClose={actions.cancelTaskModal.closeModal}
+      />
     </>
   );
 }

@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { usePaymentActions } from "./usePaymentActions";
 import { useSurchargeActions } from "./useSurchargeActions";
 import { useRescheduleActions } from "./useRescheduleActions";
+import useModal from "@/hooks/useModal";
 
 export type TaskActionType =
   | "surcharge_request"
@@ -22,6 +23,7 @@ interface UseTaskActionsProps {
 }
 
 export const useTaskActions = ({ task }: UseTaskActionsProps) => {
+  const cancelTaskModal = useModal();
   const acceptedOffer = useMemo(
     () => task?.offers?.find((o) => o.status === "accepted"),
     [task]
@@ -39,6 +41,7 @@ export const useTaskActions = ({ task }: UseTaskActionsProps) => {
     // Derived state
     acceptedOffer,
     updatedBudget,
+    cancelTaskModal,
 
     // Payment
     ...payment,

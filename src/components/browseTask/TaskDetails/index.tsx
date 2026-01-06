@@ -88,6 +88,8 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ back }) => {
     (action: MoreOptionItem) => {
       if (action.name === "reschedule") {
         actions.openRescheduleModal("create");
+      } else if (action.name === "cancel-task") {
+        actions.cancelTaskModal.openModal();
       }
     },
     [actions.openRescheduleModal]

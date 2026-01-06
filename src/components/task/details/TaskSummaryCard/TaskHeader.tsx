@@ -7,7 +7,7 @@ interface Props {
 
 export default function TaskHeader({ task }: Props) {
   return (
-    <div className="mb-4">
+    <div className="mb-2">
       <TaskStatusBadges
         status={task.status}
         category={task.category?.name}
@@ -15,7 +15,7 @@ export default function TaskHeader({ task }: Props) {
         locationType={task.location_type}
       />
 
-      <h2 className="text-xl sm:text-2xl font-bold text-text-primary mb-2 leading-tight line-clamp-2">
+      <h2 className="text-xl sm:text-2xl font-bold text-text-primary leading-tight line-clamp-2">
         {task.name}
       </h2>
     </div>

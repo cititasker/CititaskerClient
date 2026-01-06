@@ -1,21 +1,24 @@
 "use client";
+import dynamic from "next/dynamic";
+// import { accordionDataWithHTML } from "./data";
+import Navbar from "@/components/waitlist/Navbar";
+import Hero from "@/components/waitlist/Hero";
+import WhyCitiTasker from "@/components/waitlist/why/WhyCitiTasker";
+import FAQ from "@/components/waitlist/FAQ";
 import Footer from "@/components/waitlist/Footer";
 import TaskerBanner from "@/components/waitlist/TaskerBanner";
-import WhyCitiTasker from "@/components/waitlist/why/WhyCitiTasker";
-import Hero from "@/components/waitlist/Hero/Hero";
-import Navbar from "@/components/waitlist/Navbar";
-import dynamic from "next/dynamic";
 import { accordionDataWithHTML } from "data";
-import FAQ from "@/components/shared/FAQ";
 
 const CountDownTimer = dynamic(
   () => import("@/components/waitlist/CountDownTimer"),
-  { ssr: false }
+  {
+    ssr: false,
+  }
 );
 
-export default function Home() {
+export default function WaitlistPage() {
   return (
-    <main>
+    <main className="relative">
       <Navbar />
       <Hero />
       <WhyCitiTasker />

@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic";
 import LandingPageHero from "@/components/LandingPageHero";
-import TaskCategories from "@/components/TaskCategories/TaskCategories";
 import { accordionDataWithHTML } from "data";
+import TopRatedTaskers from "@/components/TopRatedTaskers/TopRatedTaskers";
 
 const WhyChooseCitiTasker = dynamic(
   () => import("@/components/WhyChooseCitiTasker/WhyChooseCitiTasker"),
@@ -41,8 +41,7 @@ export default function Page() {
     <div>
       {/* Above the fold - load immediately */}
       <LandingPageHero />
-      <TaskCategories />
-
+      <TopRatedTaskers />
       {/* Below the fold - lazy load */}
       <WhyChooseCitiTasker />
       <HowItWorks />

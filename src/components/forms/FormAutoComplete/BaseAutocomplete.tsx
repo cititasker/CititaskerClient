@@ -102,14 +102,14 @@ export function BaseAutocomplete<TOption>({
 
   return (
     <div className={cn("w-full", className)}>
-      <Popover open={open} onOpenChange={setOpen}>
+      <Popover open={open} onOpenChange={setOpen} modal>
         <PopoverTrigger asChild>
           <Button
             type="button"
             variant="outline"
             disabled={disabled}
             className={cn(
-              "w-full justify-between font-normal",
+              "w-full justify-between font-normal !bg-transparent",
               sizeClasses[size],
               hasError && "border-error",
               !hasValue && "text-muted-foreground"

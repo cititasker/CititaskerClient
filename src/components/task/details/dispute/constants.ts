@@ -1,3 +1,9 @@
+import {
+  formatCurrency,
+  formatDate,
+  getProposalLabel,
+} from "@/lib/disputes/utils";
+import { DisputeTimelineStep, DisputeType } from "@/lib/types/dispute.types";
 import { z } from "zod";
 
 const MAX_IMAGE_COUNT = 3;
@@ -93,3 +99,86 @@ export const DISPUTE_REASON_STARTED = [
   },
   { id: "other", name: "Others" },
 ];
+
+const isNegotiationActive = (dispute: DisputeType) => {
+  const status = dispute.status;
+  return (
+    ["open", "in-negotiation", "escalated", "under_review", "closed"].includes(
+      status
+    ) && dispute.proposals.length > 1
+  );
+};
+
+const isCitiTaskerActive = (status: DisputeType["status"]) =>
+  ["escalated", "under_review", "closed"].includes(status);
+
+const isFinished = (status: DisputeType["status"]) => status === "finished";
+
+export const buildTimelineSteps = (
+  dispute: DisputeType
+): DisputeTimelineStep[] => [
+  {
+    label: "Start",
+    date: formatDate(dispute.created_at),
+    active: true,
+  },
+  {
+    label: "In Negotiation",
+    date:
+      dispute.proposals.length > 0
+        ? formatDate(dispute.proposals[0].created_at)
+        : undefined,
+    active: isNegotiationActive(dispute),
+  },
+  {
+    label: "CitiTasker steps in",
+    date: isCitiTaskerActive(dispute.status)
+      ? formatDate(dispute.last_activity)
+      : undefined,
+    active: isCitiTaskerActive(dispute.status),
+  },
+  {
+    label: "Finished",
+    date: isFinished(dispute.status)
+      ? formatDate(dispute.updated_at)
+      : undefined,
+    active: isFinished(dispute.status),
+  },
+];
+
+export const getLabelStyle = (
+  index: number,
+  total: number
+): React.CSSProperties => {
+  const isFirst = index === 0;
+  const isLast = index === total - 1;
+  const percentage = (index / (total - 1)) * 100;
+
+  return {
+    left: isFirst ? 0 : isLast ? undefined : `${percentage}%`,
+    right: isLast ? 0 : undefined,
+    transform: isFirst || isLast ? undefined : "translateX(-50%)",
+  };
+};
+
+export const getSummaryItem = (dispute: DisputeType) => {
+  return [
+    {
+      label: "Dispute ID",
+      value: dispute.dispute_code,
+    },
+    {
+      label: "Request",
+      value: getProposalLabel(dispute.initial_proposal.request),
+    },
+    {
+      label: "Amount",
+      value: formatCurrency(dispute.initial_proposal.refund_amount),
+    },
+    {
+      label: "Status",
+      value: dispute.status === "finished" ? "Resolved" : "In Progress",
+      isBadge: true,
+    },
+  ];
+};

@@ -18,11 +18,15 @@ import {
   useFetchUserTaskById,
 } from "@/services/tasks/tasks.hook";
 import Loader from "@/components/reusables/Loading";
+import useModal from "@/hooks/useModal";
+import DisputeCenter from "@/components/task/details/dispute/DisputeCenter";
 
 export default function Offer() {
-  const { id } = useParams();
+  const params = useParams();
+  const id = params.id as string;
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const helpModal = useModal();
 
   const { data, isLoading } = useFetchUserTaskById({ id: id as string });
   const task = data?.data;
@@ -80,9 +84,18 @@ export default function Offer() {
     return "Payment released";
   }, [task]);
 
-  if (isLoading || !task) {
-    return <Loader />;
-  }
+  const handleSelectedOption = (opt: MoreOptionItem) => {
+    switch (opt.name) {
+      case "cancel-task": {
+        actions.cancelTaskModal.openModal();
+        break;
+      }
+      case "help": {
+        helpModal.openModal();
+        break;
+      }
+    }
+  };
 
   const tabs = [
     {
@@ -104,13 +117,17 @@ export default function Offer() {
     },
   ];
 
+  if (isLoading || !task) {
+    return <Loader />;
+  }
+
   return (
     <FormProvider {...actions.methods}>
       <div className="p-top bg-background-secondary h-full flex flex-col">
         <div className="container-w py-0 lg:flex-1 lg:min-h-0">
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:h-full">
             {/* Left column */}
-            <div className="lg:col-span-2 space-y-6 lg:overflow-y-auto no-scrollbar">
+            <div className="lg:col-span-2 space-y-6 lg:overflow-y-auto no-scrollbar pb-5">
               <TaskStatusCard
                 date={task.date}
                 offerCount={task.offer_count}
@@ -118,6 +135,7 @@ export default function Offer() {
               />
               <TaskSummaryCard
                 task={task}
+                handleSelectedOption={handleSelectedOption}
                 onEditDate={() => router.push(`/post-task/${task.id}?step=3`)}
                 onEditPrice={() => router.push(`/post-task/${task.id}?step=4`)}
                 onPrimaryAction={handlePrimaryAction}
@@ -129,6 +147,8 @@ export default function Offer() {
                     !task.has_surcharge_requests)
                 }
               />
+
+              <DisputeCenter helpModal={helpModal} taskId={id} />
             </div>
             {/* Right column */}
             <div className="lg:col-span-3 lg:min-h-0">

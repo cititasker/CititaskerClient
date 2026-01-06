@@ -1,27 +1,39 @@
 "use client";
-import React from "react";
-import { socials } from "../../../data";
+import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
 
-const Footer = () => {
+const SOCIAL_LINKS = [
+  { icon: Linkedin, href: "#", label: "LinkedIn" },
+  { icon: Instagram, href: "#", label: "Instagram" },
+  { icon: Twitter, href: "#", label: "Twitter" },
+  { icon: Facebook, href: "#", label: "Facebook" },
+];
+
+export default function Footer() {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <div className="bg-dark-secondary text-white">
-      <div className="container-w">
-        <div className="py-[60px] flex justify-between flex-col-reverse sm:flex-row gap-x-3 gap-y-5 items-center">
-          <p className="font-semibold text-base text-center">
-            © Copyright {new Date().getFullYear()}, All Right Reserved by
-            citiTasker
+    <footer className="bg-neutral-900 text-white">
+      <div className="container-w px-4 py-12 sm:px-6 lg:px-8">
+        <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
+          <p className="text-center text-sm text-neutral-400 sm:text-left sm:text-base">
+            © Copyright {currentYear}, All Rights Reserved by{" "}
+            <span className="font-semibold text-white">CitiTasker</span>
           </p>
-          <div className="inline-flex gap-6 items-center">
-            {socials.map((el, i) => (
-              <a key={i} href={el.href}>
-                <el.icon className="text-2xl" />
+
+          <div className="flex items-center gap-4">
+            {SOCIAL_LINKS.map(({ icon: Icon, href, label }) => (
+              <a
+                key={label}
+                href={href}
+                aria-label={label}
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-neutral-800 transition-all hover:bg-primary hover:scale-110"
+              >
+                <Icon size={20} />
               </a>
             ))}
           </div>
         </div>
       </div>
-    </div>
+    </footer>
   );
-};
-
-export default Footer;
+}

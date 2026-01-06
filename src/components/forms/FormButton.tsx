@@ -33,11 +33,14 @@ const FormButton: React.FC<FormButtonProps> = ({
 }) => {
   const content = (
     <>
-      {loading && (
+      {loading ? (
         <BiLoader size={20} className="animate-spin shrink-0 !w-5 !h-5" />
+      ) : (
+        <>
+          {icon && <span>{icon}</span>}
+          {children || text}
+        </>
       )}
-      {icon && !loading && <span>{icon}</span>}
-      {children || text}
     </>
   );
 
@@ -75,7 +78,6 @@ const FormButton: React.FC<FormButtonProps> = ({
       {...props}
     >
       {content}
-      {/* <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300" /> */}
     </Button>
   );
 };

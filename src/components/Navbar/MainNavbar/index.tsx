@@ -78,10 +78,13 @@ export default function MainNavbar() {
 
               {/* Desktop Navigation */}
               <nav className="hidden xl:flex items-center gap-2">
-                <CategoryDropdown
-                  categoryGroups={categoryGroups}
-                  isLoading={isLoading}
-                />
+                {user.role !== "poster" && (
+                  <CategoryDropdown
+                    categoryGroups={categoryGroups}
+                    isLoading={isLoading}
+                  />
+                )}
+
                 <HowItWorksDropdown />
 
                 {isAuthenticated && user?.role && (

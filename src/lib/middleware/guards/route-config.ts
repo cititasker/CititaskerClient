@@ -12,8 +12,8 @@ export const ROUTE_CONFIG = {
   ],
 
   // Public routes that anyone can access (no restrictions)
+  // NOTE: "/" is handled separately in middleware
   publicRoutes: [
-    "/",
     "/about",
     "/contact",
     "/legal",
@@ -23,14 +23,22 @@ export const ROUTE_CONFIG = {
 
   // Routes that require specific roles (when logged in)
   roleSpecificPublic: {
-    poster: ["/post-task", "/how-it-works-poster", "/discovery-poster"],
-    tasker: ["/browse-tasks", "/how-it-works-tasker", "/discovery-tasker"],
+    poster: [
+      "/post-task",
+      "/how-it-works-poster",
+      "/discovery-poster", // Poster's homepage
+    ],
+    tasker: [
+      "/browse-tasks",
+      "/how-it-works-tasker",
+      "/discovery-tasker", // Tasker's homepage
+    ],
   },
 
   // Protected route prefixes (must be logged in)
   protectedPrefixes: ["/poster/", "/tasker/"],
 
-  // Default redirects by role
+  // Default redirects by role (used for homepage and auth redirects)
   defaultRedirects: {
     poster: "/discovery-poster",
     tasker: "/discovery-tasker",
@@ -59,6 +67,9 @@ export function isAuthRoute(pathname: string): boolean {
 }
 
 export function isPublicRoute(pathname: string): boolean {
+  // Exclude homepage from public routes check - it's handled separately
+  if (pathname === "/") return false;
+
   return ROUTE_CONFIG.publicRoutes.some((route) => pathname.startsWith(route));
 }
 
@@ -85,4 +96,10 @@ export function isWrongRoleForPublicRoute(
 ): boolean {
   const routeRole = getRoleForRoute(pathname);
   return routeRole !== null && routeRole !== userRole;
+}
+
+// New helper to check if discovery pages require authentication
+export function requiresAuthentication(pathname: string): boolean {
+  const discoveryPages = ["/discovery-poster", "/discovery-tasker"];
+  return discoveryPages.some((page) => pathname.startsWith(page));
 }

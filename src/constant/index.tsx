@@ -116,6 +116,8 @@ export const API_ROUTES = {
   DISPUTE: {
     CREATE: "/tasks/disputes/create",
     GET_ALL: "/tasks/disputes/fetch",
+    REJECT_PROPOSAL: "/tasks/disputes/reply-to-proposal",
+    UPDATE_PROPOSAL: "/tasks/disputes/update-proposal-status",
   },
 } as const;
 

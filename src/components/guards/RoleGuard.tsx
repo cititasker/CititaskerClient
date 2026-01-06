@@ -35,9 +35,8 @@ export function RoleGuard({
       if (redirectTo) {
         router.push(redirectTo);
       } else {
-        // Default redirects based on role
         const defaultRedirect =
-          userRole === "poster" ? "/poster/dashboard" : "/tasker/dashboard";
+          userRole === "poster" ? "/discovery-poster" : "/discovery-tasker";
         router.push(defaultRedirect);
       }
     }

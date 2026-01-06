@@ -68,11 +68,10 @@ const nextConfig: NextConfig = withBundleAnalyzer({
     return config;
   },
   experimental: {
-    optimizePackageImports: [
-      "lucide-react",
-      "@radix-ui/react-icons",
-      "framer-motion",
-    ],
+    optimizePackageImports:
+      process.env.NODE_ENV === "production"
+        ? ["lucide-react", "@radix-ui/react-icons", "framer-motion"]
+        : [],
   },
 });
 

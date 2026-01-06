@@ -80,7 +80,7 @@ export default function CustomTab({
           key={value}
           value={value}
           className={cn(
-            "focus:outline-none bg-white rounded-xl",
+            "focus:outline-none bg-white rounded-t-xl",
             "flex-1 min-h-0 overflow-y-auto no-scrollbar sm:py-3",
             contentClassName
           )}

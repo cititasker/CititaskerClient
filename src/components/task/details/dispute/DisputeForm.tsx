@@ -17,13 +17,14 @@ import ActionsButtons from "@/components/reusables/ActionButtons";
 import { useCreateDispute } from "@/services/dispute/dispute.hooks";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { filterEmptyValues } from "@/utils";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 const FORM_ID = "create-dispute-form";
 
 export default function DisputeForm({ isOpen, onClose }: IModal) {
   const createDispute = useCreateDispute();
   const { id } = useParams();
+  const router = useRouter();
 
   const methods = useForm<DisputeSchemaType>({
     defaultValues: {
@@ -47,14 +48,17 @@ export default function DisputeForm({ isOpen, onClose }: IModal) {
     else return DISPUTE_REASON_STARTED;
   }, [taskStatus]);
 
-  const onSubmit = (data: DisputeSchemaType) => {
+  const onSubmit = async (data: DisputeSchemaType) => {
     const payload = filterEmptyValues({
       ...data,
       task_id: id,
       documents: data.documents.map((doc) => doc.url),
-      refund_amount: Number(data.refund_amount),
+      refund_amount:
+        data.your_request == "revision" ? 0 : Number(data.refund_amount),
     });
-    createDispute.mutate(payload);
+    await createDispute.mutateAsync(payload);
+    onClose();
+    router.push(`/poster/dispute/${id}`);
   };
 
   return (
