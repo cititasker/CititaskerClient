@@ -8,7 +8,6 @@ import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { setTaskDetails, setUserTaskOffer } from "@/store/slices/task";
 import { useFetchTaskById } from "@/services/tasks/tasks.hook";
 import { Card } from "@/components/ui/card";
-import TaskDetailSkeleton from "@/components/skeletons/TaskDetailSkeleton";
 import { useTaskActions, useTaskAlerts } from "@/components/task/hooks";
 import { TaskHeader } from "./TaskHeader";
 import { TaskContent } from "./TaskContent";
@@ -38,7 +37,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ back }) => {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.user);
 
-  const { data, isLoading } = useFetchTaskById({ id });
+  const { data } = useFetchTaskById({ id });
   const shareModal = useModal();
 
   const task = data?.data as ITask;
@@ -95,11 +94,9 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ back }) => {
     [actions.openRescheduleModal]
   );
 
-  if (isLoading || !task) return <TaskDetailSkeleton />;
-
   return (
     <>
-      <Card className="overflow-hidden">
+      <Card className="overflow-hidden rounded-b-none">
         <TaskHeader back={back} onAction={handleHeaderAction} />
         <TaskContent task={task} onOptionSelect={handleOptionSelect} />
       </Card>

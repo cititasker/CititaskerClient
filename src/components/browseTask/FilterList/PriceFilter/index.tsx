@@ -74,8 +74,8 @@ export default function PriceFilter() {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-      <div className="mb-6">
+    <div className="bg-white md:rounded-xl md:shadow-sm md:border border-gray-100 md:p-4">
+      <div className="mb-3 md:mb-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-1">
           Price Range
         </h3>
@@ -99,7 +99,7 @@ export default function PriceFilter() {
           />
 
           {/* Input Section */}
-          <div className="flex items-start gap-3">
+          <div className="flex items-start gap-2 md:gap-3">
             <PriceInput name="min" label="Minimum" value={min} />
 
             <div className="flex items-center pt-8">

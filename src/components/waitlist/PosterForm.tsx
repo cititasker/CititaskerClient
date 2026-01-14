@@ -11,6 +11,7 @@ import FormButton from "../forms/FormButton";
 
 import { joinPosterApi } from "@/services";
 import { useSnackbar } from "@/providers/SnackbarProvider";
+import { errorHandler } from "@/utils";
 
 const posterSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -40,11 +41,11 @@ export default function PosterForm({ onSuccess }: PosterFormProps) {
       onSuccess();
     },
     onError: (error: any) => {
+      const message = errorHandler(error);
       if (error?.errors?.email) {
-        const err = error.errors.email[0];
-        methods.setError("email", { type: "manual", message: err });
+        methods.setError("email", { type: "manual", message });
       }
-      showSnackbar(error.message, "error");
+      showSnackbar(message, "error");
     },
   });
 

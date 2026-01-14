@@ -4,7 +4,7 @@ import CustomTab from "@/components/reusables/CustomTab";
 import { useParams } from "next/navigation";
 import PublicProfile from "@/components/shared/dashboard/profile/public-view/components/PublicProfile";
 import Portfolio from "@/components/shared/public-profile/portfolio/Portfolio";
-import FAQList from "@/app/(protected)/(dashboard)/tasker/(settings)/profile/faq/FAQList";
+import FAQList from "@/app/(dashboard)/tasker/(settings)/profile/faq/FAQList";
 
 export default function PublicProfilePage() {
   const params = useParams();

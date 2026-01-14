@@ -1,4 +1,6 @@
+// app/browse-task/page.tsx
 "use client";
+
 import React, { Suspense } from "react";
 import dynamic from "next/dynamic";
 import CustomSheet from "@/components/reusables/CustomSheet";
@@ -8,6 +10,7 @@ import { useSearch } from "@/components/browseTask/hooks/useSearch";
 import { useTasksQuery } from "@/components/browseTask/hooks/useTasksQuery";
 import { MyTaskHeader } from "@/components/shared/task/MyTaskHeader";
 import { ROUTES } from "@/constant";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 const MyTaskContent = dynamic(
   () =>
@@ -17,10 +20,7 @@ const MyTaskContent = dynamic(
   {
     loading: () => (
       <div className="flex-1 min-h-0 flex items-center justify-center">
-        <div className="text-center space-y-3">
-          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary mx-auto" />
-          <p className="text-sm text-muted-foreground">Loading tasks...</p>
-        </div>
+        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary mx-auto" />
       </div>
     ),
     ssr: false,
@@ -28,16 +28,12 @@ const MyTaskContent = dynamic(
 );
 
 const FilterList = dynamic(() => import("@/components/browseTask/FilterList"), {
-  loading: () => (
-    <div className="p-4 text-center text-muted-foreground">
-      Loading filters...
-    </div>
-  ),
   ssr: false,
 });
 
 export default function BrowseTasksPage() {
   const showFilter = useToggle();
+  const isDesktop = useMediaQuery("(min-width: 768px)");
   const { searchTerm, setSearchTerm, isSearching } = useSearch();
   const {
     tasks,
@@ -55,13 +51,15 @@ export default function BrowseTasksPage() {
 
   return (
     <div className="space-y-2 h-full flex flex-col">
-      {/* Header */}
-      <MyTaskHeader
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        isSearching={isSearching}
-        onOpenFilter={showFilter.handleOpen}
-      />
+      {/* Header - Mobile Only */}
+      {!isDesktop && (
+        <MyTaskHeader
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          isSearching={isSearching}
+          onOpenFilter={showFilter.handleOpen}
+        />
+      )}
 
       {/* Content */}
       <Suspense
@@ -81,8 +79,8 @@ export default function BrowseTasksPage() {
         />
       </Suspense>
 
-      {/* Filter Sheet - Only render when open */}
-      {showFilter.isOpen && (
+      {/* Filter Sheet - Mobile Only */}
+      {!isDesktop && showFilter.isOpen && (
         <CustomSheet
           open={showFilter.isOpen}
           onOpenChange={showFilter.setIsOpen}

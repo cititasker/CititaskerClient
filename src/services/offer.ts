@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import api from "./apiService";
+import { api } from "@/lib/api-client";
 import { offerSchemaType } from "@/schema/offer";
 import { API_ROUTES } from "@/constant";
 

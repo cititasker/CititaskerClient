@@ -50,7 +50,7 @@ export function RangeSlider({
 
   const defaultStyles: SliderProps["styles"] = {
     track: {
-      background: "var(--primary)",
+      background: "#236F8E",
       height: 6,
       borderRadius: 3,
     },
@@ -58,7 +58,7 @@ export function RangeSlider({
       width: 20,
       height: 20,
       top: 4,
-      borderColor: "var(--primary)",
+      borderColor: "#236F8E",
       background: "#fff",
       boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
       opacity: 1,

@@ -1,7 +1,8 @@
 import { AxiosError } from "axios";
 import { API_ROUTES } from "@/constant";
-import api from "../apiService";
+
 import { loginSchemaType } from "@/schema/auth";
+import { api } from "@/lib/api-client";
 
 export function getUserApi() {
   return api

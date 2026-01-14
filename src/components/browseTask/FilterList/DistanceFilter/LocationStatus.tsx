@@ -1,3 +1,5 @@
+import FormButton from "@/components/forms/FormButton";
+import { VariantProps } from "class-variance-authority";
 import React from "react";
 
 interface LocationStatusProps {
@@ -10,7 +12,7 @@ interface LocationStatusProps {
 type Action = {
   label: string;
   onClick: () => void;
-  variant?: "primary" | "secondary";
+  variant?: VariantProps<typeof FormButton>["variant"];
 };
 
 type StatusConfig = {
@@ -50,14 +52,14 @@ export function LocationStatus({
       icon: "✅",
       message: "Location detected",
       className: "text-green-600 bg-green-50 border-green-200",
-      actions: [{ label: "disable", onClick: onSkip }],
+      // actions: [{ label: "disable", onClick: onSkip }],
     },
     error: {
       icon: "ℹ️",
       message: error,
       className: "text-amber-600 bg-amber-50 border-amber-200",
       actions: [
-        { label: "Try Again", onClick: onRetry, variant: "primary" },
+        { label: "Try Again", onClick: onRetry, variant: "custom" },
         { label: "Skip", onClick: onSkip, variant: "secondary" },
       ],
     },
@@ -78,18 +80,16 @@ export function LocationStatus({
         {config.actions && (
           <div className="flex gap-2 ml-auto">
             {config.actions.map((action, i) => (
-              <button
+              <FormButton
                 key={i}
+                size="sm"
                 type="button"
+                variant={action.variant}
                 onClick={action.onClick}
-                className={`text-xs px-2 py-1 rounded transition-colors ${
-                  action.variant === "primary"
-                    ? "bg-current bg-opacity-20 hover:bg-opacity-30"
-                    : "bg-gray-100 hover:bg-gray-200 text-gray-700"
-                }`}
+                className={`text-xs px-2 py-1 rounded transition-colors h-6`}
               >
                 {action.label}
-              </button>
+              </FormButton>
             ))}
           </div>
         )}

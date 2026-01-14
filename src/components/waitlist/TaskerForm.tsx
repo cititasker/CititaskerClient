@@ -3,23 +3,24 @@
 import React, { useEffect, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import * as z from "zod";
 
 import FormInput from "../forms/FormInput";
 import FormButton from "../forms/FormButton";
 import { FormAutoComplete } from "../forms/FormAutoComplete";
 
-import { getCategories, joinTaskerApi } from "@/services";
-import { capitalize } from "@/utils";
+import { joinTaskerApi } from "@/services";
+import { capitalize, errorHandler } from "@/utils";
 import { useSnackbar } from "@/providers/SnackbarProvider";
+import { useGetCategories } from "@/services/general/index.hook";
 
 const taskerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Please enter a valid email"),
   occupation: z
     .object({
-      id: z.string(),
+      id: z.number(),
       name: z.string(),
     })
     .nullable(),
@@ -35,10 +36,7 @@ export default function TaskerForm({ onSuccess }: TaskerFormProps) {
   const { showSnackbar } = useSnackbar();
   const [categories, setCategories] = useState<ITaskCategory[]>([]);
 
-  const categoryQuery = useQuery({
-    queryKey: ["categories"],
-    queryFn: getCategories,
-  });
+  const categoryQuery = useGetCategories();
 
   useEffect(() => {
     if (categoryQuery.data?.length) {
@@ -66,7 +64,11 @@ export default function TaskerForm({ onSuccess }: TaskerFormProps) {
       onSuccess();
     },
     onError: (error: any) => {
-      showSnackbar(error.message, "error");
+      const message = errorHandler(error);
+      if (error?.errors?.email) {
+        methods.setError("email", { type: "manual", message });
+      }
+      showSnackbar(message, "error");
     },
   });
 

@@ -1,7 +1,7 @@
 import { API_ROUTES } from "@/constant";
-import api from "@/services/apiService";
 import { AxiosError } from "axios";
 import { IReschedule, TaskData } from "./tasks.types";
+import { api } from "../../lib/api-client";
 
 export const getAllTasks = async (
   queryParams?: Record<string, any>

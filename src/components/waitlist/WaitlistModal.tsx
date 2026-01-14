@@ -1,5 +1,4 @@
 "use client";
-import { useState } from "react";
 import { Sparkles } from "lucide-react";
 import {
   Dialog,
@@ -12,6 +11,8 @@ import PosterForm from "./PosterForm";
 import TaskerForm from "./TaskerForm";
 import Icons from "../Icons";
 import FormButton from "../forms/FormButton";
+import CustomModal from "../reusables/CustomModal";
+import useModal from "@/hooks/useModal";
 
 interface WaitlistModalProps {
   open: boolean;
@@ -22,15 +23,11 @@ export default function WaitlistModal({
   open,
   onOpenChange,
 }: WaitlistModalProps) {
-  const [showSuccess, setShowSuccess] = useState(false);
+  const showSuccess = useModal();
 
   const handleSuccess = () => {
-    setShowSuccess(true);
+    showSuccess.openModal();
     onOpenChange(false);
-  };
-
-  const handleCloseSuccess = () => {
-    setShowSuccess(false);
   };
 
   const tabs = [
@@ -49,6 +46,7 @@ export default function WaitlistModal({
   return (
     <>
       {/* Main Waitlist Form Modal */}
+
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="max-w-2xl p-0">
           <div className="p-6 sm:p-8">
@@ -82,27 +80,30 @@ export default function WaitlistModal({
       </Dialog>
 
       {/* Success Modal */}
-      <Dialog open={showSuccess} onOpenChange={setShowSuccess}>
-        <DialogContent className="max-w-md">
-          <div className="flex flex-col items-center justify-center py-8 text-center">
-            <Icons.checkCircleSuccess className="mb-6" />
+      <CustomModal
+        isOpen={showSuccess.isOpen}
+        onClose={showSuccess.openModal}
+        contentClassName="max-w-md"
+        size="md"
+      >
+        <div className="flex flex-col items-center justify-center py-8 text-center">
+          <Icons.checkCircleSuccess className="mb-6" />
 
-            <h3 className="mb-3 text-2xl font-bold">Thank You! 🎉</h3>
+          <h3 className="mb-3 text-2xl font-bold">Thank You! 🎉</h3>
 
-            <p className="mb-6 text-neutral-600">
-              You have successfully joined our waitlist. We'll be in touch with
-              you soon!
-            </p>
+          <p className="mb-6 text-neutral-600">
+            You have successfully joined our waitlist. We'll be in touch with
+            you soon!
+          </p>
 
-            <FormButton
-              onClick={handleCloseSuccess}
-              className="w-full max-w-[200px]"
-            >
-              Close
-            </FormButton>
-          </div>
-        </DialogContent>
-      </Dialog>
+          <FormButton
+            onClick={showSuccess.closeModal}
+            className="w-full max-w-[200px]"
+          >
+            Close
+          </FormButton>
+        </div>
+      </CustomModal>
     </>
   );
 }

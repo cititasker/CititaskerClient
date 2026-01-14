@@ -38,8 +38,8 @@ export default function CategoryFilter() {
 
   if (isPending) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <div className="mb-6">
+      <div className="bg-white md:rounded-xl md:shadow-sm md:border border-gray-100 md:p-6">
+        <div className="mb-3 md:mb-6">
           <div className="h-6 bg-gray-200 rounded w-32 mb-2 animate-pulse"></div>
           <div className="h-4 bg-gray-200 rounded w-48 animate-pulse"></div>
         </div>
@@ -49,8 +49,8 @@ export default function CategoryFilter() {
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-      <div className="mb-6">
+    <div className="bg-white md:rounded-xl md:shadow-sm md:border border-gray-100 md:p-4">
+      <div className="mb-3 md:mb-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-1 flex items-center gap-2">
           Category Filter
         </h3>

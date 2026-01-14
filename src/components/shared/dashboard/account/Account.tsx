@@ -23,7 +23,7 @@ import { API_ROUTES } from "@/constant";
 import { Button } from "@/components/ui/button";
 import { useCloudinaryUpload } from "@/hooks/useCloudinaryUpload";
 import { useCloudinaryDelete } from "@/hooks/useCloudinaryDelete";
-import EditImageModal from "@/app/(protected)/(dashboard)/tasker/(settings)/profile/portfolio/EditImageModal";
+import EditImageModal from "@/app/(dashboard)/tasker/(settings)/profile/portfolio/EditImageModal";
 
 const genderOptions = [
   { id: "male", name: "Male" },

@@ -12,6 +12,7 @@ import Paystack from "@/utils/paystackSetup";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import { errorHandler } from "@/utils";
 import { useTaskAlert } from "@/providers/TaskAlertContext";
+import { useAuth } from "@/hooks/useAuth";
 
 type SurchargeStep =
   | "request"
@@ -26,12 +27,13 @@ export const useSurchargeActions = (task: ITask) => {
   const { showSnackbar } = useSnackbar();
   const { purgeOffer } = usePurgeData();
   const { hideAlert } = useTaskAlert();
+  const { isAuthenticated } = useAuth();
 
   const surchargeModal = useModal();
 
   const { data: surchargeList } = useSurchargeList(
     String(task?.id),
-    Boolean(task?.has_surcharge_requests)
+    Boolean(task?.has_surcharge_requests) && isAuthenticated
   );
 
   const pendingSurcharge = useMemo(() => {

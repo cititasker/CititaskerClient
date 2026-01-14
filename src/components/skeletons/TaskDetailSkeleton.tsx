@@ -1,8 +1,8 @@
 "use client";
 
-import Loading from "@/app/loading";
 import { Skeleton } from "@/components/ui/skeleton";
 import React from "react";
+import Loader from "../reusables/Loading";
 
 const TaskDetailSkeleton = () => {
   return (
@@ -75,7 +75,7 @@ const TaskDetailSkeleton = () => {
         </div>
       </div>
       <div className="md:hidden">
-        <Loading />
+        <Loader />
       </div>
     </>
   );

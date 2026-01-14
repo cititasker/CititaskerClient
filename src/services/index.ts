@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import api from "./apiService";
+import { api } from "@/lib/api-client";
 import { API_ROUTES } from "@/constant";
 
 export function joinPosterApi(data: any) {

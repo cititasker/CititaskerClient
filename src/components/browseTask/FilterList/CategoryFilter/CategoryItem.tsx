@@ -33,7 +33,7 @@ export function CategoryItem({
 
   return (
     <AccordionItem value={category.id.toString()} className="border-none">
-      <div className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors">
+      <div className="flex items-center gap-3 py-2 md:px-3 rounded-lg hover:bg-gray-50 transition-colors">
         <Checkbox
           id={`category-${category.id}`}
           checked={isSelected}

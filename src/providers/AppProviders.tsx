@@ -2,9 +2,9 @@
 import React, { useState } from "react";
 import { SessionProvider } from "next-auth/react";
 import {
-  QueryClient,
   QueryClientProvider,
   HydrationBoundary,
+  QueryClient,
 } from "@tanstack/react-query";
 import { Provider as ReduxProvider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
@@ -17,7 +17,7 @@ import { PostHogProvider } from "./PostHogProvider";
 import { SessionSync } from "./SessionSync";
 import Loader from "@/components/reusables/Loading";
 import type { Session } from "next-auth";
-import type { DehydratedState } from "@tanstack/react-query";
+import { makeQueryClient } from "@/constant/queryClient";
 
 interface ErrorBoundaryProps {
   children: React.ReactNode;
@@ -74,55 +74,34 @@ class ErrorBoundary extends React.Component<
 interface AppProvidersProps {
   children: React.ReactNode;
   session: Session | null;
-  dehydratedState: DehydratedState;
 }
 
-export default function AppProviders({
-  children,
-  session,
-  dehydratedState,
-}: AppProvidersProps) {
-  const [queryClient] = useState(
-    () =>
-      new QueryClient({
-        defaultOptions: {
-          queries: {
-            staleTime: 5 * 60 * 1000, // 5 minutes
-            gcTime: 10 * 60 * 1000, // 10 minutes
-            refetchOnWindowFocus: false,
-            refetchOnMount: false,
-            refetchOnReconnect: false,
-            retry: 1,
-          },
-        },
-      })
-  );
+export default function AppProviders({ children, session }: AppProvidersProps) {
+  const [queryClient] = useState(() => makeQueryClient());
 
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
-        <HydrationBoundary state={dehydratedState}>
-          <SessionProvider
-            session={session}
-            refetchInterval={5 * 60} // 5 minutes
-            refetchOnWindowFocus={false}
-          >
-            <ReduxProvider store={store}>
-              <PersistGate loading={<Loader />} persistor={persistor}>
-                <SessionSync />
-                <PostHogProvider>
-                  <NotificationsProvider>
-                    <TaskAlertProvider>
-                      <SnackbarProvider>
-                        <TooltipProvider>{children}</TooltipProvider>
-                      </SnackbarProvider>
-                    </TaskAlertProvider>
-                  </NotificationsProvider>
-                </PostHogProvider>
-              </PersistGate>
-            </ReduxProvider>
-          </SessionProvider>
-        </HydrationBoundary>
+        <SessionProvider
+          session={session}
+          refetchInterval={5 * 60}
+          refetchOnWindowFocus={false}
+        >
+          <ReduxProvider store={store}>
+            <PersistGate loading={<Loader />} persistor={persistor}>
+              <SessionSync />
+              <PostHogProvider>
+                <NotificationsProvider>
+                  <TaskAlertProvider>
+                    <SnackbarProvider>
+                      <TooltipProvider>{children}</TooltipProvider>
+                    </SnackbarProvider>
+                  </TaskAlertProvider>
+                </NotificationsProvider>
+              </PostHogProvider>
+            </PersistGate>
+          </ReduxProvider>
+        </SessionProvider>
       </QueryClientProvider>
     </ErrorBoundary>
   );

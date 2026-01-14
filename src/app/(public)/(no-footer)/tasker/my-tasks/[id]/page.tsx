@@ -3,6 +3,7 @@ import { getSingleTask } from "@/services/task";
 import { API_ROUTES } from "@/constant";
 import { getUserTaskById } from "@/services/tasks/tasks.api";
 import { getQueryClient } from "@/constant/queryClient";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
 type Params = Promise<{ id: string }>;
 
@@ -29,5 +30,9 @@ export default async function Page({ params }: { params: Params }) {
     queryKey: [API_ROUTES.TASKS, id],
     queryFn: () => getUserTaskById(id),
   });
-  return <TaskDetails back="/tasker/my-tasks" />;
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <TaskDetails back="/tasker/my-tasks" />
+    </HydrationBoundary>
+  );
 }

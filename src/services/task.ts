@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import api from "./apiService";
+import { api } from "@/lib/api-client";
 
 export function createTask(data: any) {
   return api

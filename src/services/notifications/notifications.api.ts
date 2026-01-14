@@ -1,5 +1,5 @@
 import { API_ROUTES } from "@/constant";
-import api from "../apiService";
+import { api } from "@/lib/api-client";
 
 export interface NotificationData {
   id: string;

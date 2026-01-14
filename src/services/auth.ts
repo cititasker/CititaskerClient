@@ -6,7 +6,7 @@ import {
   verifyEmailSchemaType,
   verifyPhoneSchemaType,
 } from "@/schema/auth";
-import api from "./apiService";
+import { api } from "@/lib/api-client";
 import { AxiosError } from "axios";
 import signupApi from "./signupApi";
 
