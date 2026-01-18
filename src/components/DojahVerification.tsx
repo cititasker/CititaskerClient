@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Dojah from "react-dojah";
 import FormButton from "./forms/FormButton";
 import { useAppSelector } from "@/store/hook";
-import moment from "moment";
+import dayjs from "dayjs";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 
 interface IProps {
@@ -35,7 +35,7 @@ function DojahVerification({ text, className, handleSuccess }: IProps) {
     last_name,
     email,
     residence_country: "NG",
-    dob: moment(date_of_birth, "DD-MM-YYYY").format("YYYY-MM-DD"),
+    dob: dayjs(date_of_birth, "DD-MM-YYYY").format("YYYY-MM-DD"),
   };
 
   const metadata = {
@@ -66,7 +66,7 @@ function DojahVerification({ text, className, handleSuccess }: IProps) {
     <>
       <FormButton
         type="button"
-        btnStyle={className}
+        className={className}
         handleClick={handleButtonClick}
         loading={isLoading}
       >

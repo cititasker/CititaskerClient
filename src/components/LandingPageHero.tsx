@@ -1,77 +1,143 @@
 "use client";
-import Image from "next/image";
-import React from "react";
-import Hero from "@/../public/images/hero.png";
+import React, { useState, useEffect } from "react";
 import FormButton from "./forms/FormButton";
-import UnderlinedHeader from "./reusables/UnderlinedHeader";
-import FadeUp from "./reusables/FadeUp";
-import { statsData } from "../../data";
+import { ROLE, ROUTES } from "@/constant";
+import { useAppSelector } from "@/store/hook";
 
-const LandingPageHero = () => {
+const HERO_CONTENT = {
+  title: "Get your to-dos done  just in minutes",
+  subtitle: "Find the right help for your tasks, instantly",
+  posterCTA: "Post a task for free",
+  taskerCTA: "Become a Tasker",
+} as const;
+
+const STYLES = {
+  container: "relative w-full min-h-[100dvh] overflow-hidden",
+  overlay: "absolute -translate-y-1/2 top-1/2 z-10 flex items-center",
+  textBackdrop:
+    "relative bg-gradient-to-br from-black/40 via-dark-secondary/20 to-transparent rounded-3xl p-8 md:p-12",
+  content: "max-w-5xl mx-auto px-4 md:px-16 text-white",
+  textSection: "mb-8 md:mb-12 text-center md:text-left space-y-4",
+  title:
+    "text-4xl md:text-5xl lg:text-7xl font-bold leading-tight text-white drop-shadow-lg",
+  subtitle:
+    "text-lg md:text-xl lg:text-2xl text-light-primary-1 font-light drop-shadow-md",
+  buttonGroup:
+    "flex flex-col sm:flex-row items-center gap-4 w-fit mx-auto md:mx-0",
+  video: "absolute inset-0 w-full h-full object-cover",
+  poster: "absolute inset-0 w-full h-full object-cover",
+} as const;
+
+const LandingPageHero: React.FC = () => {
+  const {
+    user: { role },
+    isAuth,
+  } = useAppSelector((state) => state.user);
+
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
+
+  // ✅ Only load video on desktop and after initial render
+  useEffect(() => {
+    const isDesktop = window.matchMedia("(min-width: 768px)").matches;
+    if (isDesktop) {
+      // Small delay to prioritize critical content
+      const timer = setTimeout(() => setShouldLoadVideo(true), 100);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
+  const renderActionButtons = () => {
+    if (isAuth) {
+      const isPoster = role === ROLE.poster;
+      return (
+        <FormButton
+          text={isPoster ? HERO_CONTENT.posterCTA : HERO_CONTENT.taskerCTA}
+          className="group relative min-w-[200px]"
+          href={isPoster ? ROUTES.POST_TASK : ROUTES.CREATE_ACCOUNT}
+        />
+      );
+    }
+
+    return (
+      <>
+        <FormButton
+          text={HERO_CONTENT.posterCTA}
+          className="group relative min-w-[200px]"
+          href={ROUTES.POST_TASK}
+        />
+        <FormButton
+          text={HERO_CONTENT.taskerCTA}
+          className="group relative min-w-[200px] bg-gradient-secondary"
+          href={ROUTES.SIGNUP}
+          variant="custom"
+        />
+      </>
+    );
+  };
+
   return (
-    <div className="">
-      <div className="relative w-full min-h-[31.25rem] md:max-h-full">
-        <div className="absolute top-0 left-0  w-full h-full bg-dark-secondary md:bg-[rgb(2,22,55)]/70 z-10 flex items-center">
-          <div className="max-w-[60rem] mx-auto px-[30px] mt-[15%] md:mt-0">
-            <div className="max-w-[54.25rem] mx-auto text-white">
-              <div className="mb-[3.625rem] md:mb-[9.375rem]">
-                <FadeUp transition={{ duration: 0.5 }}>
-                  <h1 className="text-2xl sm:text-[2.875rem] md:text-[4.375rem] font-bold leading-normal text-center mb-3 sm:mb-[0.875rem]">
-                    Get your todos{" "}
-                    <UnderlinedHeader text="done" lineStyle="sm:top-[80%]" />{" "}
-                    just in minutes.
-                  </h1>
-                </FadeUp>
-                <FadeUp transition={{ duration: 0.5, delay: 0.2 }}>
-                  <p className="text-center text-base sm:text-xl">
-                    Find the right people for anything you need.
-                  </p>
-                </FadeUp>
-              </div>
-              <div>
-                <FadeUp transition={{ duration: 0.5, delay: 0.4 }}>
-                  <div className="flex items-center gap-3 sm:gap-6 w-fit mx-auto mb-8">
-                    <FormButton
-                      text="Post a task for free"
-                      btnStyle="text-sm"
-                      href="/post-task"
-                    />
-                    <FormButton
-                      href="/tasker"
-                      text="Become a Tasker"
-                      btnStyle="bg-secondary text-sm"
-                    />
-                  </div>
-                </FadeUp>
-                <div className="w-fit mx-auto flex justify-between items-center gap-3 sm:gap-10 flex-wrap">
-                  {statsData.map((item, i) => (
-                    <FadeUp key={i} transition={{ duration: 0.5, delay: 0.6 }}>
-                      <div>
-                        <Image
-                          src={item.icon}
-                          alt=""
-                          width={20}
-                          height={20}
-                          className="object-contain mx-auto block w-3 h-auto sm:w-5"
-                        />
-                        <p className="mt-2 text-white text-xs sm:text-base font-normal">
-                          {item.stat}
-                        </p>
-                      </div>
-                    </FadeUp>
-                  ))}
-                </div>
-              </div>
+    <section className={STYLES.container}>
+      <img
+        src="/images/hero-poster.jpg"
+        alt=""
+        className={`${
+          STYLES.poster
+        } hidden md:block transition-opacity duration-500 ${
+          videoLoaded ? "opacity-0" : "opacity-100"
+        }`}
+        aria-hidden="true"
+      />
+
+      {/* ✅ Background Video - Loads after initial render */}
+      {shouldLoadVideo && (
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="none"
+          poster="/images/hero-poster.jpg"
+          className={`${
+            STYLES.video
+          } hidden md:block transition-opacity duration-500 ${
+            videoLoaded ? "opacity-100" : "opacity-0"
+          }`}
+          onLoadedData={() => setVideoLoaded(true)}
+          aria-hidden="true"
+        >
+          <source src="/videos/hero-video.mp4" type="video/mp4" />
+        </video>
+      )}
+
+      {/* Gradient Overlay */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(0deg, rgba(0, 0, 0, 0.49) 0%, rgba(0, 0, 0, 0.49) 100%)",
+        }}
+      />
+
+      {/* Content Overlay */}
+      <div className={STYLES.overlay}>
+        <div className={STYLES.content}>
+          <div className={STYLES.textBackdrop}>
+            <div className={STYLES.textSection}>
+              <h1 className={STYLES.title}>{HERO_CONTENT.title}</h1>
+              <p className={STYLES.subtitle}>{HERO_CONTENT.subtitle}</p>
             </div>
+
+            <div className={STYLES.buttonGroup}>{renderActionButtons()}</div>
           </div>
         </div>
-        <Image
-          src={Hero}
-          alt=""
-          className="w-full h-screen object-cover hidden md:block"
-        />
       </div>
-    </div>
+
+      {/* Animated Background for Mobile */}
+      <div className="absolute inset-0 bg-gradient-to-br from-dark-secondary via-black to-black-2 md:hidden">
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%239C92AC\' fill-opacity=\'0.1\'%3E%3Ccircle cx=\'30\' cy=\'30\' r=\'2\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-30"></div>
+      </div>
+    </section>
   );
 };
 

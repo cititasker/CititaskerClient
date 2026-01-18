@@ -1,6 +1,8 @@
 import React from "react";
 import FormButton from "../forms/FormButton";
 import { cn } from "@/utils";
+import { VariantProps } from "class-variance-authority";
+import { buttonVariants } from "../ui/button";
 
 interface IProps {
   loading?: boolean;
@@ -12,6 +14,11 @@ interface IProps {
   handleCancel?: any;
   handleSubmit?: any;
   type?: "submit" | "button";
+  disabled?: boolean;
+  okVariant?: VariantProps<typeof buttonVariants>["variant"];
+  cancelVariant?: VariantProps<typeof buttonVariants>["variant"];
+  size?: "default" | "sm" | "lg" | "icon" | null | undefined;
+  formId?: string;
 }
 const ActionsButtons = ({
   loading,
@@ -23,28 +30,38 @@ const ActionsButtons = ({
   type = "submit",
   okText = "Submit",
   cancelText = "Cancel",
+  disabled = false,
+  okVariant = "default",
+  cancelVariant = "outline",
+  size = "default",
+  formId,
 }: IProps) => {
   return (
     <div
       className={cn(
-        "flex gap-x-4 sm:gap-x-8 items-center mt-auto pb-5",
+        "flex flex-col-reverse sm:flex-row gap-y-3 gap-x-3 sm:gap-x-6 items-center mt-auto w-full",
         className
       )}
     >
-      <FormButton
-        text={cancelText}
-        btnStyle={cn(
-          "flex-1 bg-light-grey text-primary font-normal",
-          cancelStyle
-        )}
-        handleClick={handleCancel}
-      />
+      {handleCancel && (
+        <FormButton
+          variant={cancelVariant}
+          text={cancelText}
+          size={size}
+          className={cn("w-full", cancelStyle)}
+          onClick={handleCancel}
+        />
+      )}
       <FormButton
         text={okText}
         type={type}
-        btnStyle={cn("flex-1 font-medium", okStyle)}
+        className={cn("w-full", okStyle)}
         loading={loading}
-        handleClick={handleSubmit}
+        onClick={handleSubmit}
+        disabled={disabled || loading}
+        variant={okVariant}
+        size={size}
+        form={formId}
       />
     </div>
   );

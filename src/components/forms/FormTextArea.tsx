@@ -1,103 +1,90 @@
-import {
-  FormControl,
-  FormLabel,
-  SxProps,
-  TextField,
-  Theme,
-} from "@mui/material";
-import { Controller, useFormContext } from "react-hook-form";
-import FormError from "../reusables/FormError";
+import { Textarea } from "@/components/ui/textarea";
+import { useFormContext } from "react-hook-form";
+import { cn } from "@/lib/utils";
+import { FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 
-interface IProps {
-  label?: string;
+interface FormTextAreaProps {
   name: string;
+  label?: string;
   placeholder?: string;
-  sx?: any;
-  rows?: number;
   required?: boolean;
+  className?: string;
+  maxLength?: number;
+  rows?: number;
   disabled?: boolean;
-  [key: string]: any;
+  readOnly?: boolean;
 }
 
-const styles: Record<string, SxProps<Theme>> = {
-  container: {
-    mb: "15px",
-
-    ".MuiFormLabel-root": {
-      fontSize: "14px",
-      fontWeight: 500,
-      textAlign: "left",
-      color: "var(--black)",
-      mb: "10px",
-    },
-    ".MuiOutlinedInput-root": {
-      borderRadius: "9.75px",
-      fontSize: "16px",
-
-      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-        border: "1px solid",
-        borderColor: "var(--primary)",
-      },
-
-      ".MuiOutlinedInput-input::placeholder": {
-        color: "var(--dark-grey-2)",
-      },
-      ".MuiOutlinedInput-notchedOutline": {
-        border: "1px solid var(--dark-grey-1)",
-      },
-      ".MuiOutlinedInput-input": {
-        py: 0,
-        height: "100%",
-        bgcolor: "#fff",
-        resize: "both",
-      },
-    },
-    ".required": {
-      color: "rgba(217, 63, 33, 1)",
-      fontSize: "13.7px",
-      fontWeight: "500",
-      lineHeight: "20.48px",
-      textAlign: "left",
-    },
-  },
-};
-
-const FormTextArea = ({
-  label,
+export default function FormTextArea({
   name,
+  label,
   placeholder,
-  sx,
+  required = false,
+  className,
+  maxLength,
   rows = 4,
-  required,
-  disabled,
-  ...rest
-}: IProps) => {
-  const { control } = useFormContext();
+  disabled = false,
+  readOnly = false,
+}: FormTextAreaProps) {
+  const { control, formState } = useFormContext();
+  const error = formState.errors[name];
 
   return (
-    <FormControl fullWidth sx={{ ...styles.container, ...sx }} {...rest}>
-      {label && (
-        <FormLabel htmlFor={name} className="label">
-          {label} {required && <span className="required"> *</span>}
-        </FormLabel>
-      )}
-      <Controller
-        name={name}
-        control={control}
-        render={({ field }) => (
-          <TextField
-            id={name}
-            rows={rows}
-            multiline
-            placeholder={placeholder}
-            disabled={disabled}
-            {...field}
-          />
-        )}
-      />
-      <FormError name={name} />
-    </FormControl>
-  );
-};
+    <FormField
+      name={name}
+      control={control}
+      render={({ field }) => (
+        <FormItem className={cn("space-y-1", className)}>
+          {label && (
+            <FormLabel
+              htmlFor={name}
+              className="text-sm font-medium text-text-primary"
+            >
+              {label}
+              {required && <span className="text-error ml-1">*</span>}
+            </FormLabel>
+          )}
 
-export default FormTextArea;
+          <div className="relative group">
+            <Textarea
+              id={name}
+              {...field}
+              placeholder={placeholder}
+              disabled={disabled}
+              readOnly={readOnly}
+              maxLength={maxLength}
+              rows={rows}
+              aria-invalid={!!error}
+              className={cn(
+                // Base styles
+                "px-4 py-3 rounded-xl resize-none transition-all duration-200",
+                "bg-background text-text-primary placeholder:text-text-muted",
+
+                // Border states
+                error && "border-error focus:border-error",
+
+                // State styles
+                disabled &&
+                  "opacity-50 cursor-not-allowed bg-background-secondary",
+                readOnly && "bg-background-secondary cursor-default",
+
+                // Minimum height
+                rows <= 3 && "min-h-[100px]",
+                rows > 3 && "min-h-[120px]"
+              )}
+            />
+
+            {/* Character count */}
+            {maxLength && (
+              <div className="absolute bottom-2 right-3 text-xs text-text-muted">
+                {field.value?.length || 0}/{maxLength}
+              </div>
+            )}
+          </div>
+
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
+}

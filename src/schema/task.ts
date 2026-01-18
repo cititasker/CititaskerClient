@@ -1,5 +1,8 @@
 import { z } from "zod";
 
+const MAX_IMAGE_COUNT = 3;
+// const MAX_IMAGE_SIZE = 3 * 1024 * 1024; // 2MB
+
 export const postTaskSchema = z.object({
   name: z
     .string()
@@ -22,7 +25,19 @@ export const postTaskSchema = z.object({
     })
     .nullable()
     .refine((value) => value, { message: "Please select a category" }),
-  images: z.array(z.any()),
+  images: z
+    .array(z.any())
+    .max(MAX_IMAGE_COUNT, `You can upload up to ${MAX_IMAGE_COUNT} images`)
+    // .refine(
+    //   (files) =>
+    //     files.every((file) =>
+    //       typeof file === "string" ? true : file.size <= MAX_IMAGE_SIZE
+    //     ),
+    //   {
+    //     message: "Each image must be less than 2MB",
+    //   }
+    // )
+    .optional(),
   location_type: z
     .enum(["in_person", "online"], {
       required_error: "Location type is required",
@@ -36,7 +51,10 @@ export const postTaskSchema = z.object({
     })
     .nullable()
     .refine((value) => value, { message: "Please select your state" }),
-  location: z.array(z.any()).nonempty("Location is required"),
+  location: z.union([
+    z.tuple([z.number(), z.number()]),
+    z.array(z.number()).length(0), // allow empty array
+  ]),
   address: z.string().nullable(),
   time_frame: z
     .enum(["on_date", "before_date", "flexible_date"], {
@@ -60,3 +78,21 @@ export const postTaskSchema = z.object({
 });
 
 export type postTaskSchemaType = z.infer<typeof postTaskSchema>;
+
+export const rescheduleTaskSchema = z
+  .object({
+    date: z.string().min(1, "Date is required"),
+    time: z.string().optional(),
+    showTimeOfDay: z.boolean(),
+  })
+  .refine(
+    (data) => {
+      return !data.showTimeOfDay || (data.time && data.time.trim() !== "");
+    },
+    {
+      path: ["time"],
+      message: "Time is required when selecting a time slot",
+    }
+  );
+
+export type rescheduleTaskSchemaType = z.infer<typeof rescheduleTaskSchema>;

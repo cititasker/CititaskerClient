@@ -1,5 +1,6 @@
 import { AxiosError } from "axios";
-import api, { publicApi } from "./apiService";
+import { api } from "@/lib/api-client";
+import { API_ROUTES } from "@/constant";
 
 export function joinPosterApi(data: any) {
   return api
@@ -24,7 +25,7 @@ export function joinTaskerApi(data: any) {
 
 export function getCategories(): Promise<ITaskCategory[]> {
   return api
-    .get(`utility/categories`)
+    .get(`${API_ROUTES.UTILITY.CATEGORIES}`)
     .then((data) => {
       return data.data.data;
     })
@@ -43,27 +44,27 @@ export function getSubCategories(id: any): Promise<ITaskCategory[]> {
     });
 }
 
-export const reverseGeocode = async (
-  latitude: any,
-  longitude: any
-): Promise<string | undefined> => {
-  const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`;
+export async function reverseGeocode(
+  lat: number,
+  lng: number
+): Promise<string | null> {
   try {
-    const response = await fetch(url);
-    const data = await response.json();
-    return data.display_name;
+    const response = await fetch(`/api/reverse-geocode?lat=${lat}&lng=${lng}`);
+
+    if (response.ok) {
+      const data = await response.json();
+      return data.address;
+    }
   } catch (error) {
-    console.error("Error in reverse geocoding:", error);
+    console.warn("Server-side reverse geocoding failed:", error);
   }
-};
+
+  return `Location (${lat.toFixed(4)}, ${lng.toFixed(4)})`;
+}
 
 export function getBanks(): Promise<any> {
-  return publicApi
-    .get(`https://api.paystack.co/bank`, {
-      headers: {
-        Authorization: `Bearer ${process.env.NEXT_PUBLIC_PAYSTACK_SECERET_KEY}`,
-      },
-    })
+  return api
+    .get(API_ROUTES.UTILITY.BANKS)
     .then((data) => {
       return data.data.data;
     })
@@ -72,21 +73,12 @@ export function getBanks(): Promise<any> {
     });
 }
 
-export function resolveAccountNumber({
-  account,
-  bank_code,
-}: any): Promise<any> {
-  return publicApi
-    .get(
-      `https://api.paystack.co/bank/resolve?account_number=${account}&bank_code=${bank_code}`,
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_PAYSTACK_SECERET_KEY}`,
-        },
-      }
-    )
+export function verifyAccountNumber(data: any) {
+  const queryParams = new URLSearchParams(data).toString();
+  return api
+    .get(`${API_ROUTES.UTILITY.VERIFY_ACCOUNT_NUMBER}?${queryParams}`)
     .then((data) => {
-      return data.data.data;
+      return data.data;
     })
     .catch((error: AxiosError) => {
       throw error.response?.data;

@@ -1,0 +1,58 @@
+import {
+  LayoutDashboard,
+  MessageCircle,
+  CreditCard,
+  Settings,
+  User,
+  UserCircle,
+} from "lucide-react";
+
+export interface MenuItem {
+  name: string;
+  href?: string;
+  icon: React.ComponentType<any>;
+  children?: MenuItem[];
+  badge?: string | number;
+  description?: string;
+}
+
+export const MENU_ITEMS: MenuItem[] = [
+  {
+    name: "Dashboard",
+    href: "/dashboard",
+    icon: LayoutDashboard,
+    description: "Overview and analytics",
+  },
+  {
+    name: "Messages",
+    href: "/messages",
+    icon: MessageCircle,
+    badge: 5, // Example badge for unread messages
+    description: "Chat and notifications",
+  },
+  {
+    name: "Transactions",
+    href: "/transactions",
+    icon: CreditCard,
+    description: "Manage payments and invoices",
+  },
+  {
+    name: "Settings",
+    icon: Settings,
+    description: "Account and preferences",
+    children: [
+      {
+        name: "Account",
+        href: "/account",
+        icon: User,
+        description: "Account settings",
+      },
+      {
+        name: "Profile",
+        href: "/profile",
+        icon: UserCircle,
+        description: "Public profile",
+      },
+    ],
+  },
+];

@@ -1,109 +1,79 @@
-import { FormControlLabel, styled, Switch, SwitchProps } from "@mui/material";
-import React from "react";
-import { Controller } from "react-hook-form";
+"use client";
 
-interface IProps {
+import React from "react";
+import { useFormContext } from "react-hook-form";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { cn } from "@/lib/utils";
+
+interface FormSwitchProps {
+  name: string;
   label?: string;
-  name?: string;
-  control?: any;
-  value?: boolean;
-  handleChange?: any;
+  description?: string;
+  className?: string;
+  disabled?: boolean;
+  required?: boolean;
 }
 
-const IOSSwitch = styled((props: SwitchProps) => (
-  <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
-))(({ theme }) => ({
-  width: 42,
-  height: 26,
-  padding: 0,
-  "& .MuiSwitch-switchBase": {
-    padding: 0,
-    margin: 2,
-    transitionDuration: "300ms",
-    "&.Mui-checked": {
-      transform: "translateX(16px)",
-      color: "#fff",
-      "& + .MuiSwitch-track": {
-        backgroundColor: "#65C466",
-        opacity: 1,
-        border: 0,
-        ...theme.applyStyles("dark", {
-          backgroundColor: "#2ECA45",
-        }),
-      },
-      "&.Mui-disabled + .MuiSwitch-track": {
-        opacity: 0.5,
-      },
-    },
-    "&.Mui-focusVisible .MuiSwitch-thumb": {
-      color: "#33cf4d",
-      border: "6px solid #fff",
-    },
-    "&.Mui-disabled .MuiSwitch-thumb": {
-      color: theme.palette.grey[100],
-      ...theme.applyStyles("dark", {
-        color: theme.palette.grey[600],
-      }),
-    },
-    "&.Mui-disabled + .MuiSwitch-track": {
-      opacity: 0.7,
-      ...theme.applyStyles("dark", {
-        opacity: 0.3,
-      }),
-    },
-  },
-  "& .MuiSwitch-thumb": {
-    boxSizing: "border-box",
-    width: 22,
-    height: 22,
-  },
-  "& .MuiSwitch-track": {
-    borderRadius: 26 / 2,
-    backgroundColor: "#E9E9EA",
-    opacity: 1,
-    transition: theme.transitions.create(["background-color"], {
-      duration: 500,
-    }),
-    ...theme.applyStyles("dark", {
-      backgroundColor: "#39393D",
-    }),
-  },
-}));
-
-const FormSwitch = ({
+export default function FormSwitch({
+  name,
   label,
-  name = "",
-  control,
-  value,
-  handleChange,
-}: IProps) => {
-  if (control) {
-    return (
-      <Controller
-        name={name}
-        control={control}
-        render={({ field }) => (
-          <FormControlLabel
-            control={<IOSSwitch sx={{ m: 1 }} defaultChecked {...field} />}
-            label={label}
-          />
-        )}
-      />
-    );
-  } else
-    return (
-      <FormControlLabel
-        control={
-          <IOSSwitch
-            sx={{ m: 1 }}
-            defaultChecked
-            value={value}
-            onChange={handleChange}
-          />
-        }
-        label={label}
-      />
-    );
-};
+  description,
+  className,
+  disabled = false,
+  required = false,
+}: FormSwitchProps) {
+  const { control, formState } = useFormContext();
+  const error = formState.errors[name];
 
-export default FormSwitch;
+  return (
+    <FormField
+      name={name}
+      control={control}
+      render={({ field }) => (
+        <FormItem className={cn("space-y-1", className)}>
+          <div className="flex items-center justify-between group">
+            <div className="space-y-1">
+              {label && (
+                <Label
+                  htmlFor={name}
+                  className={cn(
+                    "text-sm font-medium text-text-primary cursor-pointer",
+                    "group-hover:text-text-secondary transition-colors duration-200",
+                    disabled && "opacity-50 cursor-not-allowed",
+                    required &&
+                      "after:content-['*'] after:text-error after:ml-1"
+                  )}
+                >
+                  {label}
+                </Label>
+              )}
+              {description && (
+                <p className="text-xs text-text-muted leading-relaxed">
+                  {description}
+                </p>
+              )}
+            </div>
+
+            <Switch
+              id={name}
+              checked={field.value || false}
+              onCheckedChange={field.onChange}
+              disabled={disabled}
+              className={cn(
+                "transition-all duration-200",
+                "data-[state=checked]:bg-primary",
+                "focus:ring-0 focus:ring-primary/20",
+                error && "data-[state=checked]:bg-error",
+                disabled && "opacity-50 cursor-not-allowed"
+              )}
+            />
+          </div>
+
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
+}

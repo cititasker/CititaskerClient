@@ -1,113 +1,86 @@
 "use client";
-import * as React from "react";
-import CustomModal from "@/components/reusables/CustomModal";
-import Icons from "@/components/Icons";
-import theme from "@/providers/theme";
-import FormButton from "@/components/forms/FormButton";
 
-interface ModalType {
+import React, { useMemo } from "react";
+import { AlertCircle } from "lucide-react";
+
+import { Separator } from "@/components/ui/separator";
+import { ROUTES } from "@/constant";
+import ProgressBar from "@/components/auth/ProgressBar";
+import { verificationConfig, VerificationStep } from "./constant";
+import { VerificationStepCard } from "./VerificationStepCard";
+import BaseModal from "@/components/browseTask/Modals/BaseModal";
+
+interface VerificationModalProps {
   open: boolean;
-  handleClose: () => void;
-  verifications: any;
+  onClose: () => void;
+  verifications: {
+    id: boolean;
+    bank: boolean;
+    profile: boolean;
+  };
 }
 
-export default function VerificationModal({
+const AlertMessage = () => (
+  <div className="flex items-start gap-3 p-4 bg-warning-light rounded-lg border border-warning/20">
+    <AlertCircle className="w-5 h-5 text-warning flex-shrink-0 mt-0.5" />
+    <div className="space-y-1">
+      <h4 className="font-medium text-text-primary">Verification Required</h4>
+      <p className="text-sm text-text-secondary">
+        You need to complete all verification steps before you can make offers
+        on tasks.
+      </p>
+    </div>
+  </div>
+);
+
+const VerificationModal: React.FC<VerificationModalProps> = ({
   open,
-  handleClose,
+  onClose,
   verifications,
-}: ModalType) {
-  const verificationList = React.useMemo(() => {
-    return Object.entries(verifications).map(([key, value]) => {
-      switch (key) {
-        case "face": {
-          return { label: "Face ID", key, value, href: "#", text: "Verify" };
-        }
-        case "id": {
-          return {
-            label: "ID Verification",
-            key,
-            value,
-            href: "#",
-            text: "Upload",
-          };
-        }
-        case "bank": {
-          return {
-            label: "Bank Details",
-            key,
-            value,
-            href: "#",
-            text: "Verify",
-          };
-        }
-        case "home": {
-          return {
-            label: "Home Address",
-            key,
-            value,
-            href: "#",
-            text: "Upload",
-          };
-        }
-      }
-    });
+}) => {
+  const verificationSteps = useMemo<VerificationStep[]>(() => {
+    return Object.entries(verificationConfig).map(([key, config]) => ({
+      key: key as keyof typeof verificationConfig,
+      completed: verifications[key as keyof typeof verifications],
+      href: `/tasker/${ROUTES.DASHBOARD_ACCOUNT}?tab=verifications&type=${key}`,
+      ...config,
+    }));
   }, [verifications]);
 
-  return (
-    <CustomModal
-      isOpen={open}
-      onClose={handleClose}
-      aria-labelledby="verify-modal-title"
-      aria-describedby="verify-modal-description"
-      paperStyle={{
-        maxWidth: "576px",
-        p: "20px",
-        textAlign: "center",
-        [theme.breakpoints.up("sm")]: {
-          px: "100px",
-          pt: "20px",
-          pb: "30px",
-          borderRadius: "20px",
-        },
-      }}
-    >
-      <h2
-        id="verify-modal-title"
-        className="text-2xl font-bold mb-2 text-center"
-      >
-        Verify your account
-      </h2>
-      <p
-        id="verify-modal-description"
-        className="text-sm mb-3 px-4 font-semibold text-center"
-      >
-        You need to verify your account before you can make an offer.
-      </p>
+  const completedCount = verificationSteps.filter(
+    (step) => step.completed
+  ).length;
+  const totalCount = verificationSteps.length;
+  const allCompleted = completedCount === totalCount;
 
-      <div className="space-y-3">
-        {verificationList.map((el, i) => (
-          <div
-            key={i}
-            className="flex items-center justify-between border w-full rounded-full h-[45px] pl-4 pr-[3px] py-[3px]"
-          >
-            <div className="justify-between flex w-full font-medium text-[16px] text-black">
-              {el?.label}
-            </div>
-            <div className="h-full">
-              {!el?.value ? (
-                <FormButton
-                  btnStyle="min-w-[120px] w-fit h-full"
-                  href={el?.href}
-                >
-                  {el?.text}
-                </FormButton>
-              ) : (
-                <Icons.greenTick />
-              )}
-            </div>
-          </div>
-        ))}
+  return (
+    <BaseModal
+      isOpen={open}
+      onClose={onClose}
+      title="Verify Your Account"
+      description="Complete these steps to start making offers on tasks"
+      className="max-w-lg mx-auto"
+    >
+      <div className="space-y-6">
+        {/* Progress Bar */}
+        <div className="hidden sm:block">
+          <ProgressBar currentStep={completedCount} totalSteps={totalCount} />
+        </div>
+
+        <Separator />
+
+        {/* Alert Message */}
+        {!allCompleted && <AlertMessage />}
+
+        {/* Verification Steps */}
+        <div className="space-y-4">
+          {verificationSteps.map((step, index) => (
+            <VerificationStepCard key={index} step={step} />
+          ))}
+        </div>
       </div>
-    </CustomModal>
+    </BaseModal>
   );
-}
+};
+
+export default VerificationModal;

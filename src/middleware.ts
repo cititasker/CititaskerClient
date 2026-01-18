@@ -1,31 +1,79 @@
 import { auth } from "@/auth";
 import { NextResponse } from "next/server";
+import {
+  getDefaultRedirect,
+  isAuthRoute,
+  isPublicRoute,
+  isProtectedRoute,
+  getRoleForRoute,
+} from "@/lib/middleware/guards/route-config";
+import {
+  shouldRedirectToWaitlist,
+  WAITLIST_CONFIG,
+} from "@/lib/middleware/waitlist-redirect";
 
-const authRoutes = ["/login", "/signup", "/forgot-password"];
-const protectedRoutes = ["/dashboard"]; // Routes that require authentication
+export default auth((req) => {
+  const { pathname } = req.nextUrl;
+  const user = req.auth?.user;
+  const role = user?.role?.toLowerCase() as "poster" | "tasker" | undefined;
 
-export default auth(async (req) => {
-  const currentRoute = req.nextUrl.pathname;
-
-  if (req.auth && authRoutes.includes(currentRoute)) {
-    const absoluteURL = new URL("/dashboard", req.url);
-    return Response.redirect(absoluteURL);
+  if (shouldRedirectToWaitlist(pathname)) {
+    return NextResponse.redirect(
+      new URL(WAITLIST_CONFIG.WAITLIST_PATH, req.url)
+    );
   }
-  if (
-    !req.auth &&
-    protectedRoutes.some((route) => currentRoute.startsWith(route))
-  ) {
-    const absoluteURL = new URL("/login", req.url); // Redirect to login page
-    return Response.redirect(absoluteURL);
+
+  // 1. Homepage: redirect authenticated users to discovery page
+  if (pathname === "/") {
+    if (user && role) {
+      return NextResponse.redirect(new URL(getDefaultRedirect(role), req.url));
+    }
+    return NextResponse.next();
   }
+
+  // 2. Public routes: allow everyone
+  if (isPublicRoute(pathname)) {
+    return NextResponse.next();
+  }
+
+  // 3. Auth routes: redirect authenticated users away
+  if (user && isAuthRoute(pathname)) {
+    return NextResponse.redirect(new URL(getDefaultRedirect(role!), req.url));
+  }
+
+  // 4. Protected routes (/poster/*, /tasker/*): require auth + correct role
+  if (isProtectedRoute(pathname)) {
+    if (!user) {
+      const loginUrl = new URL("/auth/login", req.url);
+      loginUrl.searchParams.set("redirect", pathname);
+      return NextResponse.redirect(loginUrl);
+    }
+
+    const routeRole = pathname.startsWith("/poster/") ? "poster" : "tasker";
+    if (role !== routeRole) {
+      return NextResponse.redirect(new URL(getDefaultRedirect(role!), req.url));
+    }
+  }
+
+  // 5. Role-specific public routes (discovery, post-task, browse-tasks, etc.)
+  const routeRole = getRoleForRoute(pathname);
+  if (routeRole) {
+    // Require authentication for role-specific routes
+    if (!user) {
+      const loginUrl = new URL("/auth/login", req.url);
+      loginUrl.searchParams.set("redirect", pathname);
+      return NextResponse.redirect(loginUrl);
+    }
+
+    // Redirect if wrong role accessing route
+    if (role !== routeRole) {
+      return NextResponse.redirect(new URL(getDefaultRedirect(role!), req.url));
+    }
+  }
+
   return NextResponse.next();
 });
 
 export const config = {
-  matcher: [
-    "/dashboard/:path*",
-    "/my-tasks/:path*",
-    "/profile",
-    "/((?!api|_next/static|_next/image|favicon.ico).*)",
-  ],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
 };

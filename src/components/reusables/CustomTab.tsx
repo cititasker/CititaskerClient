@@ -1,98 +1,93 @@
-import { Box, SxProps, Tab, Tabs, Theme } from "@mui/material";
+"use client";
+
 import React from "react";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { cn } from "@/lib/utils";
+import { useRouter, useSearchParams } from "next/navigation";
 
-interface IProps {
-  tabs: string[];
-  defaultIndex?: number;
-  children: any;
-  sx?: any;
-}
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-  [key: string]: any;
+interface TabItem {
+  label: string;
+  value: string;
+  render: () => React.ReactNode;
 }
 
-const style: Record<string, SxProps<Theme>> = {
-  container: {
-    borderBottom: 1,
-    borderColor: "divider",
-    mb: "24px",
+interface CustomTabProps {
+  items: TabItem[];
+  defaultValue?: string;
+  className?: string;
+  listClassName?: string;
+  triggerClassName?: string;
+  contentClassName?: string;
+  queryKey?: string;
+}
 
-    ".MuiTab-root": {
-      py: "10px",
-      px: "20px",
-      textTransform: "none",
-      fontSize: "20px",
-      fontWeight: 600,
-      color: "var(--black)",
-    },
-    ".Mui-selected": {
-      color: "var(--primary) !important",
-    },
-    ".MuiTabs-indicator": {
-      bgcolor: "var(--primary)",
-    },
-  },
-};
+export default function CustomTab({
+  items,
+  defaultValue,
+  className,
+  listClassName,
+  triggerClassName,
+  contentClassName,
+  queryKey = "tab",
+}: CustomTabProps) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-function CustomTabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
+  const selectedTab =
+    searchParams.get(queryKey) ?? defaultValue ?? items[0]?.value;
+
+  const handleTabChange = (value: string) => {
+    const params = new URLSearchParams();
+    params.set(queryKey, value);
+    router.replace(`?${params.toString()}`, { scroll: false });
+  };
+
+  if (!items.length) return null;
 
   return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
+    <Tabs
+      value={selectedTab}
+      onValueChange={handleTabChange}
+      className={cn("flex flex-col h-full w-full", className)}
     >
-      {value === index && children}
-    </div>
-  );
-}
-
-function a11yProps(index: number) {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
-  };
-}
-
-const CustomTab = ({ tabs, defaultIndex = 0, children, sx = {} }: IProps) => {
-  const [value, setValue] = React.useState(defaultIndex);
-
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  };
-  return (
-    <div className="h-full">
-      <Box sx={{ ...style.container, ...sx }}>
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          aria-label="basic tabs example"
-        >
-          {tabs.map((el, i) => (
-            <Tab key={i} label={el} {...a11yProps(i)} className="tab" />
-          ))}
-        </Tabs>
-      </Box>
-      {React.Children.map(children, (child, i) => {
-        return (
-          <CustomTabPanel
+      {/* Tab Headers - Fixed height */}
+      <TabsList
+        className={cn(
+          "flex w-full rounded-xl p-1 bg-background-tertiary shrink-0",
+          listClassName
+        )}
+      >
+        {items.map(({ label, value }) => (
+          <TabsTrigger
+            key={value}
             value={value}
-            index={i}
-            key={i}
-            className="h-[calc(100%-48px)] bg-white"
+            className={cn(
+              "data-[state=active]:bg-background data-[state=active]:text-primary",
+              "data-[state=active]:shadow-sm transition-all duration-200",
+              "text-text-muted hover:text-text-primary font-medium",
+              "max-w-[200px] w-full min-w-[140px]",
+              triggerClassName
+            )}
           >
-            {child}
-          </CustomTabPanel>
-        );
-      })}
-    </div>
-  );
-};
+            {label}
+          </TabsTrigger>
+        ))}
+      </TabsList>
 
-export default CustomTab;
+      {/* Tab Content - Scrollable area */}
+      {items.map(({ value, render }) => (
+        <TabsContent
+          key={value}
+          value={value}
+          className={cn(
+            "focus:outline-none bg-white rounded-t-xl",
+            "flex-1 min-h-0 overflow-y-auto no-scrollbar sm:py-3",
+            contentClassName
+          )}
+        >
+          {render()}
+        </TabsContent>
+      ))}
+    </Tabs>
+  );
+}

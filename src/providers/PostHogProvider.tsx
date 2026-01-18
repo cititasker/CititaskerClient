@@ -1,53 +1,97 @@
 "use client";
 
+import { hasAnalyticsConsent } from "@/lib/consent/analytics";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useEffect, Suspense } from "react";
-import { usePostHog } from "posthog-js/react";
+import { useEffect, useRef, Suspense } from "react";
 
-import posthog from "posthog-js";
-import { PostHogProvider as PHProvider } from "posthog-js/react";
+const isDev = process.env.NODE_ENV === "development";
 
 export function PostHogProvider({ children }: { children: React.ReactNode }) {
+  const initializedRef = useRef(false);
+
   useEffect(() => {
-    posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY as string, {
-      api_host:
-        process.env.NEXT_PUBLIC_POSTHOG_HOST || "https://us.i.posthog.com",
-      person_profiles: "identified_only", // or 'always' to create profiles for anonymous users as well
-      capture_pageview: false, // Disable automatic pageview capture, as we capture manually
+    if (isDev || initializedRef.current) return;
+
+    import("posthog-js").then((posthogModule) => {
+      const posthog = posthogModule.default;
+
+      posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY as string, {
+        api_host:
+          process.env.NEXT_PUBLIC_POSTHOG_HOST || "https://us.i.posthog.com",
+        person_profiles: "identified_only",
+        autocapture: false,
+        capture_pageview: false,
+        loaded: (ph) => {
+          if (!hasAnalyticsConsent()) {
+            ph.opt_out_capturing();
+            return;
+          }
+          ph.capture("$pageview", {
+            $current_url: window.location.href,
+          });
+        },
+      });
+
+      // Listen for consent changes
+      window.addEventListener("cc:onConsent", () => {
+        if (hasAnalyticsConsent()) {
+          posthog.opt_in_capturing();
+        } else {
+          posthog.opt_out_capturing();
+        }
+      });
+
+      initializedRef.current = true;
     });
   }, []);
 
   return (
-    <PHProvider client={posthog}>
-      <SuspendedPostHogPageView />
+    <>
+      {!isDev && (
+        <Suspense fallback={null}>
+          <PostHogPageView />
+        </Suspense>
+      )}
       {children}
-    </PHProvider>
+    </>
   );
 }
 
 function PostHogPageView() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const posthog = usePostHog();
+  const previousUrlRef = useRef<string | null>(null);
 
   useEffect(() => {
-    if (pathname && posthog) {
-      let url = window.origin + pathname;
-      if (searchParams.toString()) {
-        url = url + "?" + searchParams.toString();
-      }
+    if (isDev || !hasAnalyticsConsent()) return;
 
-      posthog.capture("$pageview", { $current_url: url });
-    }
-  }, [pathname, searchParams, posthog]);
+    const checkPostHog = () => {
+      // @ts-expect-error - posthog is injected on window after dynamic import
+      if (window.posthog) {
+        let url = window.origin + pathname;
+
+        if (searchParams.toString()) {
+          url += "?" + searchParams.toString();
+        }
+
+        if (previousUrlRef.current !== url) {
+          // @ts-expect-error - posthog capture is available only after load
+          window.posthog.capture("$pageview", { $current_url: url });
+          previousUrlRef.current = url;
+        }
+      }
+    };
+
+    const timer = setInterval(() => {
+      // @ts-expect-error - window.posthog may not exist yet on first render
+      if (window.posthog) {
+        checkPostHog();
+        clearInterval(timer);
+      }
+    }, 100);
+
+    return () => clearInterval(timer);
+  }, [pathname, searchParams]);
 
   return null;
-}
-
-function SuspendedPostHogPageView() {
-  return (
-    <Suspense fallback={null}>
-      <PostHogPageView />
-    </Suspense>
-  );
 }

@@ -1,41 +1,46 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { IState, State } from "country-state-city";
-import FormAutoComplete from "./FormAutoComplete";
+import { useMemo } from "react";
+import { FormAutoComplete } from "@/components/forms/FormAutoComplete";
+import { NIGERIA_STATES } from "@/lib/utils/nigeria-states";
 
-interface IProps {
-  countryCode?: string;
+interface SelectStateProps {
   name: string;
   label?: string;
+  countryCode?: string; // Keep for API compatibility, but we'll ignore it since we only have NG data
 }
 
-interface IIState {
+interface StateOption {
   id: string;
   name: string;
 }
 
-const SelectState = ({ name, label, countryCode = "NG" }: IProps) => {
-  const [states, setStates] = useState<IIState[]>([]);
+const SelectState = ({
+  name,
+  label = "State",
+  countryCode = "NG",
+}: SelectStateProps) => {
+  const states = useMemo<StateOption[]>(() => {
+    // Reorder to put Lagos first, then alphabetically sort the rest
+    const lagosState = NIGERIA_STATES.find((s) => s.name === "Lagos");
+    const otherStates = NIGERIA_STATES.filter((s) => s.name !== "Lagos");
 
-  useEffect(() => {
-    const allStates = State.getStatesOfCountry(countryCode) as IState[];
-    const index = allStates.findIndex((el) => el.name == "Lagos");
-    const [lagos] = allStates.splice(index, 1);
-    allStates.splice(0, 0, lagos);
-    setStates(allStates.map((el) => ({ id: el.isoCode, name: el.name })));
-  }, []);
+    const reordered = lagosState ? [lagosState, ...otherStates] : otherStates;
+
+    return reordered.map((s) => ({
+      id: s.isoCode,
+      name: s.name,
+    }));
+  }, [countryCode]); // Keep countryCode in deps for future-proofing
+
   return (
-    <>
-      <FormAutoComplete
-        label={label}
-        options={states}
-        getOptionLabel={(option: any) => option.name}
-        isOptionEqualToValue={(option, value) => option.id === value.id}
-        name={name}
-        disabled={!countryCode}
-        placeholder="Select a state"
-      />
-    </>
+    <FormAutoComplete
+      name={name}
+      label={label}
+      options={states}
+      getOptionLabel={(opt) => opt.name}
+      isOptionEqualToValue={(a, b) => a?.id === b?.id}
+      placeholder="Select a state"
+    />
   );
 };
 

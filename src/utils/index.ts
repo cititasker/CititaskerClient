@@ -4,9 +4,13 @@ import dayjs from "dayjs";
 import LocalizedFormat from "dayjs/plugin/localizedFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import advancedFormat from "dayjs/plugin/advancedFormat";
+import { connectionFee } from "@/constant";
+
 dayjs.extend(LocalizedFormat);
 dayjs.extend(relativeTime);
 dayjs.extend(customParseFormat);
+dayjs.extend(advancedFormat);
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -37,18 +41,21 @@ export const errorHandler = (error: any) => {
 
 export const formatDate = (
   date: Date | string | undefined,
-  format = "DD/MM/YYYY"
+  outputFormat = "D MMM YYYY",
+  inputFormat = "DD-MM-YYYY"
 ) => {
-  if (date) {
-    return dayjs(date, "DD-MM-YYYY").format(format);
-  }
-  return "";
+  if (!date) return "";
+  return dayjs(date, inputFormat).format(outputFormat);
 };
 
-export function convertDate(date: string, format: string): string {
-  const parsedDate = dayjs(date, "MM-DD-YYYY");
-  return parsedDate.format(format);
-}
+export const formatISODate = (
+  date: Date | string | undefined,
+  outputFormat = "DD-MM-YYYY",
+  inputFormat = "YYYY-MM-DD"
+) => {
+  if (!date) return "";
+  return dayjs(date, inputFormat).format(outputFormat);
+};
 
 export const formatDateAgo = (date: Date | string) => {
   return dayjs(date).fromNow();
@@ -64,7 +71,7 @@ export const truncate = (value: any, limit = 30) => {
 export const capitalize = (str: string | null) => {
   if (!str) return "";
   return str
-    .split(" ") // Split the string into words
+    .split(" ")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(" ");
 };
@@ -124,26 +131,24 @@ export const formatCurrency = ({
   value,
   locale = "en-US",
   currencySymbol = "₦",
-  noFraction = false,
+  noFraction = true,
 }: {
   value: number | string | undefined;
   locale?: string;
   currencySymbol?: string;
   noFraction?: boolean;
 }): string => {
-  if (!value || isNaN(Number(value))) {
+  if (value === null || value === undefined || isNaN(Number(value))) {
     return "";
   }
 
   const amount = typeof value === "string" ? parseFloat(value) : value;
 
-  // Use Intl.NumberFormat to format the number without a currency code
   const formattedAmount = new Intl.NumberFormat(locale, {
     minimumFractionDigits: noFraction ? 0 : 2,
     maximumFractionDigits: 2,
   }).format(amount);
 
-  // Prefix the formatted number with the "N" symbol
   return `${currencySymbol}${formattedAmount}`;
 };
 
@@ -167,37 +172,137 @@ export const purgeData = ({
   }
 };
 
-interface initializeNameProp {
+export const getInitials = (name: string) =>
+  name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase();
+
+interface InitializeNameProps {
   first_name?: string | null;
   last_name?: string | null;
   full_name?: string | null;
 }
+
 export function initializeName({
   first_name,
   last_name,
   full_name,
-}: initializeNameProp) {
-  if (first_name && last_name) {
-    return `${first_name} ${last_name.charAt(0)}.`;
-  } else if (first_name) return first_name;
-  else if (last_name) return last_name;
-  else if (full_name) {
-    const nameParts = full_name.trim().split(" ");
-    const firstName = nameParts[0];
-    const lastName = nameParts[nameParts.length - 1];
-    return `${firstName} ${lastName.charAt(0)}.`;
+}: InitializeNameProps): string {
+  const firstName = first_name?.trim();
+  const lastName = last_name?.trim();
+
+  if (firstName && lastName) return `${firstName} ${getInitials(lastName)}.`;
+  if (firstName) return firstName;
+  if (lastName) return lastName;
+
+  if (full_name?.trim()) {
+    const parts = full_name.trim().split(/\s+/);
+    if (parts.length === 1) return parts[0];
+    return `${parts[0]} ${getInitials(parts[parts.length - 1])}.`;
   }
-  return "Guest";
+
+  return "Anonymous";
 }
+
+export const getPartialInitials = (
+  name?:
+    | {
+        first_name?: string;
+        last_name?: string;
+      }
+    | IUser
+) => {
+  if (!name) return;
+  return initializeName({
+    first_name: name.first_name,
+    last_name: name.last_name,
+  });
+};
+
 export function loggedInUser(first_name: any, last_name: any) {
   if (first_name && last_name) {
     return `${first_name} ${last_name}`;
   } else if (first_name) return first_name;
   else if (last_name) return last_name;
-  return "Guest";
+  return "Anonymous";
 }
+
 export function formatTime(dateString: string, format = "hh:mm a"): string {
-  // Parse the date string and format it as time (11:23 am)
   return dayjs(dateString).format(format);
 }
-export const maxDate = dayjs().subtract(18, "year");
+
+export const maxDate = dayjs().endOf("day").toDate();
+
+export function getMaxDate(years?: number): Date {
+  if (typeof years === "number") {
+    return dayjs().subtract(years, "years").endOf("day").toDate();
+  }
+
+  return dayjs().endOf("day").toDate();
+}
+
+export const updateQueryParams = (
+  searchParams: URLSearchParams,
+  key: string,
+  value: string
+) => {
+  const params = new URLSearchParams(searchParams.toString());
+  if (value) {
+    params.set(key, value);
+  } else {
+    params.delete(key);
+  }
+  return params.toString();
+};
+
+export const calculateFees = (amount: number, percentage = connectionFee) => {
+  const fee = (percentage / 100) * amount;
+  const receive = amount - fee;
+  return { fee, receive };
+};
+
+export const normalizeUrl = (url: string): string => {
+  if (/^https:\/\//i.test(url)) return url;
+  if (/^http:\/\//i.test(url)) return url.replace(/^http:\/\//i, "https://");
+  return `https://${url}`;
+};
+
+export const formatFileSize = (bytes: number): string => {
+  if (bytes === 0) return "0 B";
+  const k = 1024;
+  const sizes = ["B", "KB", "MB", "GB"];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + " " + sizes[i];
+};
+
+export function extractPublicIdFromUrl(url?: any): string | undefined {
+  if (!url) return undefined;
+  const afterUpload = url.split("/upload/")[1] || url;
+  return afterUpload.replace(/^v\d+\//, "").replace(/\.[^.]+$/, "");
+}
+
+export function filterEmptyValues(
+  obj: Record<string, any>
+): Record<string, any> {
+  const isPlainObject = (val: any) =>
+    val !== null && typeof val === "object" && val.constructor === Object;
+
+  const isEmpty = (val: any): boolean => {
+    if (val == null) return true; // null or undefined
+    if (typeof val === "string") return val.trim() === "";
+    if (Array.isArray(val)) return val.length === 0;
+    if (val instanceof File || val instanceof Blob) return false;
+    if (isPlainObject(val))
+      return Object.keys(filterEmptyValues(val)).length === 0;
+    return false;
+  };
+
+  return Object.entries(obj).reduce((acc, [key, val]) => {
+    if (!isEmpty(val)) {
+      acc[key] = isPlainObject(val) ? filterEmptyValues(val) : val;
+    }
+    return acc;
+  }, {} as Record<string, any>);
+}

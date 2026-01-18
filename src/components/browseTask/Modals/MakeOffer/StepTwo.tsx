@@ -1,88 +1,95 @@
 "use client";
+
 import * as React from "react";
-import FormTextArea from "../../../forms/FormTextArea";
-import { FormProvider, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { offerSchema } from "@/schema/offer";
+
+import { baseSchema } from "@/schema/offer";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { setOfferData } from "@/store/slices/task";
-import { FormHelperText } from "@mui/material";
 import { maxLengthChar } from "@/constant";
-import ActionsButtons from "@/components/reusables/ActionButtons";
 
-interface ModalType {
+import { Form } from "@/components/ui/form";
+import ActionsButtons from "@/components/reusables/ActionButtons";
+import FormTextArea from "@/components/forms/FormTextArea";
+
+interface StepTwoProps {
   nextStep: () => void;
   prevStep: () => void;
+  isEdit: boolean;
 }
 
-const schema = offerSchema.pick({ description: true });
+const schema = baseSchema
+  .pick({ description: true })
+  .superRefine((data, ctx) => {
+    if (!data.description?.trim()) {
+      ctx.addIssue({
+        path: ["description"],
+        code: z.ZodIssueCode.custom,
+        message: "Description is required",
+      });
+    }
+  });
+type SchemaType = z.infer<typeof schema>;
 
-type schemaType = z.infer<typeof schema>;
-
-export default function StepTwo({ nextStep, prevStep }: ModalType) {
+export default function StepTwo({ nextStep, prevStep }: StepTwoProps) {
   const dispatch = useAppDispatch();
   const { offer, taskersOffer } = useAppSelector((state) => state.task);
 
-  const methods = useForm<schemaType>({
+  const methods = useForm<SchemaType>({
     defaultValues: {
-      description: offer.description ?? "",
+      description: offer?.description ?? "",
     },
     resolver: zodResolver(schema),
   });
-  const {
-    handleSubmit,
-    watch,
-    setValue,
-    formState: { errors },
-  } = methods;
 
-  const description = watch("description");
+  const { handleSubmit, setValue } = methods;
 
   React.useEffect(() => {
-    if (taskersOffer) {
+    if (taskersOffer?.description) {
       setValue("description", taskersOffer.description);
     }
-  }, [taskersOffer]);
+  }, [taskersOffer, setValue]);
 
-  const remainingChars = maxLengthChar - description.length;
-
-  const onSubmit = (data: schemaType) => {
+  const onSubmit = (data: SchemaType) => {
     dispatch(setOfferData({ ...offer, ...data }));
     nextStep();
   };
+
   return (
-    <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <p className="text-black-2 font-[600] text-2xl">Make Offer</p>
-
-        <p className="text-black-2 text-base font-[600] mt-[35px] ">
-          Why are you the best person for this task?
-        </p>
-        <p className="text-black-2 text-sm font-normal mt-[0px]">
-          Sorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
-          vulputate liber.
-        </p>
-
-        <FormTextArea
-          name="description"
-          placeholder="Write here...."
-          className="mt-3 h-[120px] mb-0"
-        ></FormTextArea>
-        {!errors.description && (
-          <FormHelperText className="form__error text-sm text-dark-grey-2 ">
-            {remainingChars} characters remaining
-          </FormHelperText>
-        )}
+    <Form {...methods}>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col flex-1 h-full"
+      >
+        <div className="flex-1">
+          <div className="mb-6">
+            <p className="text-base font-semibold text-black-2">
+              Why are you the best person for this task?
+            </p>
+            <p className="text-sm text-black-2">
+              Write a short description to help the task poster know why you're
+              a great fit.
+            </p>
+          </div>
+          <div>
+            <FormTextArea
+              name="description"
+              placeholder="Write here...."
+              maxLength={maxLengthChar}
+            />
+          </div>
+        </div>
 
         <ActionsButtons
           type="submit"
           cancelText="Back"
           okText="Next"
-          className="mt-[154px] sm:gap-x-5"
+          className="mt-6"
           handleCancel={prevStep}
         />
       </form>
-    </FormProvider>
+    </Form>
   );
 }

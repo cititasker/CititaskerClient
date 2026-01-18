@@ -1,65 +1,83 @@
 "use client";
-import React from "react";
-import { NumericFormat, NumericFormatProps } from "react-number-format";
-import FormInput from "./FormInput";
+
+import * as React from "react";
+import { useFormContext } from "react-hook-form";
+import { Input } from "@/components/ui/input";
+import {
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { cn } from "@/lib/utils";
+import { LazyNumericFormat } from "./LazyNumericFormat";
 
 interface CurrencyInputProps {
   name: string;
   label?: string;
   placeholder?: string;
-  containerStyle?: any;
-  [key: string]: any;
+  className?: string;
+  disabled?: boolean;
+  required?: boolean;
+  currency?: string;
+  allowNegative?: boolean;
 }
 
-interface CustomProps {
-  onChange: (event: { target: { name: string; value: string } }) => void;
-  name: string;
-}
-
-const NumericFormatCustom = React.forwardRef<NumericFormatProps, CustomProps>(
-  function NumericFormatCustom(props, ref) {
-    const { onChange, ...other } = props;
-    return (
-      <NumericFormat
-        {...other}
-        getInputRef={ref}
-        onValueChange={(values) => {
-          onChange({
-            target: {
-              name: props.name,
-              value: values.value,
-            },
-          });
-        }}
-        thousandSeparator
-        valueIsNumericString
-        prefix="₦ "
-      />
-    );
-  }
-);
-
-const CurrencyInput = ({
+export default function CurrencyInput({
   name,
   label,
-  placeholder,
-  containerStyle,
-  ...rest
-}: CurrencyInputProps) => {
+  placeholder = "Enter amount",
+  className,
+  disabled = false,
+  required = false,
+  currency = "₦",
+  allowNegative = false,
+}: CurrencyInputProps) {
+  const { control, formState } = useFormContext();
+  const error = formState.errors[name];
+
   return (
-    <FormInput
-      variant="outlined"
+    <FormField
       name={name}
-      label={label}
-      placeholder={placeholder}
-      InputProps={{
-        inputComponent: NumericFormatCustom as any,
-        sx: { "& .MuiOutlinedInput-input": { px: "20px" } },
-      }}
-      wrapperStyle={containerStyle}
-      {...rest}
+      control={control}
+      render={({ field }) => (
+        <FormItem className={cn("space-y-1", className)}>
+          {label && (
+            <FormLabel
+              htmlFor={name}
+              className="text-sm font-medium text-text-primary"
+            >
+              {label}
+              {required && <span className="text-error ml-1">*</span>}
+            </FormLabel>
+          )}
+
+          <div className="relative">
+            <LazyNumericFormat
+              value={field.value}
+              onValueChange={({ value }) => field.onChange(value)}
+              thousandSeparator=","
+              allowNegative={allowNegative}
+              valueIsNumericString
+              prefix={`${currency} `}
+              placeholder={`${currency} ${placeholder}`}
+              disabled={disabled}
+              customInput={Input as any}
+              className={cn(
+                "px-4 rounded-xl transition-all duration-200 placeholder:font-normal",
+                "bg-background text-text-primary placeholder:text-text-muted font-medium",
+                "focus:outline-none",
+                "border-border-light hover:border-border-medium",
+                error && "border-error focus:border-error",
+                disabled &&
+                  "opacity-50 cursor-not-allowed bg-background-secondary"
+              )}
+            />
+          </div>
+
+          <FormMessage />
+        </FormItem>
+      )}
     />
   );
-};
-
-export default CurrencyInput;
+}

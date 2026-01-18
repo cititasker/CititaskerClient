@@ -1,74 +1,52 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
+import { useSearchParams } from "next/navigation";
 import BackTo from "../BackTo";
-import PostTaskHeader from "../postTask/PostTaskHeader";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
-import { getUserTaskByIdQuery } from "@/queries/task";
-import { useAppDispatch } from "@/store/hook";
-import { setTaskData } from "@/store/slices/task";
-import { IState, State } from "country-state-city";
+import { useTaskData } from "../poster/post-task/hooks/useTaskData";
+import PostTaskHeader from "../poster/post-task/partials/PostTaskHeader";
+import { getDefaultRedirect } from "@/lib/middleware/guards/route-config";
+import { useAuth } from "@/hooks/useAuth";
+import { ROUTES } from "@/constant";
 
 const PostTaskLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const searchParams = useSearchParams();
-  const { replace } = useRouter();
-  const step = searchParams.get("step") || 1;
-  const { id } = useParams() as any;
-  const dispatch = useAppDispatch();
+  const step = parseInt(searchParams.get("step") || "1");
+  const { role } = useAuth();
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const currentUrl = new URL(window.location.href);
-      currentUrl.searchParams.set("step", `${step}`);
-      replace(`${currentUrl}`);
-    }
-  }, []);
+  const href = role ? getDefaultRedirect(role) : ROUTES.HOME;
 
-  const { data } = useQuery(getUserTaskByIdQuery(id));
-  const task: ITask = data?.data;
+  const { isLoading } = useTaskData();
 
-  useEffect(() => {
-    if (task) {
-      const allStates = State.getStatesOfCountry("NG") as IState[];
-      const state = allStates.find((el) => el.name == task.state);
-      const payload: any = {
-        name: task.name,
-        description: task.description,
-        category_id: task.category,
-        sub_category_id: task.sub_category,
-        location_type: task.location_type,
-        state: {
-          id: state?.isoCode,
-          name: state?.name,
-        },
-        location: task.location,
-        address: task.address,
-        time_frame: task.time_frame,
-        date: task.date,
-        time: task.time,
-        showTimeOfDay: !!task.date,
-        budget: `${task.budget}`,
-      };
-      if (task.images.length) {
-        payload.images = task.images.map((src) => ({ src, new: false }));
-      }
-      dispatch(setTaskData(payload));
-    }
-  }, [task]);
+  if (isLoading) return <PostTaskLoadingScreen />;
 
   return (
-    <div>
-      <header className="pl-[4.5rem] py-1.5 mb-5">
-        <BackTo href="/" />
+    <div className="min-h-screen bg-background">
+      {/* Header with backdrop blur */}
+      <header className="sticky top-0 z-10 bg-background/80 backdrop-blur-sm border-b border-border-light">
+        <div className="px-4 sm:px-6 lg:px-8 py-4">
+          <BackTo href={href} />
+        </div>
       </header>
-      <div className="max-w-[44.75rem] mx-auto px-5">
-        {Number(step) < 5 ? <PostTaskHeader /> : null}
-        {children}
-      </div>
+
+      {/* Main content */}
+      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 max-w-3xl">
+        {Number(step) < 5 && <PostTaskHeader />}
+        <div className="bg-background">{children}</div>
+      </main>
     </div>
   );
 };
+
+// Extracted loading component for better reusability
+const PostTaskLoadingScreen = () => (
+  <div className="min-h-screen bg-background flex items-center justify-center">
+    <div className="text-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+      <p className="text-text-secondary">Loading task data...</p>
+    </div>
+  </div>
+);
 
 export default PostTaskLayout;

@@ -1,50 +1,68 @@
 "use client";
+import { useState } from "react";
 import Image from "next/image";
-import React from "react";
-import FormButton from "../forms/FormButton";
-import { useAppDispatch } from "@/store/hook";
-import { toggleWaitlistModal } from "@/store/slices/general";
+import { Button } from "@/components/ui/button";
+import WaitlistModal from "./WaitlistModal";
 
-const TaskerBanner = () => {
-  const dispatch = useAppDispatch();
+export default function TaskerBanner() {
+  const [showModal, setShowModal] = useState(false);
 
   return (
     <>
-      <div className="container py-[3.25rem] sm:py-[116px]">
-        <div className="flex items-stretch justify-between gap-x-[22px] gap-y-[80px] flex-col xl:flex-row">
-          <div className="transition-all duration-300 p-5 sm:py-[62px] sm:px-[73px] bg-dark-secondary xl:bg-secondary rounded-[1.25rem] sm:rounded-[1.875rem] flex-1">
-            <div className="mb-5 sm:mb-[3.25rem]">
-              <h2 className="text-base sm:text-xl md:text-3xl lg:text-[2.5rem] font-bold text-white mb-2 sm:mb-5">
-              Get Started for Free
-              </h2>
-              <p className="text-white text-xs sm:text-base">
-              Becoming a Tasker is completely free! No hidden charges or subscription fees—just sign up and start earning.
-              </p>
+      <section className="relative overflow-hidden bg-neutral-50">
+        <div className="container-w px-4 sm:px-6 lg:px-8 md:pb-20">
+          <div className="flex flex-col gap-6 lg:flex-row lg:gap-8">
+            {/* Left - CTA Card */}
+            <div className="lg:flex-[3] overflow-hidden rounded-2xl bg-[#3B6A7C] p-8 shadow-xl sm:rounded-3xl sm:p-10 lg:p-12">
+              <div className="flex h-full flex-col justify-between">
+                <div className="space-y-5">
+                  <h2 className="text-2xl font-bold leading-tight text-white sm:text-3xl lg:text-4xl">
+                    Become a Tasker for free
+                  </h2>
+                  <p className="text-base leading-relaxed text-white/90 sm:text-lg">
+                    Turn your skills into income with CitiTasker! Join a trusted
+                    community where you can choose tasks that match your
+                    expertise, work on your terms, and earn up to ₦500,000 a
+                    month. Signing up is easy, secure, and completely free.
+                    Start earning today—your next opportunity is just a click
+                    away!
+                  </p>
+                </div>
+
+                <Button
+                  onClick={() => setShowModal(true)}
+                  size="lg"
+                  className="mt-8 w-fit rounded-full bg-white px-8 text-[#3B6A7C] hover:bg-white/90"
+                >
+                  Join Waitlist
+                </Button>
+              </div>
             </div>
-            <FormButton
-              text="Join Waitlist"
-              handleClick={() => dispatch(toggleWaitlistModal())}
-            />
-          </div>
-          <div className="w-full xl:max-w-[463px] h-[340px] xl:h-[374px] relative bg-secondary rounded-[1.25rem] sm:rounded-[1.875rem]">
-            <div className="rounded-[1.25rem] sm:rounded-[1.875rem] w-full h-full bg-transparent relative overflow-hidden">
-              <span className="inline-block absolute bg-[#F2AF42] top-5 left-5 rounded-full h-[35px] xl:h-[50px] w-[35px] xl:w-[50px]"></span>
-              <span className="inline-block absolute bg-[#FB9596] xl:bg-[#FF7701] -bottom-[30px] -left-[30px] xl:-bottom-[45px] xl:-left-[40px] rounded-full h-[85px] w-[85px] xl:h-[105px] xl:w-[105px]"></span>
-              <span className="inline-block absolute bg-[#C9F07D] top-[50%] left-[30%] translate-y-[-50%] translate-x-[-50%] rounded-full h-[85px] w-[85px] xl:h-[120px] xl:w-[120px]"></span>
-              <span className="inline-block absolute bg-primary -top-[30px] -right-[100px] xl:-right-[110px] rounded-full h-[280px] w-[280px] xl:h-[300px] xl:w-[300px]"></span>
+
+            {/* Right - Image Card */}
+            <div className="relative h-[380px] lg:flex-[2] overflow-hidden rounded-2xl bg-[#3B6A7C] sm:h-[400px] sm:rounded-3xl">
+              {/* Decorative circles */}
+              <div className="absolute left-8 top-8 z-10 h-12 w-12 rounded-full bg-[#F2AF42] sm:h-14 sm:w-14 lg:h-16 lg:w-16" />
+              <div className="absolute -bottom-6 -left-6 z-10 h-20 w-20 rounded-full bg-[#FB9596] sm:h-24 sm:w-24 lg:-bottom-8 lg:-left-8 lg:h-28 lg:w-28" />
+              <div className="absolute left-[28%] top-1/2 z-10 h-28 w-28 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#C9F07D] sm:h-32 sm:w-32 lg:h-36 lg:w-36" />
+              <div className="absolute -right-24 -top-20 z-10 h-64 w-64 rounded-full bg-[#236F8E] sm:-right-28 sm:-top-24 sm:h-72 sm:w-72 lg:-right-32 lg:-top-28 lg:h-80 lg:w-80" />
+
+              {/* Image Container */}
+              <div className="absolute inset-0 z-20">
+                <Image
+                  src="/images/tasker_lady.svg"
+                  alt="Professional tasker ready to work"
+                  fill
+                  className="object-cover object-bottom"
+                  priority
+                />
+              </div>
             </div>
-            <Image
-              src="/images/tasker_lady.svg"
-              alt="banner"
-              width={463}
-              height={374}
-              className="h-[125%] w-full absolute bottom-0  object-cover object-[-250px,0]"
-            />
           </div>
         </div>
-      </div>
+      </section>
+
+      <WaitlistModal open={showModal} onOpenChange={setShowModal} />
     </>
   );
-};
-
-export default TaskerBanner;
+}

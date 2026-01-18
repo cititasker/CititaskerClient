@@ -1,9 +1,9 @@
+// app/layout.tsx
 import type { Metadata } from "next";
-import { SessionProvider } from "next-auth/react";
+import "vanilla-cookieconsent/dist/cookieconsent.css";
 import "./globals.css";
-import Providers from "@/providers";
-import AppProvider from "@/providers/AppProvider";
-// import { dm_sans, lato, montserrat } from "@/fonts";
+import AppProviders from "@/providers/AppProviders";
+import { auth } from "@/auth";
 
 export const metadata: Metadata = {
   title: "CitiTasker",
@@ -17,19 +17,17 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
+
   return (
     <html lang="en">
       <body className="relative">
-        <SessionProvider>
-          <AppProvider>
-            <Providers>{children}</Providers>
-          </AppProvider>
-        </SessionProvider>
+        <AppProviders session={session}>{children}</AppProviders>
       </body>
     </html>
   );

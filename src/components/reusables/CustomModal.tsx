@@ -1,71 +1,220 @@
 "use client";
-import theme from "@/providers/theme";
-import { IconButton, Modal, Paper, SxProps, Theme } from "@mui/material";
-import Icons from "../Icons";
-import dynamic from "next/dynamic";
+import React from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { cn } from "@/utils";
+import FormButton from "@/components/forms/FormButton";
+import SuccessConfetti from "./SuccessConfetti";
 
-const SuccessConfetti = dynamic(() => import("./SuccessConfetti"), {
-  ssr: false,
-});
-
-interface IProps {
-  isOpen: boolean;
-  onClose: () => void;
-  children: React.ReactNode;
-  paperStyle?: SxProps<Theme>;
-  showCloseBtn?: boolean;
-  confetti?: boolean;
-  [key: string]: any;
+interface ModalAction {
+  text: string;
+  onClick: () => void;
+  variant?: "default" | "destructive" | "outline" | "secondary" | "ghost";
+  loading?: boolean;
+  disabled?: boolean;
+  icon?: React.ReactNode;
 }
 
-const style: SxProps<Theme> = {
-  maxWidth: "800px",
-  width: "90%",
-  p: "40px",
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  borderRadius: "12px",
-  outline: "none",
-  maxHeight: "90vh",
-  overflow: "auto",
-};
+interface CustomModalProps extends IModal {
+  title?: string;
+  description?: string;
+  size?: "sm" | "md" | "lg" | "xl" | "full";
+  hideClose?: boolean;
+  confetti?: boolean;
+  disableAutoFocus?: boolean;
 
-const cancel: SxProps<Theme> = {
-  position: "absolute",
-  top: "5px",
-  right: "5px",
+  // Footer actions
+  primaryAction?: ModalAction;
+  secondaryAction?: ModalAction;
+  showCancel?: boolean;
+  cancelText?: string;
+  customFooter?: React.ReactNode;
 
-  [theme.breakpoints.up("sm")]: {
-    top: "24px",
-    right: "24px",
-  },
-};
+  // Styling
+  className?: string;
+  headerClassName?: string;
+  bodyClassName?: string;
+  contentClassName?: string;
+  footerClassName?: string;
+  titleClassName?: string;
+  descriptionClassName?: string;
+}
 
 const CustomModal = ({
   isOpen,
   onClose,
   children,
-  paperStyle,
-  showCloseBtn = true,
+  title,
+  description,
+  size = "md",
+  hideClose = false,
   confetti = false,
+  disableAutoFocus = true,
+
+  // Footer props
+  primaryAction,
+  secondaryAction,
+  showCancel = false,
+  cancelText = "Cancel",
+  customFooter,
+
+  // Styling props
+  titleClassName,
+  descriptionClassName,
+  bodyClassName,
+  headerClassName,
+  contentClassName,
+  footerClassName,
   ...rest
-}: IProps) => {
+}: CustomModalProps) => {
+  const sizeClasses = {
+    sm: "max-w-sm",
+    md: "max-w-lg",
+    lg: "max-w-2xl",
+    xl: "max-w-4xl",
+    full: "max-w-[95vw] max-h-[95vh]",
+  };
+
+  const hasHeader = title || description;
+  const hasFooter =
+    primaryAction || secondaryAction || showCancel || customFooter;
+
   return (
-    <Modal open={isOpen} onClose={onClose} {...rest}>
-      <div>
-        {confetti && <SuccessConfetti />}
-        <Paper sx={{ ...style, ...paperStyle }}>
-          {showCloseBtn && (
-            <IconButton sx={cancel} onClick={onClose}>
-              <Icons.cancel />
-            </IconButton>
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      {confetti && <SuccessConfetti />}
+
+      <DialogContent
+        className={cn(
+          "w-[95vw] bg-background border border-border-light shadow-2xl z-50",
+          "focus:outline-none",
+          sizeClasses[size],
+          "rounded-xl sm:rounded-2xl",
+          "max-h-[90vh] sm:max-h-[85vh] min-h-0",
+          "flex flex-col p-0",
+          contentClassName
+        )}
+        hideClose={hideClose}
+        onOpenAutoFocus={(e) => disableAutoFocus && e.preventDefault()}
+        {...rest}
+      >
+        {/* Sticky Header */}
+        {hasHeader && (
+          <DialogHeader
+            className={cn(
+              "border-b border-light-grey",
+              "px-4 sm:px-6 py-4",
+              "shrink-0",
+              headerClassName
+            )}
+          >
+            <DialogTitle
+              className={cn(
+                "text-lg sm:text-xl font-semibold pr-8",
+                titleClassName
+              )}
+            >
+              {title}
+            </DialogTitle>
+
+            {description && (
+              <DialogDescription
+                className={cn("text-text-secondary", descriptionClassName)}
+              >
+                {description}
+              </DialogDescription>
+            )}
+          </DialogHeader>
+        )}
+
+        {/* SCROLLABLE BODY */}
+        <div
+          className={cn(
+            "flex-1 min-h-0",
+            hasFooter ? "overflow-y-auto no-scrollbar" : "overflow-hidden",
+            "p-5",
+            bodyClassName
           )}
+        >
           {children}
-        </Paper>
-      </div>
-    </Modal>
+        </div>
+
+        {/* Sticky Footer */}
+        {hasFooter && (
+          <div
+            className={cn(
+              "border-t border-light-grey",
+              "px-4 sm:px-6 py-4",
+              "shrink-0",
+              footerClassName
+            )}
+          >
+            {customFooter || (
+              <div className="flex flex-col-reverse sm:flex-row gap-3 sm:justify-end">
+                {showCancel && (
+                  <FormButton
+                    variant="outline"
+                    onClick={onClose}
+                    disabled={
+                      primaryAction?.loading || secondaryAction?.loading
+                    }
+                    className="w-full sm:w-auto min-w-[100px]"
+                  >
+                    {cancelText}
+                  </FormButton>
+                )}
+
+                {secondaryAction && (
+                  <FormButton
+                    variant={secondaryAction.variant || "outline"}
+                    onClick={secondaryAction.onClick}
+                    loading={secondaryAction.loading}
+                    disabled={secondaryAction.disabled}
+                    className="w-full sm:w-auto min-w-[100px]"
+                  >
+                    {secondaryAction.icon && (
+                      <span className="mr-2">{secondaryAction.icon}</span>
+                    )}
+                    {secondaryAction.text}
+                  </FormButton>
+                )}
+
+                {primaryAction && (
+                  <FormButton
+                    variant={primaryAction.variant || "default"}
+                    onClick={primaryAction.onClick}
+                    loading={primaryAction.loading}
+                    disabled={primaryAction.disabled}
+                    className="w-full sm:w-auto min-w-[100px]"
+                  >
+                    {primaryAction.icon && (
+                      <span className="mr-2">{primaryAction.icon}</span>
+                    )}
+                    {primaryAction.text}
+                  </FormButton>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+        {/* Hidden accessibility elements */}
+        {!hasHeader && (
+          <>
+            <VisuallyHidden asChild>
+              <DialogTitle>Modal</DialogTitle>
+            </VisuallyHidden>
+            <VisuallyHidden asChild>
+              <DialogDescription>Modal content</DialogDescription>
+            </VisuallyHidden>
+          </>
+        )}
+      </DialogContent>
+    </Dialog>
   );
 };
 

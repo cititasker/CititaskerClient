@@ -1,101 +1,104 @@
-import { globalStyles } from "@/globalStyles";
-import { cn } from "@/utils";
-import {
-  FormControl,
-  FormHelperText,
-  FormLabel,
-  MenuItem,
-  Select,
-} from "@mui/material";
-import React from "react";
-import { Controller, useFormContext } from "react-hook-form";
+"use client";
 
-interface IProps {
-  options: any[];
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { cn } from "@/lib/utils";
+import { useFormContext } from "react-hook-form";
+import { FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+
+interface FormSelectProps {
+  options: readonly SelectOption[];
   name: string;
   label?: string;
   required?: boolean;
   placeholder?: string;
-  inputLabel?: boolean;
-  sx?: any;
-  multiple?: boolean;
-  labelStyle?: string;
-  [key: string]: any;
+  className?: string;
+  disabled?: boolean;
+  triggerClassName?: string;
+  renderOption?: (option: SelectOption) => React.ReactNode;
 }
 
-const style = {
-  container: {
-    ...globalStyles.input,
-    ".MuiOutlinedInput-root": {
-      border: "none",
-      color: "var(--black)",
-      pr: 0,
-      borderRadius: "8px",
-      fontSize: "16px",
-      overflow: "hidden",
-      height: "48px",
-
-      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-        border: "1px solid",
-        borderColor: "var(--primary)",
-        boxShadow: "none",
-      },
-    },
-  },
-};
-
-const FormSelect = ({
+export default function FormSelect({
   options,
   name,
   label,
-  required,
-  placeholder,
-  inputLabel,
-  multiple,
-  labelStyle,
-}: IProps) => {
-  const {
-    control,
-    formState: { errors: err },
-  } = useFormContext();
-  const errors = err as any;
+  required = false,
+  placeholder = "Select an option",
+  className,
+  disabled = false,
+  renderOption,
+  triggerClassName,
+}: FormSelectProps) {
+  const { control, formState } = useFormContext();
+  const error = formState.errors[name];
 
   return (
-    <FormControl fullWidth sx={style.container}>
-      {label && !inputLabel && (
-        <FormLabel className={cn("label block mb-2", labelStyle)}>
-          {label} {required && <span className="required">*</span>}
-        </FormLabel>
-      )}
-      <Controller
-        name={name}
-        control={control}
-        render={({ field }) => (
+    <FormField
+      name={name}
+      control={control}
+      render={({ field }) => (
+        <FormItem className={cn("space-y-1", className)}>
+          {label && (
+            <FormLabel
+              htmlFor={name}
+              className="text-sm font-medium text-text-primary"
+            >
+              {label}
+              {required && <span className="text-error ml-1">*</span>}
+            </FormLabel>
+          )}
+
           <Select
-            variant="outlined"
-            fullWidth
-            displayEmpty
-            {...field}
-            multiple={multiple}
-            label={inputLabel ? label : null}
+            value={field.value ? String(field.value) : ""}
+            onValueChange={field.onChange}
+            disabled={disabled}
           >
-            <MenuItem value="" disabled>
-              {placeholder}
-            </MenuItem>
-            {options?.map((el) => (
-              <MenuItem key={el.id} value={`${el.id}`}>
-                {el.name}
-              </MenuItem>
-            ))}
+            <SelectTrigger
+              className={cn(
+                "w-full h-12 px-4 rounded-xl border transition-all duration-200",
+                "bg-background text-text-primary",
+                "border-border-light hover:border-border-medium",
+                "focus:outline-none focus:border-ring",
+                "data-[state=open]:border-ring data-[state=open]:ring-0 data-[state=open]:ring-ring/30",
+                error && "border-error focus:border-error",
+                disabled && "cursor-not-allowed",
+                !field.value && "text-text-muted",
+                triggerClassName
+              )}
+            >
+              <SelectValue placeholder={placeholder} />
+            </SelectTrigger>
+
+            <SelectContent className="bg-background border-border-light rounded-xl shadow-lg max-h-60">
+              {options.map((option) =>
+                renderOption ? (
+                  renderOption(option)
+                ) : (
+                  <SelectItem
+                    key={option.id}
+                    value={String(option.id)}
+                    disabled={option.disabled}
+                    className={cn(
+                      "px-4 py-2.5 text-sm text-text-primary cursor-pointer",
+                      "hover:bg-background-secondary focus:bg-primary-50 focus:text-primary",
+                      "disabled:opacity-50 disabled:cursor-not-allowed"
+                    )}
+                  >
+                    {option.name}
+                  </SelectItem>
+                )
+              )}
+            </SelectContent>
           </Select>
-        )}
-      />
 
-      <FormHelperText className="form__error">
-        {errors[name]?.message}
-      </FormHelperText>
-    </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
   );
-};
-
-export default FormSelect;
+}

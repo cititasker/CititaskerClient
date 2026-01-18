@@ -1,67 +1,82 @@
-import {
-  Box,
-  FormControl,
-  MenuItem,
-  Select,
-  SxProps,
-  Theme,
-  Typography,
-} from "@mui/material";
+// DashboardCard.tsx - Enhanced with trends and better design
 import React from "react";
-import Icons from "../Icons";
+import { Card, CardContent } from "@/components/ui/card";
+import { TrendingUp, TrendingDown, Minus } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-const style: Record<string, SxProps<Theme>> = {
-  container: {
-    ".MuiFormControl-root": {
-      ".MuiOutlinedInput-root": {
-        ".MuiSelect-select": {
-          py: "2px",
-        },
-      },
-      ".Mui-focused": {
-        outlined: "none",
-        border: "none",
-      },
-      ".MuiSelect-icon": {
-        width: "14px",
-      },
-    },
+interface DashboardCardProps {
+  title: string;
+  value: string | number;
+  percentage: number;
+  trend?: "up" | "down" | "neutral";
+  icon?: React.ReactNode;
+  className?: string;
+}
+
+const TREND_CONFIGS = {
+  up: {
+    icon: TrendingUp,
+    color: "text-green-600",
+    bgColor: "bg-green-50",
   },
-};
+  down: {
+    icon: TrendingDown,
+    color: "text-red-600",
+    bgColor: "bg-red-50",
+  },
+  neutral: {
+    icon: Minus,
+    color: "text-gray-600",
+    bgColor: "bg-gray-50",
+  },
+} as const;
 
-const DashboardCard = () => {
+export const DashboardCard = ({
+  title,
+  value,
+  percentage,
+  trend = "neutral",
+  icon,
+  className,
+}: DashboardCardProps) => {
+  const trendConfig = TREND_CONFIGS[trend];
+  const TrendIcon = trendConfig.icon;
+
   return (
-    <Box
-      sx={style.container}
-      className="px-[22px] py-[17px] rounded-20 border border-dark-grey h-[144px] flex flex-col justify-between"
+    <Card
+      className={cn(
+        "transition-all duration-200 hover:shadow-md border-border-light",
+        className
+      )}
     >
-      <div className="flex justify-between">
-        <Typography className="text-sm text-black">Completed Task</Typography>
-        <FormControl sx={{ minWidth: 75 }} variant="outlined" size="small">
-          <Select
-            labelId="demo-select-small-label"
-            id="demo-select-small"
-            value={""}
-            onChange={() => {}}
-            IconComponent={Icons.dropdown}
-          >
-            <MenuItem value="">This week</MenuItem>
-            <MenuItem value="month">This month</MenuItem>
-            <MenuItem value="year">This year</MenuItem>
-          </Select>
-        </FormControl>
-      </div>
-      <div className="flex w-full justify-between items-center">
-        <Typography className="text-[2rem] font-semibold text-black">
-          18
-        </Typography>
-        <div className="w-[92px] px-2.5 py-[5px] flex items-center gap-2">
-          <Icons.chartInc />
-          <Typography className="text-sm font-lato">90.78%</Typography>
+      <CardContent className="p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-sm font-medium text-text-secondary uppercase tracking-wide">
+            {title}
+          </h3>
+          {icon && <div className="p-2 bg-primary/10 rounded-lg">{icon}</div>}
         </div>
-      </div>
-    </Box>
+
+        <div className="space-y-2">
+          <div className="text-2xl font-bold text-text-primary">
+            {typeof value === "number" ? value.toLocaleString() : value}
+          </div>
+
+          <div className="flex items-center gap-2">
+            <div
+              className={cn(
+                "flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium",
+                trendConfig.bgColor,
+                trendConfig.color
+              )}
+            >
+              <TrendIcon className="w-3 h-3" />
+              <span>{percentage.toFixed(1)}%</span>
+            </div>
+            <span className="text-xs text-text-muted">vs last period</span>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 };
-
-export default DashboardCard;

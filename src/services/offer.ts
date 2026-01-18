@@ -1,6 +1,7 @@
 import { AxiosError } from "axios";
-import api from "./apiService";
+import { api } from "@/lib/api-client";
 import { offerSchemaType } from "@/schema/offer";
+import { API_ROUTES } from "@/constant";
 
 export function makeOffer(data: offerSchemaType) {
   return api
@@ -35,17 +36,6 @@ export function withdrawOffer(data: any) {
     });
 }
 
-export function replyOffer(data: any) {
-  return api
-    .post(`tasks/reply-offer`, null, { params: data })
-    .then((data) => {
-      return data.data;
-    })
-    .catch((error: AxiosError) => {
-      throw error.response?.data;
-    });
-}
-
 export function getOfferReply(data: any) {
   return api
     .post(`tasks/offer-replies`, null, { params: data })
@@ -59,7 +49,7 @@ export function getOfferReply(data: any) {
 
 export function acceptOffer(data: any) {
   return api
-    .post(`tasks/accept-offer`, data)
+    .post(API_ROUTES.ACCEPT_OFFER, data)
     .then((data) => {
       return data.data;
     })

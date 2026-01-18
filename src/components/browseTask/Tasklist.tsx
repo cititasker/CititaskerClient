@@ -1,17 +1,21 @@
 "use client";
-import { getAllTasksQuery } from "@/queries/task";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import React from "react";
-import TaskCard from "./TaskCard";
+import { useTasksQuery } from "./hooks/useTasksQuery";
+import { ROUTES } from "@/constant";
+import InfiniteTaskList from "../shared/task/InfiniteTaskList";
 
-export default function Tasklist() {
-  const { data } = useSuspenseQuery(getAllTasksQuery());
-  const tasks: ITask[] = data.data.data || [];
+export default function TaskList() {
+  const { tasks, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+    useTasksQuery();
+
   return (
-    <div className="grid overflow-y-auto gap-3 pb-5">
-      {tasks.map((task) => (
-        <TaskCard key={task.id} path="browse-task" item={task} />
-      ))}
-    </div>
+    <InfiniteTaskList
+      tasks={tasks}
+      isLoading={isLoading}
+      fetchNextPage={fetchNextPage}
+      hasNextPage={hasNextPage}
+      isFetchingNextPage={isFetchingNextPage}
+      path={ROUTES.BROWSE_TASK}
+    />
   );
 }

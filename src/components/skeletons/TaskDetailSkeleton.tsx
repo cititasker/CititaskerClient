@@ -1,154 +1,83 @@
-import { Card, Skeleton } from "@mui/material";
+"use client";
+
+import { Skeleton } from "@/components/ui/skeleton";
 import React from "react";
+import Loader from "../reusables/Loading";
 
 const TaskDetailSkeleton = () => {
   return (
-    <Card elevation={0} className="h-full px-[52px] py-5 rounded-[25px] mt-3">
-      <div className="w-full h-[48px] items-center justify-between flex mb-8">
-        <Skeleton animation="wave" variant="text" width={92} height={20} />
-        <div className="flex gap-3 items-center">
-          <Skeleton animation="wave" variant="text" width={67} height={20} />
-          <Skeleton animation="wave" variant="text" width={74} height={20} />
-          <Skeleton animation="wave" variant="text" width={60} height={20} />
-        </div>
-      </div>
-
-      <div className="flex gap-4 flex-row justify-between w-full mb-[48px]">
-        <div className="flex gap-4">
-          <div className="flex flex-col items-center">
-            <Skeleton
-              animation="wave"
-              variant="circular"
-              width={80}
-              height={80}
-              className="mb-2"
-            />
-            <Skeleton
-              animation="wave"
-              variant="text"
-              width={65}
-              height={18}
-              className="mb-1"
-            />
-            <Skeleton animation="wave" variant="text" width={52} height={16} />
+    <>
+      <div className="hidden md:block h-full px-[52px] py-5 rounded-[25px] bg-white">
+        {/* Header Row */}
+        <div className="w-full h-[48px] flex items-center justify-between mb-8">
+          <Skeleton className="w-[92px] h-[20px]" />
+          <div className="flex gap-3 items-center">
+            <Skeleton className="w-[67px] h-[20px]" />
+            <Skeleton className="w-[74px] h-[20px]" />
+            <Skeleton className="w-[60px] h-[20px]" />
           </div>
-          <div className="">
-            <div className="flex gap-2 mb-5">
-              <Skeleton
-                animation="wave"
-                variant="rectangular"
-                width={54}
-                height={20}
-                className="rounded-[40px]"
-              />
-              <Skeleton
-                animation="wave"
-                variant="rectangular"
-                width={70}
-                height={20}
-                className="rounded-[40px]"
-              />
-              <Skeleton
-                animation="wave"
-                variant="rectangular"
-                width={80}
-                height={20}
-                className="rounded-[40px]"
-              />
+        </div>
+
+        {/* Profile and Details */}
+        <div className="flex gap-4 justify-between w-full mb-[48px]">
+          <div className="flex gap-4">
+            <div className="flex flex-col items-center">
+              <Skeleton className="w-[80px] h-[80px] rounded-full mb-2" />
+              <Skeleton className="w-[65px] h-[14px] mb-1" />
+              <Skeleton className="w-[52px] h-[14px]" />
             </div>
-            <Skeleton
-              animation="wave"
-              variant="text"
-              width={205}
-              height={35}
-              className="mb-5"
-            />
-            <div className="flex flex-col gap-3">
-              {Array.from({ length: 3 }).map((_, i) => (
-                <div key={i} className="flex gap-2">
-                  <Skeleton
-                    animation="wave"
-                    variant="circular"
-                    width={20}
-                    height={20}
-                    className="shrink-0"
-                  />
-                  <div className="w-full">
-                    <Skeleton
-                      animation="wave"
-                      variant="text"
-                      width={106}
-                      height={18}
-                    />
-                    <Skeleton
-                      animation="wave"
-                      variant="text"
-                      width={60}
-                      height={14}
-                    />
+            <div>
+              <div className="flex gap-2 mb-5">
+                <Skeleton className="w-[54px] h-[20px] rounded-full" />
+                <Skeleton className="w-[70px] h-[20px] rounded-full" />
+                <Skeleton className="w-[80px] h-[20px] rounded-full" />
+              </div>
+              <Skeleton className="w-[205px] h-[25px] mb-5" />
+              <div className="flex flex-col gap-3">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="flex gap-2">
+                    <Skeleton className="w-[20px] h-[20px] rounded-full shrink-0" />
+                    <div className="w-full space-y-2">
+                      <Skeleton className="w-[106px] h-[14px]" />
+                      <Skeleton className="w-[60px] h-[14px]" />
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-        <div className="mt-5 max-w-[217px] w-full">
-          <Skeleton
-            animation="wave"
-            variant="rounded"
-            width="100%"
-            height={180}
-            className="mb-2"
-          />
-          <Skeleton
-            animation="wave"
-            variant="rounded"
-            width="100%"
-            height={51}
-            className="mt-2 rounded-[10px]"
-          />
-        </div>
-      </div>
 
-      <div className="w-full mb-7">
-        <Skeleton
-          animation="wave"
-          variant="text"
-          width={109}
-          height={30}
-          className="mb-3"
-        />
-        <Skeleton animation="wave" variant="text" width="100%" height={20} />
-        <Skeleton animation="wave" variant="text" width="100%" height={20} />
-        <Skeleton animation="wave" variant="text" width="80%" height={20} />
-        <Skeleton animation="wave" variant="text" width="30%" height={20} />
-      </div>
-      <div className="w-full mb-7">
-        <Skeleton
-          animation="wave"
-          variant="text"
-          width={109}
-          height={30}
-          className="mb-3"
-        />
-        <div className="flex items-center gap-5">
-          <Skeleton
-            animation="wave"
-            variant="rounded"
-            width={100}
-            height={90}
-            className="rounded-[10px]"
-          />
-          <Skeleton
-            animation="wave"
-            variant="rounded"
-            width={100}
-            height={90}
-            className="rounded-[10px]"
-          />
+          {/* Sidebar */}
+          <div className="mt-5 max-w-[180px] w-full">
+            <Skeleton className="w-full h-[150px] mb-2 rounded-md" />
+            <Skeleton className="w-full h-[40px] mt-2 rounded-[10px]" />
+          </div>
+        </div>
+
+        {/* Description Section */}
+        <div className="w-full mb-6">
+          <Skeleton className="w-[109px] h-[20px] mb-3" />
+          <div className="space-y-4">
+            <Skeleton className="w-full h-[14px]" />
+            <Skeleton className="w-full h-[14px]" />
+            <Skeleton className="w-[80%] h-[14px]" />
+            <Skeleton className="w-[30%] h-[14px]" />
+          </div>
+        </div>
+
+        {/* Attachments Section */}
+        <div className="w-full mb-6">
+          <Skeleton className="w-[109px] h-[20px] mb-3" />
+          <div className="flex items-center gap-5">
+            <Skeleton className="w-[100px] h-[90px] rounded-[10px]" />
+            <Skeleton className="w-[100px] h-[90px] rounded-[10px]" />
+          </div>
         </div>
       </div>
-    </Card>
+      <div className="md:hidden">
+        <Loader />
+      </div>
+    </>
   );
 };
 
