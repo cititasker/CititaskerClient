@@ -1,4 +1,3 @@
-// app/cookie-consent.ts
 "use client";
 
 import "vanilla-cookieconsent/dist/cookieconsent.css";
@@ -12,7 +11,7 @@ export function initCookieConsent() {
         readOnly: true,
       },
       analytics: {
-        enabled: false,
+        enabled: true,
       },
     },
 

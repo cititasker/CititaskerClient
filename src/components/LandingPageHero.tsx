@@ -78,7 +78,6 @@ const LandingPageHero: React.FC = () => {
 
   return (
     <section className={STYLES.container}>
-      {/* ✅ Poster Image - Shows immediately while video loads */}
       <img
         src="/images/hero-poster.jpg"
         alt=""

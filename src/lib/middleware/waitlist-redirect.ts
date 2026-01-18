@@ -55,7 +55,7 @@ export function shouldRedirectToWaitlist(pathname: string): boolean {
 
   // Environment check - only redirect in production
   if (WAITLIST_CONFIG.PRODUCTION_ONLY) {
-    const isProduction = process.env.NODE_ENV === "production";
+    const isProduction = process.env.VERCEL_ENV === "production";
 
     if (!isProduction) {
       return false;
@@ -76,6 +76,41 @@ export function shouldRedirectToWaitlist(pathname: string): boolean {
   }
 
   // Don't redirect static assets by file extension
+  const isStaticAsset = WAITLIST_CONFIG.EXCLUDED_EXTENSIONS.some((ext) =>
+    pathname.toLowerCase().endsWith(ext)
+  );
+  if (isStaticAsset) {
+    return false;
+  }
+
+  return true;
+}
+
+/**
+ * Alternative: Use environment variable for more control
+ * Add to .env.production: NEXT_PUBLIC_ENABLE_WAITLIST=true
+ * Add to .env.development: NEXT_PUBLIC_ENABLE_WAITLIST=false
+ */
+export function shouldRedirectToWaitlistWithEnvVar(pathname: string): boolean {
+  // Check environment variable
+  const envEnabled = process.env.NEXT_PUBLIC_ENABLE_WAITLIST === "true";
+
+  if (!WAITLIST_CONFIG.ENABLED || !envEnabled) {
+    return false;
+  }
+
+  // Same checks as above...
+  if (pathname === WAITLIST_CONFIG.WAITLIST_PATH) {
+    return false;
+  }
+
+  const isExcludedPath = WAITLIST_CONFIG.EXCLUDED_PATHS.some((path) =>
+    pathname.startsWith(path)
+  );
+  if (isExcludedPath) {
+    return false;
+  }
+
   const isStaticAsset = WAITLIST_CONFIG.EXCLUDED_EXTENSIONS.some((ext) =>
     pathname.toLowerCase().endsWith(ext)
   );
