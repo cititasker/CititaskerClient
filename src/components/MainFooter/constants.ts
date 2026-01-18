@@ -1,3 +1,4 @@
+import { easeOut } from "framer-motion";
 import { ContactInfo } from "./types";
 
 export const allowedCategoryNames = [
@@ -30,6 +31,6 @@ export const itemVariants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.5, ease: "easeOut" },
+    transition: { duration: 0.5, ease: easeOut },
   },
 };

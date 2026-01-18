@@ -8,6 +8,8 @@ import FAQ from "@/components/waitlist/FAQ";
 import Footer from "@/components/waitlist/Footer";
 import TaskerBanner from "@/components/waitlist/TaskerBanner";
 import { accordionDataWithHTML } from "data";
+import WaitlistModal from "@/components/waitlist/WaitlistModal";
+import { WelcomeModal } from "@/components/waitlist/WelcomeModal";
 
 const CountDownTimer = dynamic(
   () => import("@/components/waitlist/CountDownTimer"),
@@ -26,6 +28,7 @@ export default function WaitlistPage() {
       <FAQ accordionData={accordionDataWithHTML} />
       <TaskerBanner />
       <Footer />
+      <WelcomeModal />
     </main>
   );
 }

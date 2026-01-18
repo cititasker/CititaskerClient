@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, easeOut } from "framer-motion";
 import { HiOutlineChevronRight } from "react-icons/hi";
 import { useTasksQuery } from "@/components/browseTask/hooks/useTasksQuery";
 import { ROUTES } from "@/constant";
@@ -50,7 +50,7 @@ const Recommended: React.FC = () => {
     visible: {
       opacity: 1,
       x: 0,
-      transition: { duration: 0.5, ease: "easeOut" },
+      transition: { duration: 0.5, ease: easeOut },
     },
   };
 
@@ -123,7 +123,7 @@ const Recommended: React.FC = () => {
                 transition={{
                   duration: 0.5,
                   delay: index * 0.1,
-                  ease: "easeOut",
+                  ease: easeOut,
                 }}
                 className="flex-shrink-0"
               >

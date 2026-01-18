@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import HowItWorksListItem from "./HowItWorksListItem";
-import { motion } from "framer-motion";
+import { easeOut, motion } from "framer-motion";
 import SectionHeader from "../reusables/SectionHeader";
 import dynamic from "next/dynamic";
 
@@ -38,7 +38,7 @@ const containerVariants = {
 
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: easeOut } },
 };
 
 const HowItWorks = () => {

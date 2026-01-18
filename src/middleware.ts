@@ -1,13 +1,11 @@
-// middleware.ts
 import { auth } from "@/auth";
 import { NextResponse } from "next/server";
 import {
   getDefaultRedirect,
-  getFallbackRedirect,
   isAuthRoute,
   isPublicRoute,
   isProtectedRoute,
-  isWrongRoleForPublicRoute,
+  getRoleForRoute,
 } from "@/lib/middleware/guards/route-config";
 import {
   shouldRedirectToWaitlist,
@@ -16,69 +14,60 @@ import {
 
 export default auth((req) => {
   const { pathname } = req.nextUrl;
-  const hostname = req.headers.get("host") || "";
   const user = req.auth?.user;
   const role = user?.role?.toLowerCase() as "poster" | "tasker" | undefined;
 
-  // ========================================
-  // TEMPORARY: Production Waitlist Redirect
-  // ========================================
-  // TO REMOVE: Set ENABLED to false in waitlist-redirect.ts
-  // or delete lib/middleware/waitlist-redirect.ts entirely
-  // ========================================
-  if (shouldRedirectToWaitlist(hostname, pathname)) {
+  if (shouldRedirectToWaitlist(pathname)) {
     return NextResponse.redirect(
       new URL(WAITLIST_CONFIG.WAITLIST_PATH, req.url)
     );
   }
 
-  // 0. Homepage handling: redirect authenticated users to their discovery page
+  // 1. Homepage: redirect authenticated users to discovery page
   if (pathname === "/") {
     if (user && role) {
       return NextResponse.redirect(new URL(getDefaultRedirect(role), req.url));
     }
-    // Allow unauthenticated users to access homepage
     return NextResponse.next();
   }
 
-  // 1. Allow public routes (profiles, about, contact, etc.)
+  // 2. Public routes: allow everyone
   if (isPublicRoute(pathname)) {
     return NextResponse.next();
   }
 
-  // 2. Redirect authenticated users away from /auth/* pages
+  // 3. Auth routes: redirect authenticated users away
   if (user && isAuthRoute(pathname)) {
     return NextResponse.redirect(new URL(getDefaultRedirect(role!), req.url));
   }
 
-  // 3. Protect role-prefixed routes (/poster/*, /tasker/*)
+  // 4. Protected routes (/poster/*, /tasker/*): require auth + correct role
   if (isProtectedRoute(pathname)) {
-    // Require authentication
     if (!user) {
       const loginUrl = new URL("/auth/login", req.url);
       loginUrl.searchParams.set("redirect", pathname);
       return NextResponse.redirect(loginUrl);
     }
 
-    // Check if accessing wrong role's routes
     const routeRole = pathname.startsWith("/poster/") ? "poster" : "tasker";
     if (role !== routeRole) {
       return NextResponse.redirect(new URL(getDefaultRedirect(role!), req.url));
     }
   }
 
-  // 4. Handle role-specific routes (discovery pages, task posting/browsing, etc.)
-  if (user && isWrongRoleForPublicRoute(pathname, role!)) {
-    return NextResponse.redirect(new URL(getFallbackRedirect(role!), req.url));
-  }
-
-  // 5. Protect discovery pages - require authentication
-  const discoveryPages = ["/discovery-poster", "/discovery-tasker"];
-  if (discoveryPages.some((page) => pathname.startsWith(page))) {
+  // 5. Role-specific public routes (discovery, post-task, browse-tasks, etc.)
+  const routeRole = getRoleForRoute(pathname);
+  if (routeRole) {
+    // Require authentication for role-specific routes
     if (!user) {
       const loginUrl = new URL("/auth/login", req.url);
       loginUrl.searchParams.set("redirect", pathname);
       return NextResponse.redirect(loginUrl);
+    }
+
+    // Redirect if wrong role accessing route
+    if (role !== routeRole) {
+      return NextResponse.redirect(new URL(getDefaultRedirect(role!), req.url));
     }
   }
 
@@ -86,8 +75,5 @@ export default auth((req) => {
 });
 
 export const config = {
-  matcher: [
-    // Match all routes except static files and Next.js internals
-    "/((?!_next/static|_next/image|favicon.ico).*)",
-  ],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
 };

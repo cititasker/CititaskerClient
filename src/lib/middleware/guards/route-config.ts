@@ -12,7 +12,6 @@ export const ROUTE_CONFIG = {
   ],
 
   // Public routes that anyone can access (no restrictions)
-  // NOTE: "/" is handled separately in middleware
   publicRoutes: [
     "/about",
     "/contact",
@@ -39,14 +38,8 @@ export const ROUTE_CONFIG = {
   // Protected route prefixes (must be logged in)
   protectedPrefixes: ["/poster/", "/tasker/"],
 
-  // Default redirects by role (used for homepage and auth redirects)
+  // Default redirects by role
   defaultRedirects: {
-    poster: "/discovery-poster",
-    tasker: "/discovery-tasker",
-  },
-
-  // Fallback redirects when accessing wrong role's route
-  fallbackRedirects: {
     poster: "/discovery-poster",
     tasker: "/discovery-tasker",
   },
@@ -54,13 +47,8 @@ export const ROUTE_CONFIG = {
 
 type Role = "poster" | "tasker";
 
-// Helper functions
 export function getDefaultRedirect(role: Role): string {
   return ROUTE_CONFIG.defaultRedirects[role];
-}
-
-export function getFallbackRedirect(role: Role): string {
-  return ROUTE_CONFIG.fallbackRedirects[role];
 }
 
 export function isAuthRoute(pathname: string): boolean {
@@ -68,7 +56,7 @@ export function isAuthRoute(pathname: string): boolean {
 }
 
 export function isPublicRoute(pathname: string): boolean {
-  // Exclude homepage from public routes check - it's handled separately
+  // Homepage is handled separately in middleware
   if (pathname === "/") return false;
 
   return ROUTE_CONFIG.publicRoutes.some((route) => pathname.startsWith(route));
@@ -89,18 +77,4 @@ export function getRoleForRoute(pathname: string): Role | null {
     }
   }
   return null;
-}
-
-export function isWrongRoleForPublicRoute(
-  pathname: string,
-  userRole: Role
-): boolean {
-  const routeRole = getRoleForRoute(pathname);
-  return routeRole !== null && routeRole !== userRole;
-}
-
-// New helper to check if discovery pages require authentication
-export function requiresAuthentication(pathname: string): boolean {
-  const discoveryPages = ["/discovery-poster", "/discovery-tasker"];
-  return discoveryPages.some((page) => pathname.startsWith(page));
 }

@@ -137,7 +137,7 @@ const CustomModal = ({
           className={cn(
             "flex-1 min-h-0",
             hasFooter ? "overflow-y-auto no-scrollbar" : "overflow-hidden",
-            "p-4 sm:p-6",
+            "p-5",
             bodyClassName
           )}
         >

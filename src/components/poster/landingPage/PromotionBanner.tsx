@@ -3,7 +3,7 @@ import Image from "next/image";
 import React from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import { motion } from "framer-motion";
+import { motion, easeOut } from "framer-motion";
 import { useAppSelector } from "@/store/hook";
 import { formatCurrency } from "@/utils";
 import CustomArrow from "./CustomArrow";
@@ -54,7 +54,7 @@ const PromotionBanner: React.FC = () => {
   const slideVariants = {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.6, ease: "easeOut" },
+    transition: { duration: 0.6, ease: easeOut },
   };
 
   return (

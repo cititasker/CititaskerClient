@@ -1,5 +1,6 @@
 "use client";
 
+import { hasAnalyticsConsent } from "@/lib/consent/analytics";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useRef, Suspense } from "react";
 
@@ -18,12 +19,26 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
         api_host:
           process.env.NEXT_PUBLIC_POSTHOG_HOST || "https://us.i.posthog.com",
         person_profiles: "identified_only",
+        autocapture: false,
         capture_pageview: false,
         loaded: (ph) => {
+          if (!hasAnalyticsConsent()) {
+            ph.opt_out_capturing();
+            return;
+          }
           ph.capture("$pageview", {
             $current_url: window.location.href,
           });
         },
+      });
+
+      // Listen for consent changes
+      window.addEventListener("cc:onConsent", () => {
+        if (hasAnalyticsConsent()) {
+          posthog.opt_in_capturing();
+        } else {
+          posthog.opt_out_capturing();
+        }
       });
 
       initializedRef.current = true;
@@ -48,7 +63,7 @@ function PostHogPageView() {
   const previousUrlRef = useRef<string | null>(null);
 
   useEffect(() => {
-    if (isDev) return;
+    if (isDev || !hasAnalyticsConsent()) return;
 
     const checkPostHog = () => {
       // @ts-expect-error - posthog is injected on window after dynamic import

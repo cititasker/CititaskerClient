@@ -1,7 +1,7 @@
 "use client";
 import React, { useMemo } from "react";
 import FormButton from "../forms/FormButton";
-import { motion } from "framer-motion";
+import { motion, easeOut } from "framer-motion";
 import { ROUTES } from "@/constant";
 import SectionHeader from "../reusables/SectionHeader";
 import Link from "next/link";
@@ -145,7 +145,7 @@ const PopularTasks: React.FC = () => {
     visible: {
       opacity: 1,
       scale: 1,
-      transition: { duration: 0.5, ease: "easeOut" },
+      transition: { duration: 0.5, ease: easeOut },
     },
   };
 

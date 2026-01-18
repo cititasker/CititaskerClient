@@ -1,5 +1,6 @@
 // app/layout.tsx
 import type { Metadata } from "next";
+import "vanilla-cookieconsent/dist/cookieconsent.css";
 import "./globals.css";
 import AppProviders from "@/providers/AppProviders";
 import { auth } from "@/auth";

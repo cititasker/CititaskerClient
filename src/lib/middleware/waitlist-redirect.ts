@@ -1,4 +1,5 @@
-// TEMPORARY PRODUCTION WAITLIST CONFIGURATION
+// lib/middleware/waitlist-redirect.ts
+// 🚨 TEMPORARY PRODUCTION WAITLIST CONFIGURATION
 // ================================================
 // DELETE THIS FILE WHEN LAUNCHING THE APP
 // ================================================
@@ -8,8 +9,9 @@ export const WAITLIST_CONFIG = {
   // Set to false when ready to launch
   ENABLED: true,
 
-  // Your production domain
-  PRODUCTION_DOMAIN: "cititasker.com",
+  // Only redirect in production environment
+  // Staging, development, and local will NOT redirect
+  PRODUCTION_ONLY: true,
 
   // Waitlist page path
   WAITLIST_PATH: "/waitlist",
@@ -46,23 +48,18 @@ export const WAITLIST_CONFIG = {
   ],
 } as const;
 
-/**
- * Determines if the current request should redirect to waitlist page
- * Only redirects in production environment
- */
-export function shouldRedirectToWaitlist(
-  hostname: string,
-  pathname: string
-): boolean {
-  // Feature flag check - easy toggle
+export function shouldRedirectToWaitlist(pathname: string): boolean {
   if (!WAITLIST_CONFIG.ENABLED) {
     return false;
   }
 
-  // Only redirect on production domain
-  const isProduction = hostname.includes(WAITLIST_CONFIG.PRODUCTION_DOMAIN);
-  if (!isProduction) {
-    return false;
+  // Environment check - only redirect in production
+  if (WAITLIST_CONFIG.PRODUCTION_ONLY) {
+    const isProduction = process.env.NODE_ENV === "production";
+
+    if (!isProduction) {
+      return false;
+    }
   }
 
   // Don't redirect if already on waitlist page

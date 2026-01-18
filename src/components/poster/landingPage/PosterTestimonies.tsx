@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import React from "react";
-import { motion } from "framer-motion";
+import { motion, easeOut } from "framer-motion";
 
 interface PosterTestimoniesProps {
   showHeading?: boolean;
@@ -49,7 +49,7 @@ const PosterTestimonies: React.FC<PosterTestimoniesProps> = ({
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.6, ease: "easeOut" },
+      transition: { duration: 0.6, ease: easeOut },
     },
   };
 
@@ -58,7 +58,7 @@ const PosterTestimonies: React.FC<PosterTestimoniesProps> = ({
     visible: {
       opacity: 1,
       scale: 1,
-      transition: { duration: 0.8, ease: "easeOut" },
+      transition: { duration: 0.8, ease: easeOut },
     },
   };
 

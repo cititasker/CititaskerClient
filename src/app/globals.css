@@ -106,6 +106,20 @@
   --F9F9F9: var(--neutral-50);
   --text-black: var(--text-primary);
   --bg-red-state-color-fill: var(--error-light);
+
+  --cc-bg: #ffffff;
+  --cc-text: #0f172a;
+
+  --cc-btn-primary-bg: rgb(var(--primary));
+  --cc-btn-primary-hover-bg: rgb(var(--primary-600));
+  --cc-btn-primary-hover-border-color: rgb(var(--primary-600));
+  --cc-btn-primary-text: #ffffff;
+
+  --cc-btn-secondary-bg: #e5e7eb;
+  --cc-btn-secondary-text: #111827;
+
+  --cc-toggle-bg-on: rgb(var(--primary));
+  --cc-toggle-bg-off: #cbd5e1;
 }
 
 html,

@@ -1,6 +1,6 @@
 "use client";
 import React, { useRef, useState, useCallback } from "react";
-import { motion, useInView } from "framer-motion";
+import { easeOut, motion, useInView } from "framer-motion";
 import Image from "next/image";
 import SectionHeader from "../reusables/SectionHeader";
 
@@ -109,7 +109,7 @@ const WhyChooseCitiTasker: React.FC = () => {
     visible: {
       opacity: 1,
       x: 0,
-      transition: { duration: 0.6, ease: "easeOut" },
+      transition: { duration: 0.6, ease: easeOut },
     },
   };
 
@@ -118,7 +118,7 @@ const WhyChooseCitiTasker: React.FC = () => {
     visible: {
       opacity: 1,
       scale: 1,
-      transition: { duration: 0.8, ease: "easeOut" },
+      transition: { duration: 0.8, ease: easeOut },
     },
   };
 

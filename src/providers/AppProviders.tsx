@@ -1,11 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { SessionProvider } from "next-auth/react";
-import {
-  QueryClientProvider,
-  HydrationBoundary,
-  QueryClient,
-} from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { Provider as ReduxProvider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -18,6 +14,7 @@ import { SessionSync } from "./SessionSync";
 import Loader from "@/components/reusables/Loading";
 import type { Session } from "next-auth";
 import { makeQueryClient } from "@/constant/queryClient";
+import { CookieConsentProvider } from "./CookieConsentProvider";
 
 interface ErrorBoundaryProps {
   children: React.ReactNode;
@@ -91,6 +88,7 @@ export default function AppProviders({ children, session }: AppProvidersProps) {
             <PersistGate loading={<Loader />} persistor={persistor}>
               <SessionSync />
               <PostHogProvider>
+                <CookieConsentProvider />
                 <NotificationsProvider>
                   <TaskAlertProvider>
                     <SnackbarProvider>

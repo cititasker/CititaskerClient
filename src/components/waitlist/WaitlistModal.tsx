@@ -1,5 +1,4 @@
 "use client";
-import { Sparkles } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -28,6 +27,7 @@ export default function WaitlistModal({
   const handleSuccess = () => {
     showSuccess.openModal();
     onOpenChange(false);
+    localStorage.setItem("welcomeModalClosed", "true");
   };
 
   const tabs = [
@@ -57,7 +57,6 @@ export default function WaitlistModal({
                   CitiTasker
                 </DialogTitle>
                 <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-                  <Sparkles size={12} />
                   Coming Soon
                 </span>
               </div>

@@ -1,6 +1,6 @@
 "use client";
-import React, { useRef } from "react";
-import { motion, useAnimation, useInView } from "framer-motion";
+import React, { useRef, useEffect } from "react";
+import { motion, useAnimation, useInView, easeInOut } from "framer-motion";
 import { cn } from "@/utils";
 
 interface FadeUpProps {
@@ -22,18 +22,12 @@ const FadeUp: React.FC<FadeUpProps> = ({
   const isInView = useInView(ref, { once: true, margin: "-50px" });
   const controls = useAnimation();
 
-  React.useEffect(() => {
-    if (isInView) {
-      controls.start("visible");
-    }
+  useEffect(() => {
+    if (isInView) controls.start("visible");
   }, [isInView, controls]);
 
   const variants = {
-    hidden: {
-      opacity: 0,
-      y: distance,
-      scale: 0.95,
-    },
+    hidden: { opacity: 0, y: distance, scale: 0.95 },
     visible: {
       opacity: 1,
       y: 0,
@@ -41,7 +35,7 @@ const FadeUp: React.FC<FadeUpProps> = ({
       transition: {
         duration,
         delay,
-        ease: [0.25, 0.46, 0.45, 0.94], // Custom easing
+        ease: easeInOut, // ✅ fixed
       },
     },
   };

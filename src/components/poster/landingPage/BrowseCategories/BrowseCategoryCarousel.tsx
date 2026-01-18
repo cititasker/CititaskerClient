@@ -1,7 +1,7 @@
 "use client";
 import React, { useRef, useMemo } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { easeOut, motion } from "framer-motion";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import CustomArrow from "../CustomArrow";
@@ -78,7 +78,7 @@ const BrowseCategoryCarousel: React.FC = () => {
       opacity: 1,
       y: 0,
       scale: 1,
-      transition: { duration: 0.5, ease: "easeOut" },
+      transition: { duration: 0.5, ease: easeOut },
     },
   };
 
