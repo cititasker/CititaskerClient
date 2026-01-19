@@ -45,6 +45,12 @@ export const WelcomeModal = () => {
             Join Waitlist
           </FormButton>
         }
+        onPointerDownOutside={(event: any) => {
+          const target = event.target as HTMLElement;
+          if (target.closest("#cc-main")) {
+            event.preventDefault();
+          }
+        }}
       >
         {/* Hero Image */}
         <div className="relative w-full h-64 sm:h-80 md:h-96">

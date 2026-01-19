@@ -44,6 +44,7 @@ interface CustomModalProps extends IModal {
   footerClassName?: string;
   titleClassName?: string;
   descriptionClassName?: string;
+  [key: string]: any;
 }
 
 const CustomModal = ({
