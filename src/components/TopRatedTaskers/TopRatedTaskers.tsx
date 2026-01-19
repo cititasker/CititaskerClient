@@ -3,6 +3,7 @@ import React, { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { MOCK_TASKERS } from "./mock-taskers";
 import CarouselRow from "./CarouselRow";
+import SectionHeader from "../reusables/SectionHeader";
 
 const TopRatedTaskers: React.FC = () => {
   const [activeCategory] = useState("party");
@@ -21,20 +22,10 @@ const TopRatedTaskers: React.FC = () => {
   const shouldAutoScroll = filteredTaskers.length > minCardsForOverflow;
 
   return (
-    <section className="bg-light-primary-1 py-16 md:py-24">
+    <section className="bg-primary-100 py-16 md:py-24">
       <div className="max-w-[1920px] mx-auto">
         {/* Header */}
-        <motion.div
-          className="text-center mb-8 md:mb-12 px-4"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-text-primary">
-            See some of the top rated Taskers
-          </h2>
-        </motion.div>
+        <SectionHeader title="Top Rated Taskers" />
 
         {/* Category Tabs */}
         {/* <motion.div

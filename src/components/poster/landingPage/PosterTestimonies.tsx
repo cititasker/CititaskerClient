@@ -15,7 +15,7 @@ const STYLES = {
   testimonialCard:
     "lg:col-span-2 relative rounded-3xl overflow-hidden shadow-2xl group cursor-pointer",
   statsCard:
-    "bg-primary rounded-3xl p-6 md:p-8 flex flex-col justify-between shadow-xl hover:shadow-2xl",
+    "bg-primary-500 rounded-3xl p-6 md:p-8 flex flex-col justify-between shadow-xl hover:shadow-2xl",
   testimonialImage: "w-full h-full object-cover scale-105",
   testimonialOverlay:
     "absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent",

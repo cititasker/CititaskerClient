@@ -68,7 +68,7 @@ const LandingPageHero: React.FC = () => {
         />
         <FormButton
           text={HERO_CONTENT.taskerCTA}
-          className="group relative min-w-[200px] bg-gradient-secondary"
+          className="group relative min-w-[200px]"
           href={ROUTES.SIGNUP}
           variant="custom"
         />
