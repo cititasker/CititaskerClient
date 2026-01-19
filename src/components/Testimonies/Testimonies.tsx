@@ -55,11 +55,7 @@ const Testimonies: React.FC = () => {
           <SectionHeader
             title={
               <h2 className="text-white">
-                What Our{" "}
-                <span className="text-transparent bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text">
-                  Happy Customers
-                </span>{" "}
-                Are Saying
+                What Our Happy Customers Are Saying
               </h2>
             }
             className="max-w-[700px] mx-auto w-full"

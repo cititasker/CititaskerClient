@@ -45,18 +45,6 @@ const ICON_MAP: Record<string, string> = {
   Tutor: "📖",
 };
 
-// Color gradients for variety
-const COLOR_GRADIENTS = [
-  "from-primary to-secondary",
-  "from-green-state-color to-primary",
-  "from-yellow-state-color to-red-state-color",
-  "from-secondary to-primary",
-  "from-green-state-color to-secondary",
-  "from-red-state-color to-yellow-state-color",
-  "from-primary to-green-state-color",
-  "from-yellow-state-color to-green-state-color",
-] as const;
-
 const STYLES = {
   container:
     "bg-gradient-to-br from-light-primary-1 via-light-grey to-light-primary-2 relative overflow-hidden",
@@ -68,7 +56,6 @@ interface PopularTask {
   id: number;
   name: string;
   icon: string;
-  color: string;
   href: string;
   isSubcategory: boolean;
 }
@@ -105,7 +92,6 @@ const PopularTasks: React.FC = () => {
             id: subcategory.id,
             name: subcategory.name,
             icon: ICON_MAP[subcategory.name] || "📋",
-            color: COLOR_GRADIENTS[tasks.length % COLOR_GRADIENTS.length],
             href: `${ROUTES.BROWSE_TASK}?sub_category_id=${subcategory.id}`,
             isSubcategory: true,
           });
@@ -121,7 +107,6 @@ const PopularTasks: React.FC = () => {
             id: category.id,
             name: category.name,
             icon: ICON_MAP[category.name] || "📋",
-            color: COLOR_GRADIENTS[tasks.length % COLOR_GRADIENTS.length],
             href: `${ROUTES.BROWSE_TASK}?category_id=${category.id}`,
             isSubcategory: false,
           });
@@ -226,15 +211,10 @@ const PopularTasks: React.FC = () => {
             >
               <Link href={task.href}>
                 <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 border border-light-grey hover:border-primary relative overflow-hidden">
-                  {/* Background Gradient */}
-                  <div
-                    className={`absolute inset-0 bg-gradient-to-br ${task.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}
-                  />
-
                   {/* Content */}
                   <div className="relative z-10 text-center">
                     <div
-                      className={`w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-r ${task.color} flex items-center justify-center text-2xl shadow-lg group-hover:scale-110 transition-transform duration-300`}
+                      className={`w-16 h-16 mx-auto mb-4 rounded-2xl bg-primary-500 flex items-center justify-center text-2xl shadow-lg group-hover:scale-110 transition-transform duration-300`}
                     >
                       {task.icon}
                     </div>

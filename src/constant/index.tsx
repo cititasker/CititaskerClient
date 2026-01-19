@@ -1,4 +1,6 @@
 import Icons from "@/components/Icons";
+import { FaLinkedin, FaSquareFacebook, FaXTwitter } from "react-icons/fa6";
+import { FaInstagramSquare } from "react-icons/fa";
 
 export const maxLengthChar = 200;
 export const connectionFee = 10;
@@ -18,6 +20,20 @@ export enum TASK_STATUS {
   assigned = "assigned",
   completed = "completed",
 }
+
+export const SOCIAL_URLS = {
+  LINKEDIN: "https://www.linkedin.com/company/109437324",
+  INSTAGRAM: "https://www.instagram.com/cititasker",
+  TWITTER: "https://x.com/CitiTasker",
+  FACEBOOK: "https://www.facebook.com/share/1BVD6axaS5/",
+} as const;
+
+export const SOCIAL_LINKS = [
+  { icon: FaLinkedin, href: SOCIAL_URLS.LINKEDIN, label: "LinkedIn" },
+  { icon: FaInstagramSquare, href: SOCIAL_URLS.INSTAGRAM, label: "Instagram" },
+  { icon: FaXTwitter, href: SOCIAL_URLS.TWITTER, label: "Twitter" },
+  { icon: FaSquareFacebook, href: SOCIAL_URLS.FACEBOOK, label: "Facebook" },
+];
 
 export const API_ROUTES = {
   AUTH: {

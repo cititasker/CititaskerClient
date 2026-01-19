@@ -300,32 +300,6 @@ export const legal = [
   },
 ];
 
-import { FaInstagramSquare } from "react-icons/fa";
-import { FaLinkedin, FaSquareFacebook, FaXTwitter } from "react-icons/fa6";
-
-export const socials = [
-  {
-    name: "LinkedIn",
-    icon: FaLinkedin,
-    href: "#",
-  },
-  {
-    name: "Instagram",
-    icon: FaInstagramSquare,
-    href: "#",
-  },
-  {
-    name: "X",
-    icon: FaXTwitter,
-    href: "#",
-  },
-  {
-    name: "Facebook",
-    icon: FaSquareFacebook,
-    href: "#",
-  },
-];
-
 export const statsData = [
   {
     icon: "/icons/users-white.svg",

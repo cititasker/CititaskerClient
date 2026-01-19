@@ -91,7 +91,7 @@ const BenefitsContent = ({
             className="group rounded-xl border border-neutral-200 bg-white p-5 transition-all hover:border-primary/50 hover:shadow-md"
           >
             <div className="flex gap-4">
-              <div className="flex-shrink-0">
+              <div className="flex-shrink-0 hidden sm:inline-block">
                 <ContentCopy />
               </div>
               <div>
@@ -142,27 +142,14 @@ export default function WhyCitiTasker() {
     <section id="why-cititasker" className="relative bg-neutral-50">
       <div className="container-w px-4 sm:px-6 lg:px-8 md:py-20 lg:py-28">
         {/* Header */}
-        <div className="mb-16 text-center">
-          <h2 className="mb-4 text-3xl font-bold sm:text-4xl lg:text-5xl">
+        <div className="mb-6 md:mb-10 text-center">
+          <h2 className="mb-3 text-3xl font-bold sm:text-4xl lg:text-5xl">
             Why Join{" "}
-            <span className="relative inline-block text-primary">
+            <span className="relative inline-block text-gradient-primary">
               CitiTasker?
-              <svg
-                className="absolute -bottom-2 left-0 w-full text-primary/30"
-                viewBox="0 0 200 12"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M2 9c50-4 100-4 196 0"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                  fill="none"
-                  strokeLinecap="round"
-                />
-              </svg>
             </span>
           </h2>
-          <p className="mx-auto max-w-3xl text-lg text-neutral-600">
+          <p className="mx-auto max-w-3xl text-neutral-700">
             The ultimate platform for connecting you with skilled Taskers who
             can help tackle your to-do list.
           </p>
@@ -175,7 +162,7 @@ export default function WhyCitiTasker() {
             defaultValue="poster"
             queryKey="role"
             className="pb-0"
-            listClassName="bg-neutral-50 px-4 py-6 sm:px-8 rounded-none justify-center mb-0"
+            listClassName="bg-neutral-50 px-4 pb-6 sm:px-8 rounded-none justify-center mb-0 gap-3"
             triggerClassName="data-[state=active]:bg-primary data-[state=active]:text-white py-3"
             contentClassName="p-6 sm:p-10"
           />

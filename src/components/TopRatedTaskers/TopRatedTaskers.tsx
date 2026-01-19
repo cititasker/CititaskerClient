@@ -1,11 +1,11 @@
 "use client";
 import React, { useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { CATEGORY_TABS, MOCK_TASKERS } from "./mock-taskers";
+import { MOCK_TASKERS } from "./mock-taskers";
 import CarouselRow from "./CarouselRow";
 
 const TopRatedTaskers: React.FC = () => {
-  const [activeCategory, setActiveCategory] = useState("automobile");
+  const [activeCategory] = useState("party");
 
   // Filter taskers by category
   const filteredTaskers = useMemo(() => {
@@ -37,7 +37,7 @@ const TopRatedTaskers: React.FC = () => {
         </motion.div>
 
         {/* Category Tabs */}
-        <motion.div
+        {/* <motion.div
           className="mb-8 overflow-x-auto scrollbar-hide px-4"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -65,7 +65,7 @@ const TopRatedTaskers: React.FC = () => {
               </button>
             ))}
           </div>
-        </motion.div>
+        </motion.div> */}
 
         {/* Conditional Carousel Rendering */}
         <motion.div

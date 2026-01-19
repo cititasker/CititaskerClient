@@ -8,16 +8,15 @@ interface PosterTestimoniesProps {
 }
 
 const STYLES = {
-  container: "max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-20",
+  container: "container-w mx-auto px-4 md:px-8 pb-16 md:pb-24",
   header:
     "text-3xl md:text-4xl lg:text-5xl font-bold text-text-primary text-center max-w-2xl mx-auto mb-16",
   grid: "grid lg:grid-cols-3 gap-6 min-h-[400px]",
   testimonialCard:
     "lg:col-span-2 relative rounded-3xl overflow-hidden shadow-2xl group cursor-pointer",
   statsCard:
-    "bg-gradient-secondary rounded-3xl p-6 md:p-8 flex flex-col justify-between shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1",
-  testimonialImage:
-    "w-full h-full object-cover transition-transform duration-700 group-hover:scale-105",
+    "bg-primary rounded-3xl p-6 md:p-8 flex flex-col justify-between shadow-xl hover:shadow-2xl",
+  testimonialImage: "w-full h-full object-cover scale-105",
   testimonialOverlay:
     "absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent",
   testimonialContent:
@@ -89,7 +88,6 @@ const PosterTestimonies: React.FC<PosterTestimoniesProps> = ({
         <motion.div
           className={STYLES.testimonialCard}
           variants={testimonialVariants}
-          whileHover={{ scale: 1.02 }}
           transition={{ type: "spring", stiffness: 300 }}
         >
           <Image
@@ -124,16 +122,12 @@ const PosterTestimonies: React.FC<PosterTestimoniesProps> = ({
               - Verified CitiTasker Customer
             </motion.p>
           </div>
-
-          {/* Glow effect on hover */}
-          <div className="absolute inset-0 bg-gradient-primary opacity-0 group-hover:opacity-20 transition-opacity duration-300 rounded-3xl" />
         </motion.div>
 
         {/* Stats Card */}
         <motion.div
           className={STYLES.statsCard}
           variants={cardVariants}
-          whileHover={{ scale: 1.05, rotate: 1 }}
           transition={{ type: "spring", stiffness: 300 }}
         >
           <div className="relative z-10 h-full flex flex-col">

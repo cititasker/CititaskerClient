@@ -1,6 +1,6 @@
 "use client";
 import React, { useRef, useState, useCallback } from "react";
-import { easeOut, motion, useInView } from "framer-motion";
+import { easeInOut, easeOut, motion, useInView } from "framer-motion";
 import Image from "next/image";
 import SectionHeader from "../reusables/SectionHeader";
 
@@ -12,7 +12,6 @@ const FEATURES = [
     description:
       "Pay easily with peace of mind. We hold payments secure in CitiTasker escrow until task completion and your 100% satisfaction.",
     image: "/images/wcu-1.svg",
-    gradient: "from-emerald-500 to-teal-600",
   },
   {
     id: 2,
@@ -20,7 +19,6 @@ const FEATURES = [
     description:
       "CitiTasker insurance covers Taskers' liability to third parties for personal injury or property damage during task activities.",
     image: "/images/wcu-2.svg",
-    gradient: "from-blue-500 to-cyan-600",
   },
   {
     id: 3,
@@ -28,7 +26,6 @@ const FEATURES = [
     description:
       "Our Help Centre and dedicated support specialists are available around the clock to help you navigate and maximize our platform.",
     image: "/images/wcu-3.svg",
-    gradient: "from-purple-500 to-pink-600",
   },
   {
     id: 4,
@@ -36,7 +33,6 @@ const FEATURES = [
     description:
       "Every Tasker undergoes thorough verification including background checks and skill validation to ensure reliability and trustworthiness.",
     image: "/images/wcu-4.svg",
-    gradient: "from-orange-500 to-red-600",
   },
 ] as const;
 
@@ -44,7 +40,7 @@ const STYLES = {
   container:
     "relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 overflow-hidden",
   content: "relative z-10 container-w mx-auto px-4 md:px-8 py-16 md:py-24",
-  grid: "grid lg:grid-cols-2 gap-12 lg:gap-16 items-center",
+  grid: "grid lg:grid-cols-2 gap-12 lg:gap-16",
   featuresList: "space-y-6",
   featureItem: "group cursor-pointer transition-all duration-500 ease-out",
   featureContent:
@@ -55,7 +51,7 @@ const STYLES = {
   featureTitle: "text-xl font-semibold mb-2 transition-colors duration-300",
   featureDesc: "text-base leading-relaxed transition-colors duration-300",
   imageContainer:
-    "relative h-96 lg:h-[500px] rounded-3xl overflow-hidden shadow-2xl",
+    "relative aspect-square rounded-3xl overflow-hidden shadow-2xl",
   imageWrapper: "absolute inset-0 transition-all duration-700 ease-in-out",
 } as const;
 
@@ -170,14 +166,14 @@ const WhyChooseCitiTasker: React.FC = () => {
                   <div
                     className={`${STYLES.featureContent} ${
                       isActive
-                        ? "bg-white shadow-xl border-l-4 border-blue-500"
+                        ? "bg-white shadow-xl"
                         : "bg-white/60 hover:bg-white/80 shadow-md hover:shadow-lg"
                     }`}
                   >
                     <div
-                      className={`${STYLES.featureIcon} bg-gradient-to-r ${
-                        feature.gradient
-                      } ${isActive ? "ring-4 ring-blue-100" : ""}`}
+                      className={`bg-primary-500 ${STYLES.featureIcon} ${
+                        isActive ? "ring-4 ring-blue-100" : ""
+                      }`}
                     >
                       {index + 1}
                     </div>
@@ -185,7 +181,7 @@ const WhyChooseCitiTasker: React.FC = () => {
                       <h3
                         className={`${STYLES.featureTitle} ${
                           isActive
-                            ? "text-blue-600"
+                            ? "text-primary-500"
                             : "text-slate-700 group-hover:text-slate-900"
                         }`}
                       >
@@ -218,12 +214,11 @@ const WhyChooseCitiTasker: React.FC = () => {
                 className={STYLES.imageWrapper}
                 animate={{
                   opacity: activeIndex === index ? 1 : 0,
-                  scale: activeIndex === index ? 1 : 0.95,
                   zIndex: activeIndex === index ? 10 : 1,
                 }}
                 transition={{
                   duration: 0.6,
-                  ease: "easeInOut",
+                  ease: easeInOut,
                 }}
               >
                 <Image

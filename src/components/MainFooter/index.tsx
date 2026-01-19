@@ -2,7 +2,7 @@
 import Link from "next/link";
 import React, { useMemo } from "react";
 import { motion } from "framer-motion";
-import { company, explore, legal, socials } from "@/../data";
+import { company, explore, legal } from "@/../data";
 import {
   allowedCategoryNames,
   containerVariants,
@@ -14,7 +14,7 @@ import { FooterSection } from "./components/FooterSection";
 import { ContactSection } from "./components/ContactSection";
 import { useGetCategories } from "@/services/general/index.hook";
 import { capitalize } from "@/utils";
-import { ROUTES } from "@/constant";
+import { ROUTES, SOCIAL_LINKS } from "@/constant";
 import BrandLogo from "../reusables/BrandLogo";
 import { BRAND_LOGO_WHITE } from "@/constant/images";
 
@@ -75,7 +75,7 @@ const MainFooter: React.FC = () => {
 
                 {/* Social Links */}
                 <div className="flex gap-4 pt-4">
-                  {socials.map((social, index) => (
+                  {SOCIAL_LINKS.map((social, index) => (
                     <motion.a
                       key={index}
                       href={social.href}

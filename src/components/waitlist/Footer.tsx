@@ -1,12 +1,5 @@
 "use client";
-import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
-
-const SOCIAL_LINKS = [
-  { icon: Linkedin, href: "#", label: "LinkedIn" },
-  { icon: Instagram, href: "#", label: "Instagram" },
-  { icon: Twitter, href: "#", label: "Twitter" },
-  { icon: Facebook, href: "#", label: "Facebook" },
-];
+import { SOCIAL_LINKS } from "@/constant";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
