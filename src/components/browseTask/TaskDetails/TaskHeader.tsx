@@ -22,6 +22,7 @@ export const TaskHeader = ({
       <div className="flex items-center justify-between h-16 px-4 sm:px-8">
         <Link
           href={back}
+          scroll={false}
           className="inline-flex items-center gap-2 text-primary hover:text-primary-600 transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />

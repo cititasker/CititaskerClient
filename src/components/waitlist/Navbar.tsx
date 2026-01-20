@@ -9,7 +9,6 @@ import {
   Drawer,
   DrawerContent,
   DrawerDescription,
-  DrawerHeader,
   DrawerTitle,
 } from "../ui/drawer";
 import { VisuallyHidden } from "../ui/visually-hidden";
@@ -26,12 +25,14 @@ export default function Navbar() {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    setActiveHash(window.location.hash || "#home");
+    const updateHash = () => {
+      setActiveHash(window.location.hash || "#home");
+    };
 
-    const handleHashChange = () => setActiveHash(window.location.hash);
-    window.addEventListener("hashchange", handleHashChange);
+    updateHash();
 
-    return () => window.removeEventListener("hashchange", handleHashChange);
+    window.addEventListener("hashchange", updateHash);
+    return () => window.removeEventListener("hashchange", updateHash);
   }, []);
 
   const handleNavClick = useCallback(() => {
@@ -56,6 +57,10 @@ export default function Navbar() {
                 <Link
                   key={href}
                   href={href}
+                  onClick={() => {
+                    setActiveHash(href);
+                    setIsOpen(false);
+                  }}
                   className={`relative text-sm font-medium transition-colors hover:text-primary ${
                     activeHash === href
                       ? "text-primary after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full after:bg-primary"

@@ -1,3 +1,5 @@
+// browse-task/[id]/page.tsx
+
 import TaskDetails from "@/components/browseTask/TaskDetails";
 import { getSingleTask } from "@/services/task";
 import { API_ROUTES } from "@/constant";
