@@ -46,8 +46,7 @@ const ICON_MAP: Record<string, string> = {
 };
 
 const STYLES = {
-  container:
-    "bg-gradient-to-br from-light-primary-1 via-light-grey to-light-primary-2 relative overflow-hidden",
+  container: "bg-primary-50 relative overflow-hidden",
   content: "max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-20",
   grid: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12",
 } as const;

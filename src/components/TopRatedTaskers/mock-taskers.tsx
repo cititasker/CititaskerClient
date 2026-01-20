@@ -34,7 +34,7 @@ export const MOCK_TASKERS: Tasker[] = [
     rating: 4.8,
     reviewCount: 312,
     price: 15000,
-    image: "/images/taskers/tasker_2.svg",
+    image: "/images/taskers/tasker_1.jpg",
     categoryId: "plumbing",
   },
   {
@@ -44,7 +44,7 @@ export const MOCK_TASKERS: Tasker[] = [
     rating: 4.9,
     reviewCount: 428,
     price: 18000,
-    image: "/images/taskers/tasker_4.svg",
+    image: "/images/taskers/tasker_2.jpg",
     categoryId: "electrical",
   },
   {
@@ -54,7 +54,7 @@ export const MOCK_TASKERS: Tasker[] = [
     rating: 4.7,
     reviewCount: 265,
     price: 25000,
-    image: "/images/taskers/tasker_3.svg",
+    image: "/images/taskers/tasker_3.jpg",
     categoryId: "interior-design",
   },
   {
@@ -64,7 +64,7 @@ export const MOCK_TASKERS: Tasker[] = [
     rating: 4.6,
     reviewCount: 198,
     price: 14000,
-    image: "/images/taskers/tasker_4.svg",
+    image: "/images/taskers/tasker_4.jpg",
     categoryId: "carpentry",
   },
   {
@@ -74,7 +74,7 @@ export const MOCK_TASKERS: Tasker[] = [
     rating: 4.8,
     reviewCount: 354,
     price: 10000,
-    image: "/images/taskers/tasker_2.svg",
+    image: "/images/taskers/tasker_5.jpg",
     categoryId: "cleaning",
   },
   {
@@ -84,7 +84,7 @@ export const MOCK_TASKERS: Tasker[] = [
     rating: 4.9,
     reviewCount: 417,
     price: 40000,
-    image: "/images/taskers/tasker_4.svg",
+    image: "/images/taskers/tasker_6.jpg",
     categoryId: "event-management",
   },
   {
@@ -94,7 +94,7 @@ export const MOCK_TASKERS: Tasker[] = [
     rating: 5.0,
     reviewCount: 512,
     price: 20000,
-    image: "/images/taskers/tasker_1.svg",
+    image: "/images/taskers/tasker_7.jpg",
     categoryId: "beauty",
   },
   {
@@ -104,7 +104,7 @@ export const MOCK_TASKERS: Tasker[] = [
     rating: 4.6,
     reviewCount: 287,
     price: 7000,
-    image: "/images/taskers/tasker_3.svg",
+    image: "/images/taskers/tasker_8.jpg",
     categoryId: "delivery",
   },
   {
@@ -114,7 +114,7 @@ export const MOCK_TASKERS: Tasker[] = [
     rating: 4.8,
     reviewCount: 339,
     price: 22000,
-    image: "/images/taskers/tasker_1.svg",
+    image: "/images/taskers/tasker_9.jpg",
     categoryId: "hvac",
   },
   {
@@ -124,7 +124,7 @@ export const MOCK_TASKERS: Tasker[] = [
     rating: 4.7,
     reviewCount: 301,
     price: 20000,
-    image: "/images/taskers/tasker_2.svg",
+    image: "/images/taskers/tasker_10.jpg",
     categoryId: "automobile",
   },
   {
@@ -134,7 +134,7 @@ export const MOCK_TASKERS: Tasker[] = [
     rating: 4.6,
     reviewCount: 224,
     price: 8000,
-    image: "/images/taskers/tasker_3.svg",
+    image: "/images/taskers/tasker_11.jpg",
     categoryId: "laundry",
   },
   {
@@ -144,7 +144,7 @@ export const MOCK_TASKERS: Tasker[] = [
     rating: 4.8,
     reviewCount: 276,
     price: 18000,
-    image: "/images/taskers/tasker_4.svg",
+    image: "/images/taskers/tasker_12.jpg",
     categoryId: "painting",
   },
   {
@@ -154,7 +154,7 @@ export const MOCK_TASKERS: Tasker[] = [
     rating: 4.9,
     reviewCount: 361,
     price: 30000,
-    image: "/images/taskers/tasker_1.svg",
+    image: "/images/taskers/tasker_13.jpg",
     categoryId: "catering",
   },
   {
@@ -164,7 +164,7 @@ export const MOCK_TASKERS: Tasker[] = [
     rating: 4.7,
     reviewCount: 244,
     price: 25000,
-    image: "/images/taskers/tasker_2.svg",
+    image: "/images/taskers/tasker_14.jpg",
     categoryId: "security-installation",
   },
   {
@@ -174,17 +174,7 @@ export const MOCK_TASKERS: Tasker[] = [
     rating: 4.9,
     reviewCount: 402,
     price: 12000,
-    image: "/images/taskers/tasker_3.svg",
+    image: "/images/taskers/tasker_15.jpg",
     categoryId: "childcare",
-  },
-  {
-    id: "16",
-    name: "Ahmed Sule",
-    profession: "Moving & Home Relocation Specialist",
-    rating: 4.6,
-    reviewCount: 219,
-    price: 35000,
-    image: "/images/taskers/tasker_4.svg",
-    categoryId: "moving",
   },
 ];

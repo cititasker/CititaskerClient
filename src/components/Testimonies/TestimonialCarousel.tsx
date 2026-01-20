@@ -1,65 +1,44 @@
 "use client";
-import React from "react";
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
-import TestimonialCard from "./TestimonialCard";
 
-const responsive = {
-  superLargeDesktop: {
-    // the naming can be any, depends on you.
-    breakpoint: { max: 4000, min: 3000 },
-    items: 5,
-  },
-  desktop: {
-    breakpoint: { max: 3000, min: 1024 },
-    items: 3,
-  },
-  tablet: {
-    breakpoint: { max: 1024, min: 464 },
-    items: 2,
-  },
-  mobile: {
-    breakpoint: { max: 600, min: 0 },
-    items: 1,
-  },
-};
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, FreeMode } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/free-mode";
+
+import TestimonialCard from "./TestimonialCard";
+import { testimonials } from "./constant";
 
 const TestimonialCarousel = () => {
   return (
-    <div>
-      <Carousel
-        swipeable={true}
-        responsive={responsive}
-        ssr={true} // means to render carousel on server-side.
-        additionalTransfrom={0}
-        arrows={false}
-        autoPlay
-        autoPlaySpeed={10000}
-        centerMode={false}
-        className=""
-        containerClass="container-w-with-dots"
-        customTransition="all 8s linear"
-        dotListClass=""
-        draggable
-        focusOnSelect={false}
-        infinite
-        itemClass="px-[0.375rem] sm:px-[1.25rem]"
-        keyBoardControl
-        minimumTouchDrag={80}
-        pauseOnHover
-        renderArrowsWhenDisabled={false}
-        renderButtonGroupOutside={false}
-        renderDotsOutside={false}
+    <section className="w-full overflow-hidden">
+      <Swiper
+        modules={[Autoplay, FreeMode]}
+        loop
+        freeMode={{
+          enabled: true,
+          momentum: false,
+        }}
+        autoplay={{
+          delay: 0,
+          disableOnInteraction: false,
+        }}
+        speed={7000}
+        grabCursor
+        slidesPerView="auto"
+        spaceBetween={24}
+        className="!overflow-visible"
       >
-        <TestimonialCard />
-        <TestimonialCard />
-        <TestimonialCard />
-        <TestimonialCard />
-        <TestimonialCard />
-        <TestimonialCard />
-        <TestimonialCard />
-      </Carousel>
-    </div>
+        {testimonials.map((testimonial, index) => (
+          <SwiperSlide
+            key={index}
+            className="!h-auto flex justify-stretch"
+            style={{ width: "400px" }}
+          >
+            <TestimonialCard {...testimonial} />
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </section>
   );
 };
 

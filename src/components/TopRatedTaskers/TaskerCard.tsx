@@ -1,12 +1,13 @@
 import Image from "next/image";
 import React from "react";
 import { Tasker } from "./tasker.types";
+import { formatCurrency } from "@/utils";
 
 const TaskerCard: React.FC<{ tasker: Tasker }> = ({ tasker }) => {
   return (
-    <div className="flex-shrink-0 w-64 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden group cursor-pointer">
+    <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden group cursor-pointer">
       <div className="p-4 flex items-center gap-3">
-        <div className="relative w-16 h-16 rounded-full overflow-hidden flex-shrink-0 ring-2 ring-primary/10 group-hover:ring-primary/30 transition-all">
+        <div className="relative w-16 h-16 rounded-md overflow-hidden flex-shrink-0 ring-2 ring-primary/10 group-hover:ring-primary/30 transition-all">
           <Image
             src={tasker.image}
             alt={tasker.name}
@@ -16,7 +17,7 @@ const TaskerCard: React.FC<{ tasker: Tasker }> = ({ tasker }) => {
           />
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-text-black truncate group-hover:text-primary transition-colors">
+          <h3 className="font-semibold text-lg truncate group-hover:text-primary transition-colors">
             {tasker.name}
           </h3>
           <p className="text-sm text-dark-grey truncate">{tasker.profession}</p>
@@ -31,7 +32,7 @@ const TaskerCard: React.FC<{ tasker: Tasker }> = ({ tasker }) => {
           <span className="text-xs text-dark-grey">({tasker.reviewCount})</span>
         </div>
         <div className="font-semibold text-text-black">
-          ₦{tasker.price.toLocaleString()}
+          {formatCurrency({ value: tasker.price })}
         </div>
       </div>
     </div>

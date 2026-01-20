@@ -35,7 +35,7 @@ const STATS = [
 ] as const;
 
 const STYLES = {
-  container: "bg-primary relative overflow-hidden",
+  container: "bg-primary-500 relative overflow-hidden",
   content: "max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-20",
   grid: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12",
   statCard: "text-center group cursor-pointer",

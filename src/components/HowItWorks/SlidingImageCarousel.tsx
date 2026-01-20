@@ -35,13 +35,10 @@ const SlidingImageCarousel = () => {
 
   return (
     <div
-      className="relative h-[20rem] sm:h-[583px] w-full overflow-hidden"
+      className="relative h-[400px] sm:h-[583px] w-full overflow-hidden"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      {/* Background Layer */}
-      {/* <div className="h-full w-full -rotate-[8deg] sm:-rotate-[10deg] bg-light-primary-2 rounded-[0.875rem] sm:rounded-[1.625rem]" /> */}
-
       {/* Image Stack */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[85%] sm:w-[90%] max-w-[507px] mx-auto h-full rounded-[0.875rem] sm:rounded-[1.625rem] ">
         {imagesData.map((img, index) => {
@@ -82,7 +79,7 @@ const SlidingImageCarousel = () => {
                       alt=""
                       width={507}
                       height={583}
-                      className="w-[80%] sm:w-full mx-auto h-full object-cover rounded-[0.875rem] sm:rounded-[1.625rem]"
+                      className="w-[95%] sm:w-full mx-auto h-full object-cover rounded-[0.875rem] sm:rounded-[1.625rem]"
                     />
                   </motion.div>
                 )}

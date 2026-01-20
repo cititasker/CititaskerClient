@@ -1,43 +1,48 @@
 "use client";
+
 import Image from "next/image";
-import React from "react";
 import { FaStar } from "react-icons/fa6";
 
-const TestimonialCard = () => {
+type TestimonialCardProps = {
+  message: string;
+  name: string;
+  image: string;
+  rating: number;
+};
+
+const TestimonialCard = ({
+  message,
+  name,
+  image,
+  rating,
+}: TestimonialCardProps) => {
   return (
-    <div className="p-4 sm:px-5 sm:py-[2.5rem] rounded-lg sm:rounded-[1.25rem] bg-white">
-      <div className="flex flex-col">
-        <p className="text-[14px] sm:text-base font-medium font-lato text-dark-secondary leading-normal">
-          I needed help with moving furniture on short notice, and CitiTasker
-          came through. The Tasker was professional, punctual, and handled
-          everything with care. Highly recommend!
-        </p>
-        <div className="mt-[0.875rem] sm:mt-[3.125rem]">
-          <div className="flex items-center gap-1 sm:gap-x-5 mb-1.5 sm:mb-5">
-            <Image
-              src="/images/testimonial.svg"
-              alt=""
-              width={52}
-              height={52}
-              className="rounded-full object-contain w-[2rem] sm:w-[3.25rem] h-[2rem] sm:h-[3.25rem] shrink-0"
-            />
-            <div>
-              <p className="text-xs sm:text-xl font-medium font-lato mb-[3px] sm:mb-2.5">
-                Theresa Odunayo
-              </p>
-              <span className="block text-[0.625rem] sm:text-sm font-lato font-medium">
-                Manager Buz Bank
-              </span>
+    <article className="h-full rounded-xl bg-white p-4 sm:p-6 shadow-sm flex flex-col justify-between">
+      <p className="text-sm sm:text-base font-medium text-dark-secondary leading-relaxed">
+        {message}
+      </p>
+
+      <div className="mt-6">
+        <div className="flex items-center gap-4 mb-4">
+          <Image
+            src={image}
+            alt={name}
+            width={54}
+            height={54}
+            className="rounded-full object-cover w-14 h-14 shrink-0"
+          />
+
+          <div>
+            <p className="text-sm sm:text-lg font-semibold">{name}</p>
+            <div className="flex gap-1">
+              {Array.from({ length: rating }).map((_, i) => (
+                <FaStar key={i} className="text-[#f2af41] text-sm sm:text-lg" />
+              ))}
             </div>
-          </div>
-          <div className="flex gap-2">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <FaStar key={i} className="text-[#f2af41] text-xs sm:text-2xl" />
-            ))}
           </div>
         </div>
       </div>
-    </div>
+    </article>
   );
 };
 

@@ -17,7 +17,8 @@ export const ROUTE_CONFIG = {
     "/contact",
     "/legal",
     "/poster-profile",
-    "/tasker-profile",
+    "/how-it-works-poster",
+    "/how-it-works-tasker",
     "/waitlist",
   ],
 
@@ -64,13 +65,13 @@ export function isPublicRoute(pathname: string): boolean {
 
 export function isProtectedRoute(pathname: string): boolean {
   return ROUTE_CONFIG.protectedPrefixes.some((prefix) =>
-    pathname.startsWith(prefix)
+    pathname.startsWith(prefix),
   );
 }
 
 export function getRoleForRoute(pathname: string): Role | null {
   for (const [role, routes] of Object.entries(
-    ROUTE_CONFIG.roleSpecificPublic
+    ROUTE_CONFIG.roleSpecificPublic,
   )) {
     if (routes.some((route) => pathname.startsWith(route))) {
       return role as Role;
