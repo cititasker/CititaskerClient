@@ -46,7 +46,6 @@ export default function WaitlistModal({
   return (
     <>
       {/* Main Waitlist Form Modal */}
-
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="max-w-2xl p-0">
           <div className="p-6 sm:p-8">

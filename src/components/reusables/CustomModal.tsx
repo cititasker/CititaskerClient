@@ -92,13 +92,12 @@ const CustomModal = ({
 
       <DialogContent
         className={cn(
-          "w-[95vw] bg-background border border-border-light shadow-2xl z-50",
+          "bg-background border border-border-light shadow-2xl z-50",
           "focus:outline-none",
           sizeClasses[size],
-          "rounded-xl sm:rounded-2xl",
           "max-h-[90vh] sm:max-h-[85vh] min-h-0",
           "flex flex-col p-0",
-          contentClassName
+          contentClassName,
         )}
         hideClose={hideClose}
         onOpenAutoFocus={(e) => disableAutoFocus && e.preventDefault()}
@@ -111,13 +110,13 @@ const CustomModal = ({
               "border-b border-light-grey",
               "px-4 sm:px-6 py-4",
               "shrink-0",
-              headerClassName
+              headerClassName,
             )}
           >
             <DialogTitle
               className={cn(
                 "text-lg sm:text-xl font-semibold pr-8",
-                titleClassName
+                titleClassName,
               )}
             >
               {title}
@@ -139,7 +138,7 @@ const CustomModal = ({
             "flex-1 min-h-0",
             hasFooter ? "overflow-y-auto no-scrollbar" : "overflow-hidden",
             "p-5",
-            bodyClassName
+            bodyClassName,
           )}
         >
           {children}
@@ -152,7 +151,7 @@ const CustomModal = ({
               "border-t border-light-grey",
               "px-4 sm:px-6 py-4",
               "shrink-0",
-              footerClassName
+              footerClassName,
             )}
           >
             {customFooter || (

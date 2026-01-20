@@ -14,8 +14,6 @@ const HERO_CONTENT = {
 const STYLES = {
   container: "relative w-full min-h-[100dvh] overflow-hidden",
   overlay: "absolute -translate-y-1/2 top-1/2 z-10 flex items-center",
-  textBackdrop:
-    "relative bg-gradient-to-br from-black/40 via-dark-secondary/20 to-transparent rounded-3xl p-8 md:p-12",
   content: "max-w-5xl mx-auto px-4 md:px-16 text-white",
   textSection: "mb-8 md:mb-12 text-center md:text-left space-y-4",
   title:
@@ -70,7 +68,6 @@ const LandingPageHero: React.FC = () => {
           text={HERO_CONTENT.taskerCTA}
           className="group relative min-w-[200px]"
           href={ROUTES.SIGNUP}
-          variant="custom"
         />
       </>
     );
@@ -122,14 +119,12 @@ const LandingPageHero: React.FC = () => {
       {/* Content Overlay */}
       <div className={STYLES.overlay}>
         <div className={STYLES.content}>
-          <div className={STYLES.textBackdrop}>
-            <div className={STYLES.textSection}>
-              <h1 className={STYLES.title}>{HERO_CONTENT.title}</h1>
-              <p className={STYLES.subtitle}>{HERO_CONTENT.subtitle}</p>
-            </div>
-
-            <div className={STYLES.buttonGroup}>{renderActionButtons()}</div>
+          <div className={STYLES.textSection}>
+            <h1 className={STYLES.title}>{HERO_CONTENT.title}</h1>
+            <p className={STYLES.subtitle}>{HERO_CONTENT.subtitle}</p>
           </div>
+
+          <div className={STYLES.buttonGroup}>{renderActionButtons()}</div>
         </div>
       </div>
 

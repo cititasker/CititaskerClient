@@ -5,6 +5,14 @@ import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import WaitlistModal from "./WaitlistModal";
 import BrandLogo from "../reusables/BrandLogo";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+} from "../ui/drawer";
+import { VisuallyHidden } from "../ui/visually-hidden";
 
 const NAV_ITEMS = [
   { href: "#home", label: "Home" },
@@ -79,32 +87,42 @@ export default function Navbar() {
         </div>
 
         {/* Mobile Navigation */}
-        {isOpen && (
-          <div className="absolute left-4 right-4 top-[86px] rounded-2xl bg-white p-6 shadow-xl sm:left-6 sm:right-6 lg:hidden">
-            <nav className="flex flex-col gap-4">
-              {NAV_ITEMS.map(({ href, label }) => (
-                <Link
-                  key={href}
-                  href={href}
-                  onClick={handleNavClick}
-                  className={`rounded-lg px-4 py-3 text-center text-sm font-medium transition-colors ${
-                    activeHash === href
-                      ? "bg-primary/10 text-primary"
-                      : "text-neutral-700 hover:bg-neutral-50"
-                  }`}
+        <Drawer open={isOpen} onOpenChange={setIsOpen}>
+          <DrawerContent className="lg:hidden">
+            <>
+              <VisuallyHidden asChild>
+                <DrawerTitle>Mobile Navigation</DrawerTitle>
+              </VisuallyHidden>
+              <VisuallyHidden asChild>
+                <DrawerDescription>Mobile Navigation</DrawerDescription>
+              </VisuallyHidden>
+            </>
+            <div className="p-6">
+              <nav className="flex flex-col gap-4">
+                {NAV_ITEMS.map(({ href, label }) => (
+                  <Link
+                    key={href}
+                    href={href}
+                    onClick={handleNavClick}
+                    className={`rounded-lg px-4 py-3 text-center text-sm font-medium transition-colors ${
+                      activeHash === href
+                        ? "bg-primary/10 text-primary"
+                        : "text-neutral-700 hover:bg-neutral-50"
+                    }`}
+                  >
+                    {label}
+                  </Link>
+                ))}
+                <Button
+                  onClick={handleOpenModal}
+                  className="mt-2 w-full rounded-full"
                 >
-                  {label}
-                </Link>
-              ))}
-              <Button
-                onClick={handleOpenModal}
-                className="mt-2 w-full rounded-full"
-              >
-                Join Waitlist
-              </Button>
-            </nav>
-          </div>
-        )}
+                  Join Waitlist
+                </Button>
+              </nav>
+            </div>
+          </DrawerContent>
+        </Drawer>
       </nav>
 
       <WaitlistModal open={showModal} onOpenChange={setShowModal} />
