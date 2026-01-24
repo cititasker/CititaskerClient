@@ -161,7 +161,7 @@ export default function Account() {
   const { deleteImage, isDeleting: isCloudinaryDeleting } = useCloudinaryDelete(
     {
       // onError: (msg) => showSnackbar(msg, "error"),
-    }
+    },
   );
 
   const profileUpload = useMutation({
@@ -340,6 +340,7 @@ export default function Account() {
               <FormButton
                 type="submit"
                 loading={isLoading}
+                disabled={!methods.formState.isDirty}
                 className="btn-primary px-8 py-3 min-w-[120px]"
               >
                 {isLoading ? "Saving..." : "Save Changes"}

@@ -39,7 +39,7 @@ const FEATURES = [
 const STYLES = {
   container:
     "relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 overflow-hidden",
-  content: "relative z-10 container-w mx-auto px-4 md:px-8 py-16 md:py-24",
+  content: "relative z-10 container-w mx-auto px-4 md:px-8 py-16 md:py-20",
   grid: "grid lg:grid-cols-2 gap-12 lg:gap-16 items-center",
   featuresList: "space-y-6",
   featureItem: "group cursor-pointer transition-all duration-500 ease-out",
@@ -66,13 +66,13 @@ const WhyChooseCitiTasker: React.FC = () => {
       entries.forEach((entry) => {
         if (entry.isIntersecting && entry.intersectionRatio > 0.6) {
           const index = parseInt(
-            entry.target.getAttribute("data-index") || "0"
+            entry.target.getAttribute("data-index") || "0",
           );
           setActiveIndex(index);
         }
       });
     },
-    []
+    [],
   );
 
   const itemRef = useCallback(
@@ -89,7 +89,7 @@ const WhyChooseCitiTasker: React.FC = () => {
 
       return () => observer.disconnect();
     },
-    [observerCallback]
+    [observerCallback],
   );
 
   const containerVariants = {

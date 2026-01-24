@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import SectionHeader from "../reusables/SectionHeader";
 
 interface TimeLeft {
   days: string;
@@ -45,7 +46,7 @@ const TimeUnit = ({ value, label }: { value: string; label: string }) => (
 
 export default function CountdownTimer() {
   const [timeLeft, setTimeLeft] = useState<TimeLeft>(
-    calculateTimeLeft(TARGET_DATE)
+    calculateTimeLeft(TARGET_DATE),
   );
   const [mounted, setMounted] = useState(false);
 
@@ -62,9 +63,12 @@ export default function CountdownTimer() {
     return (
       <section className="bg-gradient-to-br from-primary via-primary-600 to-primary-700 py-16">
         <div className="mx-auto max-w-5xl px-4 sm:px-6">
-          <h2 className="text-2xl font-bold text-white sm:text-3xl mb-8 text-center">
-            Launch Countdown
-          </h2>
+          <SectionHeader
+            title="Launch Countdown"
+            titleClassName="text-white"
+            subtitleClassName="text-white"
+            className="mb-6 sm:mb-10 md:mb-10"
+          />
           <div className="grid grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
             {["00", "00", "00", "00"].map((_, i) => (
               <div
@@ -90,14 +94,13 @@ export default function CountdownTimer() {
       </div>
 
       <div className="relative mx-auto max-w-5xl px-4 sm:px-6">
-        <div className="mb-8 text-center">
-          <h2 className="text-2xl font-bold text-white sm:text-3xl lg:text-4xl">
-            Launch Countdown
-          </h2>
-          <p className="mt-2 text-sm text-white/80 sm:text-base">
-            We're almost there! Get ready to transform how you get things done.
-          </p>
-        </div>
+        <SectionHeader
+          title="Launch Countdown"
+          subtitle="We're almost there! Get ready to transform how you get things done."
+          titleClassName="text-white"
+          subtitleClassName="text-white"
+          className="mb-6 sm:mb-10 md:mb-10"
+        />
 
         <div className="grid grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
           <TimeUnit value={timeLeft.days} label="Days" />

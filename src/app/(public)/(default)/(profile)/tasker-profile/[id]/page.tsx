@@ -1,38 +1,47 @@
 "use client";
-import React from "react";
-import CustomTab from "@/components/reusables/CustomTab";
+
+import { useMemo } from "react";
 import { useParams } from "next/navigation";
+import CustomTab from "@/components/reusables/CustomTab";
+import { useGetUserProfile } from "@/services/user/user.hook";
+
 import PublicProfile from "@/components/shared/dashboard/profile/public-view/components/PublicProfile";
 import Portfolio from "@/components/shared/public-profile/portfolio/Portfolio";
 import FAQList from "@/app/(dashboard)/tasker/(settings)/profile/faq/FAQList";
 
 export default function PublicProfilePage() {
-  const params = useParams();
-  const id = params.id as string;
+  const { id } = useParams<{ id: string }>();
+  const { data, isLoading } = useGetUserProfile({ id });
 
-  const tabs = [
-    {
-      label: "Profile",
-      value: "profile",
-      render: () => <PublicProfile id={id} />,
-    },
-    {
-      label: "Portfolio",
-      value: "portfolio",
-      render: () => <Portfolio id={id} />,
-    },
-    {
-      label: "FAQ",
-      value: "faq",
-      render: () => <FAQList id={id} isEdit={false} />,
-    },
-  ];
+  const tabs = useMemo(
+    () => [
+      {
+        label: "Profile",
+        value: "profile",
+        render: () => (
+          <PublicProfile id={id} data={data?.data} isLoading={isLoading} />
+        ),
+      },
+      {
+        label: "Portfolio",
+        value: "portfolio",
+        render: () => <Portfolio id={id} />,
+      },
+      {
+        label: "FAQ",
+        value: "faq",
+        render: () => <FAQList id={id} isEdit={false} />,
+      },
+    ],
+    [id, data?.data, isLoading],
+  );
 
   return (
-    <CustomTab
-      items={tabs}
-      listClassName="sticky top-0"
-      contentClassName="p-5 sm:p-8 lg:px-12 lg:py-8 h-full"
-    />
+    <div className="w-full h-full">
+      <CustomTab
+        items={tabs}
+        contentClassName="p-5 sm:p-8 bg-white rounded-lg shadow-sm"
+      />
+    </div>
   );
 }

@@ -213,20 +213,14 @@ const PopularTasks: React.FC = () => {
                   {/* Content */}
                   <div className="relative z-10 text-center">
                     <div
-                      className={`w-16 h-16 mx-auto mb-4 rounded-2xl bg-primary-500 flex items-center justify-center text-2xl shadow-lg group-hover:scale-110 transition-transform duration-300`}
+                      className={`w-16 h-16 mx-auto mb-4 rounded-2xl bg-primary-200 flex items-center justify-center text-2xl shadow-md group-hover:scale-110 transition-transform duration-300`}
                     >
                       {task.icon}
                     </div>
                     <h3 className="text-lg font-semibold text-text-black group-hover:text-primary transition-colors duration-300">
                       {task.name}
                     </h3>
-                    <p className="text-sm text-dark-grey mt-2">
-                      Professional & Reliable
-                    </p>
                   </div>
-
-                  {/* Hover Effect Border */}
-                  <div className="absolute inset-0 rounded-2xl border-2 border-transparent group-hover:border-primary/30 transition-colors duration-300" />
                 </div>
               </Link>
             </motion.div>

@@ -1,6 +1,9 @@
 import { useMemo } from "react";
 import { useAppSelector } from "@/store/hook";
-import { useGetTransactionHistory } from "@/services/dashboard/dashboard.hook";
+import {
+  useGetBalance,
+  useGetTransactionHistory,
+} from "@/services/dashboard/dashboard.hook";
 import { usePaginatedTable } from "@/hooks/usePaginatedTable";
 import { formatCurrency, formatISODate } from "@/utils";
 import { DATE_FORMAT } from "@/constant";
@@ -36,6 +39,8 @@ export const useWallet = () => {
   const { data, isPending: isTransactionPending } =
     useGetTransactionHistory(queryParams);
 
+  const { data: balanceData, isPending: isBalancePending } = useGetBalance();
+
   const totalPages = data?.meta.last_page || 1;
   const totalDocuments = data?.meta.total || 0;
 
@@ -53,7 +58,7 @@ export const useWallet = () => {
     }));
   }, [transactions]);
 
-  const balance = "0";
+  const balance = balanceData?.balance ?? 0;
 
   const greeting = useMemo(() => {
     const hour = new Date().getHours();
@@ -72,6 +77,7 @@ export const useWallet = () => {
     totalPages,
     totalDocuments,
     isTransactionPending,
+    isBalancePending,
 
     pagination,
     onPaginationChange,

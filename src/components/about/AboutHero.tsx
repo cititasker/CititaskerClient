@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 
 export default function AboutHero() {
@@ -33,7 +31,8 @@ export default function AboutHero() {
             We're transforming service delivery across Africa.
           </h1>
           <p className="text-[16px] md:text-[20px] text-gray-300">
-            Creating a way to connect people ready to work, with people who need work done
+            Creating a way to connect people ready to work, with people who need
+            work done
           </p>
         </div>
 

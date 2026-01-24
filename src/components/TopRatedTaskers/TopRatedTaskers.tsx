@@ -6,8 +6,6 @@ import { MOCK_TASKERS } from "./mock-taskers";
 import SectionHeader from "../reusables/SectionHeader";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, FreeMode } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/free-mode";
 import TaskerCard from "./TaskerCard";
 
 const TopRatedTaskers: React.FC = () => {
@@ -26,7 +24,7 @@ const TopRatedTaskers: React.FC = () => {
   const shouldAutoScroll = filteredTaskers.length > minCardsForOverflow;
 
   return (
-    <section className="bg-primary-100 py-16 md:py-24">
+    <section className="bg-primary-50 py-16 md:py-20">
       <div className="max-w-[1920px] mx-auto px-4">
         {/* Header */}
         <SectionHeader title="Top Rated Taskers" />
@@ -39,7 +37,7 @@ const TopRatedTaskers: React.FC = () => {
           transition={{ duration: 0.8, delay: 0.4 }}
         >
           {shouldAutoScroll ? (
-            <div className="space-y-8">
+            <div className="space-y-4">
               {/* Forward scrolling row */}
               <SwiperRow taskers={filteredTaskers} direction="forward" />
 
@@ -89,7 +87,7 @@ const SwiperRow: React.FC<SwiperRowProps> = ({
       {taskers.map((tasker) => (
         <SwiperSlide
           key={tasker.id}
-          className="!w-[280px] sm:!w-[300px] lg:!w-[320px] flex-shrink-0"
+          className="!w-[280px] sm:!w-[300px] lg:!w-[320px] flex-shrink-0 pb-7"
         >
           <TaskerCard tasker={tasker} />
         </SwiperSlide>

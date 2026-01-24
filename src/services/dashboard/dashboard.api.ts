@@ -121,6 +121,15 @@ export function getWalletTransactions({
     });
 }
 
+export function getWalletBalance(): Promise<{ balance: number }> {
+  return api
+    .get(API_ROUTES.WALLET_BALANCE)
+    .then((data) => data.data.data)
+    .catch((error: AxiosError) => {
+      throw error.response?.data;
+    });
+}
+
 export function withdrawFund(data: { amount: number }): Promise<any> {
   return api
     .post(API_ROUTES.WITHDRAW, data)

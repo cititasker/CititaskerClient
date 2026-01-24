@@ -89,8 +89,9 @@ export const API_ROUTES = {
   UPDATE_FAQ: "/faqs/update",
   DELETE_FAQ: "/faqs/delete",
   GET_REVIEW_STATUS: "/tasks/reviews/status",
-  GET_REVIEWS: "/tasks/reviews/task-reviews",
-  GET_USER_REVIEW: (id: any) => `tasks/reviews/user-reviews/${id}`,
+  GET_REVIEWS: "/tasks/reviews/my-review",
+  UPDATE_REVIEW: "/tasks/reviews",
+  GET_USER_REVIEW: "tasks/reviews/user-reviews",
   POST_REVIEW: "/tasks/reviews",
   GET_QUESTIONS: "/tasks/questions",
   POST_QUESTION: "/tasks/post-question",
@@ -120,6 +121,7 @@ export const API_ROUTES = {
 
   TRANSACTION_HISTORY: "/payments/transactions",
   WITHDRAW: "/payments/withdraw",
+  WALLET_BALANCE: "/payments/wallet-balance",
 
   NOTIFICATIONS: {
     GET_ALL: "/notifications",
@@ -152,8 +154,8 @@ export const ROUTES = {
 
   // Static routes
   HOME: "/",
-  PROFILE: "/dashboard/profile",
-  ACCOUNT: "/dashboard/account",
+  PROFILE: "/profile",
+  ACCOUNT: "/account",
 
   // Role-based route templates
   DASHBOARD_TEMPLATE: "/{role}/dashboard",
@@ -267,7 +269,7 @@ export type RejectionReason =
 
 export const surchargeReasons: Record<RejectionReason, string> =
   Object.fromEntries(
-    rejectionReasonOptions.map((opt) => [opt.id, opt.name])
+    rejectionReasonOptions.map((opt) => [opt.id, opt.name]),
   ) as Record<RejectionReason, string>;
 
 export const TIME_OPTIONS = [
@@ -304,8 +306,8 @@ export const FORMATTED_OPTIONS = TIME_OPTIONS.map((el) => ({
 }));
 
 export const DEFAULT_TIME_OPTIONS = [
-  { value: "this-week", label: "This week" },
-  { value: "this-month", label: "This month" },
-  { value: "last-month", label: "Last month" },
+  { value: "last-7-days", label: "Last 7 days" },
+  { value: "last-30-days", label: "Last 30 days" },
+  { value: "last-90-days", label: "Last 90 days" },
   { value: "all-time", label: "All time" },
 ];

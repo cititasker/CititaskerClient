@@ -12,7 +12,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import FilterDrawer from "./components/FilterDrawer";
+// import FilterDrawer from "./components/FilterDrawer";
 import Search from "../Search";
 import FormButton from "@/components/forms/FormButton";
 
@@ -46,7 +46,7 @@ export const SearchAndFilterBar = ({
   onSearchChange,
   searchPlaceholder = "Search...",
   filters = [],
-  onFiltersChange,
+  // onFiltersChange,
   onReset,
   hasActiveFilters = false,
   onExport,
@@ -90,7 +90,7 @@ export const SearchAndFilterBar = ({
       className={cn(
         "flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between",
         compact && "gap-2",
-        className
+        className,
       )}
     >
       {/* Search Section */}
@@ -124,9 +124,7 @@ export const SearchAndFilterBar = ({
 
       {/* Actions Section */}
       <div className="flex items-center gap-2 flex-shrink-0">
-        {/* Filter Button */}
-
-        <FilterDrawer
+        {/* <FilterDrawer
           filters={[]}
           onFiltersChange={
             onFiltersChange ??
@@ -137,7 +135,7 @@ export const SearchAndFilterBar = ({
           title="Mixed Components Filter"
         >
           <div>Hello</div>
-        </FilterDrawer>
+        </FilterDrawer> */}
 
         {/* Export Dropdown */}
         {onExport && (

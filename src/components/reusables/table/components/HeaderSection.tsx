@@ -57,14 +57,14 @@ export const HeaderSection = ({
           hasRightContent &&
           "flex-col sm:flex-row sm:items-center",
         !stackOnMobile && "items-center",
-        className
+        className,
       )}
     >
       <div className="space-y-1 min-w-0 flex-1">
         <h1
           className={cn(
             "text-2xl font-bold text-foreground leading-tight",
-            titleClassName
+            titleClassName,
           )}
         >
           {processedTitle}
@@ -73,7 +73,7 @@ export const HeaderSection = ({
           <p
             className={cn(
               "text-muted-foreground leading-relaxed",
-              subtitleClassName
+              subtitleClassName,
             )}
           >
             {subtitle}
@@ -123,21 +123,6 @@ export const DashboardHeader = ({
     timeValue={timeValue}
     onTimeChange={onTimeChange}
     actions={actions}
-    {...props}
-  />
-);
-
-export const PageHeader = ({
-  title,
-  subtitle,
-  actions,
-  ...props
-}: HeaderSectionProps) => (
-  <HeaderSection
-    title={title}
-    subtitle={subtitle}
-    actions={actions}
-    stackOnMobile={false}
     {...props}
   />
 );

@@ -5,7 +5,7 @@ import TopRatedTaskers from "@/components/TopRatedTaskers/TopRatedTaskers";
 
 const WhyChooseCitiTasker = dynamic(
   () => import("@/components/WhyChooseCitiTasker/WhyChooseCitiTasker"),
-  { ssr: true }
+  { ssr: true },
 );
 
 const HowItWorks = dynamic(() => import("@/components/HowItWorks/HowItWorks"), {
@@ -14,26 +14,26 @@ const HowItWorks = dynamic(() => import("@/components/HowItWorks/HowItWorks"), {
 
 const PopularTasks = dynamic(
   () => import("@/components/PopularTasks/PopularTasks"),
-  { ssr: true }
+  { ssr: true },
 );
 
 const Stats = dynamic(() => import("@/components/Stats"), { ssr: true });
 
 const Testimonies = dynamic(
   () => import("@/components/Testimonies/Testimonies"),
-  { ssr: true }
+  { ssr: true },
 );
 
 const PosterTestimonies = dynamic(
   () => import("@/components/poster/landingPage/PosterTestimonies"),
-  { ssr: true }
+  { ssr: true },
 );
 
 const FAQ = dynamic(() => import("@/components/shared/FAQ"), { ssr: true });
 
 const BecomeTaskerBanner = dynamic(
   () => import("@/components/BecomeTaskerBanner"),
-  { ssr: true }
+  { ssr: true },
 );
 
 export default function Page() {

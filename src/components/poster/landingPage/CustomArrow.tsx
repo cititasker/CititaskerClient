@@ -8,12 +8,14 @@ interface CustomArrowProps {
   direction?: "left" | "right";
   onClick?: () => void;
   className?: string;
+  style?: React.CSSProperties;
 }
 
 const CustomArrow: React.FC<CustomArrowProps> = ({
   direction = "left",
   onClick,
   className,
+  style,
 }) => {
   const isLeft = direction === "left";
 
@@ -41,14 +43,14 @@ const CustomArrow: React.FC<CustomArrowProps> = ({
     // Focus styles for accessibility
     "focus:outline-none focus:ring-2 focus:ring-white/50",
 
-    className
+    className,
   );
 
   const iconClasses = cn(
     "text-white text-xl md:text-2xl",
     "drop-shadow-sm",
     "transition-transform duration-200",
-    "group-hover:scale-110"
+    "group-hover:scale-110",
   );
 
   const Icon = isLeft ? HiMiniChevronLeft : HiMiniChevronRight;
@@ -57,6 +59,7 @@ const CustomArrow: React.FC<CustomArrowProps> = ({
     <motion.button
       className={`${baseClasses} group`}
       onClick={onClick}
+      style={style}
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.9 }}
       initial={{ opacity: 0, scale: 0.8 }}

@@ -8,14 +8,14 @@ export interface Certificate {
   year: string;
 }
 
-export interface ReviewItem {
-  image: string;
-  name: string;
-  profession: string;
-  timeAgo: string;
-  review: string;
-  rating?: number;
-}
+// export interface ReviewItem {
+//   image: string;
+//   name: string;
+//   profession: string;
+//   timeAgo: string;
+//   review: string;
+//   rating?: number;
+// }
 
 export interface ProfileSummary {
   image: string;

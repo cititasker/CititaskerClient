@@ -36,7 +36,7 @@ export const usePaginatedTable = (options: UsePaginatedTableOptions = {}) => {
   const searchParams = useSearchParams();
 
   const [searchTerm, setSearchTerm] = useState(
-    () => searchParams.get("search") || ""
+    () => searchParams.get("search") || "",
   );
 
   const [filters, setFilters] = useState<Record<string, any>>(() => {
@@ -59,7 +59,7 @@ export const usePaginatedTable = (options: UsePaginatedTableOptions = {}) => {
       pageIndex: Math.max(0, Number(searchParams.get("page") || 1) - 1),
       pageSize: Number(searchParams.get("limit")) || defaultPageSize,
     }),
-    [searchParams, defaultPageSize]
+    [searchParams, defaultPageSize],
   );
 
   const debouncedSearch = useDebounce(searchTerm, debounceMs);
@@ -102,15 +102,14 @@ export const usePaginatedTable = (options: UsePaginatedTableOptions = {}) => {
         });
       }
     },
-    [persistInUrl, pathname, router, searchParams]
+    [persistInUrl, pathname, router, searchParams],
   );
 
-  // ✅ FIX: Use the passed values directly, not the stale state
   const onPaginationChange = useCallback(
     ({ pageIndex, pageSize }: PaginationState) => {
       updateUrl({ page: pageIndex + 1, limit: pageSize });
     },
-    [updateUrl]
+    [updateUrl],
   );
 
   const handleSearch = useCallback((value: string) => {
@@ -126,7 +125,7 @@ export const usePaginatedTable = (options: UsePaginatedTableOptions = {}) => {
         updateUrl(newFilters);
       }
     },
-    [resetPageOnChange, updateUrl]
+    [resetPageOnChange, updateUrl],
   );
 
   const resetAll = useCallback(() => {

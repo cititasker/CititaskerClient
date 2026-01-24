@@ -13,10 +13,9 @@ import {
   PaginationEllipsis,
   PaginationItem,
   PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
 } from "@/components/ui/pagination";
 import { cn } from "@/lib/utils";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface TablePaginationProps<TData> {
   table: Table<TData>;
@@ -85,9 +84,9 @@ export function TablePagination<TData>({
   return (
     <div
       className={cn(
-        "flex flex-col gap-4 px-2 py-4",
+        "flex gap-4",
         "sm:flex-row sm:items-center sm:justify-between",
-        className
+        className,
       )}
     >
       {/* Info and Page Size Selector */}
@@ -138,20 +137,23 @@ export function TablePagination<TData>({
 
       {/* Pagination Controls */}
       {totalPages > 0 && (
-        <Pagination className="mx-0 w-auto">
+        <Pagination className="mr-0 ml-auto w-auto">
           <PaginationContent>
             <PaginationItem>
-              <PaginationPrevious
+              <PaginationLink
                 href="#"
                 onClick={(e) => {
                   e.preventDefault();
                   if (!isLoading) table.previousPage();
                 }}
                 className={cn(
+                  "h-9 w-9 flex items-center justify-center",
                   (!table.getCanPreviousPage() || isLoading) &&
-                    "pointer-events-none opacity-50"
+                    "pointer-events-none opacity-50",
                 )}
-              />
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </PaginationLink>
             </PaginationItem>
 
             {generatePageNumbers().map((page, index) => (
@@ -167,8 +169,8 @@ export function TablePagination<TData>({
                     }}
                     isActive={page === currentPage}
                     className={cn(
-                      "hidden sm:inline-flex",
-                      isLoading && "pointer-events-none opacity-50"
+                      "inline-flex",
+                      isLoading && "pointer-events-none opacity-50",
                     )}
                   >
                     {page}
@@ -178,24 +180,27 @@ export function TablePagination<TData>({
             ))}
 
             {/* Mobile page indicator */}
-            <PaginationItem className="sm:hidden">
+            {/* <PaginationItem className="sm:hidden">
               <span className="flex h-9 min-w-9 items-center justify-center rounded-md border border-input bg-background px-3 text-sm">
                 {currentPage} of {totalPages}
               </span>
-            </PaginationItem>
+            </PaginationItem> */}
 
             <PaginationItem>
-              <PaginationNext
+              <PaginationLink
                 href="#"
                 onClick={(e) => {
                   e.preventDefault();
                   if (!isLoading) table.nextPage();
                 }}
                 className={cn(
+                  "h-9 w-9 flex items-center justify-center",
                   (!table.getCanNextPage() || isLoading) &&
-                    "pointer-events-none opacity-50"
+                    "pointer-events-none opacity-50",
                 )}
-              />
+              >
+                <ChevronRight className="h-4 w-4" />
+              </PaginationLink>
             </PaginationItem>
           </PaginationContent>
         </Pagination>

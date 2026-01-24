@@ -9,6 +9,10 @@ interface ILoginRes {
 interface UserProfileData {
   about_me: string;
   average_rating: number;
+  reviews_count: number;
+  verification_status: boolean;
+  task_completion_percentage: number;
+  profile_image: string | null;
   first_name: string;
   id: number;
   last_name: string;
@@ -43,21 +47,3 @@ interface UserFaq {
   question: string;
 }
 type UserFaqResponse = { data: UserFaq[] };
-
-interface TaskerReview {
-  id: number;
-  rating: number;
-  comment: string;
-  tasker: string;
-  created_at: string;
-  reviewer: string;
-}
-
-type GetReviewsResponse = { data: TaskerReview[] };
-
-type PostReviewInput = {
-  role: TRole;
-  task_id: string;
-  rating: number;
-  comment: string;
-};

@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 
-const DEFAULT_EXPENSE_TIMEFRAME = "all-time";
+const DEFAULT_EXPENSE_TIMEFRAME = "last-7-days";
 
 export const useTimeframe = () => {
   const router = useRouter();
@@ -16,7 +16,7 @@ export const useTimeframe = () => {
       params.set("timeframe", value);
       router.replace(`${pathname}?${params.toString()}`, { scroll: false });
     },
-    [searchParams, pathname, router]
+    [searchParams, pathname, router],
   );
 
   return { timeframe, setTimeframe };

@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
-const path = require("path");
+import path from "path";
+import bundleAnalyzer from "@next/bundle-analyzer";
 
-const withBundleAnalyzer = require("@next/bundle-analyzer")({
+const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === "true",
 });
 
@@ -9,27 +10,18 @@ const nextConfig: NextConfig = withBundleAnalyzer({
   compiler: {
     removeConsole:
       process.env.NODE_ENV === "production"
-        ? {
-            exclude: ["error", "warn"],
-          }
+        ? { exclude: ["error", "warn"] }
         : false,
   },
+
   images: {
     remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "res.cloudinary.com",
-      },
-      {
-        protocol: "http",
-        hostname: "res.cloudinary.com",
-      },
+      { protocol: "https", hostname: "res.cloudinary.com" },
+      { protocol: "http", hostname: "res.cloudinary.com" },
     ],
   },
-  // eslint: {
-  //   ignoreDuringBuilds: true,
-  // },
-  webpack(config: any, { isServer }: { isServer: boolean }) {
+
+  webpack(config, { isServer }) {
     if (!isServer) {
       config.resolve.fallback = {
         ...config.resolve.fallback,
@@ -42,12 +34,11 @@ const nextConfig: NextConfig = withBundleAnalyzer({
 
     config.resolve.alias = {
       ...(config.resolve.alias || {}),
-      "@": path.resolve(__dirname, "src"),
+      "@": path.resolve(process.cwd(), "src"),
     };
 
-    // Existing SVG rule handling
     const fileLoaderRule = config.module.rules.find((rule: any) =>
-      rule.test?.test?.(".svg")
+      rule.test?.test?.(".svg"),
     );
 
     config.module.rules.push(
@@ -61,12 +52,14 @@ const nextConfig: NextConfig = withBundleAnalyzer({
         issuer: fileLoaderRule.issuer,
         resourceQuery: { not: [...fileLoaderRule.resourceQuery.not, /url/] },
         use: ["@svgr/webpack"],
-      }
+      },
     );
+
     fileLoaderRule.exclude = /\.svg$/i;
 
     return config;
   },
+
   experimental: {
     optimizePackageImports:
       process.env.NODE_ENV === "production"

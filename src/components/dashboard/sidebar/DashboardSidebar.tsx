@@ -32,10 +32,10 @@ const DashboardSidebar = ({ role }: DashboardSidebarProps) => {
         className={cn(
           "fixed inset-y-0 left-0 z-50 w-80 lg:w-72 lg:relative lg:z-0",
           "transform transition-transform duration-300 ease-out lg:translate-x-0",
-          isOpen ? "translate-x-0" : "-translate-x-full"
+          isOpen ? "translate-x-0" : "-translate-x-full",
         )}
       >
-        <Card className="h-full rounded-none lg:rounded-xl border-r lg:border-none shadow-xl lg:shadow-sm">
+        <Card className="h-fit rounded-none lg:rounded-xl border-r lg:border-none shadow-xl lg:shadow-sm">
           {/* Mobile Header */}
           <div className="flex items-center justify-between p-4 border-b lg:hidden">
             <div className="flex items-center gap-2">
@@ -67,14 +67,6 @@ const DashboardSidebar = ({ role }: DashboardSidebarProps) => {
               />
             ))}
           </nav>
-
-          {/* Footer */}
-          {/* <div className="p-4 border-t border-border">
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-              <span>All systems operational</span>
-            </div>
-          </div> */}
         </Card>
       </aside>
     </>

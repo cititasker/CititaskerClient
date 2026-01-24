@@ -1,17 +1,19 @@
+// components/shared/dashboard/profile/public-view/sidebar/PublicProfileSidebar.tsx
 "use client";
-import React from "react";
-import { useGetUserProfile } from "@/services/user/user.hook";
+
+import { memo, useMemo } from "react";
 import { useParams } from "next/navigation";
 import { Award, User, Sparkles, LucideIcon } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import { useGetUserProfile } from "@/services/user/user.hook";
+import { cn } from "@/lib/utils";
+
 import { ProfileHeader } from "./components/ProfileHeader";
 import { LocationAndRating } from "./components/LocationAndRating";
 import { SkillsSection } from "./components/SkillsSection";
 import { BadgeSection } from "./components/BadgeSection";
 import { LoadingSkeleton } from "./components/LoadingSkeleton";
 import { ErrorState } from "./components/ErrorState";
-import { useAuth } from "@/hooks/useAuth";
-import { ROLE } from "@/constant";
 
 interface SectionProps {
   title: string;
@@ -20,50 +22,68 @@ interface SectionProps {
   noBorder?: boolean;
 }
 
-const Section = ({ title, icon: Icon, children, noBorder }: SectionProps) => (
-  <div className={`py-6 ${!noBorder ? "border-b border-neutral-200" : ""}`}>
-    <div className="flex items-center gap-2 mb-4">
-      <Icon className="w-5 h-5 text-primary" />
-      <h3 className="text-base font-semibold text-text-primary">{title}</h3>
+const Section = memo(
+  ({ title, icon: Icon, children, noBorder }: SectionProps) => (
+    <div
+      className={cn(
+        "pt-6",
+        noBorder ? "pb-0" : "border-b border-neutral-200 pb-6",
+      )}
+    >
+      <div className="flex items-center gap-2 mb-4">
+        <Icon className="w-5 h-5 text-primary" />
+        <h3 className="text-base font-semibold text-text-primary">{title}</h3>
+      </div>
+      {children}
     </div>
-    {children}
-  </div>
+  ),
 );
 
+Section.displayName = "Section";
+
 const PublicProfileSidebar = () => {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const { data, isLoading, error, refetch } = useGetUserProfile({ id });
-  const { role } = useAuth();
 
-  const user = data?.data;
-  const isTasker = role === ROLE.tasker;
+  const user = useMemo(() => data?.data, [data]);
 
-  if (isLoading) return <LoadingSkeleton />;
-  if (error) return <ErrorState onRetry={refetch} />;
+  if (isLoading) {
+    return (
+      <aside className="w-full md:max-w-[300px]">
+        <LoadingSkeleton />
+      </aside>
+    );
+  }
+
+  if (error) {
+    return (
+      <aside className="w-full md:max-w-[300px]">
+        <ErrorState onRetry={refetch} />
+      </aside>
+    );
+  }
 
   return (
-    <aside className="md:max-w-[300px] h-fit md:sticky md:top-6 md:self-start">
-      <Card className="p-5 space-y-0">
+    <aside className="w-full md:max-w-[300px]">
+      <Card className="p-5 space-y-0 shadow-sm">
         <ProfileHeader user={user} />
 
         <Section title="Overview" icon={User}>
-          <LocationAndRating user={user} role={role} />
+          <LocationAndRating user={user} />
         </Section>
 
-        {isTasker && (
-          <>
-            <Section title="Skills" icon={Sparkles}>
-              <SkillsSection skills={user?.skills || []} />
-            </Section>
-
-            <Section title="Achievements" icon={Award} noBorder>
-              <BadgeSection user={user} />
-            </Section>
-          </>
+        {user?.skills && user.skills.length > 0 && (
+          <Section title="Skills" icon={Sparkles}>
+            <SkillsSection skills={user.skills} />
+          </Section>
         )}
+
+        <Section title="Achievements" icon={Award} noBorder>
+          <BadgeSection user={user} />
+        </Section>
       </Card>
     </aside>
   );
 };
 
-export default PublicProfileSidebar;
+export default memo(PublicProfileSidebar);

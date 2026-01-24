@@ -1,15 +1,17 @@
 "use client";
 
 import { useEffect } from "react";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, FormProvider, useForm } from "react-hook-form";
-import { z } from "zod";
 import Image from "next/image";
+
+import CustomModal from "@/components/reusables/CustomModal";
 import FormButton from "@/components/forms/FormButton";
 import FormTextArea from "@/components/forms/FormTextArea";
-import CustomModal from "@/components/reusables/CustomModal";
 import FormError from "@/components/reusables/FormError";
 import Rating from "@/components/reusables/Rating";
+
 import HandeShake from "@/assets/images/handshake.svg?url";
 
 const reviewSchema = z.object({
@@ -17,12 +19,14 @@ const reviewSchema = z.object({
   comment: z.string().min(5, "Comment must be at least 5 characters"),
 });
 
-type ReviewFormData = z.infer<typeof reviewSchema>;
+export type ReviewFormData = z.infer<typeof reviewSchema>;
 
 interface RatingModalProps extends IModal {
   taskerName: string;
   userName: string;
   initialRating?: number;
+  initialComment?: string;
+  isEditMode?: boolean;
   onSubmit: (data: ReviewFormData) => void;
   showSuccess?: boolean;
   isLoading?: boolean;
@@ -34,53 +38,73 @@ export default function RatingModal({
   taskerName,
   userName,
   initialRating = 0,
+  initialComment = "",
+  isEditMode,
   onSubmit,
   showSuccess = false,
   isLoading = false,
 }: RatingModalProps) {
   const methods = useForm<ReviewFormData>({
+    resolver: zodResolver(reviewSchema),
     defaultValues: {
-      rating: initialRating,
+      rating: 0,
       comment: "",
     },
-    resolver: zodResolver(reviewSchema),
+    mode: "onSubmit",
   });
 
-  const { control, setValue, handleSubmit, reset } = methods;
+  const { control, handleSubmit, reset } = methods;
 
+  /**
+   * Hydrate form when modal opens
+   * Works for both create & edit flows
+   */
   useEffect(() => {
-    if (initialRating > 0) {
-      setValue("rating", initialRating, { shouldValidate: true });
-    }
-  }, [initialRating, setValue]);
+    if (!isOpen) return;
+
+    reset({
+      rating: initialRating || 0,
+      comment: initialComment || "",
+    });
+  }, [isOpen, initialRating, initialComment, reset]);
 
   const handleClose = () => {
     onClose();
-    reset();
+    reset({
+      rating: 0,
+      comment: "",
+    });
   };
+
+  const successMessage = isEditMode
+    ? "Your review has been updated successfully"
+    : "Thank you for sharing your review";
 
   return (
     <CustomModal isOpen={isOpen} onClose={handleClose}>
       {showSuccess ? (
-        <div className="flex h-full justify-center items-center p-6">
+        <div className="flex h-full items-center justify-center p-6">
           <div className="space-y-4 text-center">
             <Image
               src={HandeShake}
               alt="Handshake"
-              className="mx-auto w-[80%] sm:w-full"
+              className="mx-auto h-[250px] sm:w-full"
             />
-            <p className="text-lg">Thank you for sharing your review</p>
+            <p className="text-lg font-medium">{successMessage}</p>
           </div>
         </div>
       ) : (
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            {/* Header */}
             <div className="text-center space-y-2">
               <h2 className="text-xl sm:text-2xl font-semibold text-neutral-900">
                 Hi {userName} 👋
               </h2>
               <p className="text-sm sm:text-base text-neutral-600">
-                How would you rate your experience with{" "}
+                {isEditMode
+                  ? "You’re updating your review for "
+                  : "How would you rate your experience with "}
                 <span className="font-medium text-neutral-900">
                   {taskerName}
                 </span>
@@ -88,6 +112,7 @@ export default function RatingModal({
               </p>
             </div>
 
+            {/* Rating */}
             <Controller
               name="rating"
               control={control}
@@ -97,10 +122,11 @@ export default function RatingModal({
                     <Rating
                       value={field.value}
                       onChange={field.onChange}
-                      size={window.innerWidth < 640 ? 32 : 40}
+                      size={40}
                       className="gap-3 sm:gap-4"
                     />
                   </div>
+
                   {fieldState.error && (
                     <FormError
                       name="rating"
@@ -111,20 +137,22 @@ export default function RatingModal({
               )}
             />
 
+            {/* Comment */}
             <FormTextArea
               name="comment"
-              placeholder="Share your experience (optional)"
+              placeholder="Share your experience"
               rows={4}
               className="resize-none"
             />
 
+            {/* Submit */}
             <FormButton
               type="submit"
               className="w-full"
               loading={isLoading}
               disabled={isLoading}
             >
-              Submit Review
+              {isEditMode ? "Update Review" : "Submit Review"}
             </FormButton>
           </form>
         </FormProvider>

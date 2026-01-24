@@ -1,9 +1,10 @@
-// app/layout.tsx
 import type { Metadata } from "next";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/free-mode";
 import "vanilla-cookieconsent/dist/cookieconsent.css";
 import "./globals.css";
 import AppProviders from "@/providers/AppProviders";
-import { auth } from "@/auth";
 
 export const metadata: Metadata = {
   title: "CitiTasker",
@@ -22,12 +23,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await auth();
-
   return (
     <html lang="en">
       <body className="relative">
-        <AppProviders session={session}>{children}</AppProviders>
+        <AppProviders>{children}</AppProviders>
       </body>
     </html>
   );

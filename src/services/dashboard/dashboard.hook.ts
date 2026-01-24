@@ -1,13 +1,16 @@
 import { API_ROUTES } from "@/constant";
-import { useQuery } from "@tanstack/react-query";
-import { getWalletTransactions } from "./dashboard.api";
+import { getWalletBalance, getWalletTransactions } from "./dashboard.api";
 import { WalletTransactionParamsT } from "./dashboard.types";
+import { useBaseQuery } from "@/hooks/useBaseQuery";
 
 export const useGetTransactionHistory = (
-  params: WalletTransactionParamsT = {}
+  params: WalletTransactionParamsT = {},
 ) => {
-  return useQuery({
-    queryKey: [API_ROUTES.TRANSACTION_HISTORY, params],
-    queryFn: () => getWalletTransactions({ params }),
-  });
+  return useBaseQuery([API_ROUTES.TRANSACTION_HISTORY, params], () =>
+    getWalletTransactions({ params }),
+  );
+};
+
+export const useGetBalance = () => {
+  return useBaseQuery([API_ROUTES.WALLET_BALANCE], getWalletBalance);
 };

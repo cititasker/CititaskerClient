@@ -22,7 +22,7 @@ const CantFind: React.FC<CantFindProps> = ({
   variant = "primary",
 }) => {
   const variants = {
-    primary: "bg-primary",
+    primary: "bg-primary-500",
     secondary: "bg-gradient-secondary",
     accent: "bg-gradient-accent",
   };

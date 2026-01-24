@@ -5,14 +5,8 @@ import RatingCard from "@/components/reusables/RatingCard";
 import FormButton from "@/components/forms/FormButton";
 import ReviewModal from "./ReviewModal";
 import Rating from "@/components/reusables/Rating";
-
-export type ReviewItem = {
-  image: string;
-  name: string;
-  profession: string;
-  timeAgo: string;
-  review: string;
-};
+import { useUserReviews } from "@/services/review/reviews.hook";
+import { useAppSelector } from "@/store/hook";
 
 export type ProfileSummary = {
   image: string;
@@ -23,9 +17,9 @@ export type ProfileSummary = {
 };
 
 interface ReviewSectionProps {
+  id?: string;
   title?: string;
   buttonText?: string;
-  reviews: ReviewItem[];
   profileSummary?: ProfileSummary;
   maxPreview?: number;
   userName?: string;
@@ -51,27 +45,34 @@ const ReviewGrid = ({
   reviews: ReviewItem[];
   maxPreview: number;
 }) => (
-  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+  <div className="grid gap-4 grid-cols-[repeat(auto-fill,minmax(250px,1fr))]">
     {reviews.slice(0, maxPreview).map((review, index) => (
-      <RatingCard key={index} {...review} />
+      <RatingCard key={index} review={review} />
     ))}
   </div>
 );
 
 const ReviewSection: React.FC<ReviewSectionProps> = ({
+  id,
   title = "Reviews",
   buttonText = "See all reviews",
-  reviews = [],
   profileSummary,
   maxPreview = 3,
   userName,
   className = "",
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const hasMoreReviews = reviews.length > maxPreview;
+  const { user } = useAppSelector((s) => s.user);
+  const userId = id ?? user?.id;
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
+
+  const { data } = useUserReviews(userId);
+
+  const reviews = data?.data || [];
+
+  const hasMoreReviews = reviews.length > maxPreview;
 
   return (
     <section className={`space-y-4 ${className}`}>

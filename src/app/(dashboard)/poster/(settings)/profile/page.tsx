@@ -14,7 +14,7 @@ const tabs = [
 export default function Page() {
   return (
     <div className="relative h-full">
-      <CustomTab items={tabs} contentClassName="p-5 sm:p-8 lg:px-12 lg:py-8" />
+      <CustomTab items={tabs} contentClassName="p-5 sm:p-8" />
     </div>
   );
 }

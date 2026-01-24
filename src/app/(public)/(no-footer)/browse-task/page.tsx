@@ -1,8 +1,7 @@
-// app/browse-task/page.tsx
 "use client";
 
 import React, { Suspense } from "react";
-import dynamic from "next/dynamic";
+import NextDynamic from "next/dynamic"; // rename the import to avoid conflict
 import CustomSheet from "@/components/reusables/CustomSheet";
 import useToggle from "@/hooks/useToggle";
 import { ErrorState } from "@/components/browseTask/ErrorState";
@@ -12,24 +11,19 @@ import { MyTaskHeader } from "@/components/shared/task/MyTaskHeader";
 import { ROUTES } from "@/constant";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 
-const MyTaskContent = dynamic(
+// Dynamic imports for components
+const MyTaskContent = NextDynamic(
   () =>
     import("@/components/shared/task/MyTaskContent").then((mod) => ({
       default: mod.MyTaskContent,
     })),
-  {
-    loading: () => (
-      <div className="flex-1 min-h-0 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary mx-auto" />
-      </div>
-    ),
-    ssr: false,
-  }
+  { ssr: false, loading: () => <div>Loading...</div> },
 );
 
-const FilterList = dynamic(() => import("@/components/browseTask/FilterList"), {
-  ssr: false,
-});
+const FilterList = NextDynamic(
+  () => import("@/components/browseTask/FilterList"),
+  { ssr: false },
+);
 
 export default function BrowseTasksPage() {
   const showFilter = useToggle();
@@ -51,7 +45,6 @@ export default function BrowseTasksPage() {
 
   return (
     <div className="space-y-2 h-full flex flex-col">
-      {/* Header - Mobile Only */}
       {!isDesktop && (
         <MyTaskHeader
           searchTerm={searchTerm}
@@ -61,7 +54,6 @@ export default function BrowseTasksPage() {
         />
       )}
 
-      {/* Content */}
       <Suspense
         fallback={
           <div className="flex-1 min-h-0 flex items-center justify-center">
@@ -79,7 +71,6 @@ export default function BrowseTasksPage() {
         />
       </Suspense>
 
-      {/* Filter Sheet - Mobile Only */}
       {!isDesktop && showFilter.isOpen && (
         <CustomSheet
           open={showFilter.isOpen}

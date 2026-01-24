@@ -2,6 +2,7 @@
 import Image from "next/image";
 import ContentCopy from "@/assets/icons/content_copy.svg";
 import CustomTab from "@/components/reusables/CustomTab";
+import SectionHeader from "@/components/reusables/SectionHeader";
 
 const POSTER_BENEFITS = [
   {
@@ -142,29 +143,30 @@ export default function WhyCitiTasker() {
     <section id="why-cititasker" className="relative bg-neutral-50">
       <div className="container-w px-4 sm:px-6 lg:px-8 md:py-20 lg:py-28">
         {/* Header */}
-        <div className="mb-6 md:mb-10 text-center">
-          <h2 className="mb-3 text-3xl font-bold sm:text-4xl lg:text-5xl">
-            Why Join{" "}
-            <span className="relative inline-block text-gradient-primary">
-              CitiTasker?
-            </span>
-          </h2>
-          <p className="mx-auto max-w-3xl text-neutral-700">
-            The ultimate platform for connecting you with skilled Taskers who
-            can help tackle your to-do list.
-          </p>
-        </div>
+        <SectionHeader
+          title={
+            <p>
+              Why Join{" "}
+              <span className="relative inline-block text-gradient-primary">
+                CitiTasker?
+              </span>
+            </p>
+          }
+          subtitle="The ultimate platform for connecting you with skilled Taskers who can help tackle your to-do list."
+          className="mb-6 sm:mb-10 md:mb-10"
+        />
 
         {/* Content */}
-        <div className="overflow-hidden rounded-3xl bg-white shadow-sm">
+        <div className="overflow-hidden sm:rounded-3xl bg-transparent sm:bg-white sm:shadow-sm sm:p-10">
           <CustomTab
             items={tabs}
             defaultValue="poster"
             queryKey="role"
-            className="pb-0"
-            listClassName="bg-neutral-50 px-4 pb-6 sm:px-8 rounded-none justify-center mb-0 gap-3"
+            className="pb-0 "
+            mobileAsCards={false}
+            listClassName="mx-auto sm:px-8 rounded-none justify-center mb-0 gap-3 bg-transparent mb-6 sm:mb-8"
             triggerClassName="data-[state=active]:bg-primary data-[state=active]:text-white py-3"
-            contentClassName="p-6 sm:p-10"
+            contentClassName="px-0 bg-transparent sm:bg-white"
           />
         </div>
       </div>

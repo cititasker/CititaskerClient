@@ -5,7 +5,7 @@ import Image from "next/image";
 import CustomModal from "@/components/reusables/CustomModal";
 import Icons from "@/components/Icons";
 import RatingCard from "@/components/reusables/RatingCard";
-import { ProfileSummary, ReviewItem } from "./Reviews";
+import { ProfileSummary } from "./Reviews";
 
 interface ReviewModalProps {
   isOpen: boolean;
@@ -55,7 +55,7 @@ const ReviewList = ({ reviews }: { reviews: ReviewItem[] }) => (
     {reviews.length > 0 ? (
       <div className="grid grid-cols-1 gap-4">
         {reviews.map((review, index) => (
-          <RatingCard key={index} {...review} />
+          <RatingCard key={index} review={review} />
         ))}
       </div>
     ) : (

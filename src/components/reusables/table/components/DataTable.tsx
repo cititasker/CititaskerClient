@@ -42,6 +42,7 @@ interface DataTableProps<TData, TValue> {
   isSearch?: boolean;
   showPagination?: boolean;
   showTableCount?: boolean;
+  showRowsPerPage?: boolean;
   enableRowSelection?: boolean;
 }
 
@@ -70,16 +71,17 @@ export const DataTable = forwardRef<DataTableRef, DataTableProps<any, any>>(
       isSearch = false,
       showPagination = true,
       showTableCount = true,
+      showRowsPerPage = true,
       enableRowSelection = false,
     }: DataTableProps<TData, TValue>,
-    ref: React.Ref<DataTableRef>
+    ref: React.Ref<DataTableRef>,
   ) {
     const tableColumns = useMemo(() => {
       if (!enableRowSelection) return columns;
 
       // Check if select column already exists
       const hasSelectColumn = columns.some(
-        (col) => "id" in col && col.id === "select"
+        (col) => "id" in col && col.id === "select",
       );
 
       if (hasSelectColumn) return columns;
@@ -127,7 +129,7 @@ export const DataTable = forwardRef<DataTableRef, DataTableProps<any, any>>(
       () => ({
         resetSelection: resetRowSelection,
       }),
-      [resetRowSelection]
+      [resetRowSelection],
     );
 
     const hasData = data.length > 0;
@@ -158,11 +160,12 @@ export const DataTable = forwardRef<DataTableRef, DataTableProps<any, any>>(
             totalCount={totalCount}
             isLoading={isLoading}
             showTableCount={showTableCount}
+            showRowsPerPage={showRowsPerPage}
           />
         )}
       </div>
     );
-  }
+  },
 );
 
 export function IndeterminateCheckbox({

@@ -1,5 +1,3 @@
-"use client";
-
 export default function AboutIntro() {
   return (
     <section className="relative bg-white py-16 px-4 md:px-12">
@@ -44,7 +42,9 @@ export default function AboutIntro() {
         </div>
       </div>
       <div className="text-center">
-        <h2 className="text-[30px] md:text-[36px] lg:text-[48px] font-bold">Why choose CitiTasker?</h2>
+        <h2 className="text-[30px] md:text-[36px] lg:text-[48px] font-bold">
+          Why choose CitiTasker?
+        </h2>
         <p className="text-[16px] lg:text-[20px]">
           At CitiTasker, we're all about making your life simpler, one task at a
           time. Our platform connects you with skilled professionals who can

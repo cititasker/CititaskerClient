@@ -2,9 +2,9 @@ import { API_ROUTES } from "@/constant";
 import { api } from "@/lib/api-client";
 import { AxiosError } from "axios";
 
-export const getUserReview = (id: any): Promise<any> => {
+export const getUserReviews = (id: any): Promise<UserReviewResponse> => {
   return api
-    .get(API_ROUTES.GET_USER_REVIEW(id))
+    .get(`${API_ROUTES.GET_USER_REVIEW}/${id}`)
     .then((data) => {
       return data.data.data;
     })
@@ -13,21 +13,30 @@ export const getUserReview = (id: any): Promise<any> => {
     });
 };
 
-export const getReviews = (
-  id: number | string
-): Promise<GetReviewsResponse> => {
+export const getReviews = (id: number | string): Promise<TaskerReview> => {
   return api
-    .get(`${API_ROUTES.GET_REVIEWS}?task_id=${id}`)
+    .get(`${API_ROUTES.GET_REVIEWS}/${id}`)
     .then((data) => {
       return data.data.data;
     })
+    .catch((error: AxiosError) => {
+      throw error.response?.data;
+    });
+};
+
+export const updateReview = ({ data, role }: UpdateReviewArgs) => {
+  const endpoint = `${API_ROUTES.UPDATE_REVIEW}/${role}`;
+
+  return api
+    .put(endpoint, data)
+    .then((res) => res.data.data)
     .catch((error: AxiosError) => {
       throw error.response?.data;
     });
 };
 
 export const getReviewStatus = (
-  id: number | string
+  id: number | string,
 ): Promise<GetReviewsResponse> => {
   return api
     .get(`${API_ROUTES.GET_REVIEW_STATUS}?task_id=${id}`)

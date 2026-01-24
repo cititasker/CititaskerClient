@@ -6,10 +6,10 @@ import BrowseCategoryCarousel from "./BrowseCategoryCarousel";
 
 const BrowseCategories: React.FC = () => {
   return (
-    <section className="bg-background py-16 md:py-20">
-      <div className="container-w">
+    <section className="bg-background">
+      <div className="container-w py-12 md:py-16">
         <motion.div
-          className="relative bg-gradient-secondary rounded-3xl md:rounded-[3.75rem] px-6 py-12 md:px-8 md:py-16 overflow-hidden"
+          className="relative bg-primary-500 rounded-3xl md:rounded-[3.75rem] px-6 py-12 md:px-8 md:py-16 overflow-hidden"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}

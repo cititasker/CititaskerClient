@@ -12,7 +12,6 @@ import { NotificationsProvider } from "./NotificationsProvider";
 import { PostHogProvider } from "./PostHogProvider";
 import { SessionSync } from "./SessionSync";
 import Loader from "@/components/reusables/Loading";
-import type { Session } from "next-auth";
 import { makeQueryClient } from "@/constant/queryClient";
 import { CookieConsentProvider } from "./CookieConsentProvider";
 
@@ -70,20 +69,15 @@ class ErrorBoundary extends React.Component<
 
 interface AppProvidersProps {
   children: React.ReactNode;
-  session: Session | null;
 }
 
-export default function AppProviders({ children, session }: AppProvidersProps) {
+export default function AppProviders({ children }: AppProvidersProps) {
   const [queryClient] = useState(() => makeQueryClient());
 
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
-        <SessionProvider
-          session={session}
-          refetchInterval={5 * 60}
-          refetchOnWindowFocus={false}
-        >
+        <SessionProvider>
           <ReduxProvider store={store}>
             <PersistGate loading={<Loader />} persistor={persistor}>
               <SessionSync />

@@ -20,7 +20,7 @@ const STAT_CONFIG: Record<StatKey, string> = {
   open_task: "Open Tasks",
 };
 
-const DEFAULT_TIMEFRAME = "this-week";
+const DEFAULT_TIMEFRAME = "last-7-days";
 
 export const useDashboardStats = () => {
   const { user } = useAppSelector((state) => state.user);
@@ -33,7 +33,7 @@ export const useDashboardStats = () => {
   const { data: stats, isLoading: statsLoading } = useBaseQuery(
     [API_ROUTES.DASHBOARD_STATS, role, timeframe],
     () => getDashboardStats({ role, time_range: timeframe }),
-    { enabled: !!role }
+    { enabled: !!role },
   );
 
   const dashboardStats = useMemo<DashboardStatItem[]>(() => {

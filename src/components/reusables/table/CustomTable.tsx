@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 
 import SearchAndFilterBar from "./SearchAndFilterBar";
 import { DataTable } from "./components/DataTable";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 interface CustomTableProps<TData extends RowData> {
   // Core table props
@@ -107,6 +108,8 @@ export function CustomTable<TData extends RowData>({
     ...extraActions,
   ];
 
+  const md = useMediaQuery("(min-width: 768px)");
+
   // Error state
   if (error) {
     return (
@@ -162,8 +165,8 @@ export function CustomTable<TData extends RowData>({
         manualPagination
         onPaginationChange={onPaginationChange}
         showPagination={showPagination}
-        showTableCount
-        enableRowSelection
+        showTableCount={md}
+        showRowsPerPage={md}
       />
     </div>
   );

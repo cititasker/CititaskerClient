@@ -11,12 +11,13 @@ import { cn } from "@/lib/utils";
 import { formatCurrency } from "@/utils";
 
 interface WalletBalanceCardProps {
-  balance: string;
+  balance: number;
   showBalance?: boolean;
   onToggleVisibility?: () => void;
   className?: string;
   previousBalance?: string;
   percentageChange?: number;
+  isBalancePending: boolean;
 }
 
 export const WalletBalanceCard: React.FC<WalletBalanceCardProps> = ({
@@ -66,7 +67,7 @@ export const WalletBalanceCard: React.FC<WalletBalanceCardProps> = ({
         {/* Balance Section */}
         <div className="px-6 pb-6">
           <div className="mb-4">
-            <p className="text-4xl sm:text-5xl font-bold text-neutral-900 tracking-tight">
+            <p className="text-4xl sm:text-5xl font-bold text-neutral-900 tracking-normal">
               {showBalance ? balance : "••••••••"}
             </p>
           </div>
@@ -116,9 +117,10 @@ export const WalletBalanceCardGlass: React.FC<WalletBalanceCardProps> = ({
   onToggleVisibility,
   className,
   percentageChange = 12.5,
+  isBalancePending,
 }) => {
   return (
-    <div className={cn("relative group max-w-md w-full mb-8", className)}>
+    <div className={cn("relative group max-w-sm w-full mb-8", className)}>
       {/* Glassmorphism Card */}
       <div className="relative overflow-hidden rounded-3xl backdrop-blur-xl bg-white/70 border border-neutral-200 shadow-md transition-all duration-500">
         {/* Gradient Background */}
@@ -157,7 +159,7 @@ export const WalletBalanceCardGlass: React.FC<WalletBalanceCardProps> = ({
 
           {/* Balance Display */}
           <div className="mb-4">
-            <p className="text-4xl sm:text-5xl font-bold text-neutral-900 tracking-tight mb-2">
+            <p className="text-3xl sm:text-4xl font-bold text-neutral-900 tracking-tight mb-2">
               {showBalance ? formatCurrency({ value: balance }) : "••••••••"}
             </p>
 

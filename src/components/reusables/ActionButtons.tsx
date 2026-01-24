@@ -39,8 +39,8 @@ const ActionsButtons = ({
   return (
     <div
       className={cn(
-        "flex flex-col-reverse sm:flex-row gap-y-3 gap-x-3 sm:gap-x-6 items-center mt-auto w-full",
-        className
+        "flex flex-col-reverse sm:flex-row gap-3 items-center mt-auto w-full",
+        className,
       )}
     >
       {handleCancel && (

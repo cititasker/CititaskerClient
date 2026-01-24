@@ -31,7 +31,7 @@ const DoughnutChart = dynamic(
       </Card>
     ),
     ssr: false,
-  }
+  },
 );
 
 const AmountAreaChart = dynamic(
@@ -44,7 +44,7 @@ const AmountAreaChart = dynamic(
       </Card>
     ),
     ssr: false,
-  }
+  },
 );
 
 export default function DashboardPage() {
@@ -69,7 +69,7 @@ export default function DashboardPage() {
   const { data: recentTasksData, isLoading: taskLoading } = useBaseQuery(
     [API_ROUTES.RECENT_TASKS(role), role, queryParams],
     () => getRecentTasks({ role, params: query }),
-    { enabled: !!role }
+    { enabled: !!role },
   );
 
   // Expense Analysis
@@ -80,7 +80,7 @@ export default function DashboardPage() {
         role,
         params: { time_range: timeframe },
       }),
-    { enabled: !!role }
+    { enabled: !!role },
   );
 
   // Amount Spent/Earned Analysis
@@ -91,8 +91,10 @@ export default function DashboardPage() {
         role,
         params: { time_range: timeframe },
       }),
-    { enabled: !!role }
+    { enabled: !!role },
   );
+
+  console.log(11, amountData);
 
   // Transform expense data for expense chart
   const { chartData: expenseChartData, total: totalExpense } =
@@ -116,7 +118,7 @@ export default function DashboardPage() {
   }, [recentTasks, pagination.pageIndex, pagination.pageSize, role]);
 
   return (
-    <div className="space-y-8 mb-5">
+    <div className="space-y-6 mb-5">
       <DashboardHeader
         userName={user.first_name ?? ""}
         timeValue={timeframe}

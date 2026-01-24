@@ -6,16 +6,7 @@ export function useAuth() {
   const { data: session, status } = useSession();
 
   // Get full user data from Redux store (fetched via useGetUser)
-  const storeUser = useAppSelector((state) => state.user.user);
-
-  // Merge session auth data with store user data
-  const user = storeUser
-    ? {
-        ...storeUser,
-        authToken: session?.user?.authToken,
-        role: session?.user?.role,
-      }
-    : session?.user; // Fallback to session if no store data
+  const user = useAppSelector((state) => state.user.user);
 
   return {
     user,

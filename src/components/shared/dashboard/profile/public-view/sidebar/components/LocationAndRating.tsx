@@ -5,17 +5,15 @@ import { ROLE } from "@/constant";
 
 export const LocationAndRating = ({
   user,
-  role,
 }: {
-  user: any;
-  role: TRole | undefined;
+  user: UserProfileData | undefined;
 }) => {
-  const reviewCount = user?.review_count || 0;
+  const reviewCount = user?.reviews_count || 0;
   const rating = user?.average_rating || 0;
 
   return (
     <div className="grid grid-cols-1 gap-3">
-      {role == ROLE.tasker && (
+      {user?.location && (
         <StatCard
           icon={<MapPin className="w-4 h-4 text-primary" />}
           label="Location"

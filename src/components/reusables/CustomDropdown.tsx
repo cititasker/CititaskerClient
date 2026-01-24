@@ -34,7 +34,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
     <div
       className={cn(
         "flex items-center gap-1 cursor-pointer hover:bg-neutral-100 rounded-md p-1 transition-colors",
-        disabled && "opacity-50 cursor-not-allowed"
+        disabled && "opacity-50 cursor-not-allowed",
       )}
     >
       <ChevronDown className="w-4 h-4" />
@@ -51,8 +51,8 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
         align={align}
         sideOffset={sideOffset}
         className={cn(
-          "min-w-fit bg-white border border-neutral-200 rounded-xl shadow-xl animate-in data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 z-50",
-          contentClassName
+          "min-w-fit bg-white border border-neutral-200 rounded-md shadow-md animate-in data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 z-50",
+          contentClassName,
         )}
       >
         {children}
@@ -84,7 +84,7 @@ export const IconDropdown = ({
         "h-8 w-8 p-0 rounded-md hover:bg-neutral-100 transition-colors flex items-center justify-center cursor-pointer",
         "focus:outline-none focus:ring-0 focus:ring-primary focus:ring-offset-1",
         disabled && "opacity-50 cursor-not-allowed",
-        className
+        className,
       )}
       onMouseDown={(e) => {
         e.preventDefault();
