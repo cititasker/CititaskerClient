@@ -10,6 +10,7 @@ import FormInput from "@/components/forms/FormInput";
 import StepIndicator from "@/components/auth/StepIndicator";
 import AuthForm from "@/components/auth/AuthForm";
 import AuthCard from "@/components/auth/AuthCard";
+import { SUPPORT_URL } from "@/constant";
 
 interface Props {
   onNext?: () => void;
@@ -51,7 +52,7 @@ const StepThree = ({ onNext }: Props) => {
             bottomLink={{
               text: "Need help?",
               linkText: "Contact Support",
-              href: "/support",
+              href: `mailto:${SUPPORT_URL}`,
             }}
           >
             <div className="mb-4">

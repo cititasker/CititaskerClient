@@ -46,7 +46,7 @@ export const notificationsApi = {
   getNotifications: async (params?: { page?: number; per_page?: number }) => {
     const response = await api.get<NotificationsResponse>(
       API_ROUTES.NOTIFICATIONS.GET_ALL,
-      { params: { per_page: 10, page: 1, ...params } }
+      { params: { per_page: 10, page: 1, ...params } },
     );
     return response.data;
   },
@@ -75,6 +75,10 @@ export const notificationsApi = {
 
   deleteAllRead: async () => {
     const response = await api.delete("/notifications/read/all");
+    return response.data;
+  },
+  updateNotificationSettings: async () => {
+    const response = await api.post("/profile/update-notification-settings");
     return response.data;
   },
 };

@@ -56,20 +56,20 @@ export default function StepThree({ prevStep, nextStep }: Props) {
         nextStep();
         dispatch(setOfferData({}));
         toast.success(
-          data.message || "Surcharge request submitted successfully"
+          data.message || "Surcharge request submitted successfully",
         );
         queryClient.invalidateQueries({
-          queryKey: [API_ROUTES.TASKS, String(offer?.task_id)],
+          queryKey: [API_ROUTES.TASKS],
         });
         queryClient.invalidateQueries({
-          queryKey: [API_ROUTES.USER_TASKS, String(offer?.task_id)],
+          queryKey: [API_ROUTES.USER_TASKS],
         });
       },
       onError(error) {
         console.log("Error submitting surcharge request:", error);
         toast.error(
           error?.message ||
-            "Failed to submit surcharge request. Please try again."
+            "Failed to submit surcharge request. Please try again.",
         );
       },
     });

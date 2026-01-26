@@ -4,7 +4,7 @@ import { IReschedule, TaskData } from "./tasks.types";
 import { api } from "../../lib/api-client";
 
 export const getAllTasks = async (
-  queryParams?: Record<string, any>
+  queryParams?: Record<string, any>,
 ): Promise<TaskData> => {
   const params = new URLSearchParams();
 
@@ -45,7 +45,7 @@ export function getTaskById(id: string) {
 }
 
 export function getUserTasks(
-  queryParams?: Record<string, any>
+  queryParams?: Record<string, any>,
 ): Promise<TaskData> {
   const query = new URLSearchParams(queryParams).toString();
   return api
@@ -95,6 +95,17 @@ export function createTask(data: any) {
 export function updateTask(data: any) {
   return api
     .post(API_ROUTES.UPDATE_TASK, data)
+    .then((data) => {
+      return data.data;
+    })
+    .catch((error: AxiosError) => {
+      throw error.response?.data;
+    });
+}
+
+export function cancelTask(data: any) {
+  return api
+    .post(API_ROUTES.CANCEL_TASK, data)
     .then((data) => {
       return data.data;
     })

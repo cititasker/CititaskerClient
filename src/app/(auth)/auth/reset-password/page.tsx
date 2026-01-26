@@ -12,6 +12,7 @@ import { useSnackbar } from "@/providers/SnackbarProvider";
 import FormInput from "@/components/forms/FormInput";
 import { ROUTES } from "@/constant";
 import AuthCard from "@/components/auth/AuthCard";
+import { ArrowLeft } from "lucide-react";
 
 const ResetPasswordPage = () => {
   const { showSnackbar } = useSnackbar();
@@ -42,7 +43,7 @@ const ResetPasswordPage = () => {
     if (!email || !token) {
       showSnackbar(
         "Invalid reset link. Please check your email or try again.",
-        "error"
+        "error",
       );
       return;
     }
@@ -91,9 +92,10 @@ const ResetPasswordPage = () => {
       </FormProvider>
       <Link
         href={ROUTES.LOGIN}
-        className="underline text-primary my-6 text-center text-[14px]"
+        className="mt-6 flex items-center justify-center gap-2 text-sm text-text-secondary hover:text-primary-600 transition-colors font-medium"
       >
-        Back to login
+        <ArrowLeft className="w-4 h-4" />
+        Back to Login
       </Link>
     </AuthCard>
   );

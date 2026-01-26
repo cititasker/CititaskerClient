@@ -29,7 +29,7 @@ export function useNotificationsData(isAuthenticated: boolean = false) {
 
   const notifications: NotificationItem[] = useMemo(() => {
     return (allNotificationsResponse?.data?.data || []).map(
-      transformNotification
+      transformNotification,
     );
   }, [allNotificationsResponse]);
 
@@ -66,7 +66,6 @@ export function useNotificationsData(isAuthenticated: boolean = false) {
               audioRef.current?.pause();
               audioRef.current!.currentTime = 0;
               audioUnlockedRef.current = true;
-              console.log("✅ Audio unlocked");
             })
             .catch(() => {
               // Silent fail - audio will be unlocked on next interaction
@@ -150,7 +149,7 @@ export function useNotificationsData(isAuthenticated: boolean = false) {
         });
       }
     },
-    [playNotificationSound, queryClient]
+    [playNotificationSound, queryClient],
   );
 
   const { isConnected } = usePusher({
@@ -173,7 +172,7 @@ export function useNotificationsData(isAuthenticated: boolean = false) {
     (id: string) => {
       markAsReadMutation.mutate(id);
     },
-    [markAsReadMutation]
+    [markAsReadMutation],
   );
 
   const markAllAsRead = useCallback(() => {
@@ -184,7 +183,7 @@ export function useNotificationsData(isAuthenticated: boolean = false) {
     (id: string) => {
       deleteNotificationMutation.mutate(id);
     },
-    [deleteNotificationMutation]
+    [deleteNotificationMutation],
   );
 
   return {

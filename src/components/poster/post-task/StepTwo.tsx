@@ -25,7 +25,7 @@ const GooglePlacesAutocomplete = dynamic(
       </div>
     ),
     ssr: false,
-  }
+  },
 );
 
 const stepTwoSchema = postTaskSchema
@@ -64,34 +64,40 @@ export default function StepTwo() {
   };
 
   return (
-    <div className="space-y-6">
-      <FormProvider {...methods}>
-        <form onSubmit={onSubmit} className="space-y-6">
-          <div>
-            <LocationTypeSelector />
-            <FormError name="location_type" />
-          </div>
+    <FormProvider {...methods}>
+      <form
+        onSubmit={onSubmit}
+        className="h-full flex flex-col overflow-hidden"
+      >
+        {/* Scrollable content area */}
+        <div className="flex-1 overflow-y-auto no-scrollbar px-1 pb-4 space-y-6">
+          <div className="space-y-6 pb-4">
+            <div>
+              <LocationTypeSelector />
+              <FormError name="location_type" />
+            </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <SelectState name="state" />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <SelectState name="state" />
 
-            <div className="flex-1">
-              {address ? (
-                <FormInput
-                  name="address"
-                  label="Location"
-                  clearable
-                  onClear={handleClearLocation}
-                />
-              ) : (
-                <GooglePlacesAutocomplete name="location" label="Location" />
-              )}
+              <div className="flex-1">
+                {address ? (
+                  <FormInput
+                    name="address"
+                    label="Location"
+                    clearable
+                    onClear={handleClearLocation}
+                  />
+                ) : (
+                  <GooglePlacesAutocomplete name="location" label="Location" />
+                )}
+              </div>
             </div>
           </div>
+        </div>
 
-          <PostTaskFormActions />
-        </form>
-      </FormProvider>
-    </div>
+        <PostTaskFormActions />
+      </form>
+    </FormProvider>
   );
 }

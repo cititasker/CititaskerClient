@@ -1,10 +1,6 @@
-GET https://staging-api.cititasker.com/api/v1/tasks/single
+GET https://staging-api.cititasker.com/api/v1/tasks/single/62
 Content-Type: application/json
 Accept: application/json
-
-{
-    "task_id":"21"
-}
 
 ###
 GET https://staging-api.cititasker.com/api/v1/auth/google
@@ -12,12 +8,18 @@ Content-Type: application/json
 Accept: application/json
 
 ###
+GET https://staging-api.cititasker.com/api/v1/auth/user-details
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3N0YWdpbmctYXBpLmNpdGl0YXNrZXIuY29tL2FwaS92MS9hdXRoL2xvZ2luIiwiaWF0IjoxNzY5MzA0NTEwLCJleHAiOjE3Njk5MDkzMTAsIm5iZiI6MTc2OTMwNDUxMCwianRpIjoiQ2sxNHhIdFprMFpHMG1yZSIsInN1YiI6IjQxIiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.lRP97Gx7zfK3qU1eNlC_e-qAXY-AJi8wdGCmTxHvDvo
+
+###
 POST https://staging-api.cititasker.com/api/v1/auth/login
 Content-Type: application/json
 Accept: application/json
 
 {
-    "email":"juliet_tasker@gmail.com",
+    "email":"taiwokelvin+2@gmail.com",
     "password": "123456"
 }
 

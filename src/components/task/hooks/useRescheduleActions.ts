@@ -58,7 +58,7 @@ export const useRescheduleActions = ({ task }: UseRescheduleActionsProps) => {
         },
       });
     },
-    [task?.id, createReschedule, invalidateQueries]
+    [task?.id, createReschedule, invalidateQueries],
   );
 
   const handleRescheduleSubmit = useCallback(
@@ -85,10 +85,10 @@ export const useRescheduleActions = ({ task }: UseRescheduleActionsProps) => {
           onError: () => {
             toast.error("Failed to reschedule task");
           },
-        }
+        },
       );
     },
-    [task, rescheduleTask, invalidateQueries, hideAlert]
+    [task, rescheduleTask, invalidateQueries, hideAlert],
   );
 
   const handleAcceptReschedule = useCallback(() => {
@@ -109,10 +109,10 @@ export const useRescheduleActions = ({ task }: UseRescheduleActionsProps) => {
           hideAlert(`reschedule_${task?.id}`);
           setStep("success");
         },
-        onError: () => {
-          toast.error("Failed to accept reschedule");
+        onError: (error) => {
+          toast.error(error.message);
         },
-      }
+      },
     );
   }, [task, acceptReschedule, invalidateQueries, hideAlert]);
 
@@ -121,7 +121,7 @@ export const useRescheduleActions = ({ task }: UseRescheduleActionsProps) => {
       if (type) setStep(type);
       rescheduleModal.openModal();
     },
-    [rescheduleModal]
+    [rescheduleModal],
   );
 
   const closeRescheduleModal = useCallback(() => {

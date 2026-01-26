@@ -66,7 +66,7 @@
   --primary-brand: var(--primary);
   --secondary-brand: var(--secondary);
   --background: 255 255 255;
-  --background-secondary: var(--neutral-50);
+  --background-secondary: var(--neutral-100);
   --background-tertiary: var(--neutral-100);
 
   --text-primary: var(--neutral-900);
@@ -80,10 +80,10 @@
 
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1),
-    0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1),
-    0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-lg:
+    0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl:
+    0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
 
   /* === LEGACY MAPPINGS (for backward compatibility) === */
   --primary-foreground: var(--primary-50);
@@ -257,10 +257,6 @@ body {
     color: rgb(var(--error));
   }
 
-  .p-top {
-    @apply pt-24 md:pt-24;
-  }
-
   .paper {
     @apply rounded-3xl bg-white shadow-lg w-full border;
     border-color: rgb(var(--border-light));
@@ -269,6 +265,10 @@ body {
 
   .container-w {
     @apply px-4 max-w-[1440px] w-full mx-auto py-8;
+  }
+
+  .p-top {
+    @apply pt-24 md:pt-24;
   }
 
   .btn-primary {

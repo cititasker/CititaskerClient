@@ -1,29 +1,34 @@
+// components/AcceptOfferModal.tsx
+import { memo } from "react";
 import AnimatedStep from "@/components/reusables/AnimatedStep";
 import CustomModal from "@/components/reusables/CustomModal";
 import { UseModalReturn } from "@/constant/interface";
-import React from "react";
 import ReviewPayment from "./ReviewPayment";
 import PaymentSuccess from "../surcharge/PaymentSuccess";
 
-interface IProps {
+interface AcceptOfferModalProps {
   offerModal: UseModalReturn;
   taskerName?: string;
   loading: boolean;
   selectedOffer: IOffer | undefined;
   step: "review" | "success";
+  balance: number;
+  paymentMethod: "wallet" | "hybrid" | "direct";
   onSubmit: () => void;
   onClose: () => void;
 }
 
-export default function AcceptOfferModal({
+const AcceptOfferModal = ({
   offerModal,
   taskerName,
   loading,
   selectedOffer,
   step,
+  balance,
+  paymentMethod,
   onSubmit,
   onClose,
-}: IProps) {
+}: AcceptOfferModalProps) => {
   const isReviewStep = step === "review";
   const isSuccessStep = step === "success";
 
@@ -34,12 +39,18 @@ export default function AcceptOfferModal({
       onClose={onClose}
       contentClassName="max-w-lg"
       confetti={isSuccessStep}
+      hideClose={loading}
+      onInteractOutside={(e: any) => {
+        if (loading) e.preventDefault();
+      }}
     >
       <AnimatedStep currentStep={step}>
         {isReviewStep && (
           <ReviewPayment
             loading={loading}
             selectedOffer={selectedOffer}
+            balance={balance}
+            paymentMethod={paymentMethod}
             onSubmit={onSubmit}
           />
         )}
@@ -50,4 +61,6 @@ export default function AcceptOfferModal({
       </AnimatedStep>
     </CustomModal>
   );
-}
+};
+
+export default memo(AcceptOfferModal);

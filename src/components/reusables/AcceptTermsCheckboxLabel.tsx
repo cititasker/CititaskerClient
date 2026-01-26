@@ -1,13 +1,22 @@
 import Link from "next/link";
-import React from "react";
+import { memo } from "react";
 
-export default function AcceptTermsCheckboxLabel() {
+const AcceptTermsCheckboxLabel = () => {
   return (
-    <p className="text-sm text-black-2">
+    <span className="text-sm text-text-primary leading-relaxed">
       I accept the{" "}
-      <Link href="/legal/terms-and-conditions" className="text-primary text-sm">
-        Terms & Conditions.
+      <Link
+        href="/legal/terms-and-conditions"
+        className="text-primary hover:text-primary-600 underline underline-offset-2 transition-colors"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Terms & Conditions
       </Link>
-    </p>
+    </span>
   );
-}
+};
+
+AcceptTermsCheckboxLabel.displayName = "AcceptTermsCheckboxLabel";
+
+export default memo(AcceptTermsCheckboxLabel);

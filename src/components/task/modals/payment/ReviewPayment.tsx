@@ -1,64 +1,106 @@
+// components/ReviewPayment.tsx
 "use client";
 
+import { memo, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useFormContext } from "react-hook-form";
+import { Wallet, CreditCard } from "lucide-react";
 import FormCheckbox from "@/components/forms/FormCheckbox";
 import FormButton from "@/components/forms/FormButton";
 import { formatCurrency, initializeName } from "@/utils";
 import { defaultProfile } from "@/constant/images";
 import { useAppSelector } from "@/store/hook";
-
-interface Tasker {
-  email: string;
-  first_name: string;
-  id: number;
-  last_name: string;
-  profile_image: string;
-}
-
-interface Offer {
-  offer_amount: string | number | undefined;
-  tasker: Tasker;
-}
+import { cn } from "@/lib/utils";
 
 interface ReviewPaymentProps {
   loading: boolean;
-  selectedOffer: Offer | undefined;
+  selectedOffer: IOffer | undefined;
+  balance: number;
+  paymentMethod: PaymentMethodType;
   onSubmit: () => void;
 }
 
-const PaymentSummaryRow = ({
-  label,
-  amount,
-}: {
-  label: string;
-  amount: string | number | undefined;
-}) => (
-  <div className="flex justify-between">
-    <p className="font-semibold text-black">{label}</p>
-    <p className="font-semibold text-black">
-      {formatCurrency({ value: amount })}
-    </p>
-  </div>
+const PaymentSummaryRow = memo(
+  ({
+    label,
+    amount,
+    icon,
+    highlight = false,
+  }: {
+    label: string;
+    amount: string | number | undefined;
+    icon?: React.ReactNode;
+    highlight?: boolean;
+  }) => (
+    <div className="flex justify-between items-center">
+      <div className="flex items-center gap-2">
+        {icon && <span className="text-neutral-500">{icon}</span>}
+        <p
+          className={cn(
+            "text-sm",
+            highlight ? "font-semibold text-black" : "text-neutral-700",
+          )}
+        >
+          {label}
+        </p>
+      </div>
+      <p
+        className={cn(
+          "text-sm",
+          highlight ? "font-bold text-black" : "font-semibold text-black",
+        )}
+      >
+        {formatCurrency({ value: amount })}
+      </p>
+    </div>
+  ),
 );
 
-export default function ReviewPayment({
+PaymentSummaryRow.displayName = "PaymentSummaryRow";
+
+const ReviewPayment = ({
   loading,
   selectedOffer,
+  balance,
+  paymentMethod,
   onSubmit,
-}: ReviewPaymentProps) {
+}: ReviewPaymentProps) => {
   const { handleSubmit } = useFormContext();
   const { taskDetails } = useAppSelector((state) => state.task);
 
-  if (!selectedOffer) return null;
+  const paymentBreakdown = useMemo(() => {
+    if (!selectedOffer) return null;
+
+    const offerAmount = Number(selectedOffer.offer_amount) || 0;
+
+    let walletAmount = 0;
+    let cardAmount = 0;
+
+    if (paymentMethod === "wallet") {
+      walletAmount = offerAmount;
+    } else if (paymentMethod === "hybrid") {
+      walletAmount = balance;
+      cardAmount = offerAmount - balance;
+    } else {
+      cardAmount = offerAmount;
+    }
+
+    return {
+      offerAmount,
+      walletAmount,
+      cardAmount,
+      hasWalletPayment: walletAmount > 0,
+      hasCardPayment: cardAmount > 0,
+    };
+  }, [selectedOffer, balance, paymentMethod]);
+
+  if (!selectedOffer || !paymentBreakdown) return null;
 
   const fullName = initializeName({
     first_name: selectedOffer.tasker.first_name,
     last_name: selectedOffer.tasker.last_name,
   });
-
-  const offerAmount = selectedOffer.offer_amount;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -81,34 +123,65 @@ export default function ReviewPayment({
 
       {/* Payment Summary */}
       <div>
-        <h3 className="text-xl font-semibold text-dark-grey-2 mb-6">Summary</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-xl font-semibold text-dark-grey-2">Summary</h3>
+          <p className="text-sm font-medium text-primary">
+            Wallet: {formatCurrency({ value: balance, noFraction: true })}
+          </p>
+        </div>
 
-        <div className="space-y-4">
-          <div className="pb-4 border-b border-light-grey">
+        <div className="space-y-3">
+          {/* Wallet Payment */}
+          {paymentBreakdown.hasWalletPayment && (
             <PaymentSummaryRow
-              label="Total offer for the task"
-              amount={offerAmount}
+              label="From wallet"
+              amount={paymentBreakdown.walletAmount}
+              icon={<Wallet className="w-4 h-4" />}
+            />
+          )}
+
+          {/* Card Payment */}
+          {paymentBreakdown.hasCardPayment && (
+            <PaymentSummaryRow
+              label={
+                paymentMethod === "hybrid"
+                  ? "From card (remaining)"
+                  : "From card"
+              }
+              amount={paymentBreakdown.cardAmount}
+              icon={<CreditCard className="w-4 h-4" />}
+            />
+          )}
+
+          {/* Divider */}
+          <div className="pt-3 border-t border-light-grey">
+            <PaymentSummaryRow
+              label="Total"
+              amount={paymentBreakdown.offerAmount}
+              highlight
             />
           </div>
-          <PaymentSummaryRow label="Total" amount={offerAmount} />
         </div>
       </div>
 
       {/* Terms Agreement */}
       <FormCheckbox
         name="agreed"
+        required
         label={
-          <p className="text-black-2 text-sm">
+          <span className="text-black-2 text-sm">
             I accept the{" "}
             <Link
               href="/legal/terms-and-conditions"
               className="text-primary underline"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               Terms & Conditions
             </Link>
             . Please note that payment will be secured on CitiTasker until
             you're happy the task has been completed.
-          </p>
+          </span>
         }
       />
 
@@ -118,7 +191,10 @@ export default function ReviewPayment({
         className="w-full"
         type="submit"
         loading={loading}
+        disabled={loading}
       />
     </form>
   );
-}
+};
+
+export default memo(ReviewPayment);

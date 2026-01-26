@@ -7,6 +7,7 @@ interface IData {
   metadata?: any;
   reference?: string;
   handleSuccess: (data: any) => void;
+  handleError?: (data: any) => void;
   currency?: string;
 }
 const key = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY as string;
@@ -26,6 +27,7 @@ const Paystack = {
     metadata = {},
     reference,
     handleSuccess,
+    handleError,
     currency = "NGN",
   }: IData) => {
     const paystackInstance = new PaystackPop();
@@ -37,6 +39,7 @@ const Paystack = {
       currency,
       reference: generateReference(reference),
       onSuccess: handleSuccess,
+      onError: handleError,
     });
   },
 };

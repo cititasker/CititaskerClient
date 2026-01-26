@@ -22,24 +22,29 @@ const PostTaskLayout: React.FC<{ children: React.ReactNode }> = ({
   if (isLoading) return <PostTaskLoadingScreen />;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="h-screen flex flex-col overflow-hidden">
       {/* Header with backdrop blur */}
-      <header className="sticky top-0 z-10 bg-background/80 backdrop-blur-sm border-b border-border-light">
+      <header className="flex-shrink-0 bg-background/80 backdrop-blur-sm border-b border-border-light">
         <div className="px-4 sm:px-6 lg:px-8 py-4">
           <BackTo href={href} />
         </div>
       </header>
 
-      {/* Main content */}
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 max-w-3xl">
-        {Number(step) < 5 && <PostTaskHeader />}
-        <div className="bg-background">{children}</div>
+      {/* Main content - THIS IS THE KEY: Set explicit height calculation */}
+      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 max-w-3xl flex-1 flex flex-col overflow-hidden">
+        {Number(step) < 5 && (
+          <div className="flex-shrink-0 mb-6">
+            <PostTaskHeader />
+          </div>
+        )}
+
+        {/* Content wrapper with explicit height constraint */}
+        <div className="flex-1 flex flex-col overflow-hidden">{children}</div>
       </main>
     </div>
   );
 };
 
-// Extracted loading component for better reusability
 const PostTaskLoadingScreen = () => (
   <div className="min-h-screen bg-background flex items-center justify-center">
     <div className="text-center">

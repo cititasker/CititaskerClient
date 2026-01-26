@@ -79,9 +79,12 @@ export default function StepThree() {
   };
 
   return (
-    <div className="space-y-6">
-      <FormProvider {...methods}>
-        <form onSubmit={onSubmit} className="space-y-6">
+    <FormProvider {...methods}>
+      <form
+        onSubmit={onSubmit}
+        className="h-full flex flex-col overflow-hidden"
+      >
+        <div className="flex-1 overflow-y-auto no-scrollbar px-1 pb-4 space-y-6">
           <TimeFrameSelector />
 
           <FormDatePicker
@@ -96,13 +99,13 @@ export default function StepThree() {
           />
 
           <TimeOfDaySelector />
+        </div>
 
-          <PostTaskFormActions
-            okText={isReschedule ? "Submit" : "Next"}
-            loading={updateMutation.isPending}
-          />
-        </form>
-      </FormProvider>
-    </div>
+        <PostTaskFormActions
+          okText={isReschedule ? "Submit" : "Next"}
+          loading={updateMutation.isPending}
+        />
+      </form>
+    </FormProvider>
   );
 }

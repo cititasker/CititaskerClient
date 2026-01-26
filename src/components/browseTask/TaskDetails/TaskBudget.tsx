@@ -12,6 +12,7 @@ import { useTaskState } from "./hooks/useTaskState";
 import { useVerifications } from "./hooks/useVerifications";
 import { useMoreOptions } from "./hooks/useMoreOptions";
 import { useTaskActions } from "@/components/task/hooks";
+import FormButton from "@/components/forms/FormButton";
 
 interface TaskBudgetProps {
   task: ITask;
@@ -32,6 +33,7 @@ const TaskBudget: React.FC<TaskBudgetProps> = ({
   const state = useTaskState(task);
   const verifications = useVerifications(user);
   const moreOptions = useMoreOptions(state);
+  const hasDispute = task.has_disputes;
 
   const { updatedBudget } = useTaskActions({ task });
 
@@ -68,7 +70,7 @@ const TaskBudget: React.FC<TaskBudgetProps> = ({
 
   return (
     <>
-      <div>
+      <div className="space-y-2">
         <BudgetDisplay
           budget={updatedBudget}
           buttonText={buttonConfig.text}
@@ -80,13 +82,22 @@ const TaskBudget: React.FC<TaskBudgetProps> = ({
           }
         />
         {isAuth && moreOptions.length > 0 && (
-          <div className="mt-1">
+          <div>
             <MoreOptionsMenu
               moreOptions={moreOptions}
               onSelect={handleOptionSelect}
               className="w-full h-10"
             />
           </div>
+        )}
+        {hasDispute && state.isTaskAssignedToYou && (
+          <FormButton
+            variant="link"
+            className="p-0 h-auto underline block ml-auto"
+            href={`/${user.role}/dispute/${task.id}`}
+          >
+            View dispute
+          </FormButton>
         )}
       </div>
 

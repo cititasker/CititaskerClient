@@ -11,7 +11,7 @@ import { forgotPasswordApi } from "@/services/auth";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import FormButton from "@/components/forms/FormButton";
 import FormInput from "@/components/forms/FormInput";
-import { ROUTES } from "@/constant";
+import { ROUTES, SUPPORT_URL } from "@/constant";
 import AuthCard from "@/components/auth/AuthCard";
 
 const ForgotPasswordPage = () => {
@@ -79,7 +79,7 @@ const ForgotPasswordPage = () => {
             <p className="text-sm text-text-muted">
               Need help?{" "}
               <a
-                href="mailto:support@cititasker.com"
+                href={`mailto:${SUPPORT_URL}`}
                 className="text-primary-600 hover:text-primary-700 transition-colors font-medium"
               >
                 Contact Support

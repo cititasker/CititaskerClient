@@ -266,7 +266,7 @@ export const company = [
   },
   {
     name: "Support",
-    href: "#",
+    href: `mailto:${SUPPORT_URL}`,
   },
 ];
 
@@ -317,7 +317,7 @@ export const statsData = [
 
 import Tasker from "./public/images/tasker.png";
 import Icons from "@/components/Icons";
-import { ROUTES } from "@/constant";
+import { ROUTES, SUPPORT_URL } from "@/constant";
 import {
   IChat,
   ICreditCard,

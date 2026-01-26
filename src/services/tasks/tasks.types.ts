@@ -4,6 +4,7 @@ export type IntentPayload = {
   task_id: number;
   payable_id: number;
   intent: "accept_offer" | "surcharge_payment";
+  payment_method: PaymentMethodType;
 };
 
 export type IntentResponse = {
@@ -13,6 +14,10 @@ export type IntentResponse = {
     amount: number;
     currency: string;
     payment_url?: string;
+    gateway_amount: number;
+    payment_method: PaymentMethodType;
+    status: "approved" | "failed";
+    wallet_amount: number;
   };
 };
 
@@ -34,7 +39,7 @@ export type CreateTask = {
 export type UseCustomSuspenseQueryOptions<
   TData,
   TError = unknown,
-  TQueryKey extends readonly unknown[] = unknown[]
+  TQueryKey extends readonly unknown[] = unknown[],
 > = Omit<
   UseSuspenseQueryOptions<TData, TError, TData, TQueryKey>,
   "queryKey" | "queryFn"

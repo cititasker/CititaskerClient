@@ -97,7 +97,7 @@ const TaskerOffer: React.FC<TaskerOfferProps> = ({
 
   const fullName = loggedInUser(
     offer.tasker.first_name,
-    offer.tasker.last_name
+    offer.tasker.last_name,
   );
 
   const {

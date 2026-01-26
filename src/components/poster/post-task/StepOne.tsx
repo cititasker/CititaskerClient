@@ -22,7 +22,7 @@ const ImageUploader = dynamic(
       </div>
     ),
     ssr: false,
-  }
+  },
 );
 
 export default function StepOne() {
@@ -60,7 +60,7 @@ export default function StepOne() {
 
     if (urlParams.categoryId && categories.length > 0) {
       const selectedCategory = categories.find(
-        (cat) => cat.id === urlParams.categoryId
+        (cat) => cat.id === urlParams.categoryId,
       );
       if (selectedCategory) {
         updates.category_id = selectedCategory;
@@ -76,7 +76,7 @@ export default function StepOne() {
   useEffect(() => {
     if (urlParams.subCategoryId && subCategories.length > 0) {
       const selectedSubCategory = subCategories.find(
-        (sub) => sub.id === urlParams.subCategoryId
+        (sub) => sub.id === urlParams.subCategoryId,
       );
       if (selectedSubCategory) {
         setValue("sub_category_id", selectedSubCategory);
@@ -102,9 +102,10 @@ export default function StepOne() {
   };
 
   return (
-    <div className="space-y-6">
-      <FormProvider {...methods}>
-        <form onSubmit={onSubmit} className="space-y-6">
+    <FormProvider {...methods}>
+      <form onSubmit={onSubmit} className="flex flex-col h-full">
+        {/* Scrollable content area */}
+        <div className="flex-1 overflow-y-auto no-scrollbar px-1 pb-4 space-y-6">
           <FormInput
             name="name"
             label="What do you want to get done?"
@@ -161,10 +162,11 @@ export default function StepOne() {
             onUploadError={handleImageUploadError}
             description="Upload images to help describe your task"
           />
+        </div>
 
-          <PostTaskFormActions />
-        </form>
-      </FormProvider>
-    </div>
+        {/* Fixed actions at bottom */}
+        <PostTaskFormActions />
+      </form>
+    </FormProvider>
   );
 }

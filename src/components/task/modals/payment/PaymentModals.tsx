@@ -23,7 +23,7 @@ export default function PaymentModals({
   taskerName,
 }: PaymentModalsProps) {
   const [releaseStep, setReleaseStep] = useState<"release" | "success">(
-    "release"
+    "release",
   );
 
   const handleOfferSubmit = () => {
@@ -50,6 +50,8 @@ export default function PaymentModals({
         offerModal={paymentActions.offerModal}
         loading={paymentActions.paymentMutation.isPending}
         selectedOffer={paymentActions.selectedOffer}
+        paymentMethod={paymentActions.paymentMethod}
+        balance={paymentActions.balance}
         taskerName={taskerName}
         step={paymentActions.offerStep}
         onSubmit={handleOfferSubmit}
@@ -61,7 +63,7 @@ export default function PaymentModals({
         onClose={closeReleaseModal}
         step={releaseStep}
         taskerName={taskerName}
-        loading={paymentActions.releasePayment.isPending}
+        loading={paymentActions.releasePaymentMutation?.isPending}
         methods={paymentActions.releasePaymentMethods}
         onSubmit={handleReleaseSubmit}
         taskerProfile={task.tasker?.profile as any}

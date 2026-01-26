@@ -1,6 +1,12 @@
 import DashboardSidebar from "@/components/dashboard/sidebar/DashboardSidebar";
 import { requireRole } from "@/lib/auth-utils";
+import { generateLayoutMetadata } from "@/lib/metadata-helper";
 import React from "react";
+
+export const metadata = generateLayoutMetadata({
+  title: "Tasker Dashboard",
+  noIndex: true,
+});
 
 export default async function TaskerDashboardLayout({
   children,

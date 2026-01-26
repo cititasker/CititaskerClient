@@ -11,7 +11,6 @@ export const useTaskState = (task?: ITask | null): TaskState => {
   return useMemo(() => {
     const status = effectiveTask?.status;
     const isOpen = status === "open";
-    // const isAssigned = status === "assigned";
     const isCompleted = status === "completed";
 
     const isTaskAssignedToYou = effectiveTask?.tasker?.id === user?.id;
@@ -36,6 +35,7 @@ export const useTaskState = (task?: ITask | null): TaskState => {
       hasCompletedTask,
       hasMadeOffer,
       hasCompletedKyc,
+      isTaskAssignedToYou,
     };
   }, [effectiveTask, user]);
 };

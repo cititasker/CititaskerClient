@@ -4,6 +4,7 @@ import { FaInstagramSquare } from "react-icons/fa";
 
 export const maxLengthChar = 200;
 export const connectionFee = 10;
+export const SUPPORT_URL = process.env.NEXT_PUBLIC_SUPPORT_URL;
 
 export const PORTFOLIO_STORAGE_KEY = "portfolio_pending_images";
 export const MAX_IMAGES = 8;
@@ -59,7 +60,6 @@ export const API_ROUTES = {
   UPLOAD_PROFILE: "auth/upload-profile-image",
   UPDATE_PROFILE: "auth/update-profile",
 
-  // UPDATE_TASK: (id: string) => `/tasks/${id}`,
   DELETE_TASK: (id: string) => `/tasks/${id}`,
 
   TASKER: {
@@ -75,6 +75,7 @@ export const API_ROUTES = {
   CREATE_PAYMENT_INTENT: "/payments/create-intent",
   CREATE_TASK: "/tasks/create",
   UPDATE_TASK: "tasks/update-task",
+  CANCEL_TASK: "tasks/cancel-task",
   MAKE_OFFER: "/tasks/make-offer",
   UPDATE_OFFER: "/tasks/edit-offer",
   OFFER_REPLIES: "/tasks/offer-replies",

@@ -1,21 +1,35 @@
-import { useState, useMemo } from "react";
+// hooks/useCancelTask.ts
+import { useState, useMemo, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useAppSelector } from "@/store/hook";
 import { calculateFees } from "@/utils";
+import { useBaseMutation } from "@/hooks/useBaseMutation";
+import { cancelTask } from "@/services/tasks/tasks.api";
+import { API_ROUTES, ROLE } from "@/constant";
 
 export const CANCEL_REASON = {
+  // Poster reasons
   NOT_RESPONDING: "not_responding",
   TASKER_REQUESTED_CANCEL: "tasker_requested_cancel",
   FOUND_SOMEONE_ELSE: "found_someone_else",
   NO_LONGER_NEEDED: "no_longer_needed",
+
+  // Tasker reasons
+  POSTER_NOT_RESPONDING: "poster_not_responding",
+  POSTER_REQUESTED_CANCEL: "poster_requested_cancel",
+  POSTER_CHANGED_TASK: "poster_changed_task",
+  POSTER_ADDED_ADDITIONAL_TASK: "poster_added_additional_task",
+
+  // Common
   OTHER: "other",
 } as const;
 
 export type CancelReason = (typeof CANCEL_REASON)[keyof typeof CANCEL_REASON];
 
-export const cancelReasons = [
+// Poster cancellation reasons
+export const posterCancelReasons = [
   {
     id: CANCEL_REASON.NOT_RESPONDING,
     name: "Tasker is not responding to messages",
@@ -38,33 +52,74 @@ export const cancelReasons = [
   },
 ] as const;
 
-export const cancelReasonMap: Record<CancelReason, string> = Object.fromEntries(
-  cancelReasons.map((r) => [r.id, r.name])
-) as Record<CancelReason, string>;
+// Tasker cancellation reasons
+export const taskerCancelReasons = [
+  {
+    id: CANCEL_REASON.POSTER_NOT_RESPONDING,
+    name: "Poster is not responding to messages",
+  },
+  {
+    id: CANCEL_REASON.POSTER_REQUESTED_CANCEL,
+    name: "Poster requested to cancel the task",
+  },
+  {
+    id: CANCEL_REASON.POSTER_CHANGED_TASK,
+    name: "Poster changed the task",
+  },
+  {
+    id: CANCEL_REASON.POSTER_ADDED_ADDITIONAL_TASK,
+    name: "Poster added additional task",
+  },
+  {
+    id: CANCEL_REASON.OTHER,
+    name: "Other reasons",
+  },
+] as const;
 
-const schema = z
-  .object({
-    reason: z.string().min(1, "Please select your reason"),
+// Create dynamic schema based on user role
+const createSchema = (isTasker: boolean) => {
+  const baseSchema = z.object({
+    reason: z.string().min(1, "Please select a reason for cancellation"),
     description: z.string().optional(),
-    agreed: z.boolean().refine((v) => v, {
-      message: "Please agree to the terms and conditions",
+    agreed: z.boolean().refine((v) => v === true, {
+      message: "You must agree to the terms and conditions to proceed",
     }),
-  })
-  .superRefine((data, ctx) => {
-    if (data.reason === "other" && !data.description?.trim()) {
+  });
+
+  return baseSchema.superRefine((data, ctx) => {
+    // Require description when "other" is selected
+    if (data.reason === CANCEL_REASON.OTHER && !data.description?.trim()) {
       ctx.addIssue({
         path: ["description"],
         code: z.ZodIssueCode.custom,
-        message: "Description is required for other reasons",
+        message: "Please provide details about your cancellation reason",
       });
     }
   });
+};
 
-export type CancelTaskFormData = z.infer<typeof schema>;
+export type CancelTaskFormData = z.infer<ReturnType<typeof createSchema>>;
 
 export const useCancelTask = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const { taskDetails } = useAppSelector((state) => state.task);
+  const { user } = useAppSelector((state) => state.user);
+
+  const isTasker = useMemo(() => user?.role === ROLE.tasker, [user?.role]);
+
+  // Get appropriate cancel reasons based on role
+  const cancelReasons = useMemo(
+    () => (isTasker ? taskerCancelReasons : posterCancelReasons),
+    [isTasker],
+  );
+
+  const cancelTaskMutation = useBaseMutation(cancelTask, {
+    invalidateQueryKeys: [[API_ROUTES.TASKS]],
+    disableSuccessToast: true,
+    onSuccess: () => {
+      setCurrentStep(3); // Both roles go to step 3 for success
+    },
+  });
 
   const methods = useForm<CancelTaskFormData>({
     defaultValues: {
@@ -72,15 +127,19 @@ export const useCancelTask = () => {
       reason: "",
       description: "",
     },
-    resolver: zodResolver(schema),
+    resolver: zodResolver(createSchema(isTasker)),
     mode: "onChange",
   });
 
   const { trigger, reset, watch } = methods;
   const selectedReason = watch("reason");
 
-  // Calculate fees
+  // Calculate fees (only relevant for posters)
   const { amountPaid, feeBreakdown } = useMemo(() => {
+    if (isTasker) {
+      return { amountPaid: 0, feeBreakdown: undefined };
+    }
+
     const offers = taskDetails?.offers ?? [];
     const accepted = offers.find((offer) => offer.status === "accepted");
     const amount = accepted?.offer_amount ?? taskDetails?.budget ?? 0;
@@ -89,40 +148,51 @@ export const useCancelTask = () => {
       amountPaid: amount,
       feeBreakdown: calculateFees(amount),
     };
-  }, [taskDetails]);
+  }, [taskDetails, isTasker]);
 
-  const handleNext = async () => {
-    const validationFields =
-      currentStep === 1
-        ? (["reason", "description"] as const)
-        : (["agreed"] as const);
+  const handleNext = useCallback(async () => {
+    // Step 1 validation: reason and description (if other)
+    const validationFields: (keyof CancelTaskFormData)[] = ["reason"];
+    if (selectedReason === CANCEL_REASON.OTHER) {
+      validationFields.push("description");
+    }
 
     const isValid = await trigger(validationFields);
     if (!isValid) return;
 
-    if (currentStep < 3) {
-      setCurrentStep((prev) => prev + 1);
-    }
-  };
+    // Move to step 2
+    setCurrentStep(2);
+  }, [selectedReason, trigger]);
 
-  const handleBack = () => {
+  const handleBack = useCallback(() => {
     setCurrentStep((prev) => Math.max(1, prev - 1));
-  };
+  }, []);
 
-  const handleSubmit = async (data: any) => {
-    console.log(11, data);
-    setCurrentStep(3); // Success step
-  };
+  const handleSubmit = useCallback(
+    async (data: CancelTaskFormData) => {
+      const payload: any = {
+        task_id: taskDetails?.id,
+        cancellation_reason: data.reason,
+      };
 
-  const resetForm = () => {
+      if (data.description?.trim()) {
+        payload.cancellation_description = data.description.trim();
+      }
+
+      cancelTaskMutation.mutate(payload);
+    },
+    [taskDetails?.id, cancelTaskMutation],
+  );
+
+  const resetForm = useCallback(() => {
     reset();
     setCurrentStep(1);
-  };
+  }, [reset]);
 
   return {
     methods,
     currentStep,
-    isSubmitting: false,
+    isTasker,
     selectedReason,
     amountPaid,
     feeBreakdown,
@@ -131,5 +201,6 @@ export const useCancelTask = () => {
     handleBack,
     handleSubmit,
     resetForm,
+    isCancelTaskPending: cancelTaskMutation.isPending,
   };
 };

@@ -32,7 +32,6 @@ export default function FAQ({ accordionData }: FAQProps) {
                 title="Still have questions?"
                 description="We're here to help! Our support team is ready to provide the information you need and ensure your experience is smooth and hassle-free."
                 buttonText="Get Support"
-                buttonHref="/support"
               />
             </div>
           </div>

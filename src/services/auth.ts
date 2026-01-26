@@ -103,7 +103,7 @@ export function completeOnboarding(data: signupSchemaType) {
     .post(
       `auth/complete-onboarding
 `,
-      data
+      data,
     )
     .then((data) => {
       return data.data;

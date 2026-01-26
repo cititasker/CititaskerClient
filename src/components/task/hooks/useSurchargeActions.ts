@@ -13,6 +13,7 @@ import { useSnackbar } from "@/providers/SnackbarProvider";
 import { errorHandler } from "@/utils";
 import { useTaskAlert } from "@/providers/TaskAlertContext";
 import { useAuth } from "@/hooks/useAuth";
+import { useGetBalance } from "@/services/dashboard/dashboard.hook";
 
 type SurchargeStep =
   | "request"
@@ -31,14 +32,21 @@ export const useSurchargeActions = (task: ITask) => {
 
   const surchargeModal = useModal();
 
+  // Balance query
+  const { data: balanceData } = useGetBalance();
+  const balance = useMemo(
+    () => balanceData?.balance ?? 0,
+    [balanceData?.balance],
+  );
+
   const { data: surchargeList } = useSurchargeList(
     String(task?.id),
-    Boolean(task?.has_surcharge_requests) && isAuthenticated
+    Boolean(task?.has_surcharge_requests) && isAuthenticated,
   );
 
   const pendingSurcharge = useMemo(() => {
     const pending = surchargeList?.data?.data.find(
-      (s) => s.status === "pending"
+      (s) => s.status === "pending",
     );
     if (!pending) return undefined;
     return pending;
@@ -46,7 +54,7 @@ export const useSurchargeActions = (task: ITask) => {
 
   const rejectedSurcharge = useMemo(() => {
     const rejected = surchargeList?.data?.data.find(
-      (s) => s.status === "rejected"
+      (s) => s.status === "rejected",
     );
     if (!rejected) return undefined;
     return rejected;
@@ -87,6 +95,7 @@ export const useSurchargeActions = (task: ITask) => {
       payable_id: pendingSurcharge.id,
       task_id: task.id,
       intent: "surcharge_payment",
+      payment_method: paymentMethod,
     });
   };
 
@@ -95,11 +104,25 @@ export const useSurchargeActions = (task: ITask) => {
     surchargeModal.closeModal();
   };
 
+  // Computed values
+  const suchargeAmount = useMemo(
+    () => pendingSurcharge?.amount ?? 0,
+    [pendingSurcharge?.amount],
+  );
+
+  const paymentMethod = useMemo<PaymentMethodType>(() => {
+    if (balance >= suchargeAmount) return "wallet";
+    if (balance > 0 && balance < suchargeAmount) return "hybrid";
+    return "direct";
+  }, [balance, suchargeAmount]);
+
   return {
     // State
+    balance,
     pendingSurcharge,
     rejectedSurcharge,
     surchargeStep,
+    paymentMethod,
 
     // Modals
     surchargeModal,

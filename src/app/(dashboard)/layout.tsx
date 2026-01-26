@@ -1,5 +1,11 @@
 import DashboardLayout from "@/components/layouts/DashboardLayout";
 import Navbar from "@/components/Navbar";
+import { generateLayoutMetadata } from "@/lib/metadata-helper";
+
+export const metadata = generateLayoutMetadata({
+  title: "Dashboard",
+  noIndex: true,
+});
 
 export default function RootLayout({
   children,

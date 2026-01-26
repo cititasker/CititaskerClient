@@ -48,12 +48,12 @@ const PostTaskFormActions: React.FC<PostTaskFormActionsProps> = ({
   return (
     <div
       className={cn(
-        "flex flex-col-reverse sm:flex-row gap-3 items-stretch sm:items-center",
-        "pt-6 border-t border-border-light mt-6",
-        className
+        "flex flex-col-reverse xs:flex-row gap-3 items-stretch sm:items-center flex-shrink-0 mt-auto border-t border-border-light",
+        "p-4 sm:p-6",
+        className,
       )}
     >
-      {/* Back button */}
+      {/* Back button - Equal width on desktop */}
       {showBackButton && (
         <Button
           type="button"
@@ -61,10 +61,11 @@ const PostTaskFormActions: React.FC<PostTaskFormActionsProps> = ({
           onClick={handleBack}
           disabled={loading}
           className={cn(
-            "flex-1 sm:min-w-[120px] h-12",
+            "h-12",
+            "w-full sm:flex-1", // Equal width on desktop
             "border-border-medium text-text-secondary",
             "hover:bg-background-secondary hover:text-text-primary hover:border-border-strong",
-            "transition-all duration-200"
+            "transition-all duration-200",
           )}
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
@@ -72,16 +73,17 @@ const PostTaskFormActions: React.FC<PostTaskFormActionsProps> = ({
         </Button>
       )}
 
-      {/* Primary action button */}
+      {/* Primary action button - Equal width on desktop */}
       <Button
         type={type}
         onClick={onClick}
         disabled={loading || disabled}
         className={cn(
-          "flex-1 sm:min-w-[140px] h-12",
+          "h-12",
+          "w-full sm:flex-1", // Equal width on desktop
           "btn-primary relative overflow-hidden group",
           "disabled:opacity-50 disabled:cursor-not-allowed",
-          loading && "pointer-events-none"
+          loading && "pointer-events-none",
         )}
       >
         {loading ? (

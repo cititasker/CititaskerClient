@@ -11,6 +11,7 @@ import { Card } from "@/components/ui/card";
 import { useTaskActions, useTaskAlerts } from "@/components/task/hooks";
 import { TaskHeader } from "./TaskHeader";
 import { TaskContent } from "./TaskContent";
+import { JsonLd } from "@/components/seo/JsonLd";
 
 const ShareTaskModal = dynamic(() => import("../Modals/ShareTaskModal"), {
   ssr: false,
@@ -25,7 +26,7 @@ const TaskModals = dynamic(
   {
     ssr: false,
     loading: () => null,
-  }
+  },
 );
 
 interface TaskDetailsProps {
@@ -66,7 +67,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ back }) => {
     if (!task) return;
     dispatch(setTaskDetails(task));
     const userOffer = task.offers?.find(
-      (offer) => offer.tasker.id === user?.id
+      (offer) => offer.tasker.id === user?.id,
     );
     dispatch(setUserTaskOffer(userOffer ?? null));
   }, [task, user?.id, dispatch]);
@@ -80,7 +81,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ back }) => {
       };
       headerActions[key]?.();
     },
-    [shareModal]
+    [shareModal],
   );
 
   const handleOptionSelect = useCallback(
@@ -91,11 +92,30 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ back }) => {
         actions.cancelTaskModal.openModal();
       }
     },
-    [actions.openRescheduleModal]
+    [actions.openRescheduleModal],
   );
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: task.name,
+    description: task.description,
+    url: `${process.env.NEXT_PUBLIC_DOMAIN_URL}/browse-tasks/${task.id}`,
+    provider: {
+      "@type": "Person",
+      name: `${task.poster.profile.first_name} ${task.poster.profile.last_name}`,
+    },
+    offers: {
+      "@type": "Offer",
+      price: task.budget,
+      priceCurrency: "NGN",
+    },
+    datePosted: task.created_at,
+  };
 
   return (
     <>
+      <JsonLd data={jsonLd} />
       <Card className="overflow-hidden rounded-b-none">
         <TaskHeader back={back} onAction={handleHeaderAction} />
         <TaskContent task={task} onOptionSelect={handleOptionSelect} />

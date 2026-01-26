@@ -6,7 +6,8 @@ import Image from "next/image";
 import { cn } from "@/utils";
 
 interface IProps {
-  handleSuccess: any;
+  handleSuccess: (data: any) => void;
+  handleError: (error: any) => void;
   text: string;
   className: string;
   data: {
@@ -20,11 +21,12 @@ const PaystackButton = ({
   text,
   className,
   handleSuccess,
+  handleError,
   data,
   metadata,
 }: IProps) => {
   const handleClick = () => {
-    Paystack.startPayment({ ...data, metadata, handleSuccess });
+    Paystack.startPayment({ ...data, metadata, handleSuccess, handleError });
   };
   return (
     <FormButton

@@ -102,7 +102,7 @@ export default function CustomTab({
       >
         <TabsList
           className={cn(
-            "w-fit flex rounded-xl p-1 bg-background-tertiary shrink-0",
+            "w-full flex rounded-xl p-1 bg-background-tertiary shrink-0",
             listClassName,
           )}
         >

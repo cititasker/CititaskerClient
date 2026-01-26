@@ -117,6 +117,8 @@ type TransactionStatusT = "pending" | "approved" | "failed";
 
 type TransactionType = "credit" | "debit";
 
+type PaymentMethodType = "direct" | "wallet" | "hybrid";
+
 interface ITasker {
   created_at: string;
   email: string;
@@ -181,6 +183,7 @@ interface ITask {
   category: { id: number; name: string };
   sub_category: { id: number; name: string };
   description: string;
+  has_disputes: boolean;
   date: string;
   created_at: string;
   budget: number;
@@ -215,6 +218,9 @@ interface ITask {
   has_surcharge_requests: boolean;
   reschedule: IReschedule;
   accepted_offer: IAcceptedOffer;
+  tasker_average_rating: number;
+  tasker_completion_rate: number;
+  tasker_number_of_tasks_completed: number;
 }
 
 interface ITaskCategory {

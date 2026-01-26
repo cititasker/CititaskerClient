@@ -1,5 +1,6 @@
 import Image from "next/image";
 import FormButton from "./forms/FormButton";
+import { SUPPORT_URL } from "@/constant";
 
 // User Avatar Stack Component
 const UserAvatarStack = ({ count = 5 }: { count?: number }) => (
@@ -26,7 +27,7 @@ const ContactCard = ({
   title = "Still have questions?",
   description = "We're here to help! Our support team is ready to provide the information you need and ensure your experience is smooth and hassle-free.",
   buttonText = "Contact Us",
-  buttonHref = "#contact",
+  buttonHref = `mailto:${SUPPORT_URL}`,
   showAvatars = true,
   className = "",
 }) => {

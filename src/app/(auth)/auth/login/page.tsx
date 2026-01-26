@@ -52,15 +52,15 @@ export default function LoginPage() {
   };
 
   // Don't render form until schema loads
-  if (!schema) {
-    return (
-      <AuthCard>
-        <div className="flex items-center justify-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-        </div>
-      </AuthCard>
-    );
-  }
+  // if (!schema) {
+  //   return (
+  //     <AuthCard>
+  //       <div className="flex items-center justify-center py-12">
+  //         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+  //       </div>
+  //     </AuthCard>
+  //   );
+  // }
 
   return (
     <AuthCard>

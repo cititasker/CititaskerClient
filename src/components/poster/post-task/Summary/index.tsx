@@ -95,7 +95,7 @@ export default function Summary() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 h-full flex-col flex">
       <div className="text-center space-y-2">
         <h2 className="text-2xl font-bold text-text-primary">
           Review Your Task
@@ -110,73 +110,78 @@ export default function Summary() {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <ImageGallery
-            images={(task.images as NormalizedImage[]) || []}
-            taskName={task.name}
-          />
+      <form
+        onSubmit={handleSubmit}
+        className="h-full flex flex-col overflow-hidden"
+      >
+        <div className="flex-1 overflow-y-auto no-scrollbar px-1 pb-4 space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <ImageGallery
+              images={(task.images as NormalizedImage[]) || []}
+              taskName={task.name}
+            />
 
-          <div className="space-y-4">
+            <div className="space-y-4">
+              <SummaryField
+                icon={<User className="w-4 h-4" />}
+                label="Task Title"
+                value={task.name}
+              />
+              <SummaryField
+                icon={<FileText className="w-4 h-4" />}
+                label="Description"
+                value={task.description}
+              />
+              <SummaryField
+                icon={<Tag className="w-4 h-4" />}
+                label="Category"
+                value={task.category_id?.name}
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <SummaryField
-              icon={<User className="w-4 h-4" />}
-              label="Task Title"
-              value={task.name}
+              icon={<MapPin className="w-4 h-4" />}
+              label="Location"
+              value={task.address}
             />
             <SummaryField
-              icon={<FileText className="w-4 h-4" />}
-              label="Description"
-              value={task.description}
+              icon={<Calendar className="w-4 h-4" />}
+              label="Date"
+              value={task.date ? formatDate(task.date) : null}
+            />
+            {timeFrameText && (
+              <SummaryField
+                icon={<Clock className="w-4 h-4" />}
+                label="Time"
+                value={timeFrameText}
+              />
+            )}
+            <SummaryField
+              icon={<Banknote className="w-4 h-4" />}
+              label="Budget"
+              value={formatCurrency({ value: task.budget })}
             />
             <SummaryField
               icon={<Tag className="w-4 h-4" />}
-              label="Category"
-              value={task.category_id?.name}
+              label="Location Type"
+              value={
+                <Badge variant="secondary" className="capitalize">
+                  {task.location_type?.replace("_", "-")}
+                </Badge>
+              }
             />
+            {task.images && task.images.length > 0 && (
+              <SummaryField
+                icon={<ImageIcon className="w-4 h-4" />}
+                label="Images"
+                value={`${task.images.length} image${
+                  task.images.length > 1 ? "s" : ""
+                } attached`}
+              />
+            )}
           </div>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <SummaryField
-            icon={<MapPin className="w-4 h-4" />}
-            label="Location"
-            value={task.address}
-          />
-          <SummaryField
-            icon={<Calendar className="w-4 h-4" />}
-            label="Date"
-            value={task.date ? formatDate(task.date) : null}
-          />
-          {timeFrameText && (
-            <SummaryField
-              icon={<Clock className="w-4 h-4" />}
-              label="Time"
-              value={timeFrameText}
-            />
-          )}
-          <SummaryField
-            icon={<Banknote className="w-4 h-4" />}
-            label="Budget"
-            value={formatCurrency({ value: task.budget })}
-          />
-          <SummaryField
-            icon={<Tag className="w-4 h-4" />}
-            label="Location Type"
-            value={
-              <Badge variant="secondary" className="capitalize">
-                {task.location_type?.replace("_", "-")}
-              </Badge>
-            }
-          />
-          {task.images && task.images.length > 0 && (
-            <SummaryField
-              icon={<ImageIcon className="w-4 h-4" />}
-              label="Images"
-              value={`${task.images.length} image${
-                task.images.length > 1 ? "s" : ""
-              } attached`}
-            />
-          )}
         </div>
 
         <PostTaskFormActions

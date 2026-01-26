@@ -6,4 +6,5 @@ export interface TaskState {
   hasCompletedTask: boolean;
   hasMadeOffer: boolean;
   hasCompletedKyc: boolean;
+  isTaskAssignedToYou: boolean;
 }

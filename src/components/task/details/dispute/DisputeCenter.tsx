@@ -5,20 +5,22 @@ import HelpModal from "../HelpModal";
 import { UseModalReturn } from "@/constant/interface";
 import DisputeForm from "./DisputeForm";
 import useModal from "@/hooks/useModal";
-import { useFetchDispute } from "@/services/dispute/dispute.hooks";
 import { useAppSelector } from "@/store/hook";
 
 interface IProps {
   helpModal: UseModalReturn;
   taskId: string;
+  hasDispute: boolean;
 }
 
-export default function DisputeCenter({ helpModal, taskId }: IProps) {
+export default function DisputeCenter({
+  helpModal,
+  taskId,
+  hasDispute,
+}: IProps) {
   const disputeModal = useModal();
-  const { data: disputeData } = useFetchDispute(taskId);
   const { user } = useAppSelector((state) => state.user);
 
-  const hasDispute = disputeData?.data?.length;
   return (
     <div>
       <Card className="shadow-sm border-border-light">
