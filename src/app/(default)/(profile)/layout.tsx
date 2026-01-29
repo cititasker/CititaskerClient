@@ -8,7 +8,7 @@ export default function PosterLayout({
   return (
     <div className="min-h-screen bg-background-secondary">
       <div className="container-w py-0">
-        <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-4 md:gap-6 p-top">
+        <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-4 md:gap-6 p-top pb-10">
           {/* Sidebar wrapper with sticky positioning */}
           <div className="md:sticky md:top-6 md:self-start md:h-fit">
             <PublicProfileSidebar />

@@ -7,7 +7,7 @@ interface Props {
 
 export default function TaskHeader({ task }: Props) {
   return (
-    <div className="mb-2">
+    <div className="mb-3">
       <TaskStatusBadges
         status={task.status}
         category={task.category?.name}

@@ -153,7 +153,7 @@ export default function WhyCitiTasker() {
             </p>
           }
           subtitle="The ultimate platform for connecting you with skilled Taskers who can help tackle your to-do list."
-          className="mb-6 sm:mb-10 md:mb-10"
+          className="mb-6 sm:mb-10 md:mb-14"
         />
 
         {/* Content */}

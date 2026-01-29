@@ -1,77 +1,128 @@
-import React from "react";
-import Image from "next/image";
+import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Star, User } from "lucide-react";
+import { Star } from "lucide-react";
 import { formatDateAgo } from "@/utils";
+import Avatar from "./Avatar";
+import { cn } from "@/lib/utils";
+import { Button } from "../ui/button";
 
 const STAR_COUNT = 5;
+const COMMENT_PREVIEW_LENGTH = 200;
 
-const RatingCard = ({ review }: { review: ReviewItem }) => {
+interface ReviewCardProps {
+  review: ReviewItem;
+  className?: string;
+}
+
+const RatingCard = ({ review, className }: ReviewCardProps) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
   const rating = review.rating ?? 0;
-  const comment = review.comment?.trim() || "No review comment was provided.";
+  const comment =
+    "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Harum dignissimos recusandae, voluptate perspiciatis rem sunt nisi similique veniam quam obcaecati esse odio ipsam ex nobis veritatis a eos explicabo soluta! Autem quaerat non minima, eveniet sunt tempore pariatur vero totam suscipit consectetur magnam incidunt voluptatum voluptates aspernatur tempora officiis aut omnis. Ratione deserunt enim, tempora minima amet ullam alias fuga aut consequatur neque velit odio atque dolores nam expedita nihil. Officia dicta deleniti quis aspernatur, fugit labore velit repellat quos inventore, voluptatibus, porro sint enim. Adipisci veritatis et esse quam minima alias repellat illo ab, ducimus laboriosam sint! Expedita, dolorum tempore obcaecati voluptates iste vitae recusandae corrupti repudiandae ipsa cum praesentium enim accusamus possimus, mollitia non minus iure quam, dolores fugiat voluptate aut cumque blanditiis quidem eaque? Incidunt neque distinctio numquam officiis totam consequuntur modi, reiciendis repudiandae ratione quia repellat porro, impedit sequi reprehenderit exercitationem provident consectetur nemo eius? Porro asperiores ad perferendis aliquam facilis repellendus deserunt libero tenetur rem sed necessitatibus officiis blanditiis a officia nostrum magnam voluptatem recusandae, vel voluptas dolorum accusantium delectus. Excepturi dolor quibusdam quo corrupti, ullam dolorum asperiores exercitationem natus doloremque debitis eaque sed nobis vel ipsa? Aliquam nobis deserunt repellendus quas odio, minus recusandae.";
+  const hasComment = comment.length > 0;
+  const isLongComment = comment.length > COMMENT_PREVIEW_LENGTH;
+  const displayComment =
+    isExpanded || !isLongComment
+      ? comment
+      : `${comment.slice(0, COMMENT_PREVIEW_LENGTH)}...`;
 
   return (
-    <Card className="h-full bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
-      <CardContent className="p-6 flex flex-col gap-4 h-full">
-        {/* Header */}
-        <div className="flex items-start gap-4">
+    <Card
+      className={cn(
+        "bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200 h-fit",
+        className,
+      )}
+    >
+      <CardContent className="p-6">
+        {/* Header Section */}
+        <div className="flex items-start gap-4 mb-4">
           {/* Avatar */}
-          <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full border border-gray-200 bg-gray-50">
-            {review.image ? (
-              <Image
-                src={review.image}
-                alt={`${review.reviewer}'s profile photo`}
-                fill
-                sizes="44px"
-                className="object-cover"
-              />
-            ) : (
-              <div className="flex h-full w-full items-center justify-center">
-                <User className="h-5 w-5 text-gray-400" aria-hidden />
-              </div>
-            )}
-          </div>
+          <Avatar
+            src={review.image}
+            name={review.reviewer}
+            size="md"
+            className="h-12 w-12 shrink-0 border-2 border-gray-100"
+            fallbackClassName="bg-gradient-to-br from-primary/10 to-primary/20 font-semibold text-primary"
+          />
 
-          {/* Name + Rating */}
+          {/* Reviewer Info */}
           <div className="flex-1 min-w-0">
-            <h4 className="truncate text-sm font-semibold text-gray-900">
-              {review.reviewer}
-            </h4>
+            <div className="flex items-start justify-between gap-2 mb-2">
+              <h4 className="font-semibold text-gray-900 text-base truncate">
+                {review.reviewer}
+              </h4>
+            </div>
 
-            <div className="mt-1 flex items-center gap-2">
+            {/* Rating & Date */}
+            <div className="flex flex-wrap items-center gap-3">
+              {/* Star Rating */}
               <div
                 className="flex items-center gap-0.5"
-                aria-label={`Rating: ${rating} out of ${STAR_COUNT}`}
+                role="img"
+                aria-label={`Rating: ${rating} out of ${STAR_COUNT} stars`}
               >
                 {Array.from({ length: STAR_COUNT }).map((_, i) => (
                   <Star
                     key={i}
-                    className={`h-4 w-4 ${
+                    className={cn(
+                      "h-4 w-4 transition-colors",
                       i < rating
-                        ? "fill-yellow-400 text-yellow-400"
-                        : "text-gray-300"
-                    }`}
-                    aria-hidden
+                        ? "fill-amber-400 text-amber-400"
+                        : "fill-gray-200 text-gray-200",
+                    )}
+                    aria-hidden="true"
                   />
                 ))}
               </div>
 
-              <span className="text-xs text-gray-400">
+              {/* Numeric Rating */}
+              {rating > 0 && (
+                <span className="text-sm font-medium text-gray-700">
+                  {rating}.0
+                </span>
+              )}
+
+              {/* Separator */}
+              <span className="text-gray-300">•</span>
+
+              {/* Time */}
+              <time
+                className="text-sm text-gray-500"
+                dateTime={review.created_at}
+              >
                 {formatDateAgo(review.created_at)}
-              </span>
+              </time>
             </div>
           </div>
         </div>
 
-        {/* Divider */}
-        <div className="h-px bg-gray-100" />
+        {/* Review Comment */}
+        {hasComment ? (
+          <div className="space-y-2">
+            <p className="text-gray-700 text-[15px] leading-relaxed whitespace-pre-wrap break-words">
+              {displayComment}
+            </p>
 
-        {/* Review Text */}
-        <div className="flex-1">
-          <p className="text-sm leading-relaxed text-gray-800 line-clamp-5">
-            {comment}
+            {/* Read More/Less Button */}
+            {isLongComment && (
+              <Button
+                variant="custom"
+                size="sm"
+                onClick={() => setIsExpanded(!isExpanded)}
+                className="px-0 py-1 text-primary text-sm font-medium focus:outline-none"
+                aria-expanded={isExpanded}
+              >
+                {isExpanded ? "Show less" : "Read more"}
+              </Button>
+            )}
+          </div>
+        ) : (
+          /* Empty State for No Comment */
+          <p className="text-gray-400 text-sm italic">
+            No written review provided
           </p>
-        </div>
+        )}
       </CardContent>
     </Card>
   );

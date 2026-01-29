@@ -11,7 +11,10 @@ import FAQList from "@/app/(dashboard)/tasker/(settings)/profile/faq/FAQList";
 
 export default function PublicProfilePage() {
   const { id } = useParams<{ id: string }>();
+
   const { data, isLoading } = useGetUserProfile({ id });
+
+  const user = useMemo(() => data?.data, [data]);
 
   const tabs = useMemo(
     () => [
@@ -19,7 +22,7 @@ export default function PublicProfilePage() {
         label: "Profile",
         value: "profile",
         render: () => (
-          <PublicProfile id={id} data={data?.data} isLoading={isLoading} />
+          <PublicProfile id={id} data={user} isLoading={isLoading} />
         ),
       },
       {
@@ -33,14 +36,14 @@ export default function PublicProfilePage() {
         render: () => <FAQList id={id} isEdit={false} />,
       },
     ],
-    [id, data?.data, isLoading],
+    [id, user, isLoading],
   );
 
   return (
     <div className="w-full h-full">
       <CustomTab
         items={tabs}
-        contentClassName="p-5 sm:p-8 bg-white rounded-lg shadow-sm"
+        contentClassName="p-5 sm:p-8 bg-white rounded-lg"
       />
     </div>
   );

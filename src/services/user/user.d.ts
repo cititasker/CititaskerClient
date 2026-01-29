@@ -18,6 +18,7 @@ interface UserProfileData {
   last_name: string;
   location: string | null;
   skills: string[];
+  role: TRole;
   certifications: {
     institution: string;
     name: string;

@@ -20,7 +20,7 @@ export default function Bio({ bio, className = "" }: BioProps) {
       <h3 className="text-sm font-semibold text-text-primary">About Me</h3>
       {bio ? (
         <div
-          className="prose prose-sm text-text-secondary leading-relaxed"
+          className="prose prose-base max-w-full text-text-secondary leading-relaxed"
           dangerouslySetInnerHTML={{ __html: bio }}
         />
       ) : (

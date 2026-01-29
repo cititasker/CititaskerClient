@@ -7,6 +7,7 @@ import PostTaskHeader from "../poster/post-task/partials/PostTaskHeader";
 import { getDefaultRedirect } from "@/lib/middleware/guards/route-config";
 import { useAuth } from "@/hooks/useAuth";
 import { ROUTES } from "@/constant";
+import LoadingScreen from "../reusables/loaders/LoadingScreen";
 
 const PostTaskLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -19,7 +20,7 @@ const PostTaskLayout: React.FC<{ children: React.ReactNode }> = ({
 
   const { isLoading } = useTaskData();
 
-  if (isLoading) return <PostTaskLoadingScreen />;
+  if (isLoading) return <LoadingScreen text="Loading task data..." />;
 
   return (
     <div className="h-screen flex flex-col overflow-hidden">
@@ -44,14 +45,5 @@ const PostTaskLayout: React.FC<{ children: React.ReactNode }> = ({
     </div>
   );
 };
-
-const PostTaskLoadingScreen = () => (
-  <div className="min-h-screen bg-background flex items-center justify-center">
-    <div className="text-center">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-      <p className="text-text-secondary">Loading task data...</p>
-    </div>
-  </div>
-);
 
 export default PostTaskLayout;

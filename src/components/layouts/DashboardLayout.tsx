@@ -1,6 +1,6 @@
 import React from "react";
 
-const DashboardLayout = async ({ children }: IChildren) => {
+export default function DashboardLayout({ children }: IChildren) {
   return (
     <div className="bg-light-grey relative h-dvh flex flex-col">
       <div className="container-w py-0 relative flex flex-col flex-1 overflow-hidden">
@@ -8,6 +8,4 @@ const DashboardLayout = async ({ children }: IChildren) => {
       </div>
     </div>
   );
-};
-
-export default DashboardLayout;
+}

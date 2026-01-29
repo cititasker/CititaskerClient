@@ -10,18 +10,21 @@ interface UpdateReviewArgs {
 }
 
 interface TaskerReview {
-  other_party_reviewed: false;
-  reviews_visible: false;
+  other_party_review: {
+    comment: string;
+    rating: number;
+    reviewed_at: string;
+  };
+  reviews_visible: boolean;
   task_id: number;
   user_role: TRole; // poster | tasker
   my_review: {
     comment: string;
-    has_reviewed: true;
     rating: number;
     reviewed_at: string;
   };
   auto_publish_at: string;
-  can_update: true;
+  can_update: boolean;
 }
 
 type GetReviewsResponse = { data: TaskerReview[] };
@@ -33,10 +36,9 @@ type PostReviewInput = {
   comment: string;
 };
 
-type UserReviewResponse = {
+interface UserReviewResponse extends IResponse {
   data: ReviewItem[];
-  meta: any;
-};
+}
 
 type ReviewItem = {
   comment: string | null;

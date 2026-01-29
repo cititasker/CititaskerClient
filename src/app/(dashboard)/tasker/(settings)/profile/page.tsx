@@ -5,8 +5,11 @@ import { tabs } from "./portfolio/data";
 
 export default function Page() {
   return (
-    <div className="relative h-full">
-      <CustomTab items={tabs} contentClassName="p-5 sm:p-8" />
+    <div className="w-full h-full">
+      <CustomTab
+        items={tabs}
+        contentClassName="p-5 sm:p-8 bg-white rounded-lg"
+      />
     </div>
   );
 }

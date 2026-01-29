@@ -80,14 +80,6 @@ export const metadata: Metadata = {
     canonical: APP_URL,
   },
   category: "marketplace",
-  icons: {
-    icon: {
-      url: "/favicon.png",
-    },
-    apple: {
-      url: "/favicon.png",
-    },
-  },
 };
 
 export const viewport: Viewport = {

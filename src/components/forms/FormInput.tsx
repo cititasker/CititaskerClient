@@ -18,10 +18,11 @@ interface FormInputProps {
   disabled?: boolean;
   readOnly?: boolean;
   clearable?: boolean;
+  required?: boolean;
   className?: string;
   inputClassName?: string;
   onClear?: () => void;
-  // New icon props
+  // Icon props
   icon?: React.ComponentType<{ className?: string }>;
   iconPosition?: "left" | "right";
   onIconClick?: () => void;
@@ -36,6 +37,7 @@ export default function FormInput({
   disabled = false,
   readOnly = false,
   clearable = false,
+  required = false,
   className,
   inputClassName,
   onClear,
@@ -65,9 +67,8 @@ export default function FormInput({
         const hasValue = Boolean(field.value);
         const showClearButton = clearable && hasValue && !disabled && !readOnly;
         const showPasswordToggle = isPassword;
-        const showCustomIcon = Icon && !isPassword; // Don't show custom icon on password fields
+        const showCustomIcon = Icon && !isPassword;
 
-        // Calculate padding based on icons
         const hasLeftIcon = showCustomIcon && iconPosition === "left";
         const hasRightActions =
           showClearButton ||
@@ -82,6 +83,7 @@ export default function FormInput({
                 className="text-sm font-medium text-text-primary"
               >
                 {label}
+                {required && <span className="text-error ml-0.5">*</span>}
               </FormLabel>
             )}
 
@@ -97,7 +99,7 @@ export default function FormInput({
                         "p-1 rounded text-text-muted hover:text-text-secondary",
                         "hover:bg-background-secondary transition-colors duration-150",
                         "focus:outline-none",
-                        disabled && "opacity-50 cursor-not-allowed"
+                        disabled && "opacity-50 cursor-not-allowed",
                       )}
                       disabled={disabled}
                       aria-label="Icon action"
@@ -108,7 +110,7 @@ export default function FormInput({
                     <Icon
                       className={cn(
                         "w-4 h-4 text-text-muted",
-                        disabled && "opacity-50"
+                        disabled && "opacity-50",
                       )}
                     />
                   )}
@@ -122,29 +124,21 @@ export default function FormInput({
                 placeholder={placeholder}
                 disabled={disabled}
                 readOnly={readOnly}
+                required={required}
                 aria-invalid={!!error}
+                aria-required={required}
                 autoComplete={isPassword ? "current-password" : "on"}
                 autoFocus={autoFocus}
                 className={cn(
-                  // Base styles
                   "transition-all duration-200",
                   "bg-background text-text-primary placeholder:text-text-muted",
-
-                  // Border states
                   error && "border-error focus:border-error",
-
-                  // Disabled state
                   disabled &&
                     "opacity-50 cursor-not-allowed bg-background-secondary",
-
-                  // ReadOnly state
                   readOnly && "bg-background-secondary cursor-default",
-
-                  // Padding adjustments for icons
                   hasLeftIcon && "pl-10",
                   hasRightActions && "pr-12",
-
-                  inputClassName
+                  inputClassName,
                 )}
               />
 
@@ -162,7 +156,7 @@ export default function FormInput({
                             "p-1.5 rounded-lg text-text-muted hover:text-text-secondary",
                             "hover:bg-background-secondary transition-colors duration-150",
                             "focus:outline-none",
-                            disabled && "opacity-50 cursor-not-allowed"
+                            disabled && "opacity-50 cursor-not-allowed",
                           )}
                           disabled={disabled}
                           aria-label="Icon action"
@@ -174,7 +168,7 @@ export default function FormInput({
                           <Icon
                             className={cn(
                               "w-4 h-4 text-text-muted",
-                              disabled && "opacity-50"
+                              disabled && "opacity-50",
                             )}
                           />
                         </div>
@@ -193,7 +187,7 @@ export default function FormInput({
                       className={cn(
                         "p-1.5 rounded-lg text-text-muted hover:text-text-secondary",
                         "hover:bg-background-secondary transition-colors duration-150",
-                        "focus:outline-none"
+                        "focus:outline-none",
                       )}
                       aria-label="Clear input"
                     >
@@ -209,7 +203,7 @@ export default function FormInput({
                       className={cn(
                         "p-1.5 rounded-lg text-text-muted hover:text-text-secondary",
                         "hover:bg-background-secondary transition-colors duration-150",
-                        "focus:outline-none"
+                        "focus:outline-none",
                       )}
                       aria-label={
                         showPassword ? "Hide password" : "Show password"

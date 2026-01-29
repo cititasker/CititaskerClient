@@ -2,9 +2,14 @@ import { API_ROUTES } from "@/constant";
 import { api } from "@/lib/api-client";
 import { AxiosError } from "axios";
 
-export const getUserReviews = (id: any): Promise<UserReviewResponse> => {
+export const getUserReviews = (
+  id: any,
+  page: number = 1,
+): Promise<UserReviewResponse> => {
   return api
-    .get(`${API_ROUTES.GET_USER_REVIEW}/${id}`)
+    .get(`${API_ROUTES.GET_USER_REVIEW}/${id}`, {
+      params: { page },
+    })
     .then((data) => {
       return data.data.data;
     })

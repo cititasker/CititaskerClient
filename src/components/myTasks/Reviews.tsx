@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useState } from "react";
 import { MessageSquare } from "lucide-react";
 
 import ReviewCard from "./ReviewCard";
@@ -37,15 +37,19 @@ export default function Reviews({ task }: ReviewsProps) {
 
   // Determine logged-in user role
   const isPoster = reviews?.user_role === ROLE.poster;
-  const isTasker = reviews?.user_role === ROLE.tasker;
 
-  // Logged-in user's review
+  // Review data
   const myReview = reviews?.my_review;
-  const hasReviewed = !!myReview?.has_reviewed;
-  const canEdit = !!reviews?.can_update;
+  const otherPartyReview = reviews?.other_party_review;
+  const hasReviewed = !!myReview?.reviewed_at;
+  const otherPartyHasReviewed = !!otherPartyReview?.reviewed_at;
+  const canEdit = reviews?.can_update;
+  const reviewsVisible = reviews?.reviews_visible ?? false;
 
   // Other party's profile & name
-  const otherPartyProfile = isPoster ? task.tasker?.profile : user;
+  const otherPartyProfile = isPoster
+    ? task.tasker?.profile
+    : task.poster?.profile;
   const otherPartyName = initializeName({
     first_name: otherPartyProfile?.first_name ?? "",
     last_name: otherPartyProfile?.last_name ?? "",
@@ -125,12 +129,12 @@ export default function Reviews({ task }: ReviewsProps) {
     postReviewMutation.isPending || updateReviewMutation.isPending;
 
   // Empty state before task completion
-  if (!isCompleted || !myReview) {
+  if (!isCompleted) {
     return (
       <div className="px-4 sm:px-6 py-8">
         <EmptyState
           title="No Reviews Yet"
-          message="Reviews will appear once the task is assigned and completed."
+          message="Reviews will appear once the task is completed."
           icon={<MessageSquare className="w-12 h-12 text-neutral-400" />}
         />
       </div>
@@ -198,17 +202,17 @@ export default function Reviews({ task }: ReviewsProps) {
           {isPoster ? "Tasker's Review" : "Poster's Review"}
         </h2>
 
-        {reviews?.other_party_reviewed ? (
+        {otherPartyHasReviewed && reviewsVisible ? (
           <div className="border border-neutral-200 rounded-2xl p-4 sm:p-6">
             <ReviewCard
               name={otherPartyName}
-              date={myReview?.reviewed_at}
-              rating={myReview?.rating}
-              comment={myReview?.comment}
+              date={otherPartyReview.reviewed_at}
+              rating={otherPartyReview.rating}
+              comment={otherPartyReview.comment}
               avatar={otherPartyProfile?.profile_image || defaultProfile}
-              userId={!isTasker ? task?.tasker?.id : task?.poster?.id}
+              userId={isPoster ? task?.tasker?.id : task?.poster?.id}
               role={
-                !isTasker
+                isPoster
                   ? (task?.tasker?.role as TRole | undefined)
                   : (task?.poster?.role as TRole | undefined)
               }
@@ -218,7 +222,9 @@ export default function Reviews({ task }: ReviewsProps) {
           <div className="flex flex-col items-center justify-center p-8 sm:p-12 rounded-2xl bg-neutral-50">
             <Rating value={0} readOnly size={28} className="gap-2" />
             <p className="text-sm sm:text-base text-neutral-600 mt-4">
-              No review from {isPoster ? "tasker" : "poster"} yet.
+              {!otherPartyHasReviewed
+                ? `No review from ${isPoster ? "tasker" : "poster"} yet.`
+                : `${isPoster ? "Tasker's" : "Poster's"} review will be visible once both parties have submitted their reviews.`}
             </p>
           </div>
         )}

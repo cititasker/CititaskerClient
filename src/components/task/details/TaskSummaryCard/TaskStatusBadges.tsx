@@ -16,7 +16,7 @@ export default function TaskStatusBadges({
   locationType,
 }: Props) {
   return (
-    <div className="flex items-center gap-2 mb-2 flex-wrap">
+    <div className="flex items-center gap-2 mb-3 flex-wrap">
       <StatusBadge status={status as StatusType} showDot />
 
       {category && (

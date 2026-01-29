@@ -47,35 +47,29 @@ export default function TaskFooterActions({
   };
 
   return (
-    <div className="px-6 pb-6">
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(160px,1fr))] gap-3">
-        <MoreOptionsMenu
-          moreOptions={moreOptions}
-          onSelect={handleOptionSelect}
-          className="w-full h-10"
-        />
+    <div className="grid grid-cols-[repeat(auto-fit,minmax(140px,1fr))] gap-3">
+      <MoreOptionsMenu
+        moreOptions={moreOptions}
+        onSelect={handleOptionSelect}
+        className="w-full h-10"
+      />
 
-        {showViewButton && onViewTask && (
-          <Button
-            onClick={onViewTask}
-            variant="outline"
-            className="w-full h-10"
-          >
-            <Eye className="w-4 h-4 mr-2" />
-            View
-          </Button>
-        )}
+      {showViewButton && onViewTask && (
+        <Button onClick={onViewTask} variant="outline" className="w-full h-10">
+          <Eye className="w-4 h-4 mr-2" />
+          View
+        </Button>
+      )}
 
-        {buttonText && (
-          <Button
-            onClick={onPrimaryAction}
-            className="w-full h-10 bg-primary hover:bg-primary/90 text-primary-foreground"
-            disabled={disabledButtonText}
-          >
-            {buttonText}
-          </Button>
-        )}
-      </div>
+      {buttonText && (
+        <Button
+          onClick={onPrimaryAction}
+          className="w-full h-10 bg-primary hover:bg-primary/90 text-primary-foreground"
+          disabled={disabledButtonText}
+        >
+          {buttonText}
+        </Button>
+      )}
     </div>
   );
 }

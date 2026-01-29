@@ -23,11 +23,11 @@ export default function DisputeCenter({
 
   return (
     <div>
-      <Card className="shadow-sm border-border-light">
-        <CardHeader className="py-2 text-black">
+      <Card className="shadow-none sm:shadow-sm sm:border-border-light">
+        <CardHeader className="px-0 sm:px-5 py-2 text-black">
           <CardTitle className="text-2xl">Resolution centre</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-0 sm:px-5">
           <p className="">Resolve task issues.</p>
           <FormButton
             variant="link"

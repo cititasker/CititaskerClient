@@ -22,7 +22,7 @@ export default function InfoRow({
     <div
       className={cn("relative group rounded-lg transition-all duration-200")}
     >
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 py-2">
         <div className="flex-shrink-0">
           <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
             <div className="text-primary">{icon}</div>
@@ -49,7 +49,7 @@ export default function InfoRow({
             onClick={onEdit}
             className={cn(
               "text-primary hover:text-primary/80 hover:bg-primary/10",
-              "h-8 px-2 text-xs"
+              "h-8 px-2 text-xs",
             )}
           >
             <Edit className="w-3 h-3 mr-1" />

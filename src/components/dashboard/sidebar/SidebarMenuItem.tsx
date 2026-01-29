@@ -32,10 +32,10 @@ const SidebarMenuItem = ({
   const hasChildren = Boolean(item.children?.length);
 
   const baseClasses = cn(
-    "w-full justify-start transition-all duration-200 group relative",
-    level === 0 ? "h-12 px-3" : "h-10 px-6 text-sm",
+    "w-full h-12 my-0.5 justify-start transition-all duration-200 group relative",
+    level === 0 ? "px-3" : "pl-12 pr-3 text-sm",
     isActive && "bg-primary text-primary-foreground shadow-sm",
-    !isActive && "hover:bg-accent hover:text-accent-foreground"
+    !isActive && "hover:bg-accent hover:text-accent-foreground",
   );
 
   const Icon = item.icon;
@@ -59,7 +59,7 @@ const SidebarMenuItem = ({
           <ChevronRight
             className={cn(
               "h-4 w-4 transition-transform duration-200",
-              isExpanded && "rotate-90"
+              isExpanded && "rotate-90",
             )}
           />
         </Button>
@@ -67,7 +67,7 @@ const SidebarMenuItem = ({
         <div
           className={cn(
             "overflow-hidden transition-all duration-300 ease-in-out",
-            isExpanded ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+            isExpanded ? "max-h-96 opacity-100" : "max-h-0 opacity-0",
           )}
         >
           <div className="space-y-1">

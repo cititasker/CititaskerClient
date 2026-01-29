@@ -16,7 +16,7 @@ import { useSnackbar } from "@/providers/SnackbarProvider";
 import { useGetCategories } from "@/services/general/index.hook";
 
 const taskerSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
+  name: z.string().min(2, "Name must be at least 3 characters"),
   email: z.string().email("Please enter a valid email"),
   occupation: z
     .object({
@@ -44,7 +44,7 @@ export default function TaskerForm({ onSuccess }: TaskerFormProps) {
         categoryQuery.data.map((el: ITaskCategory) => ({
           ...el,
           name: capitalize(el.name),
-        }))
+        })),
       );
     }
   }, [categoryQuery.data]);

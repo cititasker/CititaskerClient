@@ -36,7 +36,10 @@ const SkillBadge = ({
     variant="secondary"
     className="group flex items-center gap-2 px-3 py-1.5 bg-neutral-100 hover:bg-neutral-200 text-text-secondary border border-neutral-200 hover:border-neutral-300 transition-all duration-200 animate-fade-in"
   >
-    <span className="truncate max-w-[120px] sm:max-w-[180px]" title={skill}>
+    <span
+      className="truncate max-w-[120px] sm:max-w-[180px] font-medium"
+      title={skill}
+    >
       {skill}
     </span>
     <button
@@ -64,8 +67,8 @@ const SkillsCounter = ({ current, max }: { current: number; max?: number }) => {
           isAtLimit
             ? "text-error"
             : isNearLimit
-            ? "text-warning"
-            : "text-text-muted"
+              ? "text-warning"
+              : "text-text-muted"
         }`}
       >
         <span>{current}</span>
@@ -129,7 +132,7 @@ export const SkillsInput = ({
       return `Skill must be ${maxLength} characters or less`;
     if (
       fields.some(
-        (field: any) => field.name.toLowerCase() === skill.toLowerCase()
+        (field: any) => field.name.toLowerCase() === skill.toLowerCase(),
       )
     ) {
       return "This skill is already added";
@@ -220,8 +223,8 @@ export const SkillsInput = ({
                       error
                         ? "border-error focus-visible:ring-error"
                         : fieldState.error
-                        ? "border-error focus-visible:ring-error"
-                        : ""
+                          ? "border-error focus-visible:ring-error"
+                          : ""
                     }`}
                   />
                   {error && (

@@ -5,6 +5,8 @@ import { FaInstagramSquare } from "react-icons/fa";
 export const maxLengthChar = 200;
 export const connectionFee = 10;
 export const SUPPORT_URL = process.env.NEXT_PUBLIC_SUPPORT_URL;
+export const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+export const APP_URL = process.env.NEXT_PUBLIC_DOMAIN_URL;
 
 export const PORTFOLIO_STORAGE_KEY = "portfolio_pending_images";
 export const MAX_IMAGES = 8;

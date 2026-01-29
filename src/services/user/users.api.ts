@@ -48,7 +48,7 @@ export function updateProfileDetails(data: any) {
     });
 }
 
-export function getUserProfileDetails(id: any) {
+export function getUserProfileDetails(id: any): Promise<UserProfileRes> {
   return api
     .get(`${API_ROUTES.GET_PROFILE_DETAILS}/${id}`)
     .then((data) => {

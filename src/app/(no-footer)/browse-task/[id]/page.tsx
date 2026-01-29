@@ -30,12 +30,11 @@ export default async function TaskDetailPage({
 }: PageProps<"/browse-task/[id]">) {
   const { id } = await params;
   const queryClient = getQueryClient();
-  const taskId = String(id);
 
   // Now prefetch
   await queryClient.prefetchQuery({
-    queryKey: [API_ROUTES.TASKS, taskId],
-    queryFn: () => getTaskById(taskId),
+    queryKey: [API_ROUTES.TASKS, id],
+    queryFn: () => getTaskById(id),
   });
 
   const dehydratedState = dehydrate(queryClient);

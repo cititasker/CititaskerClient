@@ -45,8 +45,8 @@ export default function SectionHeader({
     >
       <motion.div
         className={cn(
-          "text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight",
-          titleClassName
+          "text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold",
+          titleClassName,
         )}
         variants={itemVariants}
       >
@@ -55,8 +55,8 @@ export default function SectionHeader({
       {subtitle && (
         <motion.p
           className={cn(
-            "text-lg md:text-xl text-black-2 max-w-2xl mx-auto leading-relaxed mt-5",
-            subtitleClassName
+            "sm:text-lg md:text-xl text-black-2 max-w-2xl mx-auto mt-2 sm:mt-4",
+            subtitleClassName,
           )}
           variants={itemVariants}
         >

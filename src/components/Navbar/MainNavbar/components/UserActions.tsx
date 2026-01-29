@@ -106,7 +106,7 @@ export function UserActions({ user, onLogout }: UserActionsProps) {
         </DropdownMenuTrigger>
 
         <DropdownMenuContent
-          className="w-72 p-0 rounded-2xl shadow-2xl border-0 bg-white overflow-hidden"
+          className="w-72 p-0 rounded-2xl shadow-md bg-white overflow-hidden"
           align="end"
           sideOffset={12}
         >

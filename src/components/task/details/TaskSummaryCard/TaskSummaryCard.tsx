@@ -3,9 +3,9 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { useTaskHelpers } from "./hooks/useTaskHelpers";
 import TaskHeader from "./TaskHeader";
-import TaskImageGallery from "./TaskImageGallery";
 import TaskInfoGrid from "./TaskInfoGrid";
 import TaskFooterActions from "./TaskFooterActions";
+import ImageGallery from "@/components/browseTask/Modals/ImageGalleryModal/ImageGallery";
 
 interface Props {
   task: ITask;
@@ -35,9 +35,9 @@ export default function TaskSummaryCard({
 
   return (
     <>
-      <Card className="shadow-sm border-border-light overflow-hidden">
-        <CardContent className="p-0">
-          <div className="p-6 pb-4">
+      <Card className="shadow-none sm:shadow-sm sm:border-border-light overflow-hidden rounded-none sm:rounded-xl bg-transparent sm:bg-white">
+        <CardContent className="p-0 sm:p-5 space-y-6">
+          <div>
             <TaskHeader task={task} />
             {task.description && (
               <p className="text-text-secondary text-sm leading-relaxed line-clamp-3">
@@ -46,7 +46,14 @@ export default function TaskSummaryCard({
             )}
           </div>
 
-          <TaskImageGallery images={task.images} />
+          {task.images.length ? (
+            <ImageGallery
+              images={task.images}
+              columns={4}
+              aspectRatio="square"
+              showCounter
+            />
+          ) : null}
 
           <TaskInfoGrid
             task={task}

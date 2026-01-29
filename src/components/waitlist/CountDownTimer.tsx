@@ -67,7 +67,7 @@ export default function CountdownTimer() {
             title="Launch Countdown"
             titleClassName="text-white"
             subtitleClassName="text-white"
-            className="mb-6 sm:mb-10 md:mb-10"
+            className="mb-6 sm:mb-10 md:mb-14"
           />
           <div className="grid grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
             {["00", "00", "00", "00"].map((_, i) => (
@@ -99,7 +99,7 @@ export default function CountdownTimer() {
           subtitle="We're almost there! Get ready to transform how you get things done."
           titleClassName="text-white"
           subtitleClassName="text-white"
-          className="mb-6 sm:mb-10 md:mb-10"
+          className="mb-6 sm:mb-10 md:mb-14"
         />
 
         <div className="grid grid-cols-4 gap-3 sm:gap-4 lg:gap-6">

@@ -102,7 +102,7 @@ export default function CustomTab({
       >
         <TabsList
           className={cn(
-            "w-full flex rounded-xl p-1 bg-background-tertiary shrink-0",
+            "w-full flex rounded-xl p-1 bg-background-tertiary shrink-0 overflow-x-auto no-scrollbar",
             listClassName,
           )}
         >
@@ -114,7 +114,7 @@ export default function CustomTab({
                 "data-[state=active]:bg-background data-[state=active]:text-primary",
                 "data-[state=active]:shadow-sm transition-all duration-200",
                 "text-text-muted hover:text-text-primary font-medium",
-                "px-4 py-2.5 rounded-lg min-w-[160px]",
+                "px-4 py-2.5 rounded-lg whitespace-nowrap w-full md:max-w-[200px] md:min-w-[160px]",
                 triggerClassName,
               )}
             >
@@ -128,7 +128,7 @@ export default function CustomTab({
             key={value}
             value={value}
             className={cn(
-              "focus:outline-none bg-white rounded-xl mt-0",
+              "focus:outline-none bg-white rounded-xl mt-0 shadow-none sm:shadow-sm sm:border-border-light",
               "flex-1 min-h-0 overflow-y-auto no-scrollbar",
               contentClassName,
             )}

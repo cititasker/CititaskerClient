@@ -18,7 +18,7 @@ import { loginSchemaType } from "@/schema/auth";
 type GetUserResponse = { data: IUser };
 
 export const useLogin = (
-  opt?: UseMutationOptions<ILoginRes, Error, loginSchemaType>
+  opt?: UseMutationOptions<ILoginRes, Error, loginSchemaType>,
 ) => {
   return useMutation({
     mutationFn: loginUser,
@@ -30,7 +30,7 @@ export const useGetUser = (
   options?: Omit<
     UseQueryOptions<GetUserResponse, Error>,
     "queryKey" | "queryFn"
-  >
+  >,
 ) => {
   return useQuery<GetUserResponse, Error>({
     queryKey: [API_ROUTES.GET_USER_DETAILS],
@@ -45,21 +45,17 @@ export const useGetUser = (
   });
 };
 
-export const useGetUserProfile = (
-  data: { id: any },
-  options?: UseQueryOptions<UserProfileRes, any>
-) => {
-  return useQuery<UserProfileRes, any>({
+export const useGetUserProfile = (data: { id: any }) => {
+  return useQuery({
     queryKey: [API_ROUTES.GET_PROFILE_DETAILS, data.id],
     queryFn: () => getUserProfileDetails(data.id),
     enabled: !!data.id,
-    ...options,
   });
 };
 
 export const useGetPorfolio = (
   data: { id: any },
-  options?: UseQueryOptions<UserPorfolioRes, Error>
+  options?: UseQueryOptions<UserPorfolioRes, Error>,
 ) => {
   return useQuery<UserPorfolioRes, Error>({
     queryKey: [API_ROUTES.GET_PORTFOLIO, data.id],
@@ -71,7 +67,7 @@ export const useGetPorfolio = (
 
 export const useGetFaq = (
   data: { id: any },
-  options?: UseQueryOptions<UserFaqResponse, Error>
+  options?: UseQueryOptions<UserFaqResponse, Error>,
 ) => {
   return useQuery<UserFaqResponse, Error>({
     queryKey: [API_ROUTES.GET_FAQ, data.id],
@@ -82,7 +78,7 @@ export const useGetFaq = (
 };
 
 export const useSwitchRole = (
-  opt?: UseMutationOptions<ILoginRes, Error, { role: TRole }>
+  opt?: UseMutationOptions<ILoginRes, Error, { role: TRole }>,
 ) => {
   return useMutation({
     mutationFn: switchRoles,

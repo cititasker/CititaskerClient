@@ -26,6 +26,7 @@ import {
 } from "@/components/icons/index";
 import FormInput from "@/components/forms/FormInput";
 import FormTextArea from "@/components/forms/FormTextArea";
+import { errorHandler } from "@/utils";
 
 // Dynamic schema based on mode
 const createFAQSchema = (isMultiple: boolean) => {
@@ -65,8 +66,8 @@ const CharacterCounter = ({
     percentage >= 100
       ? "text-error"
       : percentage >= 80
-      ? "text-warning"
-      : "text-text-muted";
+        ? "text-warning"
+        : "text-text-muted";
 
   return (
     <span className={`text-xs font-medium ${colorClass}`}>
@@ -262,7 +263,7 @@ export default function FAQForm({
     onError: (error: any) => {
       const errorMessage = isDuplicate
         ? "Failed to duplicate FAQ"
-        : error.message || "Failed to create FAQ";
+        : errorHandler(error) || "Failed to create FAQ";
       showSnackbar(errorMessage, "error");
     },
   });

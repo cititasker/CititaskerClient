@@ -50,14 +50,12 @@ const CertificateCard = ({
   index,
   name,
   onRemove,
-}: // isLast,
-{
+}: {
   index: number;
   name: string;
   onRemove: () => void;
-  isLast: boolean;
 }) => (
-  <Card className="group relative border border-neutral-200 hover:border-neutral-300 hover:shadow-md transition-all duration-200">
+  <Card className="group relative border border-neutral-200 hover:border-neutral-300 transition-all duration-200">
     <CardContent className="p-4 sm:p-6">
       <div className="flex items-start gap-3 mb-4">
         <div className="flex-shrink-0 w-8 h-8 bg-primary-100 rounded-lg flex items-center justify-center">
@@ -81,18 +79,31 @@ const CertificateCard = ({
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="space-y-4">
+        {/* Certificate Name */}
         <FormInput
-          name={`${name}.${index}.institution`}
-          label="Institution"
-          placeholder="e.g. Google, Microsoft, AWS"
-        />
-        <FormDatePicker
-          name={`${name}.${index}.year`}
-          label="Year Completed"
-          placeholder="Select year"
+          name={`${name}.${index}.name`}
+          label="Certificate Name"
+          placeholder="e.g. AWS Certified Solutions Architect"
           required
         />
+
+        {/* Institution and Year */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <FormInput
+            name={`${name}.${index}.institution`}
+            label="Issuing Institution"
+            placeholder="e.g. Amazon Web Services"
+            required
+          />
+          <FormDatePicker
+            name={`${name}.${index}.year`}
+            label="Year Completed"
+            placeholder="Select year"
+            maxDate={new Date()}
+            required
+          />
+        </div>
       </div>
     </CardContent>
   </Card>
@@ -116,8 +127,8 @@ const CertificatesCounter = ({
         isAtLimit
           ? "text-error"
           : isNearLimit
-          ? "text-warning"
-          : "text-text-muted"
+            ? "text-warning"
+            : "text-text-muted"
       }`}
     >
       <span>{current}</span>
@@ -143,7 +154,7 @@ export const CertificatesInput = ({
 
   const handleAdd = () => {
     if (fields.length < maxCertificates) {
-      append({ institution: "", year: "" });
+      append({ name: "", institution: "", year: "" });
     }
   };
 
@@ -202,7 +213,6 @@ export const CertificatesInput = ({
                       index={index}
                       name={name}
                       onRemove={() => handleRemove(index)}
-                      isLast={index === fields.length - 1}
                     />
                   ))}
 
@@ -213,13 +223,20 @@ export const CertificatesInput = ({
                       </p>
                       <ul className="space-y-1 ml-4 list-disc">
                         <li>
-                          Include professional certifications, licenses, or
-                          courses
+                          Include the full name of your certification (e.g.,
+                          "PMP - Project Management Professional")
                         </li>
-                        <li>Add the full name of the issuing institution</li>
+                        <li>
+                          Add the complete name of the issuing institution or
+                          organization
+                        </li>
                         <li>
                           Specify the year you completed or received the
                           certification
+                        </li>
+                        <li>
+                          List certifications in reverse chronological order
+                          (most recent first)
                         </li>
                       </ul>
                     </div>

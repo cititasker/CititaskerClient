@@ -1,4 +1,3 @@
-// components/shared/dashboard/profile/public-view/sidebar/PublicProfileSidebar.tsx
 "use client";
 
 import { memo, useMemo } from "react";
@@ -11,9 +10,10 @@ import { cn } from "@/lib/utils";
 import { ProfileHeader } from "./components/ProfileHeader";
 import { LocationAndRating } from "./components/LocationAndRating";
 import { SkillsSection } from "./components/SkillsSection";
-import { BadgeSection } from "./components/BadgeSection";
+import { CertificationSection } from "./components/CertificationSection";
 import { LoadingSkeleton } from "./components/LoadingSkeleton";
 import { ErrorState } from "./components/ErrorState";
+import { ROLE } from "@/constant";
 
 interface SectionProps {
   title: string;
@@ -47,7 +47,7 @@ const PublicProfileSidebar = () => {
 
   const user = useMemo(() => data?.data, [data]);
 
-  if (isLoading) {
+  if (isLoading || !user) {
     return (
       <aside className="w-full md:max-w-[300px]">
         <LoadingSkeleton />
@@ -72,15 +72,17 @@ const PublicProfileSidebar = () => {
           <LocationAndRating user={user} />
         </Section>
 
-        {user?.skills && user.skills.length > 0 && (
+        {user.role == ROLE.tasker && (
           <Section title="Skills" icon={Sparkles}>
             <SkillsSection skills={user.skills} />
           </Section>
         )}
 
-        <Section title="Achievements" icon={Award} noBorder>
-          <BadgeSection user={user} />
-        </Section>
+        {user.role == ROLE.tasker && (
+          <Section title="Achievements" icon={Award} noBorder>
+            <CertificationSection user={user} />
+          </Section>
+        )}
       </Card>
     </aside>
   );
